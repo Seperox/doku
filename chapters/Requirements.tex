@@ -1,0 +1,34 @@
+\section{Requirements - SWID Generator}
+\subsection{Nicht-Funktional}
+\begin{itemize}
+\item Als Implementationsprache wird Python verwendet
+\item Es sollen möglichst wenig Abhängigkeiten zu 3. Komponenten wie Libraries/Framworks entstehen. Wo möglich sollen Komponenten aus dem Standardumfang von Python verwendet werden.
+\item Die Software soll einfach zu installieren sein, bspw. durch integration in pip
+\item Als Quelle der Paketinformationen sollen yum und dpkg verwendet werden
+\end{itemize}
+Nachfolgend sind sind die identifizierten Use Cases für die Client Komponenten des SWID-Generator aufgeführt.
+\subsection*{UC01: Standard SWID Generierung}
+Die IMC Komponente kann via stdout des SWID-Generators XML Dokumente erhalten, welche Informationen über die zur Zeit installierte Software des Zielsystems beinhalten.
+Das Format dieser XML Dokumente folgt dem ISO Draft 19770-2-5
+Pro Installiertes Packet wird ein separates ein XMl Dokument generiert.
+Diese Dokumente bestehen im wesentlichen aus einem SoftwareEntity und einem Entity Tag mit entsprechenden Attributen TODO Beispiel
+
+\paragraph{Standard Szenario}
+Die Attribute werden mit vordefinierten Standardwerten befüllt.
+TODO Beispiel
+\paragraph{Alternatives Szenario}
+Die Attribute sollen mittels optionalem Parametern spezifiziert werden können.
+
+\subsection*{UC02: SWID Tag mit File Payload}
+Mittels Optionalem Parameter können die XML Dokumente mit einem Payload Tag versehen werden, welcher für jedes Packet die darin enthaltenen Dateien auflistet.
+TODO Beispiel
+
+\subsection*{UC03: Pretty Printing}
+Der benutzer möchte mittels optionalem Parameter zu analysezwecken die XML Dokumente in Menschenlesebarer Form ansehen. Diese Ausgabe der Tags ist hierarchisch eingerückt um so die Menschenlesebarkeit sicherzustellen.
+
+\subsection*{UC04: Automatische Erkennung der Umgebung/Packetmanagaer }
+Beim Aufruf des Swid-Generators soll dieser versuchen die Der swid Generator soll den verwendeten Packagemanager selber erkennen.
+\paragraph{Alternatives Szenario}
+Mittels optionalem Parameter kann der zu verwendeten Packetmanager angegeben und die Autoerkennung übersteuert werden.
+
+
