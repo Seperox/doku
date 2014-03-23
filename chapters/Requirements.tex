@@ -1,43 +1,60 @@
 \section{Requirements - SWID Generator}
 \subsection{Nicht-Funktional}
 \begin{itemize}
-\item Als Implementationsprache wird Python verwendet
-\item Es sollen möglichst wenig Abhängigkeiten zu 3. Komponenten wie Libraries/Framworks entstehen. Wo möglich sollen Komponenten aus dem Standardumfang von Python verwendet werden.
-\item Die Software soll einfach zu installieren sein, bspw. durch integration in pip
-\item Als Quelle der Paketinformationen sollen yum und dpkg verwendet werden
+    \item Als Implementationsprache wird Python verwendet
+    \item Es sollen möglichst wenig Abhängigkeiten zu 3. Komponenten wie Libraries/Framworks entstehen. Wo möglich sollen Komponenten aus dem Standardumfang von Python verwendet werden.
+    \item Die Software soll einfach zu installieren sein, bspw. durch integration in pip
+    \item Als Quelle der Paketinformationen sollen yum und dpkg verwendet werden
 \end{itemize}
 Nachfolgend sind sind die identifizierten Use Cases für die Client Komponenten des SWID-Generator aufgeführt.
+
 \subsection*{UC01: Standard SWID Generierung}
 Die IMC Komponente kann via stdout des SWID-Generators XML Dokumente erhalten, welche Informationen über die zur Zeit installierte Software des Zielsystems beinhalten.
 Das Format dieser XML Dokumente folgt dem ISO Draft 19770-2-5
-Pro Installiertes Packet wird ein separates ein XMl Dokument generiert.
-Diese Dokumente bestehen im wesentlichen aus einem SoftwareEntity und einem Entity Tag mit entsprechenden Attributen TODO Beispiel
+Für jedes installierte Paket wird ein eigenes ein XML Dokument generiert.
+Diese Dokumente bestehen im wesentlichen aus einem SoftwareIdentity-Tag als Root-Knoten und einem Entity-Tag als Kind-Knoten. Die Information findet sich in den entsprechenden Attributen.
+\begin{minted}{xml}
+<?xml version='1.0' encoding='UTF-8'?>
+<SoftwareIdentity 
+    name="apparmor" 
+    uniqueId="Ubuntu_13.10-apparmor-2.8.0-0ubuntu31.1" 
+    version="2.8.0-0ubuntu31.1" 
+    versionScheme="alphanumeric" 
+    xmlns="http://standards.iso.org/iso/19770/-2/2014/schema.xsd">
+    
+    <Entity 
+        name="strongSwan" 
+        regid="regid.2004-03.org.strongswan" 
+        role="tagcreator" />
+</SoftwareIdentity>
+\end{minted}
 
 \paragraph{Standard Szenario}
-Die Attribute werden mit vordefinierten Standardwerten befüllt.
-TODO Beispiel
+Die Attribute werden mit vordefinierten Standardwerten befüllt. Siehe Codelisting oben (TODO: referenz).
+
 \paragraph{Alternatives Szenario}
-Die Attribute sollen mittels optionalem Parametern spezifiziert werden können.
+Die Attribute können mittels optionalem Parametern spezifiziert werden.
 
 \subsection*{UC02: SWID Tag mit File Payload}
-Mittels Optionalem Parameter können die XML Dokumente mit einem Payload Tag versehen werden, welcher für jedes Packet die darin enthaltenen Dateien auflistet.
+Mittels optionalem Parameter können die XML Dokumente mit einem Payload-Tag versehen werden, welcher für jedes Paket die darin enthaltenen Dateien auflistet.
 TODO Beispiel
 
-\subsection*{UC03: Pretty Printing}
-Der benutzer möchte mittels optionalem Parameter zu analysezwecken die XML Dokumente in Menschenlesebarer Form ansehen. Diese Ausgabe der Tags ist hierarchisch eingerückt um so die Menschenlesebarkeit sicherzustellen.
+\subsection*{UC03: Analyse der Ausgabe, Pretty Printing}
+Der Benutzer möchte mittels optionalem Parameter zu Analysezwecken die XML Dokumente in menschenlesbarer Form ansehen. Diese Ausgabe der Tags ist hierarchisch eingerückt um so die Lesbarkeit sicherzustellen.
 
-\subsection*{UC04: Automatische Erkennung der Umgebung/Packetmanagaer }
-Beim Aufruf des Swid-Generators soll dieser versuchen die Der swid Generator soll den verwendeten Packagemanager selber erkennen.
+\subsection*{UC04: Installation und Ausführung}
+Der SWID-Generator kann aus einer ausführbaren Datei gestartet werden, die Installation kann durch Kopieren der Datei oder eventuell über einen Packetmanager erfolgen.\\
+Beim Aufruf des SWID-Generators soll dieser den verwendeten Packagemanager beziehungsweise seine Umgebung selber erkennen.
+
 \paragraph{Alternatives Szenario}
-Mittels optionalem Parameter kann der zu verwendeten Packetmanager angegeben und die Autoerkennung übersteuert werden.
+Mittels optionalem Parameter kann der zu verwendende Packagemanager angegeben werden, die Autoerkennung wird dadurch übersteuert.
 
 \section{Requirements - SWID Backend}
 \subsection*{UC01: CMDB, Softwareinventar}
-Der Benutzer möchte feststellen, welche Software zu einem bestimmten Zeitpunkt auf einem Device installiert war.
+Der Benutzer möchte feststellen, welche Software in welcher Version, zu einem bestimmten Zeitpunkt auf einem Device installiert war. Dafür kann er den momentanen Zustand sowie Zustände zu Messzeitpunkten in der Vergangenheit betrachten. 
 
-\subsection{UC02: Verknüpfung Pakete <-> Dateien}
-Der Benutzer kann feststellen welche Dateien zu einem bestimmten Paket gehören.
+\subsection{UC02: Detaillierte Paketinformation}
+Der Benutzer kann feststellen welche Dateien zu einem bestimmten Paket gehören. Er kann den Namen sowie den Pfad der Datei einsehen.
 
-
-
-
+\subsection*{UC03: Informationen zu Tag Entities Abfagen}
+Der Benutzer kann einsehen welche Entities mit SWID Tags zur Verfügung stellen, er hat kann Regids und Rollen der Tag Aussteller abfragen.
