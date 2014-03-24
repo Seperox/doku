@@ -1,0 +1,15 @@
+Kommentare zum Datenbank Modell
+=================================
+
+- Zur verbesserten Übersicht haben wir versucht, die Tabellen nach Bereich/Thema zu ordnen. Allerdings sind wir nicht sicher, ob die Ordnung so Sinn macht.
+
+- Die Historie (swid_measurement_reports) wird mit der Session verknüpft so können SWID-Tags mit einem Zeitpunkt, einem Device und einem Produkt verknüpft werden.
+
+- Die Files und Directories werden zentral gehalten, d.h. vorhandenen Tabellen verwedent, da es sich dabei um Basisdaten handelt.
+
+- Die swid_entities werden mit einer n:m Verknüpfungstabelle mit den swid_tags verknüpft, da es möglich ist, dass ein Tag mehrere Entities hat.
+
+- Da eine Entity mehrere Rollen haben kann, wird eine Verknüpfungstabelle für die Rollen eingesetzt.
+
+- Die Felder package_name und versionen der Tabelle swid_tags werden nicht mit den bestehenden Tabellen (packages, versions) verknüpft, da die bestehenden Tabellen den Soll-Zustand repräsentieren und die SWID-Tag Tabellen den Ist-Zustand. 
+Es wäre möglich den package_name mit der bestehenden Package-Tabelle zu verknüpfen, da es sich um Basisdaten handelt, jedoch entsteht dadurch eine gewisse Vermischung von Ist- und Soll-Zustand.
