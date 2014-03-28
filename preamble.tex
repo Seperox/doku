@@ -1,0 +1,67 @@
+% Strict mode
+
+\RequirePackage[l2tabu, orthodox]{nag} % Warn when using deprecated constructs
+
+% Thesis information
+
+\title{Endpoint Compliance Monitoring based on Software Identification Tags}
+\author{Christian F{\"a}ssler, Danilo Bargen Jonas Furrer}
+\newcommand{\myThesis}{Bachelorarbeit\xspace}
+\newcommand{\myProf}{Prof. Dr. Andreas Steffen\xspace}
+\newcommand{\myFaculty}{ITA Institute for Internet Technologies and Applications\xspace}
+\newcommand{\myDepartment}{Abteilung Informatik\xspace}
+\newcommand{\myUni}{HSR Hochschule f{\"u}r Technik Rapperswil\xspace}
+\newcommand{\myLocation}{Rapperswil\xspace}
+\newcommand{\myTime}{Fr{\"u}hling 2014\xspace}
+\newcommand{\myVersion}{version 1.0\xspace}
+\newcommand{\myLicense}{CC BY-SA 3.0 Unported\xspace}                                                      
+\newcommand{\myKeywords}{SWID, TNC, StrongSwan, IPsec, Compliance Monitoring}
+
+
+% Document class and packages
+
+\documentclass[
+		twoside,openright,titlepage,numbers=noenddot,headinclude,
+                footinclude=true,cleardoublepage=empty,
+                BCOR=5mm,paper=a4,fontsize=11pt, % Binding correction, paper type and font size
+                german,
+                ]{scrreprt} 
+\linespread{1.05} % Palatino needs more leading space
+%\usepackage[a4paper,vmargin={30mm},hmargin={30mm}]{geometry} % Page margins
+\usepackage[ngerman]{babel} % New German hyphenation (multilingual support)
+\usepackage[utf8x]{inputenc} % Unicode support
+\usepackage{amsmath} % AMS math package
+\usepackage{amsfonts} % AMS fonts
+\usepackage{amssymb} % AMS symbols
+\usepackage{fixmath} % ISO conform greek letters
+\usepackage{graphicx} % Graphics support
+\usepackage{float} % Use H placement specifier for floats
+\usepackage{longtable} % Tables across several pages
+\usepackage{hyperref} % Hyperlinks
+\usepackage{fancyhdr} % Fancy headers
+\usepackage{calc} % Width calculations
+
+% Font configuration
+
+\usepackage[sc]{mathpazo} % Use palatino font
+\usepackage[T1]{fontenc} % Use correct font encoding
+\usepackage[babel=true]{microtype} % Micro-typographic optimizations
+\addtokomafont{disposition}{\rmfamily} % Set palatino as heading font
+
+% TikZ / PGF
+
+\usepackage{pgf} % Backend for TikZ
+\usepackage{tikz} % TikZ vector graphics
+\usetikzlibrary{arrows,automata}
+
+% Syntax highlighting
+
+\usepackage{minted} % Syntax highlighting
+\usemintedstyle{tango}
+\definecolor{tango-bg}{HTML}{F8F8F8}
+
+\newminted{python}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+
+% Configure table spacing
+
+\renewcommand{\arraystretch}{1.2}

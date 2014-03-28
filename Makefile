@@ -1,5 +1,5 @@
 SHELL=bash
-TARGET=main.pdf
+TARGET=thesis.pdf
 LL=latexmk -pdf -pdflatex="pdflatex --shell-escape %O %S"
 CLEAN=latexmk -C
 export PATH := pygments:${PATH}
