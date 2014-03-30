@@ -16,6 +16,23 @@
 Nachfolgend sind sind die identifizierten Use Cases für die Client Komponenten des SWID-Generator aufgeführt.
 
 \subsection{UC01: Erkennung des Paketmanagers}
+\begin{tabularx}{\textwidth}{lX}
+\hline 
+\textbf{Actor} & strongSwan IMC \\ 
+\hline
+\textbf{Story} &
+Der strongSwan IMC weiss nicht ob auf dem Zielsystem yum oder dpkg verwendet wird. Der swid Generator soll den verwendeten Paketmanager automatisch erkennen. \\
+\hline 
+\textbf{Standard Szenario} & 
+Der SWID-Generator erkennt automatisch den System-Paketmanager und greift auf
+dessen Datenbank zu. \\ 
+\hline 
+\textbf{Alternatives Szenario} &
+Mittels optionalem Parameter kann der zu verwendende Packagemanager definiert
+werden, die Autoerkennung wird dadurch übersteuert.
+\end{tabularx} 
+
+
 
 \paragraph{Standard Szenario}
 Der SWID-Generator erkennt automatisch den System-Paketmanager und greift auf
@@ -70,6 +87,19 @@ Der Benutzer möchte die Dokumente in menschenlesbarer Form ausgeben (pretty
 print). Das steuert er über optionale Parameter. Diese Ausgabe der Tags ist dann
 hierarchisch eingerückt um so die Lesbarkeit sicherzustellen.
 
+\subsection{UC05: Ausgabe der Tag-ID's}
+Der strongSwan IMC möchte nur Tag-ID's von den installierten Paketen erhalten. Bei Tag-ID's handelt es sich nicht um XML Dokumente, sondern einfache Strings im Format $regid\_uniqueID $. Diese sollen zeilengetrennt ($\backslash$n$\backslash$n) ausgegeben werden. Beispiel:\\
+\begin{minted}{xml}
+regid.2004-03.org.strongswan_fedora_19-64bit-NetworkManager-glib.i686-1:0.9.8.2-2.fc19
+
+regid.2004-03.org.strongswan_fedora_19-64bit-bash.i686-4.2.45-1.fc19
+\end{minted}
+\paragraph{Alternatives Szenario}
+Die Zeilentrennung der Strings kann mittels Parameter spezifiziert werden.
+
+\subsection{UC06: Anfordern bestimmter SWID Tags}
+Der strongSwan IMC möchte nur SWID Tags eines bestimmten Paketes erhalten.
+Mittels Parameter kann dem Generator eine Wildcard/Filterwert angegeben werden, um so targeted Requests ausführen zukönnen.
 
 \section{Requirements - strongTNC SWID Management}
 
