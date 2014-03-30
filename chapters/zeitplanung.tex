@@ -53,6 +53,7 @@ Die File Tags sollen optional im output enthalten sein, um das Mapping von Files
 Wir liegen nicht ganz im Zeitplan, da Danilo zur Zeit noch im Spital ist. Entsprechend haben wir den Zeitplan angepasst und die Ziele etwas nach hinten in den vorgesehenen Puffer verschoben. Bis auf das File Listing konnten wir in dieser Iteration alle Ziele erreichen. Wir haben am Meeting eine erste Version des Datenmodells für die SWID Tag vorgestellt. Es gabe da einige Diskussionspunkte. Zum einen stellte sich die Frage ob wir die Daten in das bestehende Modell integrieren sollen oder komplett als Erweiterung (separate Tabellen). Folgende Punkte sind in der Diskussion aufgefallen
 \begin{itemize}
 \item XML String sollte RAW auch abgespeichert werden
+\end{itemize}
 
 \paragraph{Zusammenfassung}
 \begin{itemize}
@@ -62,5 +63,10 @@ Wir liegen nicht ganz im Zeitplan, da Danilo zur Zeit noch im Spital ist. Entspr
 \item Pull Request von aktuellem Stand (strongTNC) erstellen
 \item Beim UI sollte bei der Suche bzw. Autocomplete auch die Option angeboten werden ein neues Item zu erstellen -> Usability
 \end{itemize}
-\end{itemize}
+
+\subsection{Meeting 26.3.2014}
+Die Meetings werden wir ab sofort wieder am Mittwoch morgen um 10:00 durchführen, damit wir den ganzen Nachmittag Zeit haben um gemeinsam zu arbeiten. Paketmanager liefern bei einer Abfragen nach enthalten Files in Paketen zum Teil Links auf Dateien die nicht existieren, und Ordner die nicht existieren, diese dürfen wir aber im File Payload dennoch mitliefern, da sie zum Paket gehören. Das Dropdownfeld im Policy View sollte zu einem Multiselect umgebaut werden, da mehrere Flags für eine Policy erlaubt sind. Die Architektur (64bit/32bit) sollte in die uniqueID aufgenommen werden, da es möglich ist, das 64bit Pakete aus anderen Dateien bestehen als die 32bit Versionen. Wir stellen das Vorgehen für Pull-Requests zurück zum Hauptrepository (strongTNC) um, sodass wir nicht mehr unseren master zurück "pullen" sondern jeweils einen eigenen Pull-branch erstellen welchen wir mittels Pull-Request in den strongTNC master pullen. Es gibt zur Zeit keine Funktion im GUI Files Einträge zu erstellen, das sollen wir noch ergänzen. Die bestehenden Use Cases sind soweit in Ordnung, während dem Meeting sind noch 2 sehr wichtige, bisher unbekannte Use-Cases dazugekommen: Generierung von Tag-ID's und die Targeted Requests nach SWID Tags.
+Ein weiterer "nice-to-have" Use Case wäre Welches Tag gehört zu einem File. Ist aber explizit keine Muss Anforderung.
+Da mit der CMDB Funktionälität der Stand eines Gerätes immer an einen bestimmten Zeitpunkt gebunden ist, sollen wir die Abfrage "Device-Report" so implementieren, dass z.B mittels Slider eine Datum oder Datumsbereich gewählt werden kann, für den der Status ersichtlich ist.
+
 
