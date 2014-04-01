@@ -32,6 +32,78 @@ PEP8 ist in unserer Software verbindlich, mit folgenden Ausnahmen:
 		\textit{E127}, \textit{E128}.
 \end{itemize}
 
+
+\subsection{Docstrings}
+
+Die meisten Klassen, Methoden und Funktionen sollten mit
+Docstrings\footnote{\url{http://legacy.python.org/dev/peps/pep-0257/}}
+dokumentiert werden (ausser wenn sie komplett trivial sind).
+
+Docstrings sind mit ReStructuredText formatiert und enden grundsätzlich mit
+einer Leerzeile. Wenn ein Docstring nur einen Absatz enthält, kann diese jedoch
+weggelassen werden.
+
+\subsubsection*{Beispiel eines Modul-Docstrings:}
+
+\begin{pythoncode}
+"""
+This module contains DPKG-specific functions for SWID-Tag generation.
+"""
+\end{pythoncode}
+
+\subsubsection*{Beispiel eines Klassen-Docstrings:}
+
+\begin{pythoncode}
+class Foo(object):
+    """
+    This class is responsible for foo-ing a bar. The resulting foobar object
+    can be used for baz.
+
+    Be careful when doing xyz. The reason for this implementation is Lorem
+    Ipsum.
+
+    """
+    def __init__(self):
+        ...
+\end{pythoncode}
+
+\subsubsection*{Beispiel eines Funktions- oder Methoden-Docstings:}
+
+\begin{pythoncode}
+def myfunc(name, state=None):
+    """
+    This function does something.
+
+    Args:
+        name (unicode or str):
+            The name to use.
+        state (bool):
+            Current state to be in.
+
+    Returns:
+        Integer return code. Possible return codes::
+
+            0 -- Success!
+            1 -- No good.
+            2 -- Try again.
+
+    Raises:
+        AttributeError:
+            Raised if foo happens.
+        RuntimeError:
+            Raised if bar is too large.
+
+    A really great idea. A way you might use me is
+
+    >>> print myfunc(name='foo', state=None)
+    0
+
+    BTW, this always returns 0. **NEVER** use with :class:`MyPublicClass`.
+
+    """
+    return 0
+\end{pythoncode}
+
 \subsection{Tools}
 
 \subsubsection{Flake8}
