@@ -40,6 +40,7 @@
 \usepackage{hyperref} % Hyperlinks
 \usepackage{fancyhdr} % Fancy headers
 \usepackage{calc} % Width calculations
+\usepackage{tabularx}
 
 % Font configuration
 
@@ -61,9 +62,14 @@
 \definecolor{tango-bg}{HTML}{F8F8F8}
 
 \newminted{python}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{bash}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{ini}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{text}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 
 % Configure table spacing
 
 \renewcommand{\arraystretch}{1.2}
 
-\usepackage{tabularx}
+% Numbering depth
+
+\setcounter{secnumdepth}{3}
