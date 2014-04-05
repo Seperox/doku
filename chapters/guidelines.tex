@@ -33,6 +33,26 @@ PEP8 ist in unserer Software verbindlich, mit folgenden Ausnahmen:
 \end{itemize}
 
 
+\subsection{Future Imports}
+
+Um in einer Python 2 Codebase möglichst gute Vorwärtskompatibilität mit Python 3
+zu erreichen, gibt es Backports von neueren Funktionen nach Python 2.7 -- die
+sogenannten \textit{Future Imports}. Die empfohlenen Imports für strongTNC sind:
+
+\begin{pythoncode}
+from __future__ import print_function, division, absolute_import, unicode_literals
+\end{pythoncode}
+
+\noindent Die Beweggründe für diese Liste von Imports sind in einem Blogeintrag
+von Stackful.io\footnote{\url{http://stackful-dev.com/quick-tips-on-making-your-code-python-3-ready.html}}
+sehr gut erläutert.
+
+Da der Wechsel zu diesen Imports in der aktuellen Codebasis potentiell Bugs
+verursachen kann (gerade beim \texttt{unicode\_literals} Import), gilt diese
+Empfehlung nur für neue Module. Der Legacy-Code sollte in einem separaten
+Refactoring Stück für Stück angepasst werden.
+
+
 \subsection{Docstrings}
 
 Die meisten Klassen, Methoden und Funktionen sollten mit
