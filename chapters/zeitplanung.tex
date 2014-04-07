@@ -68,4 +68,14 @@ Die Meetings werden wir ab sofort wieder am Mittwoch morgen um 10:00 durchführe
 Ein weiterer "nice-to-have" Use Case wäre Welches Tag gehört zu einem File. Ist aber explizit keine Muss Anforderung.
 Da mit der CMDB Funktionälität der Stand eines Gerätes immer an einen bestimmten Zeitpunkt gebunden ist, sollen wir die Abfrage "Device-Report" so implementieren, dass z.B mittels Slider eine Datum oder Datumsbereich gewählt werden kann, für den der Status ersichtlich ist.
 
+\section{Iteration 4}
+\subsection{Zeitplanung}
+\includegraphics[width=\textwidth]{images/zeitplanung/Iteration4.jpg}
+Die Phase für den SWID-Generator haben wir etwas verlängert, da letzte Woche noch 2 Use-Cases hinzugekommen sind.
+\subsection{Meeting 2.4.2014}
+Den zusätzlichen Use-Case für Software\_IDs haben wir unterdessen implementiert. Targeted Request müssen keine wildcards oder regex option anbieten, es gibt zur Zeit keinen Use-Case dafür. Es gab kurzfristig, vergangenen Montag, noch 2 Anpassungswünsche von Herrn Steffen: Zusätzliches Flag für IMA Messungen und  Sortierung der Sessions im Device Report absteigen (nach Datum). Wurde bereits implementiert und werden wir möglichst schnell in einem Pull-Request zur verfügung stellen.
+Das Benutzerrollen Konzept ist so in Ordnung. Optimalerweise werden wir einen eigenen Decorator erstellen um redundaten code zu vermeiden. Im DB Modell ist noch eine kleine Anpassung notwendig, sodass mehrere Meassurmentreports für eine Session möglich sind. Das WSGI Script werden wir in den conf Ordner verschieben. Wir werden eine Deployment Anleitung für NGINX und Apache erstellen, wo wir auf die Änderung des WSGI Pfades hinweisen werden. 
+
+
+
 
