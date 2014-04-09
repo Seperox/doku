@@ -24,14 +24,16 @@ nur Teile daraus zu verwenden und so ein einfacheres Rollen-Modell zu simulieren
 
 \subsubsection*{User / Permissions}
 
-Wenn keine personalisierten Login erwünscht sind, werden zwei technische User erstellt, 
-die für die beiden Rollen stehen. Das heisst es gibt beispielsweise einen User admin und 
-einen User reader. Dem User admin wird die Permission read-write erteilt, diese Permission 
-kann dann mittels \texttt{@permission\textunderscore required()} Decorator geprüft werden.
+Wenn keine personalisierten Login erwünscht sind, werden zwei technische User
+erstellt, die für die beiden Rollen stehen. Das heisst es gibt beispielsweise
+einen User \texttt{admin-user} und einen User \texttt{readonly-user}. Dem
+\texttt{admin-user} wird die Permission \texttt{write\_access} erteilt, diese
+Permission kann dann mittels \texttt{@permission\_required()} Decorator geprüft
+werden.
 
-Diese Umsetzungsvariante erlaubt es mit sehr wenig aufwand personaliserte Logins einzuführen. 
-Für die Verwaltung der User stellt Django ein Admin-Interface zur Verfügung, dieses müsste
-also nicht selber entwickelt werden.
+Diese Umsetzungsvariante erlaubt es mit sehr wenig Aufwand personaliserte Logins
+einzuführen. Für die Verwaltung der User stellt Django ein Admin-Interface zur
+Verfügung, dieses müsste also nicht selber entwickelt werden.
 
 \subsubsection*{Templates}
 
@@ -47,7 +49,7 @@ Beispiel:
 \subsubsection*{Alternativen}
 
 Als Alternative zum Permission-System könnten auch die standardmässig vorhandenen Flags 
-\texttt{user.is\textunderscore admin} und \texttt{user.is\textunderscore staff} verwendet werden. Dies wäre bedeutend 
+\texttt{user.is\_admin} und \texttt{user.is\_staff} verwendet werden. Dies wäre bedeutend 
 einfacher zu implementieren, die Lösung ist jedoch nicht ausbaufähig. Deshalb wird das 
 Permission-System bevorzugt.
 
@@ -113,7 +115,7 @@ diese sind wie folgt einzuschränken:
 \end{description}
 
 Mit \texttt{models}, bzw. \texttt{models} sind die Funktionen einer View gemeint, die jeweils mit dem
-Namen des Models benannt sind, zum Beispiel in der View \texttt{policy\textunderscore views.py}, die Funktionen
+Namen des Models benannt sind, zum Beispiel in der View \texttt{policy\_views.py}, die Funktionen
 \texttt{policy()} und \texttt{policies()}.
 
 \paragraph{Ausnahmen} \hspace{0pt} \\
@@ -126,5 +128,5 @@ Namen des Models benannt sind, zum Beispiel in der View \texttt{policy\textunder
 
 \textbf{Package View:}
 \begin{description}
-    \item [\texttt{toggle\textunderscore version}] Eingeschränkt, nur für Admin
+    \item [\texttt{toggle\_version}] Eingeschränkt, nur für Admin
 \end{description}
