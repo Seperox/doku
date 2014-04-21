@@ -1,71 +1,71 @@
-<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1476" measuredH="751" mockupW="1128" mockupH="727">
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1710" measuredH="751" mockupW="1362" mockupH="727">
   <controls>
-    <control controlID="41" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="348" y="24" w="1128" h="727" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+    <control controlID="185" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="348" y="24" w="1128" h="727" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
       <controlProperties>
         <text>https%3A//tnc.strongswan.org</text>
       </controlProperties>
     </control>
-    <control controlID="43" controlTypeID="com.balsamiq.mockups::List" x="363" y="141" w="133" h="300" measuredW="100" measuredH="300" zOrder="1" locked="false" isInGroup="-1">
+    <control controlID="186" controlTypeID="com.balsamiq.mockups::List" x="363" y="141" w="133" h="300" measuredW="100" measuredH="300" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
         <alternateRowColor>15594478</alternateRowColor>
         <text>%20Overview%0ACONFIGURATION%0A%20Groups%0A%20Policies%0A%20Enforcements%0A%20Devices%0ADATA%20VIEWS%0A%20Packages%0A%20Products%0A%20Directories%0A%20Files%0A%20Regids%0A%20Tags%0A%20Statistics</text>
       </controlProperties>
     </control>
-    <control controlID="44" controlTypeID="com.balsamiq.mockups::SearchBox" x="1317" y="98" w="-1" h="-1" measuredW="120" measuredH="25" zOrder="3" locked="false" isInGroup="-1"/>
-    <control controlID="45" controlTypeID="com.balsamiq.mockups::Canvas" x="348" y="94" w="1128" h="33" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="187" controlTypeID="com.balsamiq.mockups::Canvas" x="348" y="94" w="1128" h="33" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <color>6710886</color>
       </controlProperties>
     </control>
-    <control controlID="49" controlTypeID="com.balsamiq.mockups::VRule" x="508" y="142" w="-1" h="572" measuredW="10" measuredH="100" zOrder="4" locked="false" isInGroup="-1"/>
-    <control controlID="50" controlTypeID="com.balsamiq.mockups::SubTitle" x="363" y="98" w="-1" h="-1" measuredW="122" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>strongTNC</text>
-      </controlProperties>
-    </control>
-    <control controlID="52" controlTypeID="com.balsamiq.mockups::SubTitle" x="533" y="142" w="904" h="-1" measuredW="121" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>SWID%20tags</text>
-      </controlProperties>
-    </control>
-    <control controlID="66" controlTypeID="com.balsamiq.mockups::Icon" x="1445" y="102" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="-1">
-      <controlProperties>
-        <color>16777215</color>
-        <icon>PowerIcon%7Cxsmall</icon>
-      </controlProperties>
-    </control>
-    <control controlID="74" controlTypeID="com.balsamiq.mockups::SearchBox" x="532" y="233" w="-1" h="-1" measuredW="120" measuredH="25" zOrder="9" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>search</text>
-      </controlProperties>
-    </control>
-    <control controlID="75" controlTypeID="com.balsamiq.mockups::Label" x="533" y="184" w="-1" h="-1" measuredW="29" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Tags</text>
-      </controlProperties>
-    </control>
-    <control controlID="76" controlTypeID="com.balsamiq.mockups::VRule" x="725" y="194" w="-1" h="504" measuredW="10" measuredH="100" zOrder="11" locked="false" isInGroup="-1"/>
-    <control controlID="77" controlTypeID="com.balsamiq.mockups::HRule" x="533" y="214" w="152" h="-1" measuredW="100" measuredH="10" zOrder="12" locked="false" isInGroup="-1"/>
-    <control controlID="78" controlTypeID="com.balsamiq.mockups::List" x="533" y="269" w="191" h="237" measuredW="100" measuredH="237" zOrder="13" locked="false" isInGroup="-1">
-      <controlProperties>
-        <borderStyle>none</borderStyle>
-        <text>regid.1991-06.com.microsoft_Windows-8-Pro%0Aregid.1999-03.org.debian_apache-2-2-22-13%0Aregid.1999-03.org.debian_bind-9-8-4-dfsg%0Aregid.1999-03.org.debian_libsqlite-3-7-13-1%0Aregid.1999-03.org.debian_libssl-1-0-1e-2%0Aregid.1999-03.org.debian_libssl-dev-1-0-1e-2%0Aregid.1999-03.org.debian_libssl-doc-1-0-1e-2%0Aregid.1999-03.org.debian_openssl-1-0-1e-2%0Aregid.1999-03.org.debian_smbclient-3-6-6-6%0Aregid.1999-03.org.debian_sqlite-3-7-13-1%0Aregid.2004-03.org.strongswan_strongSwan-5-1-1</text>
-        <underline>true</underline>
-      </controlProperties>
-    </control>
-    <control controlID="79" controlTypeID="com.balsamiq.mockups::Canvas" x="524" y="131" w="928" h="42" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="188" controlTypeID="com.balsamiq.mockups::SearchBox" x="1317" y="98" w="-1" h="-1" measuredW="120" measuredH="25" zOrder="3" locked="false" isInGroup="-1"/>
+    <control controlID="189" controlTypeID="com.balsamiq.mockups::VRule" x="508" y="142" w="-1" h="572" measuredW="10" measuredH="100" zOrder="4" locked="false" isInGroup="-1"/>
+    <control controlID="190" controlTypeID="com.balsamiq.mockups::Canvas" x="524" y="131" w="928" h="42" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <borderColor>10066329</borderColor>
         <borderStyle>roundedSolid</borderStyle>
         <color>14540253</color>
       </controlProperties>
     </control>
-    <control controlID="80" controlTypeID="com.balsamiq.mockups::Label" x="770" y="184" w="-1" h="-1" measuredW="47" measuredH="21" zOrder="14" locked="false" isInGroup="-1">
+    <control controlID="191" controlTypeID="com.balsamiq.mockups::SubTitle" x="363" y="98" w="-1" h="-1" measuredW="122" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>strongTNC</text>
+      </controlProperties>
+    </control>
+    <control controlID="192" controlTypeID="com.balsamiq.mockups::SubTitle" x="533" y="142" w="904" h="-1" measuredW="121" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>SWID%20tags</text>
+      </controlProperties>
+    </control>
+    <control controlID="193" controlTypeID="com.balsamiq.mockups::Icon" x="1445" y="102" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <icon>PowerIcon%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="194" controlTypeID="com.balsamiq.mockups::SearchBox" x="532" y="233" w="-1" h="-1" measuredW="120" measuredH="25" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>search</text>
+      </controlProperties>
+    </control>
+    <control controlID="195" controlTypeID="com.balsamiq.mockups::Label" x="533" y="184" w="-1" h="-1" measuredW="29" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Tags</text>
+      </controlProperties>
+    </control>
+    <control controlID="196" controlTypeID="com.balsamiq.mockups::VRule" x="725" y="194" w="-1" h="504" measuredW="10" measuredH="100" zOrder="11" locked="false" isInGroup="-1"/>
+    <control controlID="197" controlTypeID="com.balsamiq.mockups::HRule" x="533" y="214" w="152" h="-1" measuredW="100" measuredH="10" zOrder="12" locked="false" isInGroup="-1"/>
+    <control controlID="198" controlTypeID="com.balsamiq.mockups::List" x="533" y="269" w="191" h="237" measuredW="100" measuredH="237" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <text>regid.1991-06.com.microsoft_Windows-8-Pro%0Aregid.1999-03.org.debian_apache-2-2-22-13%0Aregid.1999-03.org.debian_bind-9-8-4-dfsg%0Aregid.1999-03.org.debian_libsqlite-3-7-13-1%0Aregid.1999-03.org.debian_libssl-1-0-1e-2%0Aregid.1999-03.org.debian_libssl-dev-1-0-1e-2%0Aregid.1999-03.org.debian_libssl-doc-1-0-1e-2%0Aregid.1999-03.org.debian_openssl-1-0-1e-2%0Aregid.1999-03.org.debian_smbclient-3-6-6-6%0Aregid.1999-03.org.debian_sqlite-3-7-13-1%0Aregid.2004-03.org.strongswan_strongSwan-5-1-1</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="199" controlTypeID="com.balsamiq.mockups::Label" x="770" y="184" w="-1" h="-1" measuredW="47" measuredH="21" zOrder="14" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Tag%20info</text>
       </controlProperties>
     </control>
-    <control controlID="81" controlTypeID="com.balsamiq.mockups::DataGrid" x="770" y="205" w="440" h="102" measuredW="353" measuredH="125" zOrder="15" locked="false" isInGroup="-1">
+    <control controlID="200" controlTypeID="com.balsamiq.mockups::DataGrid" x="770" y="205" w="440" h="102" measuredW="353" measuredH="125" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
         <borderStyle>none</borderStyle>
         <hasHeader>false</hasHeader>
@@ -75,12 +75,12 @@
         <vLines>false</vLines>
       </controlProperties>
     </control>
-    <control controlID="82" controlTypeID="com.balsamiq.mockups::Label" x="770" y="519" w="27" h="-1" measuredW="27" measuredH="21" zOrder="16" locked="false" isInGroup="-1">
+    <control controlID="201" controlTypeID="com.balsamiq.mockups::Label" x="770" y="557" w="27" h="-1" measuredW="27" measuredH="21" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Files</text>
       </controlProperties>
     </control>
-    <control controlID="83" controlTypeID="com.balsamiq.mockups::DataGrid" x="770" y="535" w="440" h="187" measuredW="167" measuredH="1305" zOrder="17" locked="false" isInGroup="-1">
+    <control controlID="202" controlTypeID="com.balsamiq.mockups::DataGrid" x="770" y="581" w="440" h="141" measuredW="167" measuredH="1305" zOrder="17" locked="false" isInGroup="-1">
       <controlProperties>
         <borderStyle>none</borderStyle>
         <hasHeader>false</hasHeader>
@@ -90,12 +90,12 @@
         <vLines>false</vLines>
       </controlProperties>
     </control>
-    <control controlID="84" controlTypeID="com.balsamiq.mockups::Label" x="770" y="318" w="-1" h="-1" measuredW="48" measuredH="21" zOrder="18" locked="false" isInGroup="-1">
+    <control controlID="203" controlTypeID="com.balsamiq.mockups::Label" x="770" y="356" w="48" h="-1" measuredW="48" measuredH="21" zOrder="18" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Devices</text>
       </controlProperties>
     </control>
-    <control controlID="85" controlTypeID="com.balsamiq.mockups::DataGrid" x="770" y="339" w="440" h="167" measuredW="273" measuredH="165" zOrder="19" locked="false" isInGroup="-1">
+    <control controlID="204" controlTypeID="com.balsamiq.mockups::DataGrid" x="770" y="377" w="440" h="167" measuredW="273" measuredH="165" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
         <borderStyle>none</borderStyle>
         <hasHeader>false</hasHeader>
@@ -105,6 +105,41 @@
         <vLines>false</vLines>
       </controlProperties>
     </control>
-    <control controlID="86" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1457" y="127" w="-1" h="596" measuredW="16" measuredH="100" zOrder="20" locked="false" isInGroup="-1"/>
+    <control controlID="205" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1457" y="127" w="-1" h="596" measuredW="16" measuredH="100" zOrder="20" locked="false" isInGroup="-1"/>
+    <control controlID="206" controlTypeID="com.balsamiq.mockups::Button" x="770" y="315" w="-1" h="-1" measuredW="156" measuredH="27" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>DocEmptyIcon%7Cxsmall</icon>
+        <text>View%20raw%20SWID%20tag</text>
+      </controlProperties>
+    </control>
+    <control controlID="208" controlTypeID="com.balsamiq.mockups::Arrow" x="934" y="329" w="291" h="31" measuredW="150" measuredH="100" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Modal%20Div-Popup</text>
+      </controlProperties>
+    </control>
+    <control controlID="210" controlTypeID="com.balsamiq.mockups::Canvas" x="1233" y="240" w="477" h="377" measuredW="100" measuredH="70" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>roundedSolid</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="211" controlTypeID="com.balsamiq.mockups::Label" x="1254" y="257" w="-1" h="-1" measuredW="331" measuredH="21" zOrder="24" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <text>SWID%20tag%3A%20fedora_19-x86_64-strongswan-5.1.2-4.fc19</text>
+      </controlProperties>
+    </control>
+    <control controlID="212" controlTypeID="com.balsamiq.mockups::TextArea" x="1253" y="290" w="442" h="280" measuredW="200" measuredH="140" zOrder="25" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>11</size>
+        <state>up</state>
+        <text>%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%3F%3E%0A%3CSoftwareIdentity%20name%3D%22strongswan%22%20uniqueId%3D%22fedora_19-x86_64-strongswan-5.1.2-4.fc19%22%20version%3D%225.1.2-4.fc19%22%20versionScheme%3D%22alphanumeric%22%20xmlns%3D%22http%3A//standards.iso.org/iso/19770/-2/2014/schema.xsd%22%3E%0A%20%20%3CEntity%20name%3D%22strongSwan%22%20regid%3D%22regid.2004-03.org.strongswan%22%20role%3D%22tagcreator%22/%3E%0A%20%20%3CPayload%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib/systemd/system%22%20name%3D%22strongswan.service%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libcharon.so.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libcharon.so.0.0.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libhydra.so.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libhydra.so.0.0.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libpttls.so.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libpttls.so.0.0.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libstrongswan.so.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libstrongswan.so.0.0.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libtls.so.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan%22%20name%3D%22libtls.so.0.0.0%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-aes.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-attr.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-cmac.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-constraints.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-curl.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-des.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-dhcp.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-dnskey.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-eap-gtc.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-eap-identity.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-eap-md5.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-eap-mschapv2.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-eap-peap.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-eap-tls.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-eap-ttls.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-farp.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-fips-prf.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-gmp.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-hmac.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-kernel-netlink.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-md4.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-md5.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-nonce.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-openssl.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-pem.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-pgp.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-pkcs1.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-pkcs12.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-pkcs8.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-pubkey.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-random.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-rc2.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-resolve.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-revocation.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-sha1.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-sha2.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-socket-default.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-sshkey.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-stroke.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-updown.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-x509.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-xauth-eap.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-xauth-generic.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-xauth-pam.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/lib64/strongswan/plugins%22%20name%3D%22libstrongswan-xcbc.so%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22_copyright%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22_imv_policy%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22_updown%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22_updown_espmark%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22charon%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22imv_policy_manager%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22openac%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22pki%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22scepclient%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22starter%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/libexec/strongswan%22%20name%3D%22stroke%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/sbin%22%20name%3D%22charon-cmd%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/sbin%22%20name%3D%22strongswan%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/doc/strongswan-5.1.2%22%20name%3D%22COPYING%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/doc/strongswan-5.1.2%22%20name%3D%22NEWS%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/doc/strongswan-5.1.2%22%20name%3D%22README%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/doc/strongswan-5.1.2%22%20name%3D%22README.Fedora%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/doc/strongswan-5.1.2%22%20name%3D%22TODO%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---gen.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---issue.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---keyid.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---pkcs7.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---print.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---pub.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---req.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---self.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---signcrl.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki---verify.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man1%22%20name%3D%22strongswan_pki.1.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man5%22%20name%3D%22strongswan.conf.5.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man5%22%20name%3D%22strongswan_ipsec.conf.5.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man5%22%20name%3D%22strongswan_ipsec.secrets.5.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man8%22%20name%3D%22strongswan.8.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man8%22%20name%3D%22strongswan__updown.8.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man8%22%20name%3D%22strongswan__updown_espmark.8.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man8%22%20name%3D%22strongswan_charon-cmd.8.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man8%22%20name%3D%22strongswan_openac.8.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/man/man8%22%20name%3D%22strongswan_scepclient.8.gz%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22aes.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22attr.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22cmac.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22constraints.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22curl.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22des.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22dhcp.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22dnskey.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-gtc.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-identity.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-md5.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-mschapv2.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-peap.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-radius.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-tls.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-tnc.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22eap-ttls.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22farp.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22fips-prf.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22gmp.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22hmac.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22kernel-netlink.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22md4.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22md5.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22nonce.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22openssl.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22pem.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22pgp.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22pkcs1.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22pkcs12.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22pkcs7.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22pkcs8.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22pubkey.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22random.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22rc2.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22resolve.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22revocation.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22sha1.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22sha2.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22socket-default.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22sqlite.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22sshkey.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22stroke.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22tnc-ifmap.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22tnc-imc.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22tnc-imv.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22tnc-pdp.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22tnc-tnccs.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22tnccs-11.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22tnccs-20.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22tnccs-dynamic.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22updown.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22x509.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22xauth-eap.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22xauth-generic.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22xauth-pam.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/plugins%22%20name%3D%22xcbc.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config%22%20name%3D%22strongswan.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/strongswan.d%22%20name%3D%22attest.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/strongswan.d%22%20name%3D%22charon-logging.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/strongswan.d%22%20name%3D%22charon.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/strongswan.d%22%20name%3D%22imcv.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/strongswan.d%22%20name%3D%22pacman.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/strongswan.d%22%20name%3D%22starter.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/strongswan.d%22%20name%3D%22tnc.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/config/strongswan.d%22%20name%3D%22tools.conf%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/database/imv%22%20name%3D%22data.sql%22/%3E%0A%20%20%20%20%3CFile%20location%3D%22/usr/share/strongswan/templates/database/imv%22%20name%3D%22tables.sql%22/%3E%0A%20%20%3C/Payload%3E%0A%3C/SoftwareIdentity%3E</text>
+        <verticalScrollbar>true</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="213" controlTypeID="com.balsamiq.mockups::Button" x="1639" y="578" w="-1" h="-1" measuredW="56" measuredH="27" zOrder="26" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Close</text>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>
