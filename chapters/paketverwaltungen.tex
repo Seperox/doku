@@ -20,6 +20,7 @@ ist folgendes Format ideal:
 dpkg-query --show --showformat='${Package}\t${Version}\t${Status}\n'
 \end{bashcode}
 
+\noindent Hierbei ist noch anzumerken, dass entfernte DPKG Pakete einen sogenannten RC Status haben können. Dieser liegt vor, wenn ein Paket deinstalliert, aber die Konfigurationsdateien auf dem System belassen wurden. Die \texttt{---show} Option liefert auch diese Pakete . Dieser Der Zustand im Status Feld als \texttt{deinstall ok config-files} ersichtlich, entsprechende Pakete können so nachträglich im swidGenerator noch gefiltert werden.
 \paragraph{Paket-Dateien abfragen} \hspace{0pt} \\
 
 \noindent Um die zu einem Paket zugehörigen Dateien abzufragen, kann das
@@ -42,7 +43,7 @@ RPM\footnote{\url{https://rpm.org}} (Abkürzung für
 
 \paragraph{Installierte Pakete abfragen} \hspace{0pt} \\
 
-Ähnlich wie bei dpkg können alle auf dem System vorhandenen Pakete abgefragt werden. Die Ausgabe kann auch via Format String personalisiert werden. Für den swidGenerator ist folgendes Format ideal:
+\noindent Ähnlich wie bei dpkg können alle auf dem System vorhandenen Pakete abgefragt werden. Die Ausgabe kann auch via Format String personalisiert werden. Für den swidGenerator ist folgendes Format ideal:
 
 \begin{bashcode}
 rpm -qa --queryformat %{name}\t%{version}-%{release}
@@ -50,7 +51,7 @@ rpm -qa --queryformat %{name}\t%{version}-%{release}
 
 \paragraph{Paket-Dateien abfragen} \hspace{0pt} \\
 
-Um die zu einem Paket zugehörigen Dateien abzufragen, können die Parameter \texttt{--ql} verwendet werden:
+\noindent Um die zu einem Paket zugehörigen Dateien abzufragen, können die Parameter \texttt{--ql} verwendet werden:
 
 \begin{bashcode}
 rpm -ql <package-name>
