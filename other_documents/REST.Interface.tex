@@ -15,20 +15,20 @@
 \usepackage[framemethod=TikZ]{mdframed}
 \usepackage{mdframed}
 \mdfdefinestyle{def}{%
-    linecolor=gray!50!white,
-    outerlinewidth=0.5pt,
-    roundcorner=3pt,
-    skipabove=\topskip,
-    skipbelow=\topskip
-    innertopmargin=\baselineskip,
-    innerbottommargin=\baselineskip,
-    innerrightmargin=10pt,
-    innerleftmargin=10pt
+	linecolor=gray!50!white,
+	outerlinewidth=0.5pt,
+	roundcorner=3pt,
+	skipabove=\topskip,
+	skipbelow=\topskip
+	innertopmargin=\baselineskip,
+	innerbottommargin=\baselineskip,
+	innerrightmargin=10pt,
+	innerleftmargin=10pt
 }
 
 \lstset{
-    basicstyle=\linespread{.94}\ttfamily,
-    tabsize=2,
+	basicstyle=\linespread{.94}\ttfamily,
+	tabsize=2,
 }
 
 \linespread{1.3}
@@ -92,55 +92,175 @@ Buch entnommen.
 \end{description}
 
 \pagebreak
+\section{Repräsentation der Archetypen}
+
+Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
+
+\begin{description}
+	\item[Document] Ein Document gibt ein JSON Objekt zurück, welches alle relevanten Felder enthält.
+		Informationen, welche durch die Ressource-URI bereits gegeben sind (zB type), müssen nicht, können
+		jedoch, erneut in der Liste erscheinen.\\
+		Falls im Document Unterobjekte auftauchen, wird für das Feld die URI des betreffenden Unterobjekts
+		eingesetzt, damit kann dieses Objekt direkt abgefragt werden. Zusätzlich wird ein Quer-Parameter
+		bereit gestellt, welcher es erlaubt Unterobjekte bis zu einer gewissen Tiefe aufzulösen.\\
+		Beispiel: \hfill
+\begin{lstlisting}
+{
+	"feld1": "<str,wert1>",
+	"feld2": <int,wert2>,
+	"feld3": <bool,wert3>,
+	"unterobjekt": "<uri,unterobjekt>"
+	"untercollection": [
+		{
+			"uri": "<uri,unterobjekt>"
+		},
+		{
+			"uri": "<uri,unterobjekt>"
+		}
+	]
+}
+
+Query: depth=1
+---------------
+{
+	"feld1": "<str,wert1>",
+	"feld2": <int,wert2>,
+	"feld3": <bool,wert3>,
+	"unterobjekt": {
+		"feld1": <int,feld1>,
+		...
+		"uri": "<uri,unterobjekt>"
+	}
+	"untercollection": [
+		{
+			"feld": <int, feld>,
+			...
+			"uri": "<uri,unterobjekt>"
+		},
+		{
+			"feld": <int, feld>,
+			...
+			"uri": "<uri, unterobjekt>"
+		}
+	]
+}
+\end{lstlisting}
+
+	\item[Collection] Eine Collection gibt eine Liste mit allen enthaltenen (ggf. gefilterten)
+		JSON-Objekten zurück. Die Objekte werden zusätzlich jeweils um ein Feld \texttt{uri} ergänzt,
+		welches die Ressource-URI des jeweiligen Objektes enthält. Wie be einem Document gibt es bei
+		Collections einen optionalen Query Parameter welcher es erlaubt Unterobjekte aufzulösen, \\
+		Beispiel: \hfill
+\begin{lstlisting}
+{
+	{
+		"feld1": "<str,feld1>",
+		"unterobjekt": "<uri,unterobjekt>",
+		"uri": "<uri,objek>"
+	},
+	{
+		"feld1": "'<str,feld1>",
+		"unterobjekt": "<uri,unterobjekt>",
+		"uri": "<uri,objekt>"
+	},
+}
+
+Query: depth=1
+---------------
+{
+	{
+		"feld1": "<str,feld1>",
+		"unterobjekt": {
+			"feld": "<str,feld>",
+		},
+		"uri": "<uri,objekt>"
+	},
+	{
+		"feld1": "'<str,feld1>",
+		"unterobjekt": {
+			"feld": "<str,feld>",
+		},
+		"uri": "<uri,objekt>"
+	},
+}
+\end{lstlisting}
+
+	\item[Store] Ein Store verhält sich wie eine Collection, wenn sie direkt angesprochen wird
+		(\texttt{/store}) und wie ein Document, wenn ein spezifisches Element des Store angesprochen
+		wird (\texttt{/store/\{element-id\}}).
+	\item[Controller] Der Output des Controllers ist abhängig vom Verwendungszweck.
+\end{description}
+
+\pagebreak
+\section{HTTP Statuscodes}
+Das Ergebnis einer Anfrage wird grundsätzlich über einen HTTP Statuscode mitgeteilt, gewissen Fällen
+kann auch noch Payload im Body geliefert werden. Folgendes ist eine Auswahl von Statuscodes die zu
+erwarten sind:
+\begin{description*}
+	\item[201 Created] Entity wurde erfolgreich erstellt
+	\item[204 No Content] Entity wurde erfolgreich geändert
+	\item[400 Bad Request] Generischer Client Fehler
+	\item[404 Not Found] Zu änderndes Entity nicht gefunden
+	\item[405 Method Not Allowed] Die verwendete HTTP Methode ist auf dieser Ressource nicht erlaubt
+	\item[409 Conflict] Zu erstellendes Entity existiert bereits
+	\item[412 Precondition Failed] Es sind zusätzliche Schritte nötig um die Anfrage auszuführen.
+	\item[500 Internal Server Error] Generischer Client Fehler
+\end{description*}
+
+\pagebreak
 \section{REST Ressourcen}
+\subsection{Allgemeine Hinwese}
+\paragraph{Schreibweise}
+Für die Definition des Response- und Request-Formats wird eine pseudo JSON schreibweise verwendet.
 
 \subsection{Products}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT}
-    \item[Felder] id, *name
+	\item[SQL] \texttt{SELECT/INSERT}
+	\item[Felder] id, *name
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/products/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Product wurde erfolgreich erstellt
-            \item[204 No Content] Product wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Product nicht gefunden
-            \item[409 Conflict] Zu erstellendes Product existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Methods] GET, PUT, PATCH
+	\item[JSON Format Response/Request] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	name : "$productname$"
+	"id": <int,id> ,
+	"name": "<str,productname>"
 }
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/products}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-		id : $id$ ,
-		name : "$productname$",
-		uri: "$resource-uri$"
+		"id": <int,id> ,
+		"name": "<str,productname>"	
+		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
-\end{description}
+\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+		"name": "<str,productname>"
+	}
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -148,112 +268,149 @@ Buch entnommen.
 \subsection{Packages}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT}
-    \item[Felder] id, *name
+	\item[SQL] \texttt{SELECT/INSERT}
+	\item[Felder] id, *name
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/packages/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Package wurde erfolgreich erstellt
-            \item[204 No Content] Package wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Package nicht gefunden
-            \item[409 Conflict] Zu erstellendes Package existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Methods] GET, PUT, PATCH
+	\item[JSON Format Response/Request] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	name : "$packagename$"
+	"id": <int,id>,
+	"name": "<str,packagename>"
 }
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/packages}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-		id : $id$ ,
-		name : "$packagename$",
-		uri: "$resource-uri$"
+		"id": <int,id>,
+		"name": "<str,packagename>",
+		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+		"name": "<str,packagename>"
+	}
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/product/\{id\}/versions}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,version>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
 
 \pagebreak
 \subsection{Versions}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT/DELETE}
-    \item[Felder] *id, *product, *package, release, security, blacklist, time
+	\item[SQL] \texttt{SELECT/INSERT/DELETE}
+	\item[Felder] *id, *product, *package, release, security, blacklist, time
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/versions/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT, DELETE
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Version wurde erfolgreich erstellt
-            \item[204 No Content] Version wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Version nicht gefunden
-            \item[409 Conflict] Zu erstellendes Version existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Query] \texttt{dept=<int,depth>}
+	\item[Methods] GET, PUT, PATCH, DELETE
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	package : "$package-uri$",
-	product : "$product-uri$",
-	release : "$release$",
-	securtiy : $security$,
-	blacklist : $blacklist$,
-	time : $time$
+	"id": <int,id>,
+	"package": "<uri,package>",
+	"product": "<uri,product>",
+	"release": "<str,release>",
+	"securtiy": <int,security>,
+	"blacklist": <bool,blacklist>,
+	"time": <int,time>
 }
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"package": <int,package-id>,
+	"product": <int,product-id>,
+	"release": "<str,release>",
+	"securtiy": <int,security>,
+	"blacklist": <bool,blacklist>,
+	"time": <int,time>
+}
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/versions}
-	\item[Query/Filter]	product=\$product\$, package=\$package\$ 
 	\item[Archetype] Collection
+	\item[Filter] \texttt{product-name=<str,product-name>,\\
+	product-id=<int,product-id>,\\
+	package-name=<str,package-name>,\\
+	package-id=<int,package-id>}
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-	    id : $id$ ,
-	    package : "$package-uri$",
-	    product : "$product-uri$",
-    	release : "$release$",
-    	securtiy : $security$,
-    	blacklist : $blacklist$,
-    	time : $time$,
-    	uri: "$resource-uri$"
-    }
+		"id": <int,id>,
+		"package": "<uri,package>",
+		"product": "<uri,product>",
+		"release": "<str,release>",
+		"securtiy": <int,security>,
+		"blacklist": <bool,blacklist>,
+		"time": <int,time>
+		"uri": "<uri,resource>"
+	}
 ]
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+		"package": <int,package-id>,
+		"product": <int,product-id>,
+		"release": "<str,release>",
+		"securtiy": <int,security>,
+		"blacklist": <bool,blacklist>,
+		"time": <int,time>
+	}
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -261,53 +418,56 @@ Buch entnommen.
 \subsection{Identities}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT}
-    \item[Felder] id, *type, *value
+	\item[SQL] \texttt{SELECT/INSERT}
+	\item[Felder] id, *type, *value
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/identities/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Identitiy wurde erfolgreich erstellt
-            \item[204 No Content] Identitiy wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Identitiy nicht gefunden
-            \item[409 Conflict] Zu erstellendes Identitiy existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Methods] GET, PUT, PATCH
+	\item[JSON Format Response/Reques] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	type : $type$,
-	value : "$value$"
+	"id": <int,id>,
+	"type": <int,type>,
+	"value": "<str,value>"
 }
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/identities}
-	\item[Query/Filter]	type=\$type\$, value=\$value\$ 
 	\item[Archetype] Collection
+	\item[Filter] \texttt{type=<int,type>,\\
+	value=<str,value>}
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-	    id : $id$ ,
-	    type : $type$,
-	    value : "$value$",
-	    uri: "$resource-uri$"
-    }
+		"id": <int,id>,
+		"type": <int,type>,
+		"value": "<str,value>"
+		"uri": "<uri,resource>"
+	}
 ]
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+		"type": <int,type>,
+		"value": "<str,value>"
+	}
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -315,57 +475,93 @@ Buch entnommen.
 \subsection{Devices}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT/JOIN}
-    \item[Felder] *id, *value, *product, trusted, created, +desription
+	\item[SQL] \texttt{SELECT/INSERT/JOIN(sessions)}
+	\item[Felder] *id, *value, *product, trusted, created, +desription
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/devices/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Device wurde erfolgreich erstellt
-            \item[204 No Content] Device wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Device nicht gefunden
-            \item[409 Conflict] Zu erstellendes Device existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET, PUT, PATCH
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	description : "$description$",
-	value : "$value$",
-	product : "$product-uri$",
-	created : $created$
+	"id": <int,id>,
+	"description": "<str,description>",
+	"value": "<str,value>",
+	"product": "<uri,product>",
+	"created": <int,created>
 }
 \end{lstlisting}
-\end{description}
+\item[JSON Format Request] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"description": "<str,description>",
+	"value": "<str,value>",
+	"product": <int,product-id>,
+	"created": <int,created>
+}
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/devices}
-	\item[Query/Filter]	value=\$value\$, product=\$product\$ 
 	\item[Archetype] Collection
+	\item[Filter] \texttt{value=<str,value>,\\
+	 product-name=<str,product-name>,\\
+	 product-id=<int,product-id>} 
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-	    id : $id$ ,
-	    description : "$description$",
-	    value : "$value$",
-    	product : "$product-uri$",
-    	created : $created$,
-    	uri: "$resource-uri$"
-    }
+		"id": <int,id>,
+		"description": "<str,description>",
+		"value": "<str,value>",
+		"product": "<uri,product>",
+		"created": <int,created>,
+		"uri": "<uri,resource>"
+	}
 ]
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+		"description": "<str,description>",
+		"value": "<str,value>",
+		"product": <int,product-id>,
+		"created": <int,created>
+	}
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/device/\{id\}/sessions}
+	\item[Archetype] Readonly Collection
+	\item[Filter] \texttt{time-from=<int,time>,\\
+	time-to=<int,time>}
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,session>
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -373,127 +569,212 @@ Buch entnommen.
 \subsection{Sessions}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT/JOIN}
-    \item[Felder] *id, *device, *time, connection, product, identity, +rec
+	\item[SQL] \texttt{SELECT/INSERT/JOIN(devices,results)}
+	\item[Felder] *id, *device, *time, connection, product, identity, +rec
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/sessions/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Session wurde erfolgreich erstellt
-            \item[204 No Content] Session wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Session nicht gefunden
-            \item[409 Conflict] Zu erstellendes Session existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Methods] GET, PUT, PATCH
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	time : $time$,
-	identity : "$identity-uri$",
-	device : "$device-uri$",
-	product : $product-uri$,
-	rec : "$rec$"
+	"id": <int,id>,
+	"time": <int,time>,
+	"identity": "<uri,identity>",
+	"device": "<uri,device>",
+	"product": "<uri,product>",
+	"rec": <int,rec>
 }
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"time": <int,time>,
+	"identity": "<uri,identity>",
+	"device": <int,device-id>,
+	"product": <int,product-int>,
+	"rec": <int,rec>
+}
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/sessions}
-	\item[Query/Filter]	time=\$time\$, device=\$device\$ 
 	\item[Archetype] Collection
+	\item[Filter] \texttt{time-from=<int,time>,\\
+	time-to=<int,time>}
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-	    id : $id$ ,
-    	time : $time$,
-    	identity : "$identity-uri$",
-    	device : "$device-uri$",
-    	product : $product-uri$,
-    	rec : "$rec$",
-    	uri: "$resource-uri$"
-    }
+		"id": <int,id>,
+		"time": <int,time>,
+		"identity": "<uri,identity>",
+		"device": "<uri,device>",
+		"product": "<uri,product>",
+		"rec": <int,rec>
+		"uri": "<uri,resource>"
+	}
 ]
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+		"time": <int,time>,
+		"identity": "<uri,identity>",
+		"device": <int,device-id>,
+		"product": <int,product-id>,
+		"rec": <int,rec>
+	}
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/session/\{id\}/workitems}
+	\item[Archetype] Readonly Collection
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,workitem>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/session/\{id\}/results}
+	\item[Archetype] Readonly Collection
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,result>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
 
 \pagebreak
 \subsection{Workitems}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT/DELETE/JOIN}
-    \item[Felder] *id, *session, *result, enforcement, type, arg\_str, arg\_int, rec\_fail, rec\_noresult, rec\_final
+	\item[SQL] \texttt{SELECT/INSERT/DELETE/JOIN(enforcements)}
+	\item[Felder] *id, *session, *result, enforcement, type, arg\_str, arg\_int, rec\_fail, rec\_noresult, rec\_final
 \end{description*}
 
-
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/workitems/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT, DELETE
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Workitem wurde erfolgreich erstellt
-            \item[204 No Content] Workitem wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Workitem nicht gefunden
-            \item[409 Conflict] Zu erstellendes Workitem existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET, PUT, PATCH, DELETE
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	session : "$session-uri$",
-	enforcement : "$enforcement-uri$",
-	type : $type$,
-	arg-str : "$arg_str$",
-	arg-int : $arg_int$,
-	rec-fail : $rec_fail$,
-	rec-noresult : $rec_noresult$", 
-	rec-final : $rec_final$,
-	result : "$result$"
+	"id": <int,id>,
+	"session": "<uri,session>",
+	"enforcement": "<uri,enforcement>",
+	"type": <int,type>,
+	"arg-str": "<str,arg_str>",
+	"arg-int": <int,arg_int>,
+	"rec-fail": <int,rec_fail>,
+	"rec-noresult": <int,rec_noresult>, 
+	"rec-final": <int,rec_final>,
+	"result": "<str,result>"
 }
 \end{lstlisting}
-\end{description}
+\item[JSON Format Request] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"session": <int,session-id>,
+	"enforcement": <int,enforcement-id>,
+	"type": <int,type>,
+	"arg-str": "<str,arg_str>",
+	"arg-int": <int,arg_int>,
+	"rec-fail": <int,rec_fail>,
+	"rec-noresult": <int,rec_noresult>, 
+	"rec-final": <int,rec_final>,
+	"result": "<str,result>"
+}
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/workitems}
-	\item[Query/Filter]	session=\$session\$, result=\$result\$ 
 	\item[Archetype] Collection
+	\item[Filter] \texttt{result=<str,result>}
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-	    id : $id$ ,
-    	session : "$session-uri$",
-    	enforcement : "$enforcement-uri$",
-    	type : $type$,
-    	arg-str : "$arg_str$",
-    	arg-int : $arg_int$,
-    	rec-fail : $rec_fail$,
-    	rec-noresult : $rec_noresult$", 
-    	rec-final : $rec_final$,
-    	result : "$result$",
-    	uri: "$resource-uri$"
-    }
+		"id": <int,id>,
+		"session": "<uri,session>",
+		"enforcement": "<uri,enforcement>",
+		"type": <int,type>,
+		"arg-str": "<str,arg_str>",
+		"arg-int": <int,arg_int>,
+		"rec-fail": <int,rec_fail>,
+		"rec-noresult": <int,rec_noresult>, 
+		"rec-final": <int,rec_final>,
+		"result": "<str,result>"
+		"uri": "<uri,resource>"
+	}
 ]
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+		"session": "<int,session-id>",
+		"enforcement": "<int,enforcement-id>",
+		"type": <int,type>,
+		"arg-str": "<str,arg_str>",
+		"arg-int": <int,arg_int>,
+		"rec-fail": <int,rec_fail>,
+		"rec-noresult": <int,rec_noresult>, 
+		"rec-final": <int,rec_final>,
+		"result": "<str,result>"
+	}
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/workitems/\{id\}/enforcements}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,enforcement>
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -501,106 +782,137 @@ Buch entnommen.
 \subsection{Enforcements}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/JOIN}
-    \item[Felder] *id, *group\_id, policy, rec\_fail, rec\_noresult, max\_age
+	\item[SQL] \texttt{SELECT/JOIN(policies,workitems)}
+	\item[Felder] *id, *group\_id, policy, rec\_fail, rec\_noresult, max\_age
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/enforcements/\{id\}}
 	\item[Archetype] Readonly Document
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
-	\item[JSON Format] \hfill
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	policy : "$policy-uri$",
-	group-id : "$group-uri$",
-	rec-fail : $rec_fail$,
-	rec-noresult : $rec_noresult$", 
-	max-age : $max_age$
+	"id": <int,id>,
+	"policy": "<uri,policy>",
+	"group": "<uri,group>",
+	"rec-fail": <int,rec_fail>,
+	"rec-noresult": <int,rec_noresult>", 
+	"max-age": <int,max_age>
 }
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/enforcements}
-	\item[Query/Filter]	group-id=\$group\_id\$ 
-	\item[Archetype] Collection
+	\item[Archetype] Readonly Collection
+	\item[Filter] \texttt{group-id=<int,group-id>,\\
+	group-name=<str,group-name>}
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
 	\item[JSON Format] \hfill
 \begin{lstlisting}
 [
-    {
-    	id : $id$ ,
-    	policy : "$policy-uri$",
-    	group-id : "$group-uri$",
-    	rec-fail : $rec_fail$,
-    	rec-noresult : $rec_noresult$", 
-    	max-age : $max_age$,
-    	uri : "$resource-uri$"
-    }
+	{
+		"id": <int,id>,
+		"policy": "<uri,policy>",
+		"group": "<uri,group>",
+		"rec-fail": <int,rec_fail>,
+		"rec-noresult": <int,rec_noresult>", 
+		"max-age": <int,max_age>
+		"uri": "<uri,resource>"
+	}
 ]
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/enforcements/\{id\}/workitems}
+	\item[Archetype] Readonly Collection
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET
+	\item[JSON Format] \hfill
+\begin{lstlisting}
+[
+	<doc,workitem>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
 
 \pagebreak
 \subsection{Policies}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/JOIN}
-    \item[Felder] *id, type, argument, rec\_fail, rec\_noresult, file, dir, +name
+	\item[SQL] \texttt{SELECT/JOIN(enforcements)}
+	\item[Felder] *id, type, argument, rec\_fail, rec\_noresult, file, dir, +name
 \end{description*}
 
-
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/policies/\{id\}}
 	\item[Archetype] Readonly Document
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
-	\item[JSON Format] \hfill
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	type : $type$,
-	name : "$name$",
-	argument : "$argument"$,
-	rec-fail : $rec_fail$,
-	rec-noresult : $rec_noresult$", 
-	file : "$file-uri$",
-	dir : "$dir-uri$"
+	"id": <int,id>,
+	"type": <int,type>,
+	"name": "<str,name>",
+	"argument": "<str,argument>",
+	"rec-fail": <int,rec_fail>,
+	"rec-noresult": <int,rec_noresult>, 
+	"file": "<uri,file>",
+	"dir": "<uri,dir>"
 }
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/policies}
-	\item[Archetype] Collection
+	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format] \hfill
 \begin{lstlisting}
 [
-    {
-    	id : $id$ ,
-    	type : $type$,
-    	name : "$name$",
-    	argument : "$argument"$,
-    	rec-fail : $rec_fail$,
-    	rec-noresult : $rec_noresult$", 
-    	file : "$file-uri$",
-    	dir : "$dir-uri$",
-    	uri : "$resource-uri$"
-    }
+	{
+		"id": <int,id>,
+		"type": <int,type>,
+		"name": "<str,name>",
+		"argument": "<str,argument>",
+		"rec-fail": <int,rec_fail>,
+		"rec-noresult": <int,rec_noresult>, 
+		"file": "<uri,file>",
+		"dir": "<uri,dir>"	
+		"uri": "<uri,resource>"
+	}
 ]
 \end{lstlisting}
-\end{description}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/policies/\{id\}/enforcements}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format] \hfill
+\begin{lstlisting}
+[
+	<doc,enforcement>
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -608,57 +920,73 @@ Buch entnommen.
 \subsection{Results}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT/JOIN}
-    \item[Felder] *policy, session, rec, result, +id
+	\item[SQL] \texttt{SELECT/INSERT/JOIN(sessions)}
+	\item[Felder] *policy, session, rec, result, +id
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/results/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Result wurde erfolgreich erstellt
-            \item[204 No Content] Result wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Result nicht gefunden
-            \item[409 Conflict] Zu erstellendes Result existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET, PUT, PATCH
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	session : "$session-uri$",
-	policy : "$policy-uri$",
-	rec : $rec$,
-	result : "$result$"
+	"id": <int,id>,
+	"session": "<uri,session>",
+	"policy": "<uri,policy>",
+	"rec": <int,rec>,
+	"result": "<str,result>"
 }
 \end{lstlisting}
-\end{description}
+    \item[JSON Format Request] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"session": <int,session-id>,
+	"policy": <int,policy-id>,
+	"rec": <int,rec>,
+	"result": "<str,result>"
+}
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/results}
-	\item[Query/Filter]	policy=\$policy\$
 	\item[Archetype] Collection
+	\item[Filter] \texttt{policy=<int,policy>}
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
-	{
-	    id : $id$ ,
-    	session : "$session-uri$",
-    	policy : "$policy-uri$",
-    	rec : $rec$,
-    	result : "$result$",
-      	uri : "$resource-uri$"
+    {
+	    "id": <int,id>,
+	  	"session": "<uri,session>",
+    	"policy": "<uri,policy>",
+	    "rec": <int,rec>,
+	    "result": "<str,result>",
+	    "uri": <uri,resource>
     }
 ]
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+    {
+	    "session": <int,session-id>,
+	    "policy": <int,policy-id>,
+	    "rec": <int,rec>,
+	    "result": "<str,result>",
+    }
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -666,44 +994,67 @@ Buch entnommen.
 \subsection{Groups}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT}
-    \item[Felder] *id, parent, +name
+	\item[SQL] \texttt{SELECT}
+	\item[Felder] *id, parent, +name
 \end{description*}
 
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/groups/\{id\}}
 	\item[Archetype] Readonly Document
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
-	\item[JSON Format] \hfill
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	name : "$name$",
-	parent : "$group-uri$",
+	"id": <int,id>,
+	"name": "<str,name>",
+	"parent": "<uri,group>"
 }
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/groups}
-	\item[Archetype] Collection
+	\item[Archetype] Readonly Collection
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
 	\item[JSON Format] \hfill
 \begin{lstlisting}
 [
-    {
-	    id : $id$ ,
-	    name : "$name$",
-	    parent : "$group-uri$",
-	    uri : "$resource-uri$"
-    }
+	{
+        "id": <int,id>,
+    	"name": "<str,name>",
+    	"parent": "<uri,group>"
+		"uri": "<uri,resource>"
+	}
 ]
 \end{lstlisting}
-\end{description}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/groups/\{id\}/devices}
+	\item[Archetype] Collection
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET, POST
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,device>
+]
+\end{lstlisting}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	<int,device-id>
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -711,61 +1062,18 @@ Buch entnommen.
 \subsection{Groups\_members}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT/INSERT}
-    \item[Felder] *device\_id, group\_id, +id
+	\item[SQL] \texttt{SELECT/INSERT}
+	\item[Felder] *device\_id, group\_id, +id
 \end{description*}
 
-
-\begin{mdframed}[style=def]
-\begin{description}
-	\item[URI Path] \texttt{/groups-members/\{id\}}
-	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Group Member wurde erfolgreich erstellt
-            \item[204 No Content] Group Member wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Group Member nicht gefunden
-            \item[409 Conflict] Zu erstellendes Group Member existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
-\begin{lstlisting}
-{
-	id : $id$ ,
-	group : "$group-uri$",
-	device : "$device-uri$"
-}
-\end{lstlisting}
-\end{description}
-\end{mdframed}
-
-\begin{mdframed}[style=def]
-\begin{description}
-	\item[URI Path] \texttt{/groups-members}
-	\item[Archetype] Collection
-	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
-\begin{lstlisting}
-[
-    {
-    	id : $id$ ,
-    	group : "$group-uri$",
-    	device : "$device-uri$",
-	    uri : "$resource-uri$"
-    }
-]
-\end{lstlisting}
-\end{description}
-\end{mdframed}
-
+Keine Ressourcen für Zwischentabellen.
 
 \pagebreak
 \subsection{Groups\_products\_defaults}
 
 \begin{description*}
-    \item[SQL] \texttt{SELECT}
-    \item[Felder] *product\_id, group\_id, +id
+	\item[SQL] \texttt{SELECT}
+	\item[Felder] *product\_id, group\_id, +id
 \end{description*}
 
 
@@ -793,12 +1101,12 @@ Buch entnommen.
 	\item[JSON Format] \hfill
 \begin{lstlisting}
 [
-    {
-    	id : $id$ ,
-    	group : "$group-uri$",
-    	device : "$device-uri$",
-	    uri : "$resource-uri$"
-    }
+	{
+		id : $id$ ,
+		group : "$group-uri$",
+		device : "$device-uri$",
+		uri : "$resource-uri$"
+	}
 ]
 \end{lstlisting}
 \end{description}
@@ -812,43 +1120,57 @@ Buch entnommen.
 \begin{description}
 	\item[URI Path] \texttt{/files/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] File wurde erfolgreich erstellt
-            \item[204 No Content] File wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes File nicht gefunden
-            \item[409 Conflict] Zu erstellendes File existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET, PUT, PATCH
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	name : "$name$",
-	dir : "$directory-uri$"
+	"id": <int,id>,
+	"name": "<str,name>",
+	"dir": "<uri,directory>"
+}
+\end{lstlisting}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"name": "<str,name>",
+	"dir": <int,directory-id>
 }
 \end{lstlisting}
 \end{description}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/files}
 	\item[Archetype] Collection
+	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
     {
-    	id : $id$ ,
-    	name : "$name$",
-    	dir : "$directory-uri$",
-    	uri : "$resource-uri$"
+	    "id": <int,id>,
+	    "name": "<str,name>",
+	    "dir": "<uri,directory>",
+	    "uri": "<uri,resource>"
     }
 ]
 \end{lstlisting}
-\end{description}
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+    {
+	    "id": <int,id>,
+	    "name": "<str,name>",
+	    "dir": <int,directory-id>,
+	    "uri": "<uri,resource>"
+    }
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
 
@@ -856,109 +1178,167 @@ Buch entnommen.
 \subsection{Directories}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/directories/\{id\}}
 	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] Directory wurde erfolgreich erstellt
-            \item[204 No Content] Directory wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes Directory nicht gefunden
-            \item[409 Conflict] Zu erstellendes Directory existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Methods] GET, PUT, PATCH
+	\item[JSON Format Response/Request] \hfill
 \begin{lstlisting}
 {
-	id : $id$ ,
-	path : "$path$",
+	"id": <int,id>,
+	"path": "<str,path>"
 }
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/directories}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Batch Create] Unterstützt
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
-    {
-    	id : $id$ ,
-    	path : "$path$",
-    	uri : "$resource-uri$"
-    }
+	{
+		"id": <int,id>,
+	    "path": "<str,path>",
+	    "uri": <uri,resource>
+	}
 ]
 \end{lstlisting}
-\end{description}
+    \item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+	    "path": "<str,path>"
+	}
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/directories/\{id\}/files}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,file>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
 
 \pagebreak
 \subsection{SWID Tags}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/swid-tags/{id}}
-	\item[Archetype] Document
-	\item[Methods] GET, PUT
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-            \item[201 Created] SWID Tag wurde erfolgreich erstellt
-            \item[204 No Content] SWID Tag  wurde erfolgreich geändert
-            \item[400 Bad Request] Response Entity fehlt oder ist unvollständig
-            \item[404 Not Found] Zu änderndes SWID Tag  nicht gefunden
-            \item[409 Conflict] Zu erstellendes SWID Tag  existiert bereits
-		\end{description*}
-	\item[JSON Format] \hfill
+	\item[Archetype] Readonly Document
+	\item[Query] \texttt{depth=<int,depth>}
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-    id : $id$,
-    package-name: "$package-name$",
-    version : "$version$",
-    unique-id : "$unique_id$",
-    entity : {
-        tag-creator : "$entity-uri$",
-        publisher :  $entity-uri$",
-        licensor : $entity-uri$"
-    }
+	"id": <int,id>,
+	"package-name": "<str,package-name>",
+	"version": "<str,version>",
+	"unique-id": "<str,unique_id>",
+	"entity": {
+		"tag-creator": "<uri-entity>",
+		"publisher":  "<uri-entity>",
+		"licensor": "<uri-entity>"
+	},
+	"tag-xml": "<xml,swid-tag>"
 }
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/swid-tags}
-	\item[Archetype] Collection
-	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
-    {
-        id : $id$,
-        package-name: "$package-name$",
-        version : "$version$",
-        unique-id : "$unique_id$",
-        entity : {
-            tag-creator : "$entity-uri$",
-            publisher :  $entity-uri$",
-            licensor : $entity-uri$"
-        },
-        uri : "$resource-uri$"
-    }
+	{
+		"id": <int,id>,
+    	"package-name": "<str,package-name>",
+    	"version": "<str,version>",
+    	"unique-id": "<str,unique_id>",
+    	"entity": {
+    		"tag-creator": "<uri-entity>",
+    		"publisher":  "<uri-entity>",
+    		"licensor": "<uri-entity>"
+    	},
+    	"tag-xml": "<xml,swid-tag>",
+    	"uri": <uri,resource>
+    	
+	}
 ]
 \end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 
 \pagebreak
 \subsection{Entities}
 
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/swid-entities/{id}}
+	\item[Archetype] Readonly Document
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"name": "<str,name>",
+	"regid": "<str,regid>"
+}
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/swid-entities}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	{
+	    "id": <int,id>,
+	    "name": "<str,name>",
+	    "regid": "<str,regid>",
+	    "uri": <uri,resource>
+    }
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/swid-entities/\{id\}/swid-tags}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+    <doc,swid-tag>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
 
 \pagebreak
 \subsection{SWID Tags: Messung}
@@ -968,21 +1348,42 @@ Schnittstelle. Die Software-IDs wurden zuvor auf dem Client gemessen und widersp
 installierten Software Pakete.\\
 Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können diese direkt eingetragen werden.
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/swid/measurement}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Response Statuscodes] \hfill
 		\begin{description*}
-			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen und wurden für die übermittelte Session eingetragen
-			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs übertragen.
+			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
+			und wurden für die übermittelte Session eingetragen
+			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die übertragenen Software-IDs.\\
+			Als Payload werden die fehlenden Software-IDs übertragen.
 		\end{description*}
-	\item[JSON Format] \hfill
+	\item[JSON Format Response/Request] \hfill
 \begin{lstlisting}
 [
-    "{software-id}"
+	"<str,software-id>"
 ]
 \end{lstlisting}
-\end{description}
+\end{description*}
+\end{mdframed}
+
+\pagebreak
+\subsection{SWID Tags: Erstellung}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/swid-tags}
+	\item[Archetype] Controller
+	\item[Methods] POST
+	\item[JSON Format Request] \hfill
+\begin{lstlisting}
+[
+	{
+        "tag-xml": "<xml,swid-tag>"	
+	}
+]
+\end{lstlisting}
+\end{description*}
 \end{mdframed}
 \end{document}
