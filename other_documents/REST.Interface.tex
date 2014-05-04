@@ -196,7 +196,9 @@ Beispiel mit Query \texttt{depth=1}:1
 Das Ergebnis einer Anfrage wird grundsätzlich über einen HTTP Statuscode mitgeteilt, gewissen Fällen
 kann auch noch Payload im Body geliefert werden. Folgendes ist eine Auswahl von Statuscodes die zu
 erwarten sind:
+
 \begin{description*}
+    \item[200 OK] Request erfolgreich
 	\item[201 Created] Entity wurde erfolgreich erstellt
 	\item[204 No Content] Entity wurde erfolgreich geändert
 	\item[400 Bad Request] Generischer Client Fehler
@@ -206,6 +208,9 @@ erwarten sind:
 	\item[412 Precondition Failed] Es sind zusätzliche Schritte nötig um die Anfrage auszuführen.
 	\item[500 Internal Server Error] Generischer Client Fehler
 \end{description*}
+
+Falls zusätzliche Codes verwendet werden oder die Codes eine spezielle oder erwähnenswerte Bedeutung haben, ist dies bei der betroffenen Resource vermerkt.
+
 
 \pagebreak
 \section{Allgemeine Hinweise}
@@ -349,11 +354,15 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
     \begin{description*}
         \item[\texttt{type}] Typ des gewünschten Workitems. Der Typ steht für den Policy Type.
     \end{description*}
+    \item[Response Statuscodes] \hfill
+    \begin{description*}
+        \item[204 No Content] Falls kein Workitem mit dem gegeben Typ vorhanden ist
+    \end{description*}
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 <doc,workitem>
 \end{lstlisting}
-    \item[Beschreibung] Der Request auf diesen Controller gibt ein Workitem mit dem gewünschten Typ zurück. Der Controller stellt sicher, dass ein Workitem immer nur einmal zurück gegeben wird.
+    \item[Beschreibung] Der Request auf diesen Controller gibt ein Workitem mit dem gewünschten Typ zurück. Der Controller stellt sicher, dass ein Workitem immer nur einmal zurück gegeben wird. 
 \end{description*}
 \end{mdframed}
 
@@ -363,12 +372,12 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	\item[URI Path] \texttt{/sessions/\{id\}/close}
 	\item[Archetype] Controller
 	\item[Methods] POST
-    \item[Beschreibung] Dieser Controller schliesst die Session ab.
+    \item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle zusätzlich nötigen Vorgänge.
 \end{description*}
 \end{mdframed}
 
 \pagebreak
-\subsubsection{Daten}
+\subsubsection{Documents und Collections}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -387,6 +396,7 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	"recommendation": <int,rec>
 }
 \end{lstlisting}
+    \item[Beschreibung] Informationen zu einer bestimmten Session. Sessions sollen nicht direkt geändert werden, sondern nur über die entsprechenden Controller, der Grund dafür ist, dass im Hintergrund noch zusätzliche Operationen vorgenommen werden müssen.
 \end{description*}
 \end{mdframed}
 
@@ -415,6 +425,7 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	}
 ]
 \end{lstlisting}
+    \item[Beschreibung] Liste aller Sessions. Neue Sessions können nur über den entsprechenden Controller erstellt werden.
 \end{description*}
 \end{mdframed}
 
@@ -434,6 +445,7 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	<doc,workitem>
 ]
 \end{lstlisting}
+    \item[Beschreibung] Eine Liste aller Workitems die zu einer bestimmten Session gehören. Workitems können nicht direkt erstellt werden, sondern werden beim erstellen einer Session anhand der Enforcements erstellt.
 \end{description*}
 \end{mdframed}
 
@@ -460,6 +472,7 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	"comment": "<str,comment>"
 }
 \end{lstlisting}
+    \item[Beschreibung] Detailierte Informationen zu einem Workitem, hier kann das Ergebnis und ein Kommentar dazu eingetragen werden.
 \end{description*}
 \end{mdframed}
 
@@ -472,8 +485,86 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 \begin{lstlisting}
 <doc,enforcement>
 \end{lstlisting}
+    \item[Beschreibung] Gibt das Enforcement eines bestimmten Workitems zurück.
 \end{description*}
 \end{mdframed}
+
+\subsubsection{Workitem Arguments}
+
+Folgende Workitem, bzw. Policy Typen sind momentan vorhanden:
+\begin{description*}
+    \item[\texttt{00: RESVD}] Deny
+    \item[\texttt{01: PCKGS}] Installed Packages
+    \item[\texttt{02: UNSRC}] Unknown Source
+    \item[\texttt{03: FWDEN}] Forwarding Enabled
+    \item[\texttt{04: PWDEN}] Default Password Enabled
+    \item[\texttt{05: FREFM}] File Reference Measurement
+    \item[\texttt{06: FMEAS}] File Measurement 
+    \item[\texttt{07: FMETA}] File Metadata
+    \item[\texttt{08: DREFM}] Directory Reference Measurement
+    \item[\texttt{09: DMEAS}] Directory Measurement
+    \item[\texttt{10: DMETA}] Directory Metadata
+    \item[\texttt{11: TCPOP}] Open TCP Listening Ports
+    \item[\texttt{12: TCPBL}] Blocked TCP Listening Ports
+    \item[\texttt{13: UDPOP}] Open UDP Listening Ports
+    \item[\texttt{14: UDPBL}] Blocked UDP Listening Ports
+    \item[\texttt{15: SWIDT}] SWID Tag Inventory
+    \item[\texttt{16: TPMRA}] TPM Remote Attestation
+\end{description*}
+
+Einige Typen benötigen unterschiedliche Argumente, Gemeinsamkeiten lassen sich wie folgt gruppieren:
+\begin{description*}
+    \item[Keine Argumente] 00, 01, 02, 03, 04
+    \item[Datei Pfad] 05, 06, 07
+    \item[Verzeichnis Pfad] 08, 09, 10
+    \item[Port Liste] 11, 12, 13, 14
+    \item[SWID Request Flags] 15
+    \item[TPM Attestation Flags] 16
+\end{description*}
+Entsprechend sollen die Argumente der Workitems übermittelt werden:
+\begin{description*}
+    \item[Keine Argumente] \hfill
+\begin{lstlisting}
+{}
+\end{lstlisting}
+    \item[Datei Pfad] \hfill
+\begin{lstlisting}
+{
+    "file": "<str,file-path>"
+}
+\end{lstlisting}   
+    \item[Verzeichnis Pfad] \hfill
+\begin{lstlisting}
+{
+    "directory": "<str,directory-path>"
+}
+\end{lstlisting} 
+    \item[Port Liste] \hfill
+\begin{lstlisting}
+{
+    "port-list": [
+        "<str,port or port-range>"
+    ]
+}
+\end{lstlisting} 
+    \item[SWID Request Flags] \hfill
+\begin{lstlisting}
+{
+    "swid-flags": [
+        "<str,swid-flag>"
+    ]
+}
+\end{lstlisting} 
+    \item[TPM Attestation Flags] \hfill
+\begin{lstlisting}
+{
+    "tpm-flags": [
+        "<str,tpm-flag>"
+    ]
+}
+\end{lstlisting} 
+\end{description*}
+
 
 \pagebreak
 \subsection{Controller für Messungen}
