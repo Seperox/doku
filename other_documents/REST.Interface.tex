@@ -1,6 +1,6 @@
 \documentclass[10pt,a4paper]{scrartcl}
 \pagestyle{empty}
-\usepackage{a4} % alternativ \usepackage{a4wide}
+\usepackage{a4wide}
 \usepackage[ngerman]{babel} % Neudeutsche Silbentrennung (mehrsprachiges Dokument)
 \usepackage{parskip} % Skip indentation of first row
 \usepackage{graphicx} % Graphics support
@@ -101,8 +101,8 @@ Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
 		Informationen, welche durch die Ressource-URI bereits gegeben sind (zB type), müssen nicht, können
 		jedoch, erneut in der Liste erscheinen.\\
 		Falls im Document Unterobjekte auftauchen, wird für das Feld die URI des betreffenden Unterobjekts
-		eingesetzt, damit kann dieses Objekt direkt abgefragt werden. Zusätzlich wird ein Quer-Parameter
-		bereit gestellt, welcher es erlaubt Unterobjekte bis zu einer gewissen Tiefe aufzulösen.\\
+		eingesetzt, damit kann dieses Objekt direkt abgefragt werden. Zusätzlich wird ein Query-Parameter
+		bereit gestellt, welcher es erlaubt, Unterobjekte bis zu einer gewissen Tiefe aufzulösen.\\
 		Beispiel: \hfill
 \begin{lstlisting}
 {
@@ -119,9 +119,9 @@ Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
 		}
 	]
 }
-
-Query: depth=1
----------------
+\end{lstlisting}
+Beispiel mit Query \texttt{depth=1}:
+\begin{lstlisting}
 {
 	"feld1": "<str,wert1>",
 	"feld2": <int,wert2>,
@@ -147,8 +147,8 @@ Query: depth=1
 \end{lstlisting}
 
 	\item[Collection] Eine Collection gibt eine Liste mit allen enthaltenen (ggf. gefilterten)
-		JSON-Objekten zurück. Die Objekte werden zusätzlich jeweils um ein Feld \texttt{uri} ergänzt,
-		welches die Ressource-URI des jeweiligen Objektes enthält. Wie be einem Document gibt es bei
+		JSON-Objekten zurück. Die Objekte werden zusätzlich um ein Feld \texttt{uri} ergänzt,
+		welches die Ressource-URI des jeweiligen Objektes enthält. Wie bei einem Document gibt es bei
 		Collections einen optionalen Query Parameter welcher es erlaubt Unterobjekte aufzulösen, \\
 		Beispiel: \hfill
 \begin{lstlisting}
@@ -164,9 +164,9 @@ Query: depth=1
 		"uri": "<uri,objekt>"
 	},
 }
-
-Query: depth=1
----------------
+\end{lstlisting}
+Beispiel mit Query \texttt{depth=1}:1
+\begin{lstlisting}
 {
 	{
 		"feld1": "<str,feld1>",
@@ -208,18 +208,326 @@ erwarten sind:
 \end{description*}
 
 \pagebreak
-\section{REST Ressourcen}
-\subsection{Allgemeine Hinwese}
-\paragraph{Schreibweise}
-Für die Definition des Response- und Request-Formats wird eine pseudo JSON schreibweise verwendet.
+\section{Allgemeine Hinweise}
 
-\subsection{Products}
+\subsection{Schreibweise}
+Für die Definition des Response- und Request-Formats wird eine pseudo JSON schreibweise verwendet. Die
+auszufüllenden Werte werden als Tupel in spitzen Klammern dargestellt. Der erste Teil des Tupels zeigt 
+den Typ, der zweite Teil steht zur Beschreibung für den Wert. Folgende Typen werden verwendet:
+\begin{description*}
+    \item[int] Integer Zahlenwert
+    \item[num] Dezimalzahl, 
+    \item[str] String
+    \item[bool] Wahrheitswert
+    \item[uri] Die voll qualifizerte URI einer Resource
+    \item[doc] Das Dokument einer Resource, wie dieses Aussieht kann im jeweiligen Abschnitt zur genannten Resource nachgeschlagen werden
+\end{description*}
 
+\subsection{Standard Verhalten}
+Folgende Punkte beschreiben das standard Verhalten der Resourcen:
+\begin{description*}
+    \item[Depth Query-Parameter] Jede Resource die als Antwort eine URI auf eine andere Resource zurück gibt                         unterstützt den \texttt{depth} Query-Parameter. Dieser löst die URIs bis zur gewünschten tiefe auf. Möglicherweise wird die maximale Tiefe eingeschränkt. Wenn keine tiefe angegeben wird, gilt die Auflösungstiefe 0.
+    \item[Filter Query-Parameter] Filter Query-Parameter sind, falls vorhanden, immer optional, sie dienen der Präzisierung des Rückgabesets. Wenn sie weggelassen werden, wird das vollständige Set zurückgegeben.
+\end{description*}
+ 
+\subsection{Bisher verwendete SQL Vorgänge}
+\paragraph{Session}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/INSERT/JOIN(devices,results)}
+	\item[Felder] *id, *device, *time, connection, product, identity, +rec
+\end{description*}
+
+\paragraph{Workitem}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/INSERT/DELETE/JOIN(enforcements)}
+	\item[Felder] *id, *session, *result, enforcement, type, arg\_str, arg\_int, rec\_fail, rec\_noresult, rec\_final
+\end{description*} 
+ 
+\paragraph{Products}
 \begin{description*}
 	\item[SQL] \texttt{SELECT/INSERT}
 	\item[Felder] id, *name
 \end{description*}
 
+\paragraph{Packages}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/INSERT}
+	\item[Felder] id, *name
+\end{description*}
+
+\paragraph{Versions}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/INSERT/DELETE}
+	\item[Felder] *id, *product, *package, release, security, blacklist, time
+\end{description*}
+
+\paragraph{Identities}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/INSERT}
+	\item[Felder] id, *type, *value
+\end{description*}
+
+\paragraph{Devices}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/INSERT/JOIN(sessions)}
+	\item[Felder] *id, *value, *product, trusted, created, +desription
+\end{description*}
+
+\paragraph{Enforcements}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/JOIN(policies,workitems)}
+	\item[Felder] *id, *group\_id, policy, rec\_fail, rec\_noresult, max\_age
+\end{description*}
+
+\paragraph{Policies}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/JOIN(enforcements)}
+	\item[Felder] *id, type, argument, rec\_fail, rec\_noresult, file, dir, +name
+\end{description*}
+
+\paragraph{Results}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/INSERT/JOIN(sessions)}
+	\item[Felder] *policy, session, rec, result, +id
+\end{description*}
+
+\paragraph{Groups}
+\begin{description*}
+	\item[SQL] \texttt{SELECT}
+	\item[Felder] *id, parent, +name
+\end{description*}
+
+\paragraph{Groups\_members}
+\begin{description*}
+	\item[SQL] \texttt{SELECT/INSERT}
+	\item[Fe•lder] *device\_id, group\_id, +id
+\end{description*}
+
+\paragraph{Groups\_products\_defaults}
+\begin{description*}
+	\item[SQL] \texttt{SELECT}
+	\item[Felder] *product\_id, group\_id, +id
+\end{description*} 
+
+
+\pagebreak
+\section{REST Ressourcen}
+
+\subsection{Session Steuerung und Ablauf}
+
+\subsubsection{Controller}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/sessions/create}
+	\item[Archetype] Controller
+	\item[Methods] POST
+	\item[Request Parameter] \hfill
+    \begin{description*}
+        \item[\texttt{connection-id}] strongSwan Connection Id
+        \item[\texttt{device-id}] Device identifikation
+        \item[\texttt{TODO}] Welche Informationen werden benötigt
+    \end{description*}
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+{
+	"session-id": <int,id>,
+	"uri": "<uri,resource>"
+}
+\end{lstlisting}
+    \item[Beschreibung] Dieser Controller erstellt und startet eine Session. Die Id die im Response Dokument zurück geliefert wird, dient zur zukünftigen Identifikation der soeben gestarteten Session.
+\end{description*}
+\end{mdframed}
+
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/sessions/\{id\}/getWorkitem}
+	\item[Archetype] Controller
+	\item[Methods] POST
+	\item[Request Parameter] \hfill
+    \begin{description*}
+        \item[\texttt{type}] Typ des gewünschten Workitems. Der Typ steht für den Policy Type.
+    \end{description*}
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+<doc,workitem>
+\end{lstlisting}
+    \item[Beschreibung] Der Request auf diesen Controller gibt ein Workitem mit dem gewünschten Typ zurück. Der Controller stellt sicher, dass ein Workitem immer nur einmal zurück gegeben wird.
+\end{description*}
+\end{mdframed}
+
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/sessions/\{id\}/close}
+	\item[Archetype] Controller
+	\item[Methods] POST
+    \item[Beschreibung] Dieser Controller schliesst die Session ab.
+\end{description*}
+\end{mdframed}
+
+\pagebreak
+\subsubsection{Daten}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/sessions/\{id\}}
+	\item[Archetype] Readonly Document
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"time": <int,time>,
+	"identity": "<uri,identity>",
+	"connection-id": <int,connection-id>,
+	"device": "<uri,device>",
+	"product": "<uri,product>",
+	"recommendation": <int,rec>
+}
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/sessions}
+	\item[Archetype] Readonly Collection
+	\item[Filter Query] \hfill
+    \begin{description*}
+        \item[time-from] \texttt{<int,timestamp>}
+        \item[time-to] \texttt{<int,timestamp>}
+    \end{description*}	
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	{
+		"id": <int,id>,
+		"time": <int,time>,
+		"identity": "<uri,identity>",
+		"connection-id": <int,connection-id>,
+		"device": "<uri,device>",
+		"product": "<uri,product>",
+		"recommendation": <int,rec>
+		"uri": "<uri,resource>"
+	}
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/session/\{id\}/workitems}
+	\item[Archetype] Readonly Collection
+	\item[Filter Query] \hfill
+	\begin{description*}
+	    \item[type] \texttt{<int,policy-type>}
+	\end{description*}
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,workitem>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/workitems/\{id\}}
+	\item[Archetype] Document
+	\item[Methods] GET, PATCH
+	\item[Request Parameter] \hfill
+    \begin{description*}
+        \item[\texttt{recommendation}] Empfehlung als folge des Messergebnisses für dieses Workitem.
+        \item[\texttt{comment}] Kommentar zur Empfehlung.
+    \end{description*}
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"session": "<uri,session>",
+	"enforcement": "<uri,enforcement>",
+	"type": <int,type>,
+	"argument": <doc,workitem-argument>,
+	"recommendation": <int,recommendation>,
+	"comment": "<str,comment>"
+}
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/workitems/\{id\}/enforcement}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+<doc,enforcement>
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\pagebreak
+\subsection{Controller für Messungen}
+
+\subsubsection{SWID Tags: Messung}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/session/\{id\}/swidMeasurement}
+	\item[Archetype] Controller
+	\item[Methods] POST
+	\item[Response Statuscodes] \hfill
+		\begin{description*}
+			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
+			und wurden für die übermittelte Session eingetragen
+			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die übertragenen Software-IDs.\\
+			Als Payload werden die fehlenden Software-IDs übertragen.
+		\end{description*}
+	\item[Request Parameter] \hfill
+    \begin{description*}
+        \item[\texttt{software-id}] Eine kommagetrennte Liste von Software Ids
+    \end{description*}
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	"<str,software-id>"
+]
+\end{lstlisting}
+    \item[Beschreibung] Die strongSwan Komponente sendet eine Liste von Software-IDs an die strongTNC 
+Schnittstelle. Die Software-IDs wurden zuvor auf dem Client gemessen und widerspiegeln die momentan
+installierten Software Pakete.\\
+Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können diese direkt eingetragen werden.
+\end{description*}
+\end{mdframed}
+
+
+\subsubsection{SWID Tags: Erstellung}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/swid/addTags}
+	\item[Archetype] Controller
+	\item[Methods] POST
+	\item[Request Parameter] \hfill
+    \begin{description*}
+        \item[\texttt{xml-data}] TODO Encoding? 
+    \end{description*}
+    \item[Beschreibung] Die übermittelten Tags werden gelesen und in die Datenbank gespeichert. Bereits vorhandene Tags werden übersprungen, beziehungsweise ergänzt, wenn der neu übermittelte Tag mehr optionale Felder enthält als der bereits gespeicherte.
+\end{description*}
+\end{mdframed}
+
+\pagebreak
+\subsection{CRUD Resourcen}
+\subsubsection{Products}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -265,13 +573,7 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 
 
 \pagebreak
-\subsection{Packages}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT}
-	\item[Felder] id, *name
-\end{description*}
-
+\subsubsection{Packages}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -317,7 +619,7 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/product/\{id\}/versions}
+	\item[URI Path] \texttt{/packages/\{id\}/versions}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
@@ -330,13 +632,7 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 \end{mdframed}
 
 \pagebreak
-\subsection{Versions}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/DELETE}
-	\item[Felder] *id, *product, *package, release, security, blacklist, time
-\end{description*}
-
+\subsubsection{Versions}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -415,14 +711,7 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 
 
 \pagebreak
-\subsection{Identities}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT}
-	\item[Felder] id, *type, *value
-\end{description*}
-
-
+\subsubsection{Identities}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/identities/\{id\}}
@@ -472,13 +761,7 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 
 
 \pagebreak
-\subsection{Devices}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/JOIN(sessions)}
-	\item[Felder] *id, *value, *product, trusted, created, +desription
-\end{description*}
-
+\subsubsection{Devices}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -564,229 +847,8 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 \end{description*}
 \end{mdframed}
 
-
 \pagebreak
-\subsection{Sessions}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/JOIN(devices,results)}
-	\item[Felder] *id, *device, *time, connection, product, identity, +rec
-\end{description*}
-
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/sessions/\{id\}}
-	\item[Archetype] Document
-	\item[Methods] GET, PUT, PATCH
-	\item[Query] \texttt{depth=<int,depth>}
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"time": <int,time>,
-	"identity": "<uri,identity>",
-	"device": "<uri,device>",
-	"product": "<uri,product>",
-	"rec": <int,rec>
-}
-\end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"time": <int,time>,
-	"identity": "<uri,identity>",
-	"device": <int,device-id>,
-	"product": <int,product-int>,
-	"rec": <int,rec>
-}
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/sessions}
-	\item[Archetype] Collection
-	\item[Filter] \texttt{time-from=<int,time>,\\
-	time-to=<int,time>}
-	\item[Query] \texttt{depth=<int,depth>}
-	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-[
-	{
-		"id": <int,id>,
-		"time": <int,time>,
-		"identity": "<uri,identity>",
-		"device": "<uri,device>",
-		"product": "<uri,product>",
-		"rec": <int,rec>
-		"uri": "<uri,resource>"
-	}
-]
-\end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-		"time": <int,time>,
-		"identity": "<uri,identity>",
-		"device": <int,device-id>,
-		"product": <int,product-id>,
-		"rec": <int,rec>
-	}
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/workitems}
-	\item[Archetype] Readonly Collection
-	\item[Query] \texttt{depth=<int,depth>}
-	\item[Methods] GET
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-[
-	<doc,workitem>
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/results}
-	\item[Archetype] Readonly Collection
-	\item[Query] \texttt{depth=<int,depth>}
-	\item[Methods] GET
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-[
-	<doc,result>
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-\pagebreak
-\subsection{Workitems}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/DELETE/JOIN(enforcements)}
-	\item[Felder] *id, *session, *result, enforcement, type, arg\_str, arg\_int, rec\_fail, rec\_noresult, rec\_final
-\end{description*}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/workitems/\{id\}}
-	\item[Archetype] Document
-	\item[Query] \texttt{depth=<int,depth>}
-	\item[Methods] GET, PUT, PATCH, DELETE
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"session": "<uri,session>",
-	"enforcement": "<uri,enforcement>",
-	"type": <int,type>,
-	"arg-str": "<str,arg_str>",
-	"arg-int": <int,arg_int>,
-	"rec-fail": <int,rec_fail>,
-	"rec-noresult": <int,rec_noresult>, 
-	"rec-final": <int,rec_final>,
-	"result": "<str,result>"
-}
-\end{lstlisting}
-\item[JSON Format Request] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"session": <int,session-id>,
-	"enforcement": <int,enforcement-id>,
-	"type": <int,type>,
-	"arg-str": "<str,arg_str>",
-	"arg-int": <int,arg_int>,
-	"rec-fail": <int,rec_fail>,
-	"rec-noresult": <int,rec_noresult>, 
-	"rec-final": <int,rec_final>,
-	"result": "<str,result>"
-}
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/workitems}
-	\item[Archetype] Collection
-	\item[Filter] \texttt{result=<str,result>}
-	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-[
-	{
-		"id": <int,id>,
-		"session": "<uri,session>",
-		"enforcement": "<uri,enforcement>",
-		"type": <int,type>,
-		"arg-str": "<str,arg_str>",
-		"arg-int": <int,arg_int>,
-		"rec-fail": <int,rec_fail>,
-		"rec-noresult": <int,rec_noresult>, 
-		"rec-final": <int,rec_final>,
-		"result": "<str,result>"
-		"uri": "<uri,resource>"
-	}
-]
-\end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-		"session": "<int,session-id>",
-		"enforcement": "<int,enforcement-id>",
-		"type": <int,type>,
-		"arg-str": "<str,arg_str>",
-		"arg-int": <int,arg_int>,
-		"rec-fail": <int,rec_fail>,
-		"rec-noresult": <int,rec_noresult>, 
-		"rec-final": <int,rec_final>,
-		"result": "<str,result>"
-	}
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/workitems/\{id\}/enforcements}
-	\item[Archetype] Readonly Collection
-	\item[Methods] GET
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-[
-	<doc,enforcement>
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-
-\pagebreak
-\subsection{Enforcements}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/JOIN(policies,workitems)}
-	\item[Felder] *id, *group\_id, policy, rec\_fail, rec\_noresult, max\_age
-\end{description*}
-
-
+\subsubsection{Enforcements}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/enforcements/\{id\}}
@@ -848,12 +910,7 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 \end{mdframed}
 
 \pagebreak
-\subsection{Policies}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/JOIN(enforcements)}
-	\item[Felder] *id, type, argument, rec\_fail, rec\_noresult, file, dir, +name
-\end{description*}
+\subsubsection{Policies}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -917,13 +974,7 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 
 
 \pagebreak
-\subsection{Results}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/JOIN(sessions)}
-	\item[Felder] *policy, session, rec, result, +id
-\end{description*}
-
+\subsubsection{Results}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -991,13 +1042,7 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 
 
 \pagebreak
-\subsection{Groups}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT}
-	\item[Felder] *id, parent, +name
-\end{description*}
-
+\subsubsection{Groups}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -1059,23 +1104,12 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 
 
 \pagebreak
-\subsection{Groups\_members}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT}
-	\item[Felder] *device\_id, group\_id, +id
-\end{description*}
+\subsubsection{Groups\_members}
 
 Keine Ressourcen für Zwischentabellen.
 
 \pagebreak
-\subsection{Groups\_products\_defaults}
-
-\begin{description*}
-	\item[SQL] \texttt{SELECT}
-	\item[Felder] *product\_id, group\_id, +id
-\end{description*}
-
+\subsubsection{Groups\_products\_defaults}
 
 \begin{mdframed}[style=def]
 \begin{description}
@@ -1114,7 +1148,7 @@ Keine Ressourcen für Zwischentabellen.
 
 
 \pagebreak
-\subsection{Files}
+\subsubsection{Files}
 
 \begin{mdframed}[style=def]
 \begin{description}
@@ -1175,7 +1209,7 @@ Keine Ressourcen für Zwischentabellen.
 
 
 \pagebreak
-\subsection{Directories}
+\subsubsection{Directories}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -1234,7 +1268,7 @@ Keine Ressourcen für Zwischentabellen.
 \end{mdframed}
 
 \pagebreak
-\subsection{SWID Tags}
+\subsubsection{SWID Tags}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -1289,7 +1323,7 @@ Keine Ressourcen für Zwischentabellen.
 
 
 \pagebreak
-\subsection{Entities}
+\subsubsection{Entities}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -1340,50 +1374,5 @@ Keine Ressourcen für Zwischentabellen.
 \end{description*}
 \end{mdframed}
 
-\pagebreak
-\subsection{SWID Tags: Messung}
 
-Die strongSwan Komponente sendet eine Liste von Software-IDs an die strongTNC 
-Schnittstelle. Die Software-IDs wurden zuvor auf dem Client gemessen und widerspiegeln die momentan
-installierten Software Pakete.\\
-Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können diese direkt eingetragen werden.
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/swid/measurement}
-	\item[Archetype] Controller
-	\item[Methods] POST
-	\item[Response Statuscodes] \hfill
-		\begin{description*}
-			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
-			und wurden für die übermittelte Session eingetragen
-			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die übertragenen Software-IDs.\\
-			Als Payload werden die fehlenden Software-IDs übertragen.
-		\end{description*}
-	\item[JSON Format Response/Request] \hfill
-\begin{lstlisting}
-[
-	"<str,software-id>"
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-\pagebreak
-\subsection{SWID Tags: Erstellung}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/swid-tags}
-	\item[Archetype] Controller
-	\item[Methods] POST
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-        "tag-xml": "<xml,swid-tag>"	
-	}
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
 \end{document}
