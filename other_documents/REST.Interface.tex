@@ -419,24 +419,6 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 
 \paragraph{Workitems} \hfill \\
 
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/workitems/\{id\}}
-	\item[Archetype] Readonly Document
-	\item[Methods] GET
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"session": "<uri,session>",
-	"type": <int,type>,
-	"argument": <doc,policy-argument>
-}
-\end{lstlisting}
-    \item[Beschreibung] Detailierte Informationen zu einem Workitem.
-\end{description*}
-\end{mdframed}
-
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -466,7 +448,6 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result}
-	\item[URI Path] \texttt{/workitems/\{id\}/result}
 	\item[Archetype] Document
 	\item[Request Parameter] \hfill
     \begin{description*}
