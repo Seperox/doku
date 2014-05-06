@@ -23,7 +23,8 @@
 	innertopmargin=\baselineskip,
 	innerbottommargin=\baselineskip,
 	innerrightmargin=10pt,
-	innerleftmargin=10pt
+	innerleftmargin=10pt,
+	nobreak=true
 }
 
 \lstset{
@@ -224,6 +225,7 @@ den Typ, der zweite Teil steht zur Beschreibung für den Wert. Folgende Typen we
     \item[num] Dezimalzahl, 
     \item[str] String
     \item[bool] Wahrheitswert
+    \item[xml] Ein XML Dokument
     \item[uri] Die voll qualifizerte URI einer Resource
     \item[doc] Das Dokument einer Resource, wie dieses Aussieht kann im jeweiligen Abschnitt zur genannten Resource nachgeschlagen werden
 \end{description*}
@@ -316,6 +318,94 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	\item[Felder] *product\_id, group\_id, +id
 \end{description*} 
 
+\section{Daten Definition}
+
+\subsection{Policy Arguments}
+
+Folgende Workitem, bzw. Policy Typen sind momentan vorhanden:
+\begin{description*}
+    \item[\texttt{00: RESVD}] Deny
+    \item[\texttt{01: PCKGS}] Installed Packages
+    \item[\texttt{02: UNSRC}] Unknown Source
+    \item[\texttt{03: FWDEN}] Forwarding Enabled
+    \item[\texttt{04: PWDEN}] Default Password Enabled
+    \item[\texttt{05: FREFM}] File Reference Measurement
+    \item[\texttt{06: FMEAS}] File Measurement 
+    \item[\texttt{07: FMETA}] File Metadata
+    \item[\texttt{08: DREFM}] Directory Reference Measurement
+    \item[\texttt{09: DMEAS}] Directory Measurement
+    \item[\texttt{10: DMETA}] Directory Metadata
+    \item[\texttt{11: TCPOP}] Open TCP Listening Ports
+    \item[\texttt{12: TCPBL}] Blocked TCP Listening Ports
+    \item[\texttt{13: UDPOP}] Open UDP Listening Ports
+    \item[\texttt{14: UDPBL}] Blocked UDP Listening Ports
+    \item[\texttt{15: SWIDT}] SWID Tag Inventory
+    \item[\texttt{16: TPMRA}] TPM Remote Attestation
+\end{description*}
+
+Einige Typen benötigen unterschiedliche Argumente, Gemeinsamkeiten lassen sich wie folgt gruppieren:
+\begin{description*}
+    \item[Keine Argumente] 00, 01, 02, 03, 04
+    \item[Datei Pfad] 05, 06, 07
+    \item[Verzeichnis Pfad] 08, 09, 10
+    \item[Port Liste] 11, 12, 13, 14
+    \item[SWID Request Flags] 15
+    \item[TPM Attestation Flags] 16
+\end{description*}
+Entsprechend sollen die Argumente der Workitems übermittelt werden:
+\begin{description*}
+    \item[Keine Argumente] \hfill
+\begin{lstlisting}
+{}
+\end{lstlisting}
+    \item[Datei Pfad] \hfill
+\begin{lstlisting}
+{
+    "file": "<str,file-path>"
+}
+\end{lstlisting}   
+    \item[Verzeichnis Pfad] \hfill
+\begin{lstlisting}
+{
+    "directory": "<str,directory-path>"
+}
+\end{lstlisting} 
+    \item[Port Liste] \hfill
+\begin{lstlisting}
+{
+    "port-list": [
+        "<str,port or port-range>"
+    ]
+}
+\end{lstlisting} 
+    \item[SWID Request Flags] \hfill
+\begin{lstlisting}
+{
+    "swid-flags": [
+        "<str,swid-flag>"
+    ]
+}
+\end{lstlisting} 
+    \item[TPM Attestation Flags] \hfill
+\begin{lstlisting}
+{
+    "tpm-flags": [
+        "<str,tpm-flag>"
+    ]
+}
+\end{lstlisting} 
+\end{description*}
+
+\subsection{Recommendation Types}
+Folgende Recommendation Types bzw. Actions sind vorhanden:
+\begin{description*}
+    \item[\texttt{0: ALLOW}] Die Empfehlung/Aktion ist, den Client zuzulassen
+    \item[\texttt{1: BLOCK}] Die Empfehlung/Aktion ist, den Client zu blockieren
+    \item[\texttt{2: ISOLATE}] Die Empfehlung/Aktion ist, den Client in einem isoliertem Segment zu platzieren
+    \item[\texttt{3: NONE}]
+\end{description*}
+
+Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Repräsentation erstellt.
 
 \pagebreak
 \section{REST Ressourcen}
@@ -416,10 +506,8 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 \end{description*}
 \end{mdframed}
 
-
-\paragraph{Workitems} \hfill \\
-
-
+\pagebreak
+\paragraph{Workitems}\hfill \\
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/session/\{id\}/workitems}
@@ -436,7 +524,7 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	    "id": <int,id>,
 	    "session": "<uri,session>",
 	    "type": <int,type>,
-	    "argument": <doc,policy-argument>
+	    "argument": <policy-argument>
     }
 ]
 \end{lstlisting}
@@ -447,7 +535,7 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result}
+	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result}b
 	\item[Archetype] Document
 	\item[Request Parameter] \hfill
     \begin{description*}
@@ -466,9 +554,9 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 \end{description*}
 \end{mdframed}
 
-
+\pagebreak
 \paragraph{Results} \hfill \\
-
+\nopagebreak
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/session/\{id\}/results}
@@ -510,83 +598,6 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
     \item[Beschreibung] 
 \end{description*}
 \end{mdframed}
-
-
-\subsubsection{Policy Arguments}
-
-Folgende Workitem, bzw. Policy Typen sind momentan vorhanden:
-\begin{description*}
-    \item[\texttt{00: RESVD}] Deny
-    \item[\texttt{01: PCKGS}] Installed Packages
-    \item[\texttt{02: UNSRC}] Unknown Source
-    \item[\texttt{03: FWDEN}] Forwarding Enabled
-    \item[\texttt{04: PWDEN}] Default Password Enabled
-    \item[\texttt{05: FREFM}] File Reference Measurement
-    \item[\texttt{06: FMEAS}] File Measurement 
-    \item[\texttt{07: FMETA}] File Metadata
-    \item[\texttt{08: DREFM}] Directory Reference Measurement
-    \item[\texttt{09: DMEAS}] Directory Measurement
-    \item[\texttt{10: DMETA}] Directory Metadata
-    \item[\texttt{11: TCPOP}] Open TCP Listening Ports
-    \item[\texttt{12: TCPBL}] Blocked TCP Listening Ports
-    \item[\texttt{13: UDPOP}] Open UDP Listening Ports
-    \item[\texttt{14: UDPBL}] Blocked UDP Listening Ports
-    \item[\texttt{15: SWIDT}] SWID Tag Inventory
-    \item[\texttt{16: TPMRA}] TPM Remote Attestation
-\end{description*}
-
-Einige Typen benötigen unterschiedliche Argumente, Gemeinsamkeiten lassen sich wie folgt gruppieren:
-\begin{description*}
-    \item[Keine Argumente] 00, 01, 02, 03, 04
-    \item[Datei Pfad] 05, 06, 07
-    \item[Verzeichnis Pfad] 08, 09, 10
-    \item[Port Liste] 11, 12, 13, 14
-    \item[SWID Request Flags] 15
-    \item[TPM Attestation Flags] 16
-\end{description*}
-Entsprechend sollen die Argumente der Workitems übermittelt werden:
-\begin{description*}
-    \item[Keine Argumente] \hfill
-\begin{lstlisting}
-{}
-\end{lstlisting}
-    \item[Datei Pfad] \hfill
-\begin{lstlisting}
-{
-    "file": "<str,file-path>"
-}
-\end{lstlisting}   
-    \item[Verzeichnis Pfad] \hfill
-\begin{lstlisting}
-{
-    "directory": "<str,directory-path>"
-}
-\end{lstlisting} 
-    \item[Port Liste] \hfill
-\begin{lstlisting}
-{
-    "port-list": [
-        "<str,port or port-range>"
-    ]
-}
-\end{lstlisting} 
-    \item[SWID Request Flags] \hfill
-\begin{lstlisting}
-{
-    "swid-flags": [
-        "<str,swid-flag>"
-    ]
-}
-\end{lstlisting} 
-    \item[TPM Attestation Flags] \hfill
-\begin{lstlisting}
-{
-    "tpm-flags": [
-        "<str,tpm-flag>"
-    ]
-}
-\end{lstlisting} 
-\end{description*}
 
 
 \pagebreak
@@ -648,7 +659,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[URI Path] \texttt{/products/\{id\}}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response/Request] \hfill
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id> ,
@@ -671,6 +682,24 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"name": "<str,productname>"	
 		"uri": "<uri,resource>"
 	}
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/products/\{id\}/default-groups}
+	\item[Archetype] Collection
+	\item[Methods] GET, POST
+	\item[Request Parameter] \hfill
+    \begin{description*}
+        \item[\texttt{group-id}] group-id
+    \end{description*}
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+    <doc,group>
 ]
 \end{lstlisting}
 \end{description*}
@@ -788,7 +817,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[URI Path] \texttt{/identities/\{id\}}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response/Reques] \hfill
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -803,8 +832,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/identities}
 	\item[Archetype] Collection
-	\item[Filter] \texttt{type=<int,type>,\\
-	value=<str,value>}
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -896,6 +923,21 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \end{description*}
 \end{mdframed}
 
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/device/\{id\}/groups}
+	\item[Archetype] Collection 
+	\item[Methods] GET, POST
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,group>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
 \pagebreak
 \subsubsection{Enforcements}
 \begin{mdframed}[style=def]
@@ -944,6 +986,19 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \end{description*}
 \end{mdframed}
 
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/enforcements/\{id\}/groups}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format] \hfill
+\begin{lstlisting}
+[
+	<doc,group>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
 
 \pagebreak
 \subsubsection{Policies}
@@ -959,7 +1014,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	"id": <int,id>,
 	"type": <int,type>,
 	"name": "<str,name>",
-	"argument": <doc,policy-argument>,
+	"argument": <policy-argument>,
     "fail-recommendation": <int,rec_fail>,
     "noresult-recommendation": <int,rec_noresult>",
 }
@@ -979,7 +1034,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"id": <int,id>,
 		"type": <int,type>,
 		"name": "<str,name>",
-		"argument": <doc,policyargument>,
+		"argument": <policy-argument>,
         "fail-recommendation": <int,rec_fail>,
         "noresult-recommendation": <int,rec_noresult>",
 		"uri": "<uri,resource>"
@@ -1053,10 +1108,18 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	<doc,device>
 ]
 \end{lstlisting}
-	\item[JSON Format Request] \hfill
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/groups/\{id\}/enforcements}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
-	<int,device-id>
+	<doc,enfocement>
 ]
 \end{lstlisting}
 \end{description*}
@@ -1066,52 +1129,17 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \pagebreak
 \subsubsection{Groups\_members}
 
-Keine Ressourcen für Zwischentabellen.
+Keine Ressourcen für Zwischentabellen (siehe 'devices' und 'enforcements').
 
 \pagebreak
 \subsubsection{Groups\_products\_defaults}
-
-\begin{mdframed}[style=def]
-\begin{description}
-	\item[URI Path] \texttt{/groups-product-defaults/\{id\}}
-	\item[Archetype] Readonly Document
-	\item[Methods] GET
-	\item[JSON Format] \hfill
-\begin{lstlisting}
-{
-	id : $id$ ,
-	group : "$group-uri$",
-	product : "$product-uri$"
-}
-\end{lstlisting}
-\end{description}
-\end{mdframed}
-
-\begin{mdframed}[style=def]
-\begin{description}
-	\item[URI Path] \texttt{/groups-members}
-	\item[Archetype] Collection
-	\item[Methods] GET, POST
-	\item[JSON Format] \hfill
-\begin{lstlisting}
-[
-	{
-		id : $id$ ,
-		group : "$group-uri$",
-		device : "$device-uri$",
-		uri : "$resource-uri$"
-	}
-]
-\end{lstlisting}
-\end{description}
-\end{mdframed}
-
+Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \pagebreak
 \subsubsection{Files}
 
 \begin{mdframed}[style=def]
-\begin{description}
+\begin{description*}
 	\item[URI Path] \texttt{/files/\{id\}}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
@@ -1123,15 +1151,7 @@ Keine Ressourcen für Zwischentabellen.
 	"dir": "<uri,directory>"
 }
 \end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"name": "<str,name>",
-	"dir": <int,directory-id>
-}
-\end{lstlisting}
-\end{description}
+\end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
@@ -1150,17 +1170,6 @@ Keine Ressourcen für Zwischentabellen.
     }
 ]
 \end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-    {
-	    "id": <int,id>,
-	    "name": "<str,name>",
-	    "dir": <int,directory-id>,
-	    "uri": "<uri,resource>"
-    }
-]
-\end{lstlisting}
 \end{description*}
 \end{mdframed}
 
@@ -1173,7 +1182,7 @@ Keine Ressourcen für Zwischentabellen.
 	\item[URI Path] \texttt{/directories/\{id\}}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response/Request] \hfill
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -1198,22 +1207,14 @@ Keine Ressourcen für Zwischentabellen.
 	}
 ]
 \end{lstlisting}
-    \item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-	    "path": "<str,path>"
-	}
-]
-\end{lstlisting}
 \end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/directories/\{id\}/files}
-	\item[Archetype] Readonly Collection
-	\item[Methods] GET
+	\item[Archetype] Collection
+	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -1239,9 +1240,9 @@ Keine Ressourcen für Zwischentabellen.
 	"version": "<str,version>",
 	"unique-id": "<str,unique_id>",
 	"entity": {
-		"tag-creator": "<uri-entity>",
-		"publisher":  "<uri-entity>",
-		"licensor": "<uri-entity>"
+		"tag-creator": "<uri,entity>",
+		"publisher":  "<uri,entity>",
+		"licensor": "<uri,entity>"
 	},
 	"tag-xml": "<xml,swid-tag>"
 }
@@ -1263,9 +1264,9 @@ Keine Ressourcen für Zwischentabellen.
     	"version": "<str,version>",
     	"unique-id": "<str,unique_id>",
     	"entity": {
-    		"tag-creator": "<uri-entity>",
-    		"publisher":  "<uri-entity>",
-    		"licensor": "<uri-entity>"
+    		"tag-creator": "<uri,entity>",
+    		"publisher":  "<uri,entity>",
+    		"licensor": "<uri,entity>"
     	},
     	"tag-xml": "<xml,swid-tag>",
     	"uri": <uri,resource>
