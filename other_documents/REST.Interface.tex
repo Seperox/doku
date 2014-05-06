@@ -233,8 +233,10 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 \begin{description*}
     \item[Depth Query-Parameter] Jede Resource die als Antwort eine URI auf eine andere Resource zurück gibt                         unterstützt den \texttt{depth} Query-Parameter. Dieser löst die URIs bis zur gewünschten tiefe auf. Möglicherweise wird die maximale Tiefe eingeschränkt. Wenn keine tiefe angegeben wird, gilt die Auflösungstiefe 0.
     \item[Filter Query-Parameter] Filter Query-Parameter sind, falls vorhanden, immer optional, sie dienen der Präzisierung des Rückgabesets. Wenn sie weggelassen werden, wird das vollständige Set zurückgegeben.
-\end{description*}
+    \item[Generische Filter] Collections unterstützen wenn nicht anders erwähnt generische Filter. Das heisst, es kann grundsätzlich nach jedem Attribut des Rückgabedokuments gefiltert werden. Der Parameter ist wie folgt aufgebaute: \texttt{filter=atrribut:query;attribut:query;}.
+    \item[Batch Create] Collections unterstützen, sofern sie nicht readonly sind oder es anders erwähnt ist, das sogenannte 'Batch Create'. D.h zum Erstellen von neuen Dokumenten kann einer Collection auch eine Liste gesendet werden. Wird 'Batch Create' verwendet, besteht die Antwort des Servers nur aus einem Statuscode, es wird nicht eine Liste der Erstellten Dokumente zurück geschickt. Fall die Erstellung fehlschlägt wird kein Dokument angelegt. Es wird versucht mitzuteilen warum die Erstellung fehlschlug.\end{description*}
  
+\pagebreak
 \subsection{Bisher verwendete SQL Vorgänge}
 \paragraph{Session}
 \begin{description*}
@@ -324,20 +326,23 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/sessions/create}
+	\item[URI Path] \texttt{/sessions/start}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Request Parameter] \hfill
     \begin{description*}
         \item[\texttt{connection-id}] strongSwan Connection Id
-        \item[\texttt{device-id}] Device identifikation
+        \item[\texttt{device-id}] Device identifikation (wie wird das Device durch strongSwan identifiziert?)
         \item[\texttt{TODO}] Welche Informationen werden benötigt
     \end{description*}
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"session-id": <int,id>,
-	"uri": "<uri,resource>"
+	"workitems": [
+	     <doc,workitem>
+    ],
+	"uri": "<uri,session>"
 }
 \end{lstlisting}
     \item[Beschreibung] Dieser Controller erstellt und startet eine Session. Die Id die im Response Dokument zurück geliefert wird, dient zur zukünftigen Identifikation der soeben gestarteten Session.
@@ -347,32 +352,14 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/sessions/\{id\}/getWorkitem}
+	\item[URI Path] \texttt{/sessions/\{id\}/end}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Request Parameter] \hfill
     \begin{description*}
-        \item[\texttt{type}] Typ des gewünschten Workitems. Der Typ steht für den Policy Type.
+        \item[\texttt{recommendation}] Endgültiges Resultat/Empfehlung für diese Session.
     \end{description*}
-    \item[Response Statuscodes] \hfill
-    \begin{description*}
-        \item[204 No Content] Falls kein Workitem mit dem gegeben Typ vorhanden ist
-    \end{description*}
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-<doc,workitem>
-\end{lstlisting}
-    \item[Beschreibung] Der Request auf diesen Controller gibt ein Workitem mit dem gewünschten Typ zurück. Der Controller stellt sicher, dass ein Workitem immer nur einmal zurück gegeben wird. 
-\end{description*}
-\end{mdframed}
-
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/sessions/\{id\}/close}
-	\item[Archetype] Controller
-	\item[Methods] POST
-    \item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle zusätzlich nötigen Vorgänge.
+    \item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle zusätzlich nötigen Vorgänge, so werden zum Beispiel die Workitems dieser Session abgeräumt.
 \end{description*}
 \end{mdframed}
 
@@ -430,6 +417,27 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 \end{mdframed}
 
 
+\paragraph{Workitems} \hfill \\
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/workitems/\{id\}}
+	\item[Archetype] Readonly Document
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+{
+	"id": <int,id>,
+	"session": "<uri,session>",
+	"type": <int,type>,
+	"argument": <doc,policy-argument>
+}
+\end{lstlisting}
+    \item[Beschreibung] Detailierte Informationen zu einem Workitem.
+\end{description*}
+\end{mdframed}
+
+
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/session/\{id\}/workitems}
@@ -442,7 +450,12 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
-	<doc,workitem>
+	{
+	    "id": <int,id>,
+	    "session": "<uri,session>",
+	    "type": <int,type>,
+	    "argument": <doc,policy-argument>
+    }
 ]
 \end{lstlisting}
     \item[Beschreibung] Eine Liste aller Workitems die zu einer bestimmten Session gehören. Workitems können nicht direkt erstellt werden, sondern werden beim erstellen einer Session anhand der Enforcements erstellt.
@@ -452,44 +465,73 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/workitems/\{id\}}
+	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result}
+	\item[URI Path] \texttt{/workitems/\{id\}/result}
 	\item[Archetype] Document
-	\item[Methods] GET, PATCH
 	\item[Request Parameter] \hfill
     \begin{description*}
-        \item[\texttt{recommendation}] Empfehlung als folge des Messergebnisses für dieses Workitem.
-        \item[\texttt{comment}] Kommentar zur Empfehlung.
+        \item[\texttt{recommendation}] Resultat/Empfehlung für dieses Workitem.
+        \item[\texttt{comment}] Kommentar zum Resultat.
     \end{description*}
+	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	"id": <int,id>,
-	"session": "<uri,session>",
-	"enforcement": "<uri,enforcement>",
-	"type": <int,type>,
-	"argument": <doc,workitem-argument>,
-	"recommendation": <int,recommendation>,
-	"comment": "<str,comment>"
+	"recommendation": <int,type>,
+	"comment": <str,comment>
 }
 \end{lstlisting}
-    \item[Beschreibung] Detailierte Informationen zu einem Workitem, hier kann das Ergebnis und ein Kommentar dazu eingetragen werden.
+    \item[Beschreibung] Hier ka
 \end{description*}
 \end{mdframed}
+
+
+\paragraph{Results} \hfill \\
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/workitems/\{id\}/enforcement}
+	\item[URI Path] \texttt{/session/\{id\}/results}
 	\item[Archetype] Readonly Collection
+	\item[Filter Query] \hfill
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
-<doc,enforcement>
+[
+	{
+    	"id": <int,id>,
+    	"enforcement": "<uri,enforcement>",
+    	"recommendation": <int,type>,
+	    "comment": <str,comment>,
+	    "uri": "<uri,resource>"
+    }
+]
 \end{lstlisting}
-    \item[Beschreibung] Gibt das Enforcement eines bestimmten Workitems zurück.
+    \item[Beschreibung] 
 \end{description*}
 \end{mdframed}
 
-\subsubsection{Workitem Arguments}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/session/\{id\}/results/\{id\}}
+	\item[Archetype] Readonly Collection
+	\item[Filter Query] \hfill
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+{
+    "id": <int,id>,
+    "enforcement": "<uri,enforcement>",
+    "recommendation": <int,type>, 	
+    "comment": <str,comment>
+}
+\end{lstlisting}
+    \item[Beschreibung] 
+\end{description*}
+\end{mdframed}
+
+
+\subsubsection{Policy Arguments}
 
 Folgende Workitem, bzw. Policy Typen sind momentan vorhanden:
 \begin{description*}
@@ -567,7 +609,7 @@ Entsprechend sollen die Argumente der Workitems übermittelt werden:
 
 
 \pagebreak
-\subsection{Controller für Messungen}
+\subsection{SWID Erweiterung}
 
 \subsubsection{SWID Tags: Messung}
 
@@ -640,7 +682,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[URI Path] \texttt{/products}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -648,14 +689,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"id": <int,id> ,
 		"name": "<str,productname>"	
 		"uri": "<uri,resource>"
-	}
-]
-\end{lstlisting}
-\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-		"name": "<str,productname>"
 	}
 ]
 \end{lstlisting}
@@ -671,7 +704,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[URI Path] \texttt{/packages/\{id\}}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response/Request] \hfill
+	\item[Request Parameter] \hfill
+	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -686,7 +720,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[URI Path] \texttt{/packages}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -697,22 +730,14 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	}
 ]
 \end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-		"name": "<str,packagename>"
-	}
-]
-\end{lstlisting}
 \end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/packages/\{id\}/versions}
-	\item[Archetype] Readonly Collection
-	\item[Methods] GET
+	\item[Archetype] Collection
+	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -722,6 +747,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \end{description*}
 \end{mdframed}
 
+
 \pagebreak
 \subsubsection{Versions}
 
@@ -729,7 +755,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/versions/\{id\}}
 	\item[Archetype] Document
-	\item[Query] \texttt{dept=<int,depth>}
 	\item[Methods] GET, PUT, PATCH, DELETE
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -743,18 +768,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	"time": <int,time>
 }
 \end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"package": <int,package-id>,
-	"product": <int,product-id>,
-	"release": "<str,release>",
-	"securtiy": <int,security>,
-	"blacklist": <bool,blacklist>,
-	"time": <int,time>
-}
-\end{lstlisting}
 \end{description*}
 \end{mdframed}
 
@@ -762,13 +775,12 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/versions}
 	\item[Archetype] Collection
-	\item[Filter] \texttt{product-name=<str,product-name>,\\
-	product-id=<int,product-id>,\\
-	package-name=<str,package-name>,\\
-	package-id=<int,package-id>}
-	\item[Query] \texttt{depth=<int,depth>}
+	\item[Filter Query] \hfill
+	\begin{description*}
+	    \item[product-name] \texttt{<str,product-name>}
+	    \item[package-name] \texttt{<str,package-name>}
+	\end{description*}
 	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -781,19 +793,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"blacklist": <bool,blacklist>,
 		"time": <int,time>
 		"uri": "<uri,resource>"
-	}
-]
-\end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-		"package": <int,package-id>,
-		"product": <int,product-id>,
-		"release": "<str,release>",
-		"securtiy": <int,security>,
-		"blacklist": <bool,blacklist>,
-		"time": <int,time>
 	}
 ]
 \end{lstlisting}
@@ -826,7 +825,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[Filter] \texttt{type=<int,type>,\\
 	value=<str,value>}
 	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -835,15 +833,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"type": <int,type>,
 		"value": "<str,value>"
 		"uri": "<uri,resource>"
-	}
-]
-\end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-		"type": <int,type>,
-		"value": "<str,value>"
 	}
 ]
 \end{lstlisting}
@@ -858,7 +847,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/devices/\{id\}}
 	\item[Archetype] Document
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -870,16 +858,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	"created": <int,created>
 }
 \end{lstlisting}
-\item[JSON Format Request] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"description": "<str,description>",
-	"value": "<str,value>",
-	"product": <int,product-id>,
-	"created": <int,created>
-}
-\end{lstlisting}
 \end{description*}
 \end{mdframed}
 
@@ -887,12 +865,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/devices}
 	\item[Archetype] Collection
-	\item[Filter] \texttt{value=<str,value>,\\
-	 product-name=<str,product-name>,\\
-	 product-id=<int,product-id>} 
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -906,17 +879,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	}
 ]
 \end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-	{
-		"description": "<str,description>",
-		"value": "<str,value>",
-		"product": <int,product-id>,
-		"created": <int,created>
-	}
-]
-\end{lstlisting}
 \end{description*}
 \end{mdframed}
 
@@ -924,15 +886,30 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/device/\{id\}/sessions}
 	\item[Archetype] Readonly Collection
-	\item[Filter] \texttt{time-from=<int,time>,\\
-	time-to=<int,time>}
-	\item[Query] \texttt{depth=<int,depth>}
+	\item[Filter Query] \hfill
+    \begin{description*}
+        \item[time-from] \texttt{<int,timestamp>}
+        \item[time-to] \texttt{<int,timestamp>}
+    \end{description*}	
 	\item[Methods] GET
-	\item[Batch Create] Unterstützt
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	<doc,session>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/device/\{id\}/sessions/\{id\}/results}
+	\item[Archetype] Readonly Collection 
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,result>
 ]
 \end{lstlisting}
 \end{description*}
@@ -944,7 +921,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/enforcements/\{id\}}
 	\item[Archetype] Readonly Document
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -952,8 +928,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	"id": <int,id>,
 	"policy": "<uri,policy>",
 	"group": "<uri,group>",
-	"rec-fail": <int,rec_fail>,
-	"rec-noresult": <int,rec_noresult>", 
+	"fail-recommendation": <int,rec_fail>,
+	"noresult-recommendation": <int,rec_noresult>", 
 	"max-age": <int,max_age>
 }
 \end{lstlisting}
@@ -964,10 +940,12 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/enforcements}
 	\item[Archetype] Readonly Collection
-	\item[Filter] \texttt{group-id=<int,group-id>,\\
-	group-name=<str,group-name>}
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
+	\item[Filter Query] \hfill
+    \begin{description*}
+        \item[group-name] \texttt{<str,group-name>}
+        \item[policy-name] \texttt{<str,policy-name>}
+    \end{description*}	
 	\item[JSON Format] \hfill
 \begin{lstlisting}
 [
@@ -975,8 +953,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"id": <int,id>,
 		"policy": "<uri,policy>",
 		"group": "<uri,group>",
-		"rec-fail": <int,rec_fail>,
-		"rec-noresult": <int,rec_noresult>", 
+        "fail-recommendation": <int,rec_fail>,
+        "noresult-recommendation": <int,rec_noresult>",
 		"max-age": <int,max_age>
 		"uri": "<uri,resource>"
 	}
@@ -985,20 +963,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \end{description*}
 \end{mdframed}
 
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/enforcements/\{id\}/workitems}
-	\item[Archetype] Readonly Collection
-	\item[Query] \texttt{depth=<int,depth>}
-	\item[Methods] GET
-	\item[JSON Format] \hfill
-\begin{lstlisting}
-[
-	<doc,workitem>
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
 
 \pagebreak
 \subsubsection{Policies}
@@ -1007,7 +971,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/policies/\{id\}}
 	\item[Archetype] Readonly Document
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -1015,11 +978,9 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	"id": <int,id>,
 	"type": <int,type>,
 	"name": "<str,name>",
-	"argument": "<str,argument>",
-	"rec-fail": <int,rec_fail>,
-	"rec-noresult": <int,rec_noresult>, 
-	"file": "<uri,file>",
-	"dir": "<uri,dir>"
+	"argument": <doc,policy-argument>,
+    "fail-recommendation": <int,rec_fail>,
+    "noresult-recommendation": <int,rec_noresult>",
 }
 \end{lstlisting}
 \end{description*}
@@ -1037,11 +998,9 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"id": <int,id>,
 		"type": <int,type>,
 		"name": "<str,name>",
-		"argument": "<str,argument>",
-		"rec-fail": <int,rec_fail>,
-		"rec-noresult": <int,rec_noresult>, 
-		"file": "<uri,file>",
-		"dir": "<uri,dir>"	
+		"argument": <doc,policyargument>,
+        "fail-recommendation": <int,rec_fail>,
+        "noresult-recommendation": <int,rec_noresult>",
 		"uri": "<uri,resource>"
 	}
 ]
@@ -1065,81 +1024,12 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 
 \pagebreak
-\subsubsection{Results}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/results/\{id\}}
-	\item[Archetype] Document
-	\item[Query] \texttt{depth=<int,depth>}
-	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"session": "<uri,session>",
-	"policy": "<uri,policy>",
-	"rec": <int,rec>,
-	"result": "<str,result>"
-}
-\end{lstlisting}
-    \item[JSON Format Request] \hfill
-\begin{lstlisting}
-{
-	"id": <int,id>,
-	"session": <int,session-id>,
-	"policy": <int,policy-id>,
-	"rec": <int,rec>,
-	"result": "<str,result>"
-}
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/results}
-	\item[Archetype] Collection
-	\item[Filter] \texttt{policy=<int,policy>}
-	\item[Query] \texttt{depth=<int,depth>}
-	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
-	\item[JSON Format Response] \hfill
-\begin{lstlisting}
-[
-    {
-	    "id": <int,id>,
-	  	"session": "<uri,session>",
-    	"policy": "<uri,policy>",
-	    "rec": <int,rec>,
-	    "result": "<str,result>",
-	    "uri": <uri,resource>
-    }
-]
-\end{lstlisting}
-	\item[JSON Format Request] \hfill
-\begin{lstlisting}
-[
-    {
-	    "session": <int,session-id>,
-	    "policy": <int,policy-id>,
-	    "rec": <int,rec>,
-	    "result": "<str,result>",
-    }
-]
-\end{lstlisting}
-\end{description*}
-\end{mdframed}
-
-
-\pagebreak
 \subsubsection{Groups}
 
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/groups/\{id\}}
 	\item[Archetype] Readonly Document
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -1156,7 +1046,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/groups}
 	\item[Archetype] Readonly Collection
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
 	\item[JSON Format] \hfill
 \begin{lstlisting}
@@ -1176,7 +1065,6 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \begin{description*}
 	\item[URI Path] \texttt{/groups/\{id\}/devices}
 	\item[Archetype] Collection
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -1245,7 +1133,6 @@ Keine Ressourcen für Zwischentabellen.
 \begin{description}
 	\item[URI Path] \texttt{/files/\{id\}}
 	\item[Archetype] Document
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -1270,9 +1157,7 @@ Keine Ressourcen für Zwischentabellen.
 \begin{description*}
 	\item[URI Path] \texttt{/files}
 	\item[Archetype] Collection
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -1322,7 +1207,6 @@ Keine Ressourcen für Zwischentabellen.
 	\item[URI Path] \texttt{/directories}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[Batch Create] Unterstützt
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
@@ -1365,7 +1249,6 @@ Keine Ressourcen für Zwischentabellen.
 \begin{description*}
 	\item[URI Path] \texttt{/swid-tags/{id}}
 	\item[Archetype] Readonly Document
-	\item[Query] \texttt{depth=<int,depth>}
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
