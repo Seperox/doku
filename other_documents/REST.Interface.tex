@@ -235,7 +235,7 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 \begin{description*}
     \item[Depth Query-Parameter] Jede Resource die als Antwort eine URI auf eine andere Resource zurück gibt                         unterstützt den \texttt{depth} Query-Parameter. Dieser löst die URIs bis zur gewünschten tiefe auf. Möglicherweise wird die maximale Tiefe eingeschränkt. Wenn keine tiefe angegeben wird, gilt die Auflösungstiefe 0.
     \item[Filter Query-Parameter] Filter Query-Parameter sind, falls vorhanden, immer optional, sie dienen der Präzisierung des Rückgabesets. Wenn sie weggelassen werden, wird das vollständige Set zurückgegeben.
-    \item[Generische Filter] Collections unterstützen wenn nicht anders erwähnt generische Filter. Das heisst, es kann grundsätzlich nach jedem Attribut des Rückgabedokuments gefiltert werden. Der Parameter ist wie folgt aufgebaute: \texttt{filter=atrribut:query;attribut:query;}.
+    \item[Generische Filter] Collections unterstützen wenn nicht anders erwähnt generische Filter. Das heisst, es kann grundsätzlich nach jedem Attribut des Rückgabedokuments gefiltert werden. Der Parameter ist wie folgt aufgebaute: \texttt{filter=attribut:query;attribut:query;}.
     \item[Batch Create] Collections unterstützen, sofern sie nicht readonly sind oder es anders erwähnt ist, das sogenannte 'Batch Create'. D.h zum Erstellen von neuen Dokumenten kann einer Collection auch eine Liste gesendet werden. Wird 'Batch Create' verwendet, besteht die Antwort des Servers nur aus einem Statuscode, es wird nicht eine Liste der Erstellten Dokumente zurück geschickt. Fall die Erstellung fehlschlägt wird kein Dokument angelegt. Es wird versucht mitzuteilen warum die Erstellung fehlschlug.\end{description*}
  
 \pagebreak
@@ -435,7 +435,7 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 	"uri": "<uri,session>"
 }
 \end{lstlisting}
-    \item[Beschreibung] Dieser Controller erstellt und startet eine Session. Die Id die im Response Dokument zurück geliefert wird, dient zur zukünftigen Identifikation der soeben gestarteten Session.
+    \item[Beschreibung] Dieser Controller erstellt und startet eine Session. Die Id, die im Response Dokument zurück geliefert wird, dient zur zukünftigen Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste von Workitems die für diese Session abgearbeitet werden müssen.
 \end{description*}
 \end{mdframed}
 
@@ -449,7 +449,7 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
     \begin{description*}
         \item[\texttt{recommendation}] Endgültiges Resultat/Empfehlung für diese Session.
     \end{description*}
-    \item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle zusätzlich nötigen Vorgänge, so werden zum Beispiel die Workitems dieser Session abgeräumt.
+    \item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle zusätzlich nötigen Vorgänge, so werden zum Beispiel die Workitems dieser Session abgeräumt und die jeweiligen Resultate gespeichert und können via <TODO Verweise> \texttt{/sessions/\{id\}/results} abgerufen werden.
 \end{description*}
 \end{mdframed}
 
@@ -528,14 +528,14 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
     }
 ]
 \end{lstlisting}
-    \item[Beschreibung] Eine Liste aller Workitems die zu einer bestimmten Session gehören. Workitems können nicht direkt erstellt werden, sondern werden beim erstellen einer Session anhand der Enforcements erstellt.
+    \item[Beschreibung] Eine Liste aller Workitems die zu einer bestimmten Session gehören. Workitems können nicht direkt erstellt werden, sondern werden beim erstellen einer Session anhand der Enforcements erstellt. Workitems gibt es nur, so lange eine Session nicht beendet wurde. Nach dem Ende der Session wird eine leere Liste und/oder ein entsprechender Statuscode geliefert.
 \end{description*}
 \end{mdframed}
 
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result}b
+	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result}
 	\item[Archetype] Document
 	\item[Request Parameter] \hfill
     \begin{description*}
@@ -550,7 +550,7 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 	"comment": <str,comment>
 }
 \end{lstlisting}
-    \item[Beschreibung] Hier ka
+    \item[Beschreibung] Auf dieser Ressource sollen die Resultate des jeweiligen Workitems eingetragen werden. Diese Resultate werden beim Beenden der Session, von den Workitems in die Session-Resulate übertragen.
 \end{description*}
 \end{mdframed}
 
@@ -575,7 +575,7 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
     }
 ]
 \end{lstlisting}
-    \item[Beschreibung] 
+    \item[Beschreibung] Nach dem Beenden einer Session können die eingetragenen Resultate in dieser Collection abgefragt werden. Diese Collection ist readonly, damit die Session-Ergebnisse nicht nachträglich geändert werden können.
 \end{description*}
 \end{mdframed}
 
