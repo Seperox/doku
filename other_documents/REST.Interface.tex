@@ -35,7 +35,7 @@
 \linespread{1.3}
 
 \author{Danilo Bargen, Christian Fässler, Jonas Furrer} 
-\title{REST API\\strongTNC BA}
+\title{strongTNC REST API\\DRAFT \\ \small{Im Rahmen der strongTNC BA} }
 
 \pagestyle{scrheadings}
 \ihead{REST API} %linke Kopfzeile
@@ -58,25 +58,25 @@
 \section{Einleitung}
 
 Die Definition der Ressourcen orientiert sich an den Regeln des Buches
-\textit{REST API Design Rulebook} \cite{masse2011rest} aus dem O'Reilly Verlag.
+\textit{REST API Design Rulebook}\cite{masse2011rest} aus dem O'Reilly Verlag.
 
 \subsubsection*{URI Definition}
 
-Bei der Bezeichnung der URIs\footnote{Uniform Resource Identifier} wurde folgende Terminologie gemäss RFC 3986 verwendet:
+Bei der Bezeichnung der URIs\footnote{Uniform Resource Identifier} wurde folgende Terminologie gemäss RFC 3986\cite{rfc3986} verwendet:
 
 \texttt{URI = scheme \textquotedbl ://\textquotedbl{} authority \textquotedbl /\textquotedbl{}
 path [ \textquotedbl ?\textquotedbl{} query ] [ \textquotedbl \#\textquotedbl{} fragment ]}
 
 \subsubsection*{Ressource-Archetypen}
 
-Nachfolgend die Ressource-Archetypen gemäss \cite{masse2011rest}. Die Erklärungstexte wurden direkt dem besagten
+Nachfolgend die Ressource-Archetypen gemäss Masse 2011\cite{masse2011rest}. Die Erklärungstexte wurden direkt dem besagten
 Buch entnommen.
 
 \begin{description}
 	\item[Document] A document resource is a singular concept that is akin to an object instance or database
 		record. A document’s state representation typically includes both fields with values and
 		links to other related resources.
-	\item[Collection] A collection resource is a server-managed directory of resources. Clients may propose
+	\item[Collection] A collection resource is a server-managed directory of resources. Clients may								 propose
 		new resources to be added to a collection. However, it is up to the collection to choose
 		to create a new resource, or not.
 	\item[Store] A store is a client-managed resource repository. A store resource lets an API client put
@@ -99,24 +99,23 @@ Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
 
 \begin{description}
 	\item[Document] Ein Document gibt ein JSON Objekt zurück, welches alle relevanten Felder enthält.
-		Informationen, welche durch die Ressource-URI bereits gegeben sind (zB type), müssen nicht, können
-		jedoch, erneut in der Liste erscheinen.\\
+		Informationen, welche durch die Ressource-URI bereits gegeben sind (z.B. Type), müssen nicht, können jedoch, erneut in der Liste erscheinen.\\
 		Falls im Document Unterobjekte auftauchen, wird für das Feld die URI des betreffenden Unterobjekts
 		eingesetzt, damit kann dieses Objekt direkt abgefragt werden. Zusätzlich wird ein Query-Parameter
 		bereit gestellt, welcher es erlaubt, Unterobjekte bis zu einer gewissen Tiefe aufzulösen.\\
 		Beispiel: \hfill
 \begin{lstlisting}
 {
-	"feld1": "<str,wert1>",
-	"feld2": <int,wert2>,
-	"feld3": <bool,wert3>,
-	"unterobjekt": "<uri,unterobjekt>"
-	"untercollection": [
+	"field-1": "<str,value-1>",
+	"field-2": <int,value-2>,
+	"field-3": <bool,value-3>,
+	"sub-object": "<uri,sub-object>"
+	"sub-collection": [
 		{
-			"uri": "<uri,unterobjekt>"
+			"uri": "<uri,sub-object>"
 		},
 		{
-			"uri": "<uri,unterobjekt>"
+			"uri": "<uri,sub-object>"
 		}
 	]
 }
@@ -124,24 +123,24 @@ Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
 Beispiel mit Query \texttt{depth=1}:
 \begin{lstlisting}
 {
-	"feld1": "<str,wert1>",
-	"feld2": <int,wert2>,
-	"feld3": <bool,wert3>,
-	"unterobjekt": {
-		"feld1": <int,feld1>,
+	"field-1": "<str,value-1>",
+	"field-2": <int,value-2>,
+	"field-3": <bool,value-3>,
+	"sub-object": {
+		"field-1": <int,value-1>,
 		...
-		"uri": "<uri,unterobjekt>"
+		"uri": "<uri,sub-object>"
 	}
-	"untercollection": [
+	"sub-collection": [
 		{
-			"feld": <int, feld>,
+			"field": <int, field>,
 			...
-			"uri": "<uri,unterobjekt>"
+			"uri": "<uri,sub-object>"
 		},
 		{
-			"feld": <int, feld>,
+			"field": <int, field>,
 			...
-			"uri": "<uri, unterobjekt>"
+			"uri": "<uri, sub-object>"
 		}
 	]
 }
@@ -155,33 +154,33 @@ Beispiel mit Query \texttt{depth=1}:
 \begin{lstlisting}
 {
 	{
-		"feld1": "<str,feld1>",
-		"unterobjekt": "<uri,unterobjekt>",
+		"field-1": "<str,value-1>",
+		"sub-object": "<uri,sub-object>",
 		"uri": "<uri,objek>"
 	},
 	{
-		"feld1": "'<str,feld1>",
-		"unterobjekt": "<uri,unterobjekt>",
-		"uri": "<uri,objekt>"
+		"field-1": "'<str,value-1>",
+		"sub-object": "<uri,sub-object>",
+		"uri": "<uri,resource>"
 	},
 }
 \end{lstlisting}
-Beispiel mit Query \texttt{depth=1}:1
+Beispiel mit Query \texttt{depth=1}:
 \begin{lstlisting}
 {
 	{
-		"feld1": "<str,feld1>",
-		"unterobjekt": {
-			"feld": "<str,feld>",
+		"field-1": "<str,value-1>",
+		"sub-object": {
+			"field": "<str,value>",
 		},
-		"uri": "<uri,objekt>"
+		"uri": "<uri,resource>"
 	},
 	{
-		"feld1": "'<str,feld1>",
-		"unterobjekt": {
-			"feld": "<str,feld>",
+		"field-1": "'<str,value-1>",
+		"sub-object": {
+			"field": "<str,value>",
 		},
-		"uri": "<uri,objekt>"
+		"uri": "<uri,resource>"
 	},
 }
 \end{lstlisting}
@@ -199,7 +198,7 @@ kann auch noch Payload im Body geliefert werden. Folgendes ist eine Auswahl von 
 erwarten sind:
 
 \begin{description*}
-    \item[200 OK] Request erfolgreich
+	\item[200 OK] Request erfolgreich
 	\item[201 Created] Entity wurde erfolgreich erstellt
 	\item[204 No Content] Entity wurde erfolgreich geändert
 	\item[400 Bad Request] Generischer Client Fehler
@@ -221,22 +220,25 @@ Für die Definition des Response- und Request-Formats wird eine pseudo JSON schr
 auszufüllenden Werte werden als Tupel in spitzen Klammern dargestellt. Der erste Teil des Tupels zeigt 
 den Typ, der zweite Teil steht zur Beschreibung für den Wert. Folgende Typen werden verwendet:
 \begin{description*}
-    \item[int] Integer Zahlenwert
-    \item[num] Dezimalzahl, 
-    \item[str] String
-    \item[bool] Wahrheitswert
-    \item[xml] Ein XML Dokument
-    \item[uri] Die voll qualifizerte URI einer Resource
-    \item[doc] Das Dokument einer Resource, wie dieses Aussieht kann im jeweiligen Abschnitt zur genannten Resource nachgeschlagen werden
+	\item[int] Integer Zahlenwert
+	\item[num] Dezimalzahl, 
+	\item[str] String
+	\item[bool] Wahrheitswert
+	\item[xml] Ein XML Dokument
+	\item[hex] Ein HEX-Encoded String
+	\item[uri] Die voll qualifizerte URI einer Resource
+	\item[doc] Das Dokument einer Resource, wie dieses Aussieht kann im jeweiligen Abschnitt zur genannten Resource nachgeschlagen werden
 \end{description*}
 
 \subsection{Standard Verhalten}
 Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 \begin{description*}
-    \item[Depth Query-Parameter] Jede Resource die als Antwort eine URI auf eine andere Resource zurück gibt                         unterstützt den \texttt{depth} Query-Parameter. Dieser löst die URIs bis zur gewünschten tiefe auf. Möglicherweise wird die maximale Tiefe eingeschränkt. Wenn keine tiefe angegeben wird, gilt die Auflösungstiefe 0.
-    \item[Filter Query-Parameter] Filter Query-Parameter sind, falls vorhanden, immer optional, sie dienen der Präzisierung des Rückgabesets. Wenn sie weggelassen werden, wird das vollständige Set zurückgegeben.
-    \item[Generische Filter] Collections unterstützen wenn nicht anders erwähnt generische Filter. Das heisst, es kann grundsätzlich nach jedem Attribut des Rückgabedokuments gefiltert werden. Der Parameter ist wie folgt aufgebaute: \texttt{filter=attribut:query;attribut:query;}.
-    \item[Batch Create] Collections unterstützen, sofern sie nicht readonly sind oder es anders erwähnt ist, das sogenannte 'Batch Create'. D.h zum Erstellen von neuen Dokumenten kann einer Collection auch eine Liste gesendet werden. Wird 'Batch Create' verwendet, besteht die Antwort des Servers nur aus einem Statuscode, es wird nicht eine Liste der Erstellten Dokumente zurück geschickt. Fall die Erstellung fehlschlägt wird kein Dokument angelegt. Es wird versucht mitzuteilen warum die Erstellung fehlschlug.\end{description*}
+	\item[Depth Query-Parameter] Jede Resource die als Antwort eine URI auf eine andere Resource zurück gibt						 unterstützt den \texttt{depth} Query-Parameter. Dieser löst die URIs bis zur gewünschten tiefe auf. Möglicherweise wird die maximale Tiefe eingeschränkt. Wenn keine tiefe angegeben wird, gilt die Auflösungstiefe 0.
+	\item[Filter Query-Parameter] Filter Query-Parameter sind, falls vorhanden, immer optional, sie dienen der Präzisierung des Rückgabesets. Wenn sie weggelassen werden, wird das vollständige Set zurückgegeben.
+	\item[Generische Filter] Collections unterstützen wenn nicht anders erwähnt generische Filter. Das heisst, es kann grundsätzlich nach jedem Attribut des Rückgabedokuments gefiltert werden. Der Parameter ist wie folgt aufgebaut: \texttt{attribute-name=query}.
+	\item[Batch Create] Collections unterstützen, sofern sie nicht readonly sind oder es anders erwähnt ist, das sogenannte 'Batch Create'. D.h zum Erstellen von neuen Dokumenten kann einer Collection auch eine Liste gesendet werden. Wird 'Batch Create' verwendet, besteht die Antwort des Servers nur aus einem Statuscode, es wird nicht eine Liste der Erstellten Dokumente zurück geschickt. Fall die Erstellung fehlschlägt wird kein Dokument angelegt. Es wird versucht mitzuteilen warum die Erstellung fehlschlug.
+	\item[Paging] //TODO: Beschreiben//  
+\end{description*}
  
 \pagebreak
 \subsection{Bisher verwendete SQL Vorgänge}
@@ -318,80 +320,81 @@ Folgende Punkte beschreiben das standard Verhalten der Resourcen:
 	\item[Felder] *product\_id, group\_id, +id
 \end{description*} 
 
+\pagebreak
 \section{Daten Definition}
 
 \subsection{Policy Arguments}
 
 Folgende Workitem, bzw. Policy Typen sind momentan vorhanden:
 \begin{description*}
-    \item[\texttt{00: RESVD}] Deny
-    \item[\texttt{01: PCKGS}] Installed Packages
-    \item[\texttt{02: UNSRC}] Unknown Source
-    \item[\texttt{03: FWDEN}] Forwarding Enabled
-    \item[\texttt{04: PWDEN}] Default Password Enabled
-    \item[\texttt{05: FREFM}] File Reference Measurement
-    \item[\texttt{06: FMEAS}] File Measurement 
-    \item[\texttt{07: FMETA}] File Metadata
-    \item[\texttt{08: DREFM}] Directory Reference Measurement
-    \item[\texttt{09: DMEAS}] Directory Measurement
-    \item[\texttt{10: DMETA}] Directory Metadata
-    \item[\texttt{11: TCPOP}] Open TCP Listening Ports
-    \item[\texttt{12: TCPBL}] Blocked TCP Listening Ports
-    \item[\texttt{13: UDPOP}] Open UDP Listening Ports
-    \item[\texttt{14: UDPBL}] Blocked UDP Listening Ports
-    \item[\texttt{15: SWIDT}] SWID Tag Inventory
-    \item[\texttt{16: TPMRA}] TPM Remote Attestation
+	\item[\texttt{00: RESVD}] Deny
+	\item[\texttt{01: PCKGS}] Installed Packages
+	\item[\texttt{02: UNSRC}] Unknown Source
+	\item[\texttt{03: FWDEN}] Forwarding Enabled
+	\item[\texttt{04: PWDEN}] Default Password Enabled
+	\item[\texttt{05: FREFM}] File Reference Measurement
+	\item[\texttt{06: FMEAS}] File Measurement 
+	\item[\texttt{07: FMETA}] File Metadata
+	\item[\texttt{08: DREFM}] Directory Reference Measurement
+	\item[\texttt{09: DMEAS}] Directory Measurement
+	\item[\texttt{10: DMETA}] Directory Metadata
+	\item[\texttt{11: TCPOP}] Open TCP Listening Ports
+	\item[\texttt{12: TCPBL}] Blocked TCP Listening Ports
+	\item[\texttt{13: UDPOP}] Open UDP Listening Ports
+	\item[\texttt{14: UDPBL}] Blocked UDP Listening Ports
+	\item[\texttt{15: SWIDT}] SWID Tag Inventory
+	\item[\texttt{16: TPMRA}] TPM Remote Attestation
 \end{description*}
 
 Einige Typen benötigen unterschiedliche Argumente, Gemeinsamkeiten lassen sich wie folgt gruppieren:
 \begin{description*}
-    \item[Keine Argumente] 00, 01, 02, 03, 04
-    \item[Datei Pfad] 05, 06, 07
-    \item[Verzeichnis Pfad] 08, 09, 10
-    \item[Port Liste] 11, 12, 13, 14
-    \item[SWID Request Flags] 15
-    \item[TPM Attestation Flags] 16
+	\item[Keine Argumente] 00, 01, 02, 03, 04
+	\item[Datei Pfad] 05, 06, 07
+	\item[Verzeichnis Pfad] 08, 09, 10
+	\item[Port Liste] 11, 12, 13, 14
+	\item[SWID Request Flags] 15
+	\item[TPM Attestation Flags] 16
 \end{description*}
-Entsprechend sollen die Argumente der Workitems übermittelt werden:
+Entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende Objekte werden je nach Type übermittelt, als Verweis wir \texttt{<doc,policy-argument>} verwendet.
 \begin{description*}
-    \item[Keine Argumente] \hfill
+	\item[Keine Argumente] \hfill
 \begin{lstlisting}
 {}
 \end{lstlisting}
-    \item[Datei Pfad] \hfill
+	\item[Datei Pfad] \hfill
 \begin{lstlisting}
 {
-    "file": "<str,file-path>"
+	"file": "<str,file-path>"
 }
 \end{lstlisting}   
-    \item[Verzeichnis Pfad] \hfill
+	\item[Verzeichnis Pfad] \hfill
 \begin{lstlisting}
 {
-    "directory": "<str,directory-path>"
+	"directory": "<str,directory-path>"
 }
 \end{lstlisting} 
-    \item[Port Liste] \hfill
+	\item[Port Liste] \hfill
 \begin{lstlisting}
 {
-    "port-list": [
-        "<str,port or port-range>"
-    ]
+	"port-list": [
+		"<str,port or port-range>"
+	]
 }
 \end{lstlisting} 
-    \item[SWID Request Flags] \hfill
+	\item[SWID Request Flags] \hfill
 \begin{lstlisting}
 {
-    "swid-flags": [
-        "<str,swid-flag>"
-    ]
+	"swid-flags": [
+		"<str,swid-flag>"
+	]
 }
 \end{lstlisting} 
-    \item[TPM Attestation Flags] \hfill
+	\item[TPM Attestation Flags] \hfill
 \begin{lstlisting}
 {
-    "tpm-flags": [
-        "<str,tpm-flag>"
-    ]
+	"tpm-flags": [
+		"<str,tpm-flag>"
+	]
 }
 \end{lstlisting} 
 \end{description*}
@@ -399,13 +402,34 @@ Entsprechend sollen die Argumente der Workitems übermittelt werden:
 \subsection{Recommendation Types}
 Folgende Recommendation Types bzw. Actions sind vorhanden:
 \begin{description*}
-    \item[\texttt{0: ALLOW}] Die Empfehlung/Aktion ist, den Client zuzulassen
-    \item[\texttt{1: BLOCK}] Die Empfehlung/Aktion ist, den Client zu blockieren
-    \item[\texttt{2: ISOLATE}] Die Empfehlung/Aktion ist, den Client in einem isoliertem Segment zu platzieren
-    \item[\texttt{3: NONE}]
+	\item[\texttt{0: ALLOW}] Die Empfehlung/Aktion ist, den Client zuzulassen
+	\item[\texttt{1: BLOCK}] Die Empfehlung/Aktion ist, den Client zu blockieren
+	\item[\texttt{2: ISOLATE}] Die Empfehlung/Aktion ist, den Client in einem isoliertem Segment zu platzieren
+	\item[\texttt{3: NONE}]
 \end{description*}
 
 Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Repräsentation erstellt.
+
+\subsection{Hash-Set}
+Ein Hash-Set wird innerhalb eines File-Documents ausgeliefert, der Verweis lautet \texttt{<doc,hash-set>} und ist wie folgt aufgebaut:
+
+\begin{lstlisting}
+[
+	{
+		"algorithm": "<str,algorithm-name>",
+		"hash": "<hex,hash>	"
+	}
+]
+\end{lstlisting}
+
+Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgende Algorithmen erfasst:
+\begin{itemize*}
+	\item SHA384
+	\item SHA256
+	\item SHA1
+	\item SHA1-IMA
+\end{itemize*}
+
 
 \pagebreak
 \section{REST Ressourcen}
@@ -416,40 +440,41 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/sessions/start}
+	\item[URI Path] \texttt{/sessions/start/}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Request Parameter] \hfill
-    \begin{description*}
-        \item[\texttt{connection-id}] strongSwan Connection Id
-        \item[\texttt{device-id}] Device identifikation (wie wird das Device durch strongSwan identifiziert?)
-        \item[\texttt{TODO}] Welche Informationen werden benötigt
-    \end{description*}
+	\begin{description*}
+		\item[\texttt{connection-id}] strongSwan Connection Id
+		\item[\texttt{client-identity}] strongSwan Client-Identity
+		\item[\texttt{hardware-id}] Die Id, welche das Gerät identifiziert, so zum Beispiel, AIK, Android-Id, DBUS machine-id, o.ä. Dies entspricht dem \texttt{value} Feld in der \texttt{device} Tabelle in der Datenbank
+		\item[\texttt{product-name}] Der Productname ist der Name des OS wie er in der \texttt{product} Tabelle der Datenbank steht
+	\end{description*}
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"session-id": <int,id>,
 	"workitems": [
-	     <doc,workitem>
-    ],
+		 <doc,workitem>
+	],
 	"uri": "<uri,session>"
 }
 \end{lstlisting}
-    \item[Beschreibung] Dieser Controller erstellt und startet eine Session. Die Id, die im Response Dokument zurück geliefert wird, dient zur zukünftigen Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste von Workitems die für diese Session abgearbeitet werden müssen.
+	\item[Beschreibung] Dieser Controller erstellt und startet eine Session, das Device welches der Session zugeordnet werden soll wird anhand der \texttt{hardware-id} und dem \texttt{product-name} bestimmt. Falls eines der Objekte noch nicht existiert wird dieses durch den Controller erstellt. Die Id, die im Response Dokument zurück geliefert wird, dient zur zukünftigen Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste von Workitems die für diese Session abgearbeitet werden müssen.
 \end{description*}
 \end{mdframed}
 
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/sessions/\{id\}/end}
+	\item[URI Path] \texttt{/sessions/\{id\}/end/}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Request Parameter] \hfill
-    \begin{description*}
-        \item[\texttt{recommendation}] Endgültiges Resultat/Empfehlung für diese Session.
-    \end{description*}
-    \item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle zusätzlich nötigen Vorgänge, so werden zum Beispiel die Workitems dieser Session abgeräumt und die jeweiligen Resultate gespeichert und können via <TODO Verweise> \texttt{/sessions/\{id\}/results} abgerufen werden.
+	\begin{description*}
+		\item[\texttt{recommendation}] Endgültiges Resultat/Empfehlung für diese Session.
+	\end{description*}
+	\item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle zusätzlich nötigen Vorgänge, so werden zum Beispiel die Workitems dieser Session abgeräumt und die jeweiligen Resultate gespeichert und können via \texttt{/sessions/\{id\}/results} abgerufen werden.
 \end{description*}
 \end{mdframed}
 
@@ -458,51 +483,50 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/sessions/\{id\}}
+	\item[URI Path] \texttt{/sessions/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"time": <int,time>,
 	"identity": "<uri,identity>",
 	"connection-id": <int,connection-id>,
 	"device": "<uri,device>",
-	"product": "<uri,product>",
 	"recommendation": <int,rec>
 }
 \end{lstlisting}
-    \item[Beschreibung] Informationen zu einer bestimmten Session. Sessions sollen nicht direkt geändert werden, sondern nur über die entsprechenden Controller, der Grund dafür ist, dass im Hintergrund noch zusätzliche Operationen vorgenommen werden müssen.
+	\item[Beschreibung] Informationen zu einer bestimmten Session. Sessions sollen nicht direkt geändert werden, sondern nur über die entsprechenden Controller, der Grund dafür ist, dass im Hintergrund noch zusätzliche Operationen vorgenommen werden müssen.
 \end{description*}
 \end{mdframed}
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/sessions}
+	\item[URI Path] \texttt{/sessions/}
 	\item[Archetype] Readonly Collection
 	\item[Filter Query] \hfill
-    \begin{description*}
-        \item[time-from] \texttt{<int,timestamp>}
-        \item[time-to] \texttt{<int,timestamp>}
-    \end{description*}	
+	\begin{description*}
+		\item[time-from] \texttt{<int,timestamp>}
+		\item[time-to] \texttt{<int,timestamp>}
+	\end{description*}	
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
 		"id": <int,id>,
+		"uri": "<uri,resource>",
 		"time": <int,time>,
 		"identity": "<uri,identity>",
 		"connection-id": <int,connection-id>,
 		"device": "<uri,device>",
-		"product": "<uri,product>",
 		"recommendation": <int,rec>
-		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
-    \item[Beschreibung] Liste aller Sessions. Neue Sessions können nur über den entsprechenden Controller erstellt werden.
+	\item[Beschreibung] Liste aller Sessions. Neue Sessions können nur über den entsprechenden Controller erstellt werden.
 \end{description*}
 \end{mdframed}
 
@@ -510,38 +534,39 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 \paragraph{Workitems}\hfill \\
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/workitems}
+	\item[URI Path] \texttt{/session/\{id\}/workitems/}
 	\item[Archetype] Readonly Collection
 	\item[Filter Query] \hfill
 	\begin{description*}
-	    \item[type] \texttt{<int,policy-type>}
+		\item[type] \texttt{<int,policy-type>}
 	\end{description*}
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-	    "id": <int,id>,
-	    "session": "<uri,session>",
-	    "type": <int,type>,
-	    "argument": <policy-argument>
-    }
+		"id": <int,id>,
+		"uri": "<uri,resource>",
+		"session": "<uri,session>",
+		"type": <int,type>,
+		"argument": <policy-argument>
+	}
 ]
 \end{lstlisting}
-    \item[Beschreibung] Eine Liste aller Workitems die zu einer bestimmten Session gehören. Workitems können nicht direkt erstellt werden, sondern werden beim erstellen einer Session anhand der Enforcements erstellt. Workitems gibt es nur, so lange eine Session nicht beendet wurde. Nach dem Ende der Session wird eine leere Liste und/oder ein entsprechender Statuscode geliefert.
+	\item[Beschreibung] Eine Liste aller Workitems die zu einer bestimmten Session gehören. Workitems können nicht direkt erstellt werden, sondern werden beim erstellen einer Session anhand der Enforcements erstellt. Workitems gibt es nur, so lange eine Session nicht beendet wurde. Nach dem Ende der Session wird eine leere Liste und/oder ein entsprechender Statuscode geliefert.
 \end{description*}
 \end{mdframed}
 
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result}
+	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result/}
 	\item[Archetype] Document
 	\item[Request Parameter] \hfill
-    \begin{description*}
-        \item[\texttt{recommendation}] Resultat/Empfehlung für dieses Workitem.
-        \item[\texttt{comment}] Kommentar zum Resultat.
-    \end{description*}
+	\begin{description*}
+		\item[\texttt{recommendation}] Resultat/Empfehlung für dieses Workitem.
+		\item[\texttt{comment}] Kommentar zum Resultat.
+	\end{description*}
 	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -550,7 +575,7 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 	"comment": <str,comment>
 }
 \end{lstlisting}
-    \item[Beschreibung] Auf dieser Ressource sollen die Resultate des jeweiligen Workitems eingetragen werden. Diese Resultate werden beim Beenden der Session, von den Workitems in die Session-Resulate übertragen.
+	\item[Beschreibung] Auf dieser Ressource sollen die Resultate des jeweiligen Workitems eingetragen werden. Diese Resultate werden beim Beenden der Session, von den Workitems in die Session-Resulate übertragen.
 \end{description*}
 \end{mdframed}
 
@@ -559,7 +584,7 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 \nopagebreak
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/results}
+	\item[URI Path] \texttt{/session/\{id\}/results/}
 	\item[Archetype] Readonly Collection
 	\item[Filter Query] \hfill
 	\item[Methods] GET
@@ -567,35 +592,36 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 \begin{lstlisting}
 [
 	{
-    	"id": <int,id>,
-    	"enforcement": "<uri,enforcement>",
-    	"recommendation": <int,type>,
-	    "comment": <str,comment>,
-	    "uri": "<uri,resource>"
-    }
+		"id": <int,id>,
+		"uri": "<uri,resource>"
+		"enforcement": "<uri,enforcement>",
+		"recommendation": <int,type>,
+		"comment": "<str,comment>"
+	}
 ]
 \end{lstlisting}
-    \item[Beschreibung] Nach dem Beenden einer Session können die eingetragenen Resultate in dieser Collection abgefragt werden. Diese Collection ist readonly, damit die Session-Ergebnisse nicht nachträglich geändert werden können.
+	\item[Beschreibung] Nach dem Beenden einer Session können die eingetragenen Resultate in dieser Collection abgefragt werden. Diese Collection ist readonly, damit die Session-Ergebnisse nicht nachträglich geändert werden können.
 \end{description*}
 \end{mdframed}
 
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/results/\{id\}}
+	\item[URI Path] \texttt{/session/\{id\}/results/\{id\}/}
 	\item[Archetype] Readonly Collection
 	\item[Filter Query] \hfill
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-    "id": <int,id>,
-    "enforcement": "<uri,enforcement>",
-    "recommendation": <int,type>, 	
-    "comment": <str,comment>
+	"id": <int,id>,
+	"uri": "<uri,resource>",
+	"enforcement": "<uri,enforcement>",
+	"recommendation": <int,type>,	 
+	"comment": "<str,comment>"
 }
 \end{lstlisting}
-    \item[Beschreibung] 
+	\item[Beschreibung] 
 \end{description*}
 \end{mdframed}
 
@@ -607,27 +633,26 @@ Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Re
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/swidMeasurement}
+	\item[URI Path] \texttt{/session/\{id\}/swidMeasurement/}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Response Statuscodes] \hfill
 		\begin{description*}
 			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
 			und wurden für die übermittelte Session eingetragen
-			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die übertragenen Software-IDs.\\
-			Als Payload werden die fehlenden Software-IDs übertragen.
+			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs übertragen.
 		\end{description*}
 	\item[Request Parameter] \hfill
-    \begin{description*}
-        \item[\texttt{software-id}] Eine kommagetrennte Liste von Software Ids
-    \end{description*}
+	\begin{description*}
+		\item[\texttt{software-id}] Eine kommagetrennte Liste von Software Ids
+	\end{description*}
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	"<str,software-id>"
 ]
 \end{lstlisting}
-    \item[Beschreibung] Die strongSwan Komponente sendet eine Liste von Software-IDs an die strongTNC 
+	\item[Beschreibung] Die strongSwan Komponente sendet eine Liste von Software-IDs an die strongTNC 
 Schnittstelle. Die Software-IDs wurden zuvor auf dem Client gemessen und widerspiegeln die momentan
 installierten Software Pakete.\\
 Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können diese direkt eingetragen werden.
@@ -639,14 +664,14 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/swid/addTags}
+	\item[URI Path] \texttt{/swid/addTags/}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Request Parameter] \hfill
-    \begin{description*}
-        \item[\texttt{xml-data}] TODO Encoding? 
-    \end{description*}
-    \item[Beschreibung] Die übermittelten Tags werden gelesen und in die Datenbank gespeichert. Bereits vorhandene Tags werden übersprungen, beziehungsweise ergänzt, wenn der neu übermittelte Tag mehr optionale Felder enthält als der bereits gespeicherte.
+	\begin{description*}
+		\item[\texttt{xml-data}] //TODO: Encoding?//
+	\end{description*}
+	\item[Beschreibung] Die übermittelten Tags werden gelesen und in die Datenbank gespeichert. Bereits vorhandene Tags werden übersprungen, beziehungsweise ergänzt, wenn der neu übermittelte Tag mehr optionale Felder enthält als der bereits gespeicherte.
 \end{description*}
 \end{mdframed}
 
@@ -656,13 +681,14 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/products/\{id\}}
+	\item[URI Path] \texttt{/products/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	"id": <int,id> ,
+	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"name": "<str,productname>"
 }
 \end{lstlisting}
@@ -671,16 +697,16 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/products}
+	\item[URI Path] \texttt{/products/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-		"id": <int,id> ,
+		"id": <int,id>,
+		"uri": "<uri,resource>",
 		"name": "<str,productname>"	
-		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
@@ -689,17 +715,17 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/products/\{id\}/default-groups}
+	\item[URI Path] \texttt{/products/\{id\}/default-groups/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[Request Parameter] \hfill
-    \begin{description*}
-        \item[\texttt{group-id}] group-id
-    \end{description*}
+	\begin{description*}
+		\item[\texttt{group-id}] group-id
+	\end{description*}
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
-    <doc,group>
+	<doc,group>
 ]
 \end{lstlisting}
 \end{description*}
@@ -711,14 +737,14 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/packages/\{id\}}
+	\item[URI Path] \texttt{/packages/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[Request Parameter] \hfill
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"name": "<str,packagename>"
 }
 \end{lstlisting}
@@ -727,7 +753,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/packages}
+	\item[URI Path] \texttt{/packages/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -735,8 +761,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 [
 	{
 		"id": <int,id>,
+		"uri": "<uri,resource>",
 		"name": "<str,packagename>",
-		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
@@ -745,7 +771,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/packages/\{id\}/versions}
+	\item[URI Path] \texttt{/packages/\{id\}/versions/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -763,13 +789,14 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/versions/\{id\}}
+	\item[URI Path] \texttt{/versions/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH, DELETE
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"package": "<uri,package>",
 	"product": "<uri,product>",
 	"release": "<str,release>",
@@ -783,12 +810,12 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/versions}
+	\item[URI Path] \texttt{/versions/}
 	\item[Archetype] Collection
 	\item[Filter Query] \hfill
 	\begin{description*}
-	    \item[product-name] \texttt{<str,product-name>}
-	    \item[package-name] \texttt{<str,package-name>}
+		\item[product-name] \texttt{<str,product-name>}
+		\item[package-name] \texttt{<str,package-name>}
 	\end{description*}
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -796,13 +823,13 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 [
 	{
 		"id": <int,id>,
+		"uri": "<uri,resource>",
 		"package": "<uri,package>",
 		"product": "<uri,product>",
 		"release": "<str,release>",
 		"securtiy": <int,security>,
 		"blacklist": <bool,blacklist>,
 		"time": <int,time>
-		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
@@ -814,13 +841,14 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \subsubsection{Identities}
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/identities/\{id\}}
+	\item[URI Path] \texttt{/identities/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"type": <int,type>,
 	"value": "<str,value>"
 }
@@ -830,7 +858,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/identities}
+	\item[URI Path] \texttt{/identities/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -838,9 +866,9 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 [
 	{
 		"id": <int,id>,
+		"uri": "<uri,resource>",
 		"type": <int,type>,
 		"value": "<str,value>"
-		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
@@ -853,13 +881,14 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/devices/\{id\}}
+	\item[URI Path] \texttt{/devices/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"description": "<str,description>",
 	"value": "<str,value>",
 	"product": "<uri,product>",
@@ -871,19 +900,19 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/devices}
+	\item[URI Path] \texttt{/devices/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-		"id": <int,id>,
+		"id": <int,id>,\\
+		"uri": "<uri,resource>",
 		"description": "<str,description>",
 		"value": "<str,value>",
 		"product": "<uri,product>",
 		"created": <int,created>,
-		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
@@ -892,13 +921,13 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/device/\{id\}/sessions}
+	\item[URI Path] \texttt{/device/\{id\}/sessions/}
 	\item[Archetype] Readonly Collection
 	\item[Filter Query] \hfill
-    \begin{description*}
-        \item[time-from] \texttt{<int,timestamp>}
-        \item[time-to] \texttt{<int,timestamp>}
-    \end{description*}	
+	\begin{description*}
+		\item[time-from] \texttt{<int,timestamp>}
+		\item[time-to] \texttt{<int,timestamp>}
+	\end{description*}	
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -911,7 +940,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/device/\{id\}/sessions/\{id\}/results}
+	\item[URI Path] \texttt{/device/\{id\}/sessions/\{id\}/results/}
 	\item[Archetype] Readonly Collection 
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
@@ -923,10 +952,9 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \end{description*}
 \end{mdframed}
 
-
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/device/\{id\}/groups}
+	\item[URI Path] \texttt{/device/\{id\}/groups/}
 	\item[Archetype] Collection 
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -938,17 +966,33 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 \end{description*}
 \end{mdframed}
 
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/device/\{id\}/swid-tags/}
+	\item[Archetype] Readonly Collection 
+	\item[Methods] POST
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	<doc,swid-tag>
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+
 \pagebreak
 \subsubsection{Enforcements}
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/enforcements/\{id\}}
+	\item[URI Path] \texttt{/enforcements/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"policy": "<uri,policy>",
 	"group": "<uri,group>",
 	"fail-recommendation": <int,rec_fail>,
@@ -961,25 +1005,25 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/enforcements}
+	\item[URI Path] \texttt{/enforcements/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[Filter Query] \hfill
-    \begin{description*}
-        \item[group-name] \texttt{<str,group-name>}
-        \item[policy-name] \texttt{<str,policy-name>}
-    \end{description*}	
+	\begin{description*}
+		\item[group-name] \texttt{<str,group-name>}
+		\item[policy-name] \texttt{<str,policy-name>}
+	\end{description*}	
 	\item[JSON Format] \hfill
 \begin{lstlisting}
 [
 	{
 		"id": <int,id>,
+		"uri": "<uri,resource>",
 		"policy": "<uri,policy>",
 		"group": "<uri,group>",
-        "fail-recommendation": <int,rec_fail>,
-        "noresult-recommendation": <int,rec_noresult>",
+		"fail-recommendation": <int,rec_fail>,
+		"noresult-recommendation": <int,rec_noresult>",
 		"max-age": <int,max_age>
-		"uri": "<uri,resource>"
 	}
 ]
 \end{lstlisting}
@@ -988,7 +1032,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/enforcements/\{id\}/groups}
+	\item[URI Path] \texttt{/enforcements/\{id\}/groups/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format] \hfill
@@ -1005,18 +1049,19 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/policies/\{id\}}
+	\item[URI Path] \texttt{/policies/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"type": <int,type>,
 	"name": "<str,name>",
 	"argument": <policy-argument>,
-    "fail-recommendation": <int,rec_fail>,
-    "noresult-recommendation": <int,rec_noresult>",
+	"fail-recommendation": <int,rec_fail>,
+	"noresult-recommendation": <int,rec_noresult>",
 }
 \end{lstlisting}
 \end{description*}
@@ -1024,7 +1069,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/policies}
+	\item[URI Path] \texttt{/policies/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format] \hfill
@@ -1032,12 +1077,12 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 [
 	{
 		"id": <int,id>,
+		"uri": "<uri,resource>",
 		"type": <int,type>,
 		"name": "<str,name>",
 		"argument": <policy-argument>,
-        "fail-recommendation": <int,rec_fail>,
-        "noresult-recommendation": <int,rec_noresult>",
-		"uri": "<uri,resource>"
+		"fail-recommendation": <int,rec_fail>,
+		"noresult-recommendation": <int,rec_noresult>"
 	}
 ]
 \end{lstlisting}
@@ -1046,7 +1091,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/policies/\{id\}/enforcements}
+	\item[URI Path] \texttt{/policies/\{id\}/enforcements/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format] \hfill
@@ -1064,13 +1109,14 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/groups/\{id\}}
+	\item[URI Path] \texttt{/groups/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"name": "<str,name>",
 	"parent": "<uri,group>"
 }
@@ -1080,17 +1126,17 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/groups}
+	\item[URI Path] \texttt{/groups/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format] \hfill
 \begin{lstlisting}
 [
 	{
-        "id": <int,id>,
-    	"name": "<str,name>",
-    	"parent": "<uri,group>"
-		"uri": "<uri,resource>"
+		"id": <int,id>,
+		"uri": "<uri,resource>",
+		"name": "<str,name>",
+		"parent": "<uri,group>"
 	}
 ]
 \end{lstlisting}
@@ -1099,7 +1145,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/groups/\{id\}/devices}
+	\item[URI Path] \texttt{/groups/\{id\}/devices/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -1113,7 +1159,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/groups/\{id\}/enforcements}
+	\item[URI Path] \texttt{/groups/\{id\}/enforcements/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
@@ -1131,7 +1177,7 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 
 Keine Ressourcen für Zwischentabellen (siehe 'devices' und 'enforcements').
 
-\pagebreak
+
 \subsubsection{Groups\_products\_defaults}
 Keine Ressourcen für Zwischentabellen (siehe 'products').
 
@@ -1140,14 +1186,16 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/files/\{id\}}
+	\item[URI Path] \texttt{/files/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"name": "<str,name>",
+	"hashes: <doc,hash-set>,
 	"dir": "<uri,directory>"
 }
 \end{lstlisting}
@@ -1156,18 +1204,19 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/files}
+	\item[URI Path] \texttt{/files/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
-    {
-	    "id": <int,id>,
-	    "name": "<str,name>",
-	    "dir": "<uri,directory>",
-	    "uri": "<uri,resource>"
-    }
+	{
+		"id": <int,id>,
+		"uri": "<uri,resource>",
+		"name": "<str,name>"
+		"hashes: <doc,hash-set>,
+		"dir": "<uri,directory>"
+	}
 ]
 \end{lstlisting}
 \end{description*}
@@ -1179,13 +1228,14 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/directories/\{id\}}
+	\item[URI Path] \texttt{/directories/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"path": "<str,path>"
 }
 \end{lstlisting}
@@ -1194,7 +1244,7 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/directories}
+	\item[URI Path] \texttt{/directories/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -1202,8 +1252,8 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 [
 	{
 		"id": <int,id>,
-	    "path": "<str,path>",
-	    "uri": <uri,resource>
+		"uri": "<uri,resource>",
+		"path": "<str,path>"
 	}
 ]
 \end{lstlisting}
@@ -1212,7 +1262,7 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/directories/\{id\}/files}
+	\item[URI Path] \texttt{/directories/\{id\}/files/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -1229,13 +1279,14 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/swid-tags/{id}}
+	\item[URI Path] \texttt{/swid-tags/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"package-name": "<str,package-name>",
 	"version": "<str,version>",
 	"unique-id": "<str,unique_id>",
@@ -1252,7 +1303,7 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/swid-tags}
+	\item[URI Path] \texttt{/swid-tags/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
@@ -1260,17 +1311,32 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 [
 	{
 		"id": <int,id>,
-    	"package-name": "<str,package-name>",
-    	"version": "<str,version>",
-    	"unique-id": "<str,unique_id>",
-    	"entity": {
-    		"tag-creator": "<uri,entity>",
-    		"publisher":  "<uri,entity>",
-    		"licensor": "<uri,entity>"
-    	},
-    	"tag-xml": "<xml,swid-tag>",
-    	"uri": <uri,resource>
-    	
+		"uri": "<uri,resource>",
+		"package-name": "<str,package-name>",
+		"version": "<str,version>",
+		"unique-id": "<str,unique_id>",
+		"entity": {
+			"tag-creator": "<uri,entity>",
+			"publisher":  "<uri,entity>",
+			"licensor": "<uri,entity>"
+		},
+		"tag-xml": "<xml,swid-tag>"
+	}
+]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/swid-tags/\{id\}/files/}
+	\item[Archetype] Readonly Collection
+	\item[Methods] GET
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+[
+	{
+		<doc,file>
 	}
 ]
 \end{lstlisting}
@@ -1283,13 +1349,14 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/swid-entities/{id}}
+	\item[URI Path] \texttt{/swid-entities/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
+	"uri": "<uri,resource>",
 	"name": "<str,name>",
 	"regid": "<str,regid>"
 }
@@ -1299,18 +1366,18 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/swid-entities}
+	\item[URI Path] \texttt{/swid-entities/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
 	{
-	    "id": <int,id>,
-	    "name": "<str,name>",
-	    "regid": "<str,regid>",
-	    "uri": <uri,resource>
-    }
+		"id": <int,id>,
+		"uri": "<uri,resource>",
+		"name": "<str,name>",
+		"regid": "<str,regid>",
+	}
 ]
 \end{lstlisting}
 \end{description*}
@@ -1318,17 +1385,29 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/swid-entities/\{id\}/swid-tags}
+	\item[URI Path] \texttt{/swid-entities/\{id\}/swid-tags/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [
-    <doc,swid-tag>
+	<doc,swid-tag>
 ]
 \end{lstlisting}
 \end{description*}
 \end{mdframed}
 
-
+\pagebreak
+\begin{thebibliography}{1}
+	\bibitem{masse2011rest}
+	Masse, Mark. 
+	\emph{REST API design rulebook.} 
+	O'Reilly Media, Inc., 2011.
+	
+	\bibitem{rfc3986}
+	Berners-Lee, Tim, Roy Fielding, and Larry Masinter. 
+	\emph{RFC 3986: Uniform resource identifier (uri): Generic syntax.}
+	The Internet Society (2005).
+		
+\end{thebibliography}
 \end{document}
