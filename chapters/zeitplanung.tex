@@ -76,6 +76,15 @@ Die Phase für den SWID-Generator haben wir etwas verlängert, da letzte Woche n
 Den zusätzlichen Use-Case für Software\_IDs haben wir unterdessen implementiert. Targeted Request müssen keine wildcards oder regex option anbieten, es gibt zur Zeit keinen Use-Case dafür. Es gab kurzfristig, vergangenen Montag, noch 2 Anpassungswünsche von Herrn Steffen: Zusätzliches Flag für IMA Messungen und  Sortierung der Sessions im Device Report absteigen (nach Datum). Wurde bereits implementiert und werden wir möglichst schnell in einem Pull-Request zur verfügung stellen.
 Das Benutzerrollen Konzept ist so in Ordnung. Optimalerweise werden wir einen eigenen Decorator erstellen um redundaten code zu vermeiden. Im DB Modell ist noch eine kleine Anpassung notwendig, sodass mehrere Meassurmentreports für eine Session möglich sind. Das WSGI Script werden wir in den conf Ordner verschieben. Wir werden eine Deployment Anleitung für NGINX und Apache erstellen, wo wir auf die Änderung des WSGI Pfades hinweisen werden. 
 
+\section{Iteration 5}
+TODO
+\section{Iteration 6}
+
+\subsection{Zeitplanung}
+\includegraphics[width=\textwidth]{images/zeitplanung/Iteration6.jpg}
+
+\subsubsection{Meeting 7.5.2014}
+In der SWID Inventory View sollten wir Tags die durch die ausgewählte Sesssion hinzugekommen sind hervorheben. Das first reported Datum sollten wir zur jeweiligen Session verlinken. In der Session übersicht soll es mittels AJAX Paging möglich sein, nicht nur die letzten 50 Sessions anzuzeigen. Die erste Version des API Konzeptes sieht gut aus, Herr Steffen möchte es gerne als Proposale an die TCG senden, dazu werden wir das Konzept noch auf Englisch übersetzen. Im Anhang des Konzeptes werden wir noch ein paar CURL Beispiele zur programmatischen Benutzung der API auflisten. Die Präsentation der strongTNC Erweiterung wird am 25. Juni 2014 sein. In der Logview sollte der Diff (gelöschte Pakete / neue Pakete) angezeigt werden und der Zeitrahmen mittels Kalender eingestellt werden können. Der SWID Generator soll noch so erweitert werden, dass auch eine targeted Request nach Package name möglich ist (z.B OpenSSL), die Parameter sollen \texttt{---package} und \texttt{---software-id} sein. Ein grosser Mehrwert wäre das Matching von SWID Tags auf Packages, kann aber nicht mit 100\% Sicherheit gemacht werden. Das hätte den Vorteil, dass man sehen könnte welche Files für ein package geändert haben (z.B Security Patch) und könnte dann eine Messung auf diesen Files veranlassen.
 
 
 
