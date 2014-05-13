@@ -106,11 +106,11 @@ Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
 		Beispiel: \hfill
 \begin{lstlisting}
 {
-	"field-1": "<str,value-1>",
-	"field-2": <int,value-2>,
-	"field-3": <bool,value-3>,
-	"sub-object": "<uri,sub-object>"
-	"sub-collection": [
+	"field1": "<str,value-1>",
+	"field2": <int,value-2>,
+	"field3": <bool,value-3>,
+	"subObject": "<uri,sub-object>"
+	"subCollection": [
 		{
 			"uri": "<uri,sub-object>"
 		},
@@ -123,15 +123,15 @@ Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
 Beispiel mit Query \texttt{depth=1}:
 \begin{lstlisting}
 {
-	"field-1": "<str,value-1>",
-	"field-2": <int,value-2>,
-	"field-3": <bool,value-3>,
-	"sub-object": {
-		"field-1": <int,value-1>,
+	"field1": "<str,value-1>",
+	"field2": <int,value-2>,
+	"field3": <bool,value-3>,
+	"subObject": {
+		"field1": <int,value-1>,
 		...
 		"uri": "<uri,sub-object>"
 	}
-	"sub-collection": [
+	"subCollection": [
 		{
 			"field": <int, field>,
 			...
@@ -154,13 +154,13 @@ Beispiel mit Query \texttt{depth=1}:
 \begin{lstlisting}
 {
 	{
-		"field-1": "<str,value-1>",
-		"sub-object": "<uri,sub-object>",
+		"field1": "<str,value-1>",
+		"subObject": "<uri,sub-object>",
 		"uri": "<uri,objek>"
 	},
 	{
-		"field-1": "'<str,value-1>",
-		"sub-object": "<uri,sub-object>",
+		"field1": "'<str,value-1>",
+		"subObject": "<uri,sub-object>",
 		"uri": "<uri,resource>"
 	},
 }
@@ -169,15 +169,15 @@ Beispiel mit Query \texttt{depth=1}:
 \begin{lstlisting}
 {
 	{
-		"field-1": "<str,value-1>",
-		"sub-object": {
+		"field1": "<str,value-1>",
+		"subObject": {
 			"field": "<str,value>",
 		},
 		"uri": "<uri,resource>"
 	},
 	{
-		"field-1": "'<str,value-1>",
-		"sub-object": {
+		"field1": "'<str,value-1>",
+		"subObject": {
 			"field": "<str,value>",
 		},
 		"uri": "<uri,resource>"
@@ -376,7 +376,7 @@ Entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende Ob
 	\item[Port Liste] \hfill
 \begin{lstlisting}
 {
-	"port-list": [
+	"portList": [
 		"<str,port or port-range>"
 	]
 }
@@ -384,7 +384,7 @@ Entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende Ob
 	\item[SWID Request Flags] \hfill
 \begin{lstlisting}
 {
-	"swid-flags": [
+	"swidFlags": [
 		"<str,swid-flag>"
 	]
 }
@@ -392,7 +392,7 @@ Entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende Ob
 	\item[TPM Attestation Flags] \hfill
 \begin{lstlisting}
 {
-	"tpm-flags": [
+	"tpmFlags": [
 		"<str,tpm-flag>"
 	]
 }
@@ -453,7 +453,7 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 {
-	"session-id": <int,id>,
+	"sessionId": <int,id>,
 	"workitems": [
 		 <doc,workitem>
 	],
@@ -493,7 +493,7 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	"uri": "<uri,resource>",
 	"time": <int,time>,
 	"identity": "<uri,identity>",
-	"connection-id": <int,connection-id>,
+	"connectionId": <int,connection-id>,
 	"device": "<uri,device>",
 	"recommendation": <int,rec>
 }
@@ -508,8 +508,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	\item[Archetype] Readonly Collection
 	\item[Filter Query] \hfill
 	\begin{description*}
-		\item[time-from] \texttt{<int,timestamp>}
-		\item[time-to] \texttt{<int,timestamp>}
+		\item[timeFrom] \texttt{<int,timestamp>}
+		\item[timeTo] \texttt{<int,timestamp>}
 	\end{description*}	
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
@@ -520,7 +520,7 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 		"uri": "<uri,resource>",
 		"time": <int,time>,
 		"identity": "<uri,identity>",
-		"connection-id": <int,connection-id>,
+		"connectionId": <int,connection-id>,
 		"device": "<uri,device>",
 		"recommendation": <int,rec>
 	}
@@ -814,8 +814,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[Archetype] Collection
 	\item[Filter Query] \hfill
 	\begin{description*}
-		\item[product-name] \texttt{<str,product-name>}
-		\item[package-name] \texttt{<str,package-name>}
+		\item[productName] \texttt{<str,product-name>}
+		\item[packageName] \texttt{<str,package-name>}
 	\end{description*}
 	\item[Methods] GET, POST
 	\item[JSON Format Response] \hfill
@@ -925,8 +925,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[Archetype] Readonly Collection
 	\item[Filter Query] \hfill
 	\begin{description*}
-		\item[time-from] \texttt{<int,timestamp>}
-		\item[time-to] \texttt{<int,timestamp>}
+		\item[timeFrom] \texttt{<int,timestamp>}
+		\item[timeTo] \texttt{<int,timestamp>}
 	\end{description*}	
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
@@ -995,9 +995,9 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	"uri": "<uri,resource>",
 	"policy": "<uri,policy>",
 	"group": "<uri,group>",
-	"fail-recommendation": <int,rec_fail>,
-	"noresult-recommendation": <int,rec_noresult>", 
-	"max-age": <int,max_age>
+	"failRecommendation": <int,rec_fail>,
+	"noresultRecommendation": <int,rec_noresult>", 
+	"maxAge": <int,max_age>
 }
 \end{lstlisting}
 \end{description*}
@@ -1010,8 +1010,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	\item[Methods] GET
 	\item[Filter Query] \hfill
 	\begin{description*}
-		\item[group-name] \texttt{<str,group-name>}
-		\item[policy-name] \texttt{<str,policy-name>}
+		\item[groupName] \texttt{<str,group-name>}
+		\item[policyName] \texttt{<str,policy-name>}
 	\end{description*}	
 	\item[JSON Format] \hfill
 \begin{lstlisting}
@@ -1021,9 +1021,9 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"uri": "<uri,resource>",
 		"policy": "<uri,policy>",
 		"group": "<uri,group>",
-		"fail-recommendation": <int,rec_fail>,
-		"noresult-recommendation": <int,rec_noresult>",
-		"max-age": <int,max_age>
+		"failRecommendation": <int,rec_fail>,
+		"noresultRecommendation": <int,rec_noresult>",
+		"maxAge": <int,max_age>
 	}
 ]
 \end{lstlisting}
@@ -1060,8 +1060,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 	"type": <int,type>,
 	"name": "<str,name>",
 	"argument": <policy-argument>,
-	"fail-recommendation": <int,rec_fail>,
-	"noresult-recommendation": <int,rec_noresult>",
+	"failRecommendation": <int,rec_fail>,
+	"noresultRecommendation": <int,rec_noresult>",
 }
 \end{lstlisting}
 \end{description*}
@@ -1081,8 +1081,8 @@ Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können di
 		"type": <int,type>,
 		"name": "<str,name>",
 		"argument": <policy-argument>,
-		"fail-recommendation": <int,rec_fail>,
-		"noresult-recommendation": <int,rec_noresult>"
+		"failRecommendation": <int,rec_fail>,
+		"noresultRecommendation": <int,rec_noresult>"
 	}
 ]
 \end{lstlisting}
@@ -1287,15 +1287,15 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 {
 	"id": <int,id>,
 	"uri": "<uri,resource>",
-	"package-name": "<str,package-name>",
+	"packageName": "<str,package-name>",
 	"version": "<str,version>",
-	"unique-id": "<str,unique_id>",
+	"uniqueId": "<str,unique_id>",
 	"entity": {
-		"tag-creator": "<uri,entity>",
+		"tagCreator": "<uri,entity>",
 		"publisher":  "<uri,entity>",
 		"licensor": "<uri,entity>"
 	},
-	"tag-xml": "<xml,swid-tag>"
+	"tagXml": "<xml,swid-tag>"
 }
 \end{lstlisting}
 \end{description*}
@@ -1312,15 +1312,15 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 	{
 		"id": <int,id>,
 		"uri": "<uri,resource>",
-		"package-name": "<str,package-name>",
+		"packageName": "<str,package-name>",
 		"version": "<str,version>",
-		"unique-id": "<str,unique_id>",
+		"uniqueId": "<str,unique_id>",
 		"entity": {
-			"tag-creator": "<uri,entity>",
+			"tagCreator": "<uri,entity>",
 			"publisher":  "<uri,entity>",
 			"licensor": "<uri,entity>"
 		},
-		"tag-xml": "<xml,swid-tag>"
+		"tagXml": "<xml,swid-tag>"
 	}
 ]
 \end{lstlisting}
