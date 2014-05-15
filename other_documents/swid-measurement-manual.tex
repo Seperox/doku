@@ -30,23 +30,6 @@
 	nobreak=true
 }
 
-\definecolor{gray}{rgb}{0.4,0.4,0.4}
-\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
-\definecolor{cyan}{rgb}{0.0,0.6,0.6}
-
-\lstdefinelanguage{XML}
-{
-  morestring=[b]",
-  morestring=[s]{>}{<},
-  morecomment=[s]{<?}{?>},
-  stringstyle=\color{black},
-  identifierstyle=\color{darkblue},
-  keywordstyle=\color{cyan},
-  morekeywords={xmlns,version,type},% list your attributes here
-  columns=fullflexible,
-  showstringspaces=false,
-  commentstyle=\color{gray}\upshape
-}
 
 \lstset{
 	basicstyle=\linespread{.94}\ttfamily,
@@ -242,7 +225,7 @@ Der Request sieht folgendermassen aus:
 	basicstyle=\linespread{.94}\ttfamily,
 	tabsize=2,
 }
-\begin{small}\begin{lstlisting}[language=BASH]
+\begin{small}\begin{lstlisting}
 POST /api/swid/add-tags/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
 Host: tncserver:8000
@@ -251,8 +234,8 @@ Content-Type: application/json; charset="utf-8"
 Content-Length: 239
 
 [
-"<?xml\ version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
-"<?xml\ version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
+"<?xml version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
 ]
 \end{lstlisting}\end{small}
 
@@ -313,8 +296,7 @@ Allow: POST, OPTIONS
 		Beispiel: \texttt{Content-Type: application/json; charset=utf-8}
 	\item Nichtdruckbare Zeichen sowie doppelte Anführungszeichen innerhalb eines
 		JSON Strings (zB bei den XML Tags) müssen mit einem Backslash escaped werden
-		(z.B newline, tab, double quotes $\rightarrow$ \escape{n}, \escape{t}
-		\escape{"}).
+		(z.B newline, tab, double quotes $\rightarrow$ \escape{n}, \escape{t}, \escape{"}).
 \end{itemize}
 
 
