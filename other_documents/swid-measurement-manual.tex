@@ -113,7 +113,7 @@ Curl Befehl:
 \begin{lstlisting}
 $: curl -i -X POST http://tncserver/sessions/2/swid\_measurement/ \
 	-u root:root \
-	-H "Content-Type: application/json" \
+	-H "Content-Type: application/json; charset=utf-8" \
 	-d $DATA
 \end{lstlisting}
 \subsubsection{Antwort - Status 412 Precondition Failed}
@@ -168,7 +168,7 @@ Authorization: Basic cm9vdDpyb290
 User-Agent: curl/7.32.0
 Host: tncserver:8000
 Accept: */*
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 Content-Length: 239
 
 [<?xml version="1.0" encoding="utf-8"?>...
