@@ -676,7 +676,9 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 		\begin{description*}
 			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
 			und wurden für die übermittelte Session eingetragen
-			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs übertragen.
+			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die
+				übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs
+				übertragen.
 		\end{description*}
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -700,10 +702,20 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Request Parameter] \hfill
-	\begin{description*}
-		\item[\texttt{xmlData}] //TODO: Encoding?//
-	\end{description*}
-	\item[Beschreibung] Die übermittelten Tags werden gelesen und in die Datenbank gespeichert. Bereits vorhandene Tags werden übersprungen, beziehungsweise ergänzt, wenn der neu übermittelte Tag mehr optionale Felder enthält als der bereits gespeicherte.
+		\begin{description*}
+			\item[\texttt{xmlData}] SWID Tag, ein XML-String pro Zeile, getrennt durch
+				einen Newline-Character.
+		\end{description*}
+	\item[Response Statuscodes] \hfill
+		\begin{description*}
+			\item[200 OK] SWID Tags wurden erfolgreich verarbeitet.
+			\item[400 Bad Request] Fehlerhafter Request. Details zum Fehler werden im
+				Response-Body zurückgesendet.
+		\end{description*}
+	\item[Beschreibung] Die übermittelten Tags werden gelesen und in die Datenbank
+		gespeichert. Bereits vorhandene Tags werden übersprungen, beziehungsweise
+		ergänzt, wenn der neu übermittelte Tag mehr optionale Felder enthält als der
+		bereits gespeicherte. (TODO specify genauer)
 \end{description*}
 \end{mdframed}
 
