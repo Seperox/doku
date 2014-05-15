@@ -41,7 +41,6 @@
   identifierstyle=\color{darkblue},
   keywordstyle=\color{cyan},
   morekeywords={xmlns,version,type},% list your attributes here
-  basicstyle=\tiny,
   columns=fullflexible,
   showstringspaces=false,
   commentstyle=\color{gray}\upshape
@@ -60,6 +59,8 @@
 \pagestyle{scrheadings}
 \ihead{REST API} %linke Kopfzeile
 \ohead{strongTNC BA} %rechte Kopfzeile
+
+\newcommand*{\escape}[1]{\texttt{\textbackslash#1}}
 
 \let\textquotedbl="
 
@@ -81,15 +82,15 @@ Hier der Auszug aus der REST API: \\
 \includegraphics[scale=0.5]{swid-measurement-api.jpg}
 \includegraphics[scale=0.25]{../images/architecture/SWID_strongTNC.png}
 
-\subsection{Beispiel Szenario}
+\section{Beispiel Szenario}
 Im folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels illustriert werden. In diesem Beispiel soll eine Messung für 3 Tags mit folgenden Software-IDs erfolgen:
 \begin{itemize}
 \item "regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-logrotate-3.7.8-6ubuntu5"
-\item "regid.2004-03.org.strongswan\_Ubuntu\_2.04-i686-lsb-base-4.0-0ubuntu20"
-\item "regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-fortune-mod-1:1.99.1-4"
+\item "regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-lsb-base-4.0-0ubuntu20"
+\item "regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-strongswan-4.5.2-1.5+deb7u3"
 \end{itemize}
 
-\subsubsection{Request - SWID Measurement}
+\subsection{Request - SWID Measurement}
 Als erstes wird versucht eine Messung für die Session mit der ID 2 zu erfassen. \hfill
 \begin{lstlisting}
 
@@ -104,17 +105,17 @@ Content-Length: 239
 [
 "regid.2004-03.org.strongswan_Ubuntu_12.04-i686-logrotate-3.7.8-6ubuntu5",
 "regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20",
-"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-fortune-mod-1:1.99.1-4
+"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3
 ]
 
 \end{lstlisting}
 
 Curl Befehl:
 \begin{lstlisting}
-$: curl -i -X POST http://tncserver/sessions/2/swid\_measurement/ \
-	-u root:root \
-	-H "Content-Type: application/json; charset=utf-8" \
-	-d $DATA
+curl	-i -X POST http://tncserver/sessions/2/swid\_measurement/ \
+			-u root:root \
+			-H "Content-Type: application/json" \
+			-d $DATA
 \end{lstlisting}
 \subsubsection{Antwort - Status 412 Precondition Failed}
 Sind noch nicht alle Tags in der strongTNC Datenbank vorhanden, werden dienigen Software-IDs zurückgeliefert, die zuerst erfasst werden müssen. Der HTTP Status Code ist 412 "Precondition Failed". Es werden zu diesem Zeitpunkt noch keine Tags mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt aussehen:
@@ -126,7 +127,7 @@ Vary: Accept, Cookie
 Content-Type: application/json
 Allow: POST, OPTIONS
 
-["regid.2004-03.org.strongswan_Ubuntu_12.04-i686-fortune-mod-1:1.99.1-4"]
+["regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"]
 \end{lstlisting}
 \subsubsection{Antwort - Status 200 OK}
 Wären für alle Software-IDs bereits Tags in der Datenbank vorhanden, könnte die Antwort wie folgt aussehen:
@@ -144,19 +145,39 @@ Allow: POST, OPTIONS
 \subsection{Nacherfassen von SWID Tags}
 War die Messung nicht erfolgreich (Status 412), müssen für die zurückgelieferten Software-IDs zuerst komplette SWID Tags erfasst werden.
 Im swidGenerator kann ein solcher mit \texttt{swid-generator swid --software-id="regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-fortune-mod-1:1.99.1-4"} abgefragt werden.
-Ein erhaltener SWID Tag hat könnte wie folgt aussehen:
+Ein solcher SWID Tag sieht wie folgt aus:
 
 \lstset{language=XML}
 \begin{lstlisting}
-<?xml version="1.0" encoding="utf-8"?>
-<SoftwareIdentity name="fortune-mod" uniqueId="Ubuntu_12.04-i686-fortune-mod-1:1.99.1-4" version="1:1.99.1-4"
-	   			versionScheme="alphanumeric" xmlns="http://standards.iso.org/iso/19770/-2/2014/schema.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<SoftwareIdentity name="strongswan" 
+				  uniqueId="debian_7.4-x86_64-strongswan-4.5.2-1.5+deb7u3" 
+				  version="4.5.2-1.5+deb7u3" versionScheme="alphanumeric" 
+				  xmlns="http://standards.iso.org/iso/19770/-2/2014/schema.xsd">
   <Entity name="strongSwan" regid="regid.2004-03.org.strongswan" role="tagcreator"/>
+  <Entity name="HSR" regid="regid.2004-03.org.strongswan" role="publisher"/>
+  <Payload>
+    <File location="/usr/share/doc/strongswan" name="README.gz"/>
+    <File location="/usr/share/doc/strongswan" name="copyright"/>
+    <File location="/usr/share/doc/strongswan" name="changelog.Debian.gz"/>
+    <File location="/usr/share/doc/strongswan" name="CREDITS.gz"/>
+    <File location="/usr/share/doc/strongswan" name="README.Debian.gz"/>
+    <File location="/usr/share/doc/strongswan" name="NEWS.Debian.gz"/>
+    <File location="/usr/share/doc/strongswan" name="changelog.gz"/>
+  </Payload>
 </SoftwareIdentity>
+
 \end{lstlisting}
 
-Dieser Tag kann anschliessen auf die Ressource /swid-tags gepostet werden. Die Daten für diesen Request bestehen aus einer JSON Liste von XML Strings, dadurch können auch mehrere Tags auf einmal erfasst werden.
+Dieser Tag kann anschliessend in der strongTNC Datenbank mittels POST Request auf die Ressource \texttt{/swid/add-tags/} erfasst werden. Die Daten für diesen Request bestehen aus einer JSON Liste von XML Strings, dadurch können auch mehrere Tags auf einmal erfasst werden. 
+\paragraph{Tag Format}
+\begin{itemize}
+\item Die Dokumente können entweder mit oder ohne File Payload gespeichert werden. Wird versucht ein bereits bestehender Tag zu erfassen, wird dieser mit den neuen Daten komplett ersetzt.
+\item XML Strings müssen in doppelten Anführungszeichen eingeschlossen und nichtdruckbare Zeichen innerhalb der XML Strings escapen werden (z.B newline, tab, double quotes $\rightarrow$ \escape{n}, \escape{t} \escape{"}).
 
+\end{itemize}
+
+Der Request sieht folgendermassen aus:
 \lstset{
 	basicstyle=\linespread{.94}\ttfamily,
 	tabsize=2,
@@ -168,14 +189,13 @@ Authorization: Basic cm9vdDpyb290
 User-Agent: curl/7.32.0
 Host: tncserver:8000
 Accept: */*
-Content-Type: application/json; charset=utf-8
+Content-Type: application/json; charset="utf-8"
 Content-Length: 239
 
-[<?xml version="1.0" encoding="utf-8"?>...
-<SoftwareIdentity name="fortune-mod" uniqueId="Ubuntu_12.04-i686-fortune-mod-1:1.99.1-4" version="1:1.99.1-4"
-	   			versionScheme="alphanumeric" xmlns="http://standards.iso.org/iso/19770/-2/2014/schema.xsd">
-  <Entity name="strongSwan" regid="regid.2004-03.org.strongswan" role="tagcreator"/>
-</SoftwareIdentity>]
+[
+"<?xml version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
+]
 \end{lstlisting}
 
 \end{document}
