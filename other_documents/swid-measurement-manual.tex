@@ -87,6 +87,8 @@ Eine Messung läuft wie folgt ab:
 	\begin{itemize}
 		\item Wenn von der API ``\texttt{200 OK}'' zurückgegeben wurde, ist alles OK und die SWID
 			Tags wurden mit der aktuellen Session verknüpft. ENDE.
+		\item Wenn von der API ``\texttt{404 Not Found}'' zurückgegeben wurde, ist
+			die Session ID ungültig. Problem beheben und weiter zu Punkt 2.
 		\item Wenn von der API ``\texttt{412 Precondition Failed}'' zurückgegeben wurde, sind
 			noch nicht alle SWID Tags in der Datenbank erfasst. Weiter zu Punkt 3.
 	\end{itemize}
@@ -108,24 +110,26 @@ Eine Messung läuft wie folgt ab:
 		Measurement-Request erneut gesendet werden. Weiter zu Punkt 1.
 \end{enumerate}
 
+\pagebreak
 \section{Beispiel Szenario}
-Im folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels illustriert werden. In diesem Beispiel soll eine Messung für 3 Tags mit folgenden Software-IDs erfolgen:
+Im Folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels
+illustriert werden. In diesem Beispiel soll eine Messung für 3 Tags mit
+folgenden Software-IDs erfolgen:
 \begin{itemize}
-\item "regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-logrotate-3.7.8-6ubuntu5"
-\item "regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-lsb-base-4.0-0ubuntu20"
-\item "regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-strongswan-4.5.2-1.5+deb7u3"
+	\item \texttt{regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-logrotate-3.7.8-6ubuntu5}
+	\item \texttt{regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-lsb-base-4.0-0ubuntu20}
+	\item \texttt{regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-strongswan-4.5.2-1.5+deb7u3}
 \end{itemize}
 
 \subsection{Request - SWID Measurement}
-Als erstes wird versucht eine Messung für die Session mit der ID 2 zu erfassen. \hfill
-\begin{lstlisting}
+Zuerst wird versucht eine Messung für die Session mit der ID 2 zu erfassen.
 
+\begin{small}\begin{lstlisting}
 POST /api/sessions/2/swid_measurement/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
-User-Agent: curl/7.32.0
 Host: tncserver:8000
-Accept: */*
-Content-Type: application/json
+Accept: application/json
+Content-Type: application/json; charset=utf-8
 Content-Length: 239
 
 [
@@ -133,19 +137,27 @@ Content-Length: 239
 "regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20",
 "regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3
 ]
-
-\end{lstlisting}
+\end{lstlisting}\end{small}
 
 Curl Befehl:
-\begin{lstlisting}
-curl	-i -X POST http://tncserver/sessions/2/swid\_measurement/ \
-			-u root:root \
-			-H "Content-Type: application/json" \
-			-d $DATA
-\end{lstlisting}
+
+\begin{small}\begin{lstlisting}
+curl -i -X POST http://tncserver:8000/api/sessions/2/swid_measurement/ \
+		 -u username:password \
+		 -H "Accept: application/json" \
+		 -H "Content-Type: application/json; charset=utf-8" \
+		 -d $DATA
+\end{lstlisting}\end{small}
+
 \subsubsection{Antwort - Status 412 Precondition Failed}
-Sind noch nicht alle Tags in der strongTNC Datenbank vorhanden, werden dienigen Software-IDs zurückgeliefert, die zuerst erfasst werden müssen. Der HTTP Status Code ist 412 "Precondition Failed". Es werden zu diesem Zeitpunkt noch keine Tags mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt aussehen:
-\begin{lstlisting}
+
+Sind noch nicht alle Tags in der strongTNC Datenbank vorhanden, werden die
+Software-IDs der fehlenden Tags zurückgeliefert. Der HTTP Status Code ist
+``\texttt{412 Precondition Failed}''. Es werden zu diesem Zeitpunkt noch keine
+Tags mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt
+aussehen:
+
+\begin{small}\begin{lstlisting}
 HTTP/1.0 412 PRECONDITION FAILED
 Date: Wed, 14 May 2014 15:21:45 GMT
 Server: WSGIServer/0.1 Python/2.7
@@ -154,10 +166,13 @@ Content-Type: application/json
 Allow: POST, OPTIONS
 
 ["regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"]
-\end{lstlisting}
+\end{lstlisting}\end{small}
+
 \subsubsection{Antwort - Status 200 OK}
+
 Wären für alle Software-IDs bereits Tags in der Datenbank vorhanden, könnte die Antwort wie folgt aussehen:
-\begin{lstlisting}
+
+\begin{small}\begin{lstlisting}
 HTTP/1.0 200 OK
 Date: Wed, 14 May 2014 15:21:45 GMT
 Server: WSGIServer/0.1 Python/2.7
@@ -166,13 +181,23 @@ Content-Type: application/json
 Allow: POST, OPTIONS
 
 []
-\end{lstlisting}
+\end{lstlisting}\end{small}
 
 \subsection{Nacherfassen von SWID Tags}
-War die Messung nicht erfolgreich (Status 412), müssen für die zurückgelieferten Software-IDs zuerst komplette SWID Tags erfasst werden.
-Im swidGenerator kann ein solcher mit \texttt{swid-generator swid --software-id="regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-fortune-mod-1:1.99.1-4"} abgefragt werden.
+
+War die Messung nicht erfolgreich (HTTP 412), müssen für die zurückgelieferten
+Software-IDs zuerst komplette SWID Tags erfasst werden.
+
+Im swidGenerator kann ein solcher wie folgt abgefragt werden:
+
+\begin{small}\begin{verbatim}
+	swid-generator swid \
+	  --software-id="regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-fortune-mod-1:1.99.1-4"
+\end{verbatim}\end{small}
+
 Ein solcher SWID Tag sieht wie folgt aus:
 
+\begin{small}
 \lstset{language=XML}
 \begin{lstlisting}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -192,14 +217,19 @@ Ein solcher SWID Tag sieht wie folgt aus:
     <File location="/usr/share/doc/strongswan" name="changelog.gz"/>
   </Payload>
 </SoftwareIdentity>
-
 \end{lstlisting}
+\end{small}
 
-Dieser Tag kann anschliessend in der strongTNC Datenbank mittels POST Request auf die Ressource \texttt{/swid/add-tags/} erfasst werden. Die Daten für diesen Request bestehen aus einer JSON Liste von XML Strings, dadurch können auch mehrere Tags auf einmal erfasst werden. 
-\paragraph{Tag Format}
-\begin{itemize}
-\item Die Dokumente können entweder mit oder ohne File Payload gespeichert werden. Wird versucht ein bereits bestehender Tag zu erfassen, wird dieser mit den neuen Daten komplett ersetzt.
-\item XML Strings müssen in doppelten Anführungszeichen eingeschlossen und nichtdruckbare Zeichen innerhalb der XML Strings escapen werden (z.B newline, tab, double quotes $\rightarrow$ \escape{n}, \escape{t} \escape{"}).
+Dieser Tag kann anschliessend in der strongTNC Datenbank mittels POST Request
+auf die Ressource \texttt{/swid/add-tags/} erfasst werden. Die Daten für diesen
+Request bestehen aus einer JSON Liste von XML Strings, dadurch können auch
+mehrere Tags auf einmal erfasst werden. Empfehlenswert ist allerdings ein
+Batching in mehrere Gruppen, da die Requests sonst unter Umständen sehr lange
+dauern können. 
+
+Falls bereits ein Tag mit der selben Software-ID existiert, wird er komplett
+überschrieben.
+
 
 \end{itemize}
 
@@ -224,6 +254,23 @@ Content-Length: 239
 ]
 \end{lstlisting}
 
+\section{Allgemeine Hinweise}
+
+\begin{itemize}
+	\item JSON-Objekte dürfen im Gegensatz zu Python nur in doppelte
+		Anführungszeichen eingeschlossen werden. Beispiel: \texttt{\{"foo": "bar"\}}
+		statt \texttt{\{'foo': 'bar'\}}.
+	\item Alle übermittelten Daten sollten UTF-8 encoded sein. Der
+		\texttt{Content-Type} Header sollte entsprechend übermittelt werden.
+		Beispiel: \texttt{Content-Type: application/json; charset=utf-8}
+	\item Nichtdruckbare Zeichen sowie doppelte Anführungszeichen innerhalb eines
+		JSON Strings (zB bei den XML Tags) müssen mit einem Backslash escaped werden
+		(z.B newline, tab, double quotes $\rightarrow$ \escape{n}, \escape{t}
+		\escape{"}).
+\end{itemize}
+
+
+\pagebreak
 \section{API Endpoints}
 
 \subsection{SWID Tags: Messung}
@@ -242,7 +289,8 @@ Content-Length: 239
 	\item[Response Statuscodes] \hfill
 		\begin{description*}
 			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
-			und wurden für die übermittelte Session eingetragen
+				und wurden für die übermittelte Session eingetragen
+			\item[404 Not Found] Session mit der spezifizierten ID wurde nicht gefunden. 
 			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die
 				übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs
 				übertragen.
