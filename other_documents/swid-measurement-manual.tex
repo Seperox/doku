@@ -14,6 +14,8 @@
 \usepackage[utf8x]{inputenc} % Unicode-Encoding
 \usepackage[framemethod=TikZ]{mdframed}
 \usepackage{mdframed}
+\usepackage{minted}
+\usemintedstyle{tango}
 \usepackage{color}
 \mdfdefinestyle{def}{%
 	linecolor=gray!50!white,
@@ -96,7 +98,7 @@ Eine Messung läuft wie folgt ab:
 		zurückgegeben. Diese werden nun über Targeted Requests generiert.
 	\item Die neu generierten Tags werden als JSON-Listen an den entsprechenden
 		API-Endpoint [\ref{api:create}] gesendet. Es können auch mehrere Tags in
-		einem Request mitegesendet werden, empfehlenswert ist allerdings ein
+		einem Request mitgesendet werden, empfehlenswert ist allerdings ein
 		Batching in mehrere Gruppen, da die Requests sonst unter Umständen sehr
 		lange dauern können.
 	\begin{itemize}
@@ -203,13 +205,12 @@ Im swidGenerator kann ein solcher wie folgt abgefragt werden:
 Ein solcher SWID Tag sieht wie folgt aus:
 
 \begin{small}
-\lstset{language=XML}
-\begin{lstlisting}
+\begin{minted}{xml}
 <?xml version="1.0" encoding="UTF-8"?>
 <SoftwareIdentity name="strongswan" 
-				  uniqueId="debian_7.4-x86_64-strongswan-4.5.2-1.5+deb7u3" 
-				  version="4.5.2-1.5+deb7u3" versionScheme="alphanumeric" 
-				  xmlns="http://standards.iso.org/iso/19770/-2/2014/schema.xsd">
+	uniqueId="debian_7.4-x86_64-strongswan-4.5.2-1.5+deb7u3" 
+	version="4.5.2-1.5+deb7u3" versionScheme="alphanumeric" 
+	xmlns="http://standards.iso.org/iso/19770/-2/2014/schema.xsd">
   <Entity name="strongSwan" regid="regid.2004-03.org.strongswan" role="tagcreator"/>
   <Entity name="HSR" regid="regid.2004-03.org.strongswan" role="publisher"/>
   <Payload>
@@ -222,7 +223,7 @@ Ein solcher SWID Tag sieht wie folgt aus:
     <File location="/usr/share/doc/strongswan" name="changelog.gz"/>
   </Payload>
 </SoftwareIdentity>
-\end{lstlisting}
+\end{minted}
 \end{small}
 
 Dieser Tag kann anschliessend in der strongTNC Datenbank mittels POST Request
@@ -250,8 +251,8 @@ Content-Type: application/json; charset="utf-8"
 Content-Length: 239
 
 [
-"<?xml version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
+"<?xml\ version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
+"<?xml\ version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
 ]
 \end{lstlisting}\end{small}
 
