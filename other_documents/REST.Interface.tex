@@ -668,9 +668,10 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	\item[URI Path] \texttt{/session/\{id\}/register-swid-measurement/}
 	\item[Archetype] Controller
 	\item[Methods] POST
+	\item[Content-Type] \texttt{application/json; charset=utf-8}
 	\item[Request Parameter] \hfill
 	\begin{description*}
-		\item[\texttt{softwareId}] Eine kommagetrennte Liste von Software Ids
+		\item[\texttt{softwareId}] Software-IDs als JSON-Liste.
 	\end{description*}
 	\item[Response Statuscodes] \hfill
 		\begin{description*}
@@ -701,10 +702,10 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	\item[URI Path] \texttt{/swid/add-tags/}
 	\item[Archetype] Controller
 	\item[Methods] POST
+	\item[Content-Type] \texttt{application/json; charset=utf-8}
 	\item[Request Parameter] \hfill
 		\begin{description*}
-			\item[\texttt{xmlData}] SWID Tag, ein XML-String pro Zeile, getrennt durch
-				einen Newline-Character.
+			\item[\texttt{xmlData}] SWID Tag als JSON-Liste.
 		\end{description*}
 	\item[Response Statuscodes] \hfill
 		\begin{description*}

@@ -54,7 +54,7 @@
 \linespread{1.3}
 
 \author{Danilo Bargen, Christian Fässler, Jonas Furrer} 
-\title{strongTNC REST API\\SWID Measurement \\ \small{Im Rahmen der strongTNC BA} }
+\title{strongTNC REST API\\SWID Endpoints \\ \small{Im Rahmen der strongTNC BA} }
 
 \pagestyle{scrheadings}
 \ihead{REST API} %linke Kopfzeile
@@ -77,10 +77,36 @@
 \newpage
 
 \section{Ablauf der Messung}
-Mittels POST auf die Ressource \texttt{http://tncserver/sessions/id/swid\_measurement} können Tags für eine Session gespeichert werden.
-Hier der Auszug aus der REST API: \\
-\includegraphics[scale=0.5]{swid-measurement-api.jpg}
-\includegraphics[scale=0.25]{../images/architecture/SWID_strongTNC.png}
+
+Eine Messung läuft wie folgt ab:
+
+\begin{enumerate}
+	\item Auf dem Client werden die Software-IDs aller installierter Pakete generiert.
+	\item Die Software-IDs werden als JSON-Liste an den entsprechenden
+		API-Endpoint [\ref{api:measurement}] gesendet.
+	\begin{itemize}
+		\item Wenn von der API ``\texttt{200 OK}'' zurückgegeben wurde, ist alles OK und die SWID
+			Tags wurden mit der aktuellen Session verknüpft. ENDE.
+		\item Wenn von der API ``\texttt{412 Precondition Failed}'' zurückgegeben wurde, sind
+			noch nicht alle SWID Tags in der Datenbank erfasst. Weiter zu Punkt 3.
+	\end{itemize}
+	\item Die fehlenden SWID-Tags werden im Response-Body als JSON-Liste
+		zurückgegeben. Diese werden nun über Targeted Requests generiert.
+	\item Die neu generierten TAgs werden als JSON-Listen an den entsprechenden
+		API-Endpoint [\ref{api:create}] gesendet. Es können auch mehrere Tags in
+		einem Request mitegesendet werden, empfehlenswert ist allerdings ein
+		Batching in mehrere Gruppen, da die Requests sonst unter Umständen sehr
+		lange dauern können.
+	\begin{itemize}
+		\item Wenn von der API ``\texttt{200 OK}'' zurückgegeben wurde, ist alles
+			OK. Weiter zu Punkt 5.
+		\item Wenn von der API ``\texttt{400 Bad Request}'' zurückgegeben wurde,
+			stimmt etwas mit dem Request nicht. Fehler-Details werden im Response Body
+			zurückgesendet.
+	\end{itemize}
+	\item Nachdem alle fehlenden SWID-Tags eingetragen wurden, kann der
+		Measurement-Request erneut gesendet werden. Weiter zu Punkt 1.
+\end{enumerate}
 
 \section{Beispiel Szenario}
 Im folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels illustriert werden. In diesem Beispiel soll eine Messung für 3 Tags mit folgenden Software-IDs erfolgen:
@@ -198,5 +224,57 @@ Content-Length: 239
 ]
 \end{lstlisting}
 
-\end{document}
+\section{API Endpoints}
 
+\subsection{SWID Tags: Messung}
+\label{api:measurement}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/session/\{id\}/register-swid-measurement/}
+	\item[Archetype] Controller
+	\item[Methods] POST
+	\item[Content-Type] \texttt{application/json; charset=utf-8}
+	\item[Request Parameter] \hfill
+	\begin{description*}
+		\item[\texttt{softwareId}] Software-IDs als JSON-Liste.
+	\end{description*}
+	\item[Response Statuscodes] \hfill
+		\begin{description*}
+			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
+			und wurden für die übermittelte Session eingetragen
+			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die
+				übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs
+				übertragen.
+		\end{description*}
+	\item[JSON Format Response] \hfill
+\begin{lstlisting}
+["<str,software-id>", ...]
+\end{lstlisting}
+\end{description*}
+\end{mdframed}
+
+
+\subsection{SWID Tags: Erstellung}
+\label{api:create}
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/swid/add-tags/}
+	\item[Archetype] Controller
+	\item[Methods] POST
+	\item[Content-Type] \texttt{application/json; charset=utf-8}
+	\item[Request Parameter] \hfill
+		\begin{description*}
+			\item[\texttt{xmlData}] SWID Tags als JSON-Liste.
+		\end{description*}
+	\item[Response Statuscodes] \hfill
+		\begin{description*}
+			\item[200 OK] SWID Tags wurden erfolgreich verarbeitet.
+			\item[400 Bad Request] Fehlerhafter Request. Details zum Fehler werden im
+				Response-Body zurückgesendet.
+		\end{description*}
+\end{description*}
+\end{mdframed}
+
+\end{document}
