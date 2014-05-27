@@ -113,7 +113,7 @@ folgenden Software-IDs erfolgen:
 Zuerst wird versucht eine Messung für die Session mit der ID 2 zu erfassen.
 
 \begin{small}\begin{lstlisting}
-POST /api/sessions/2/swid_measurement/ HTTP/1.1
+POST /api/sessions/2/swid-measurement/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
 Host: tncserver:8000
 Accept: application/json
@@ -130,7 +130,7 @@ Content-Length: 239
 Curl Befehl:
 
 \begin{small}\begin{lstlisting}
-curl -i -X POST http://tncserver:8000/api/sessions/2/swid_measurement/ \
+curl -i -X POST http://tncserver:8000/api/sessions/2/swid-measurement/ \
 		 -u username:password \
 		 -H "Accept: application/json" \
 		 -H "Content-Type: application/json; charset=utf-8" \
