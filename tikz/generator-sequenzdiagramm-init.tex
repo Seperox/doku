@@ -1,0 +1,19 @@
+\begin{tikzpicture}
+	\begin{umlseqdiag}[font=\footnotesize]
+
+		% Objekte
+
+		\umlobject{main}
+		\umlcreatecall{main}{environment registry}
+		\umlcreatecall{main}{argparser}
+
+		% Calls
+
+		\begin{umlcall}[op={register(dpkg,rpm,pacman)},return=registry]{main}{environment registry}
+		\end{umlcall}
+
+		\begin{umlcall}[op={parse(registry)},return=options]{main}{argparser}
+		\end{umlcall}
+
+	\end{umlseqdiag}
+\end{tikzpicture}
