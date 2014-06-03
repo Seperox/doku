@@ -11,7 +11,7 @@ Im Bereich des SWID Generators gibt es zur Zeit noch keine bestehenden Produkte.
 
 \subsection{Stand der strongTNC Webapplikation} 
 strongTNC ist eine Umsetzung des TNC Policy Servers, implementiert wurde dieser
-als Webapp mit dem Python basierten \enquote{Django Web Framework} <TODO: Ref>.
+als Webapp mit dem Python basierten \enquote{Django Web Framework} in Version 1.6 <TODO: Ref>.
 Die Applikation bietet Unterstützung für das Verwalten von Geräten, Policies,
 Enforcements und erlaubt es die Anwendung der Enforcements mittels
 hierarchischer Gruppen zu steuern. Stammdaten wie Dateien oder Softwarepakete
@@ -59,25 +59,29 @@ bestehenden Python Code zu 21\% abdecken.\\
 
 \subsubsection{Einschätzung}
 \begin{description}
-	\item[Ergänzungen] Es existieren noch keine Möglichkeit zur Erfassung und
+	\item[Ergänzungen] Es existiert noch keine Möglichkeit zur Erfassung und
 	Verwaltung von SWID Tags, diese müssen im Rahmen dieser Arbeit erstellt werden.
 	Die bestehenden Views können gegebenenfalls als Vorlage verwendet werden.
 	
-	\item[Schnittstelle] Das Verwenden einer gemeinsamen Datenbank stell in unseren
+	\item[Schnittstelle] Das Verwenden einer gemeinsamen Datenbank stellt in unseren
 	Augen ein Architekturproblem dar, welches dringend angegangen werden muss.
 	Einerseits wird die Interoperabilität mit anderen Systemen stark eingeschränkt,
 	andererseits wird die Wartbarkeit und Ausbaufähigkeit aller beteiligten
 	Komponenten erschwert oder verunmöglicht. In diesem Fall wird ausserdem SQLite
 	als Datenbank verwendet. SQLite ist nur bei lesendem Zugriff mehrbenutzerfähig,
 	bei schreibendem Zugriff wird die Datenbank gesperrt, da eine gemeinsam
-	genutzte Datenbank Mehrbenutzerbetrieb impliziert sollte auch in diesem Bereich
+	genutzte Datenbank Mehrbenutzerbetrieb impliziert, sollte auch in diesem Bereich
 	etwas unternommen werden. 
 	
 	\item[Benutzerschnittstelle] 
-	
-	\item[Aufteilung in Apps] 
+	Die Benutzeroberfläche wurde noch nicht für den Umgang mit grossen Datenmengen optimiert. Bei einer grossen Anzahl Objekten gibt es keinen Paging Mechanismus, der ein Stückweises ausliefern von Daten oder Filtern erlaubt.  
+Beispielsweise kann das Inventar der Dateinamen in einem Linux System kann durchaus 40000 Objekte umfassen. Wird die vorhandene File View aufgerufen, werden alle 40000 Einträge angezeigt. Diesen möglichen Dimensionen wird zur Zeit noch nicht Rechnung getragen, und hat sich bereits beim Entwickeln in einer kleinen Umgebung als nicht mehr überschaubar erwiesen (TODO Hr. Steffen).
+Tendentiell ist der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen Unternehmungen zu erwarten, dementsprechend grösser ist auch die Menge der Daten die verwaltet werden müssen.
+
+\item[Aufteilung in Apps] 
 	
 	\item[Codequalität]
+	
 	
 \end{description}
 
@@ -111,7 +115,7 @@ aber die regid ist nicht zwingend eindeutig
 
 \subsubsection{XSD wiederspiegelt nicht den Standard}
 
-\subsubsection{SWID Tags sollten im Installations verzeichnis liegen}
+\subsubsection{SWID Tags sollten im Installationsverzeichnis liegen}
 Schlecht bei Linux Systemen
 
 \subsubsection{Unique ID}
@@ -119,7 +123,7 @@ Nur unique innerhalb regid und regid ist nicht unbedingt eindeutig
 
 \subsubsection{Links}
 Links müssen im "Mastertag" definiert werden, obwohl dieser nach der erstellung
-nichtmher geändert werden darf
+nicht mehr geändert werden darf
 
 
 \subsubsection{Doppelpunkte in der Unique ID} 
