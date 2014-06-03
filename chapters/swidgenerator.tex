@@ -2,22 +2,44 @@
 
 \section{Requirements}
 
-\subsection{Nicht-Funktional}
+\subsection{Zweck}
+
+Der SWID Generator soll ein kleines Programm für Linux-Systeme sein, welches aus
+den Informationen in Paket Management Systemen SWID Tags generiert.
+
+\subsection{Nichtfunktionale Anforderungen}
 
 \begin{itemize}
-    \item Als Implementationsprache wird Python verwendet
-    \item Es sollen möglichst wenig Abhängigkeiten zu Drittkomponenten wie
-			Libraries/Framworks entstehen. Wo möglich sollen Komponenten aus der
-			Python-Standardlibrary verwendet werden.
+		\item Als Implementationsprache wird Python verwendet.
+		\item Es sollen möglichst wenig Abhängigkeiten zu Drittkomponenten wie
+			Libraries/Frameworks entstehen.
     \item Die Software soll einfach zu installieren sein, beispielsweise durch
 			Upload in den Python Package Index ($\rightarrow$ \texttt{pip install
-			swid-generator}) oder durch Erstellen von \texttt{.deb}-Paketen.
-    \item Als Quelle der Paketinformationen sollen yum und dpkg verwendet werden
+			swid-generator}) oder durch Erstellen von \texttt{.deb}- und
+			\texttt{.rpm}-Paketen.
+    \item Als Quelle der Paketinformationen sollen Paketmanager wie DPKG und RPM
+			verwendet werden.
 \end{itemize}
 
-Nachfolgend sind sind die identifizierten Use Cases für die Client Komponenten des SWID-Generator aufgeführt.
+\subsection{Use Cases}
 
-\subsection{UC01: Erkennung des Paketmanagers}
+Nachfolgend sind sind die identifizierten Use Cases für die Client Komponenten
+des SWID-Generator aufgeführt.
+
+Dabei werden die folgen drei Systemkomponenten berücksichtigt, welche
+gegenseitig über die Standardeingabe und -ausgabe kommunizieren.
+
+\vspace{1em}
+
+\begin{figure}[H]
+	\centering
+	\input{tikz/swid-generator-aktoren}
+	\caption{SWID Generator: Systemkomponenten}
+	\label{img:swid-generator-aktoren}
+\end{figure}
+
+\subsubsection{UC01: Erkennung des Paketmanagers}
+
 \begin{tabularx}{\textwidth}{lX}
 \hline 
 \textbf{Actor} & strongSwan IMC \\ 
@@ -42,7 +64,7 @@ dessen Datenbank zu.
 Mittels optionalem Parameter kann der zu verwendende Packagemanager definiert
 werden, die Autoerkennung wird dadurch übersteuert.
 
-\subsection{UC02: Standard SWID Generierung}
+\subsubsection{UC02: Standard SWID Generierung}
 
 Die IMC Komponente kann via stdout des SWID-Generators XML Dokumente erhalten, welche Informationen über die zur Zeit installierte Software des Zielsystems beinhalten.
 Das Format dieser XML Dokumente folgt dem ISO Draft 19770-2-5
@@ -71,11 +93,11 @@ Die Attribute werden mit vordefinierten Standardwerten befüllt. Siehe Codelisti
 \paragraph{Alternatives Szenario}
 Die Attribute können mittels optionalem Parametern spezifiziert werden.
 
-\subsection{UC03: SWID Tag mit File Payload}
+\subsubsection{UC03: SWID Tag mit File Payload}
 Mittels optionalem Parameter können die XML Dokumente mit einem Payload-Tag versehen werden, welcher für jedes Paket die darin enthaltenen Dateien auflistet.
 TODO Beispiel
 
-\subsection{UC04: Ausgabe der Dokumente}
+\subsubsection{UC04: Ausgabe der Dokumente}
 
 \paragraph{Standard Szenario}
 Der Benutzer möchte die XML Dokumente parsen. Dafür führt er den Generator mit
@@ -87,7 +109,7 @@ Der Benutzer möchte die Dokumente in menschenlesbarer Form ausgeben (pretty
 print). Das steuert er über optionale Parameter. Diese Ausgabe der Tags ist dann
 hierarchisch eingerückt um so die Lesbarkeit sicherzustellen.
 
-\subsection{UC05: Ausgabe der Tag-ID's}
+\subsubsection{UC05: Ausgabe der Tag-ID's}
 Der strongSwan IMC möchte nur Tag-ID's von den installierten Paketen erhalten. Bei Tag-ID's handelt es sich nicht um XML Dokumente, sondern einfache Strings im Format $regid\_uniqueID $. Diese sollen zeilengetrennt ($\backslash$n$\backslash$n) ausgegeben werden. Beispiel:\\
 \begin{minted}{xml}
 regid.2004-03.org.strongswan_fedora_19-64bit-NetworkManager-glib.i686-1:0.9.8.2-2.fc19
@@ -97,7 +119,7 @@ regid.2004-03.org.strongswan_fedora_19-64bit-bash.i686-4.2.45-1.fc19
 \paragraph{Alternatives Szenario}
 Die Zeilentrennung der Strings kann mittels Parameter spezifiziert werden.
 
-\subsection{UC06: Anfordern bestimmter SWID Tags}
+\subsubsection{UC06: Anfordern bestimmter SWID Tags}
 Der strongSwan IMC möchte nur SWID Tags eines bestimmten Paketes erhalten.
 Mittels Parameter kann dem Generator eine Wildcard/Filterwert angegeben werden, um so targeted Requests ausführen zukönnen.
 
