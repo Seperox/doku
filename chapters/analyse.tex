@@ -74,9 +74,17 @@ bestehenden Python Code zu 21\% abdecken.\\
 	etwas unternommen werden. 
 	
 	\item[Benutzerschnittstelle] 
-	Die Benutzeroberfläche wurde noch nicht für den Umgang mit grossen Datenmengen optimiert. Bei einer grossen Anzahl Objekten gibt es keinen Paging Mechanismus, der ein Stückweises ausliefern von Daten oder Filtern erlaubt.  
-Beispielsweise kann das Inventar der Dateinamen in einem Linux System kann durchaus 40000 Objekte umfassen. Wird die vorhandene File View aufgerufen, werden alle 40000 Einträge angezeigt. Diesen möglichen Dimensionen wird zur Zeit noch nicht Rechnung getragen, und hat sich bereits beim Entwickeln in einer kleinen Umgebung als nicht mehr überschaubar erwiesen (TODO Hr. Steffen).
-Tendentiell ist der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen Unternehmungen zu erwarten, dementsprechend grösser ist auch die Menge der Daten die verwaltet werden müssen.
+	Die Benutzeroberfläche wurde noch nicht für den Umgang mit grossen Datenmengen
+	optimiert. Bei einer grossen Anzahl Objekten gibt es keinen Paging Mechanismus,
+	der ein Stückweises ausliefern von Daten oder Filtern erlaubt. Beispielsweise
+	kann das Inventar der Dateinamen in einem Linux System kann durchaus 40000
+	Objekte umfassen. Wird die vorhandene File View aufgerufen, werden alle 40000
+	Einträge angezeigt. Diesen möglichen Dimensionen wird zur Zeit noch nicht
+	Rechnung getragen, und hat sich bereits beim Entwickeln in einer kleinen
+	Umgebung als nicht mehr überschaubar erwiesen (TODO Hr. Steffen). Tendentiell
+	ist der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen
+	Unternehmungen zu erwarten, dementsprechend grösser ist auch die Menge der
+	Daten die verwaltet werden müssen.
 
 \item[Aufteilung in Apps] 
 	
@@ -85,8 +93,27 @@ Tendentiell ist der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen U
 	
 \end{description}
 
-\section{Soll Situation}
+\section{Soll Situation} Nebst den geforderten Pflichttteilen, der
+	Implementation eines SWID Generators für Linux Systeme und der Integration der
+	SWID Erweiterung in strongTNC, schlagen wir nachfolgende Anpassungen vor, die
+	wir bei vorhandener Kapazität noch umsetzen möchten.
 
+\subsection{Entkopplung der Datenbank} Wie bereits erwähnt entstehen durch die
+gemeinsame nutzung einer SQLite Datenbank einige Probleme. Nachfolgend möchten wir kurz auf die daraus resultierenden Nachteile eingehen.
+\begin{description}
+\item[Mehrbenutzerfähigkeit]
+Die Daten einer SQLite Datenbank kann nur von einem Prozess gleichzeitig geändert werden.
+Da es sich bei der aktuellen Situation aber bereits um eine Multiprozessumgebung handelt ist dieser Einsatz denkbar schlecht, und kann zu unerwünschten Locks führen.
+
+\item[Verteilung der Komponenten] Die Policy Decision Komponente (TNC Server aus
+strongSwan Projekt) kann derzeit nicht getrennt von der strongTNC Webserver
+Komponente betrieben werden. Dies kann aber in einem Enterprise Deployment
+durchaus erwünscht sein. Beispielsweise der Einsatz eines Windows Webservers mit der strongTNC App, während der Enforcement Point auf einem Linux System läuft. Zusätzlich kann es aus Netzwerktechnischen Gründen bedingt sein, einen Webserver getrennt von
+Firewallkomponenten, in diesem Fall vom strongSwan VPN Gateway, in getrennten Netzwerksegmenten zu halten. Oder aus Performancegründen die Komponenten auf unterschiedliche Hosts zu verteilen.
+
+\item[Anbindung an Drittsysteme]
+Die Anbindung an Umsysteme gestaltet sich als kaum realisierbar. Das TNC Framework sieht aber bereits weitere Komponenten, wie bspw. IF-MAP Devices vor, die integriert werden könnten. Auch eine Integration bestehende Geschäftsprozesse (CMDB) ist nur sehr schwer realisierbar.
+\end{description}
 
 
 \section{Abgrenzung}
