@@ -37,3 +37,5 @@ revision.tex
 *hidden*
 *.bak
 *~
+thesis-blx.bib
+thesis.run.xml

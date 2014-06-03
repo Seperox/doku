@@ -28,7 +28,7 @@
                 ]{scrreprt} 
 \raggedbottom % Don't stretch text to fill page
 \usepackage[ngerman]{babel} % New German hyphenation (multilingual support)
-\usepackage[utf8x]{inputenc} % Unicode support
+\usepackage[utf8]{inputenc} % Unicode support
 \usepackage{amsmath} % AMS math package
 \usepackage{amsfonts} % AMS fonts
 \usepackage{amssymb} % AMS symbols
@@ -42,7 +42,6 @@
 \usepackage{tabularx}
 \usepackage{booktabs} % Nicer tables
 \usepackage{parskip} % Spaces instead of indentation between paragraphs
-
 \usepackage[babel,german=swiss]{csquotes} % quotes: \enquote{}
 \usepackage{mdwlist} % lists with less spacing, use itemize*
 \usepackage{caption} % used for subfigures with subcaptions
@@ -84,5 +83,12 @@
 \setcounter{secnumdepth}{3}
 
 % Page break before each section
+
 \let\stdsection\section
 \renewcommand\section{\newpage\stdsection}
+
+% Bibliography
+
+\addto\captionsngerman{\renewcommand*{\bibname}{Literaturverzeichnis}}
+\usepackage[backend=bibtex]{biblatex} % Use BibLaTeX
+\addbibresource{bibliography.bib}
