@@ -1,40 +1,38 @@
 \chapter{Abstract}
 
-Das amerikanische National Cybersecurity Center of Excellence
-schlägt in einem Entwurfsdokument vor, durch eine kontinuierliche
-Überwachung der installierten Software auf Client-Systemen
-(Desktop PCs, Laptops, Tablets, Smartphones, etc) die Gefahr von
-Cyberattacken zu minimieren. Das Software Asset Management soll
-über Software Identification (SWID) Tags erfolgen, die durch die
-ISO/IEC 19770-2:2009 Norm international standardisiert sind.
+Das amerikanische National Cybersecurity Center of Excellence schlägt in einem
+Entwurfsdokument vor, durch eine kontinuierliche Überwachung der installierten
+Software auf Client-Systemen (Desktop PCs, Laptops, Tablets, Smartphones, etc)
+die Gefahr von Cyberattacken zu minimieren. Das Software Asset Management soll
+über Software Identification (SWID) Tags erfolgen, die durch die ISO/IEC
+19770-2:2009 Norm international standardisiert sind.
 
 Im Rahmen dieser Arbeit wurde eine Client Komponente für Linux Systeme
 entwickelt, welche SWID Tags gemäss ISO 19770-2:2009 aus den installierten
 Softwarepaketen generiert. Implementiert wurde die Unterstützung für drei weit
-verbreitete Paket Manager. Die Architektur des Generators ist modular aufgebaut, so dass die
-Unterstützung für weitere Umgebungen einfach hinzugefügt werden kann.
+verbreitete Paket Manager. Die Architektur des Generators ist modular aufgebaut,
+so dass die Unterstützung für weitere Umgebungen einfach hinzugefügt werden
+kann.
 
-Das so generierten SWID Tags werden an einen zentralen Server
-übermittelt. Die Trusted Computing Group hat ein offenes Framework für
-das aktive Monitoring von Endgeräten mit dem Namen Trusted Network
-Connect (TNC) entwickelt. In einer Vorgängerarbeit wurde bereits eine erste Version eines
-TNC Policy Managers implementiert, welcher nun für die Verwaltung der SWID Tags
-erweitert wurde.
+Die so generierten SWID Tags werden einem zentralen Server übermittelt. Die
+Trusted Computing Group hat ein offenes Framework für das aktive Monitoring von
+Endgeräten mit dem Namen Trusted Network Connect (TNC) entwickelt. In einer
+Vorgängerarbeit wurde bereits eine erste Version eines TNC Policy Managers
+implementiert, welcher nun für die Verwaltung der SWID Tags erweitert wurde.
 
 Über frei definierbare Policies können Clients mit bestimmten Softwarepaketen
 oder -versionen automatisch aus dem Netzwerk ausgeschlossen oder zu Software
-Updates gezwungen werden. Dadurch wird ein umfassendes Software Asset
-Management ermöglicht, welches sich in bestehende Geschäftsprozesse integrieren
-lässt.
+Updates gezwungen werden. Dadurch wird ein umfassendes Software Asset Management
+ermöglicht, welches sich in bestehende Geschäftsprozesse integrieren lässt.
 
-Der strongTNC Policy Manager was bisher über eine gemeinsame Datenbank eng mit
+Der strongTNC Policy Manager war bisher über eine gemeinsame Datenbank eng mit
 der strongSwan IPsec Implementierung gekoppelt. Diese Kopplung wirkt sich
-negativ auf die Wartbarkeit und die Interoperabilität mit Drittsystemen aus.
-Aus diesem Grund wurde im Rahmen dieser Arbeit ein Konzept erarbeitet, welches
-eine Serviceorientierte Architektur vorsieht und so den Grad der Kopplung minimiert.
-Bestandteil des Konzeptes ist die Definition einer REST Schnittstelle sowie ein Proof of Concept, welcher
-diese Schnittstelle gemäss Vorschlag für die Verwaltung der SWID Tags bereits
-erfolgreich implementiert. Da das TNC Framework bisher keine einheitlichen Schnittstellen für die Kommunikation
-zwischen dem Policy Manager und Umsystemen vorsieht, wird das
-erarbeitete Konzept der Trusted Computing Group als Vorschlag
-unterbreitet.
+negativ auf die Wartbarkeit und die Interoperabilität mit Drittsystemen aus. Aus
+diesem Grund wurde im Rahmen dieser Arbeit ein Konzept erarbeitet, welches eine
+Serviceorientierte Architektur vorsieht und so den Grad der Kopplung minimiert.
+Bestandteil des Konzeptes ist die Definition einer REST Schnittstelle, sowie ein
+Proof of Concept, welcher diese Schnittstelle gemäss dem erarbeiteten Konzept für die
+Verwaltung der SWID Tags bereits erfolgreich implementiert. Da das TNC Framework
+bisher keine einheitlichen Schnittstellen für die Kommunikation zwischen dem
+Policy Manager und Umsystemen vorsieht, wird das erarbeitete Konzept der Trusted
+Computing Group als Vorschlag unterbreitet.
