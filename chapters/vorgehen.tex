@@ -1,6 +1,63 @@
 \chapter{Vorgehen}
 
+Durch die organisatorischen Anforderungen an das Projekt haben wir uns für eine Iterative Vorgehensweise entschieden und ein Subset der SCRUM Methodik verwendet. Die drei Säulen von SCRUM waren in diesem Projekt von zentraler Bedeutung:
+\begin{description}
+\item[Transparenz]
+Durch die Verwendung von Github war der aktuelle Fortschritt und allfällige Hindernisse im Verlauf des Projektes stets sichtbar für alle festgehalten.
+\item[Überprüfung]
+Das Resultat dieser Arbeit wird zeitnah nach Abschluss an einer internationalen Konferenz präsentiert. Um zu diesem Zeitpunkt eine möglichst stabilen Stand zu haben, haben wir uns entschieden regelmässig den aktuellen Stand unserer Arbeiten mittels Pull Requests in das offizielle strongTNC Master Repository zu integrieren. Somit ist sichergestellt, dass die  Funktionalität von den Betreuern stets überprüft werden kann und die Feedback Roundtrips minjmal gehalten werden.
+\item[Anpassung]
+"Die Anforderungen an das Produkt werden nicht ein für alle Mal festgelegt, sondern nach jeder Lieferung neu bewertet und bei Bedarf durch weitere Iteration angepasst."
+
+\end{description}
+Bei der Einarbeitung in die vorhandene strongTNC Umgebung konnten wir feststellen, dass die Qualität der Architektur und des Codes einige Mängel besitzt. Deshalb haben wir uns entschieden, diesem Aspekt ein spezielles Augenmerk zu schenken und haben Massnahmen definiert die wir an dieser Stelle erwähnen möchten. Diese Massnahmen sollen die Qualität dieser Arbeit als auch von möglichen Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
+
+\begin{description}
+\item[Continuous Integration]
+Zur Fortlaufenden Integration des Entwickelten Codes wird Travis CI eingesetzt.
+"Travis CI is a hosted, distributed continuous integration service used to build and test projects hosted at GitHub...". Damit wird sichergestellt, dass stets lauffähiger Code im Master Branch des Repositories vorhanden ist, oder fehlerhafter Code sofort entdeckt wird und nicht erst bei einem Release bzw. erreichen eines Meilensteines. Auf Webseite des Github Repositories wurde ein Statusindikator eingebaut welcher stets optisch über den aktuellen Stand informiert.
+
+\item[Code Qualiltät]
+Durch die Integration von Landscape.io einem online Service, welcher stets statische Codeanalysen durchführt und die Codequalität anhand einer Gütestufe in Prozent angibt, kann sichergestellt werden, dass Code Smells welche nicht durch Unittest erkannt werden können festgehalten werden. Auf Webseite des Github Repositories wurde ein Statusindikator eingebaut welcher stets optisch über den aktuellen Stand informiert.
+
+\item[Coding Styleguide]
+Wir haben ein set von Coding Stylesguidelines definiert (siehe Anhang TODO) welche folgende Richtlinien definieren:
+\begin{itemize}
+\item In welchem Format Docstrings zu verwenden sind
+\item Code Format (Einrückung, Zeilenlänge)
+\item Future Imports für Vorwärtskompatibilität zu Python 3
+\item PEP8 Style Checking Konfiguration
+\item Pytest Testing Framework Konfiguration
+\end{itemize}
+
+\item[Git Guidelines]
+Zum einheitlichen Umgang mit Git wurden Guidelines verfasst (TODO Anhang Git Guidelines) welche beschreiben wie 
+\begin{itemize}
+\item Commit Messages aussehen sollen (Sprache, Format, Referenzierungen)
+\item History Rewriting/Reorderung/Squashing vorgenommen werden soll
+\item Wie Pull Requests erstellt werden
+\item Merging in den Master abläuft
+\end{itemize}
+
+\end{description}
+Wir haben uns für eine Iterative Vorgehensweise in diesem Projekt entschieden. Die zur Verfügung stehende Zeit haben wir in 8 Iterationen aufgeteilt.
+
 \section{Arbeitsweise}
 
+Dadurch ist sichergestellt dass wir uns auf dem richtigen Weg befinden (nicht ins Blaue programmieren) und möglichst schnell Feedback zur geleisteten Arbeit erhalten. Um eine agile Vorgeheinsweise zu erreichen haben wir uns für das Subset folgender SCRUM (TODO Referenz) Paradigmen entschieden.
+\subsection{Definition of Done}
+Siehe Anhang
+\subsection{Scrumboard}
+Sämtliche Tasks werden einenerseits im Github Issue Tracker erfasst. 
+\subsection{Backlog}
+Sämtliche Features und Bugs wurden in einem Backlog gehalten
+\subsection{Iteration Backlog}
+
+Das 
+
+\section{Zeitplanung / Phasen}
+Wir haben das ganze Projekt in 2 Phasen aufgeteilt. In einer ersten Phasen haben wir uns den kritischen Pflichtteilen der Aufgabenstellung angenommen. Die wesentlichen Ziele waren die Behebung der bereits bekannten Bugs sowie die Implementation einer ersten Version (Prototyp) des SWID Generators und der entsprechenden Erweiterung der strongTNC App. Um erstens durch die Implementation von Prototypen Risiken zu minimieren und zweitens die nötige Spezifikation zu liefern, welche für die Integration in die strongSwan Infrastruktur nötig war.
+
+In einer 2. Phase konzentrierten wir uns in die Ausarbeitung des REST Konzeptes, sowie Architektonische Konzepte, die nicht Bestandteil der Aufgabenstellung waren (TODO siehe Soll Zustand)
 
 \section{Methoden}
