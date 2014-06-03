@@ -14,7 +14,7 @@
 \newcommand{\myLocation}{Rapperswil\xspace}
 \newcommand{\myTime}{Fr{\"u}hling 2014\xspace}
 \newcommand{\myVersion}{version 1.0\xspace}
-\newcommand{\myLicense}{CC BY-SA 3.0 Unported\xspace}                                                      
+\newcommand{\myLicense}{CC BY-SA 3.0 Unported\xspace}
 \newcommand{\myKeywords}{SWID, TNC, StrongSwan, IPsec, Compliance Monitoring, SOA,  REST}
 
 
@@ -25,7 +25,7 @@
                 footinclude=true,cleardoublepage=empty,
                 BCOR=5mm,paper=a4,DIV=14,fontsize=11pt, % Binding correction, paper type and font size
                 german,
-                ]{scrreprt} 
+                ]{scrreprt}
 \raggedbottom % Don't stretch text to fill page
 \usepackage[ngerman]{babel} % New German hyphenation (multilingual support)
 \usepackage[utf8]{inputenc} % Unicode support
@@ -92,3 +92,9 @@
 \addto\captionsngerman{\renewcommand*{\bibname}{Literaturverzeichnis}}
 \usepackage[backend=bibtex]{biblatex} % Use BibLaTeX
 \addbibresource{bibliography.bib}
+
+% Custom functions
+
+\newenvironment{usecase}%
+{\tabularx{\textwidth}{lX}}%
+{\endtabularx}
