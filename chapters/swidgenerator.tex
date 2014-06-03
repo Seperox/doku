@@ -1,4 +1,6 @@
-\section{Requirements - SWID Generator}
+\chapter{SWID Generator}
+
+\section{Requirements}
 
 \subsection{Nicht-Funktional}
 
@@ -31,8 +33,6 @@ dessen Datenbank zu. \\
 Mittels optionalem Parameter kann der zu verwendende Packagemanager definiert
 werden, die Autoerkennung wird dadurch übersteuert.
 \end{tabularx} 
-
-
 
 \paragraph{Standard Szenario}
 Der SWID-Generator erkennt automatisch den System-Paketmanager und greift auf
@@ -101,57 +101,63 @@ Die Zeilentrennung der Strings kann mittels Parameter spezifiziert werden.
 Der strongSwan IMC möchte nur SWID Tags eines bestimmten Paketes erhalten.
 Mittels Parameter kann dem Generator eine Wildcard/Filterwert angegeben werden, um so targeted Requests ausführen zukönnen.
 
-\section{Requirements - strongTNC SWID Management}
 
-\subsection{UC01: CMDB, Softwareinventar}
+\section{Paketverwaltungen}
 
-Der Benutzer möchte feststellen, welche Software in welcher Version, zu einem
-bestimmten Zeitpunkt auf einem Device installiert war. Dafür kann er den
-momentanen Zustand sowie Zustände zu Messzeitpunkten in der Vergangenheit
-betrachten.
+\subsubsection{DPKG}
 
-\subsection{UC02: Detaillierte SWID-Tag Information}
+DPKG\footnote{\url{https://alioth.debian.org/projects/dpkg}} (Abkürzung für
+\textit{Debian Package}) ist die Basis der Paketverwaltung in Debian und in
+verwandten Distributionen wie Ubuntu. DPKG verwaltet unter anderem alle
+installierten Software-Pakete inklusive Meta-Informationen. Diese Paketliste
+kann mit \texttt{dpkg-query} abgefragt werden.
 
-Der Benutzer kann feststellen welche Dateien zu einem bestimmten Paket gehören.
-Er kann den Namen sowie den Pfad der Datei einsehen.
+\paragraph{Installierte Pakete abfragen} \hspace{0pt} \\
 
-\subsection{UC03: Verfügbare Tag Entities auflisten}
+\noindent Mit \texttt{dpkg ---show} wird eine Liste aller installierter Pakete
+ausgegeben, ein Paket pro Zeile. Um die Ausgabe zu personalisieren kann das
+\texttt{---showformat} Flag verwendet werden. Im Falle des swidGenerators
+ist folgendes Format ideal:
 
-Es ist möglich alle im System erfassten Entities aufzulisten. In der
-Detailansicht der Entities sind alle dazugehörigen SWID-Tags ersichtlich.
+\begin{bashcode}
+dpkg-query --show --showformat='${Package}\t${Version}\t${Status}\n'
+\end{bashcode}
 
-\subsection{UC04: Verfügbare SWID-Tags auflisten}
+\noindent Hierbei ist noch anzumerken, dass entfernte DPKG Pakete einen sogenannten RC Status haben können. Dieser liegt vor, wenn ein Paket deinstalliert, aber die Konfigurationsdateien auf dem System belassen wurden. Die \texttt{---show} Option liefert auch diese Pakete . Dieser Der Zustand im Status Feld als \texttt{deinstall ok config-files} ersichtlich, entsprechende Pakete können so nachträglich im swidGenerator noch gefiltert werden.
+\paragraph{Paket-Dateien abfragen} \hspace{0pt} \\
 
-Es ist möglich alle im System erfassten SWID-Tags aufzulisten. In der
-Detailansicht der Tags sind alle Devices ersichtlich, auf welchen der
-betreffende Tag installiert ist und war.
+\noindent Um die zu einem Paket zugehörigen Dateien abzufragen, kann das
+\texttt{---listfiles} Flag verwendet werden:
 
-\subsection{Auflisten aller Tags zu einem File}
+\begin{bashcode}
+dpkg-query --listfiles <package-name>
+\end{bashcode}
 
-Der Benutzer kann auflisten, welche Tags ein bestimmtes File enthalten.
+\paragraph{Datei-Hashes abfragen} \hspace{0pt} \\
+
+\noindent Es besteht die Möglichkeit, aus DPKG MD5-Hashes der Dateien abzufragen. Weitere
+Hash-Algorithmen (beispielsweise SHA) sind nicht verfügbar.
 
 
-\section{ISO Standard 19770-2 (Draft)}
+\subsubsection{RPM}
 
-\subsection{Einleitung}
+RPM\footnote{\url{https://rpm.org}} (Abkürzung für
+\textit{Red Hat Package Manager}) ist die Standardpaketverwaltung für Red Hat Systeme sowie zahlreichen verwandten Distributionen wie SUSE, Mandriva und Fedora.
 
-In diesem Kapitel wird auf den ISO Standard 19770-2 eingegangen. 
+\paragraph{Installierte Pakete abfragen} \hspace{0pt} \\
 
-\subsection{Doppelpunkte in der Unique ID}
-\begin{quote}
-unique\_id und that may be either a GUID, or any reference unique for the tag\_creator\_regid. The unique\_id shall 
-follow the restrictions for URI character use as specified in IETF RFC 3986, section 2, characters.
-\end{quote}
-\textit{ISO/IEC CD 19770-2 (N6078 - ISO CD 19770-2-5.pdf) Page 13}
+\noindent Ähnlich wie bei dpkg können alle auf dem System vorhandenen Pakete abgefragt werden. Die Ausgabe kann auch via Format String personalisiert werden. Für den swidGenerator ist folgendes Format ideal:
 
-Die Unique ID unterliegt den Restrikitonen einer URI. Bei URIs gilt, ein Doppelpunkt ist kein unerlaubtes Zeichen jedoch ein reserviertes: 
+\begin{bashcode}
+rpm -qa --queryformat %{name}\t%{version}-%{release}
+\end{bashcode}
 
-\begin{verbatim}
-reserved = gen-delims / sub-delims gen-delims = ":" / "/" / "?" / "#" / "[" / "]" / "@" 
-sub-delims = "!" / "\$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
-unreserved = ALPHA / DIGIT / "-" / "." / "_ " / "~"
-\end{verbatim}
+\paragraph{Paket-Dateien abfragen} \hspace{0pt} \\
 
-\textit{See: http://www.ietf.org/rfc/rfc3986.txt}
+\noindent Um die zu einem Paket zugehörigen Dateien abzufragen, können die Parameter \texttt{--ql} verwendet werden:
 
-Die Unique ID kann als Attribut des Links Tags, in Form einer URI mit dem \texttt{swid:\\} Schema. Daraus folgt, dass die Unique ID keine Doppelpunkte enthalten sollte.
+\begin{bashcode}
+rpm -ql <package-name>
+\end{bashcode}
+
+\noindent TODO

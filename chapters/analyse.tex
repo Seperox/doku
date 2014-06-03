@@ -1,0 +1,33 @@
+\chapter{Analyse}
+
+\section{Ist Situation}
+
+\section{Soll Situation}
+
+\section{Abgrenzung}
+
+\section{Aufgabe und Ziel}
+
+\section{ISO Standard 19770-2}
+\subsection{Einleitung}
+
+In diesem Kapitel wird auf den ISO Standard 19770-2 eingegangen. 
+
+\subsection{Doppelpunkte in der Unique ID}
+\begin{quote}
+unique\_id und that may be either a GUID, or any reference unique for the tag\_creator\_regid. The unique\_id shall 
+follow the restrictions for URI character use as specified in IETF RFC 3986, section 2, characters.
+\end{quote}
+\textit{ISO/IEC CD 19770-2 (N6078 - ISO CD 19770-2-5.pdf) Page 13}
+
+Die Unique ID unterliegt den Restrikitonen einer URI. Bei URIs gilt, ein Doppelpunkt ist kein unerlaubtes Zeichen jedoch ein reserviertes: 
+
+\begin{verbatim}
+reserved = gen-delims / sub-delims gen-delims = ":" / "/" / "?" / "#" / "[" / "]" / "@" 
+sub-delims = "!" / "\$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+unreserved = ALPHA / DIGIT / "-" / "." / "_ " / "~"
+\end{verbatim}
+
+\textit{See: http://www.ietf.org/rfc/rfc3986.txt}
+
+Die Unique ID kann als Attribut des Links Tags, in Form einer URI mit dem \texttt{swid:\\} Schema. Daraus folgt, dass die Unique ID keine Doppelpunkte enthalten sollte.
