@@ -1,5 +1,7 @@
 \chapter{SWID Generator}
 
+% {{{ Requirements -----------------------------------------------------------%
+
 \section{Requirements}
 
 \subsection{Zweck}
@@ -150,6 +152,9 @@ auflistet. \\
 \hline
 \end{usecase}
 
+% }}}
+
+% {{{ Paketmanager -----------------------------------------------------------%
 
 \section{Paketmanager}
 
@@ -158,13 +163,15 @@ verbreiteten Paketverwaltungssysteme (DPKG, RPM und Pacman) implementiert. Damit
 werden 8 der 10 führenden Linux- und BSD-Distributionen gemäss
 DistroWatch.com\cite{distrowatch:2014} abgedeckt.
 
-\subsubsection{DPKG}
+Ein Paketmanager verwaltet unter anderem alle verfügbaren und installierten
+Softwarepakete inklusive Meta-Informationen wie Paketname, Version oder
+Installationsstatus.
+
+\subsection{DPKG}
 
 DPKG\footnote{\url{https://alioth.debian.org/projects/dpkg}} (Abkürzung für
 \textit{Debian Package}) ist die Basis der Paketverwaltung in Debian und in
-verwandten Distributionen wie Ubuntu. DPKG verwaltet unter anderem alle
-installierten Software-Pakete inklusive Meta-Informationen. Diese Paketliste
-kann mit \texttt{dpkg-query} abgefragt werden.
+verwandten Distributionen wie Ubuntu.
 
 \textbf{Liste installierter Pakete abfragen}
 
@@ -187,7 +194,7 @@ Der Status ist in der Ausgabe als \texttt{"deinstall ok config-files"}
 ersichtlich, entsprechende Pakete können so nachträglich herausgefiltert werden.
 
 
-\subsubsection{RPM}
+\subsection{RPM}
 
 RPM\footnote{\url{https://rpm.org}} (Abkürzung für \textit{Red Hat Package
 Manager}) ist der Standard-Paketmanager für Red Hat Linux Systeme sowie
@@ -206,7 +213,7 @@ rpm -ql <package-name>
 \end{bashcode}
 
 
-\subsubsection{Pacman}
+\subsection{Pacman}
 
 Pacman\footnote{\url{https://www.archlinux.org/pacman/}} ist der Paketmanager
 unter Arch Linux und allen Derivaten wie Manjaro Linux oder Chakra.
@@ -223,16 +230,84 @@ pacman -Q --color never
 pacman -Ql <package-name>
 \end{bashcode}
 
+% }}}
+
+% {{{ Architektur ------------------------------------------------------------%
 
 \section{Architektur}
 
+\subsection{Übersicht}
+
+Der SWID Generator wurde komplett in Python geschrieben und nutzt keine externen
+Libraries. Es wird sowohl Python 2 wie auch Python 3 unterstützt.
+
+Der Quellcode ist modular aufgebaut, gewisse Komponenten wurden in separate
+Subpackages aufgeteilt:
+
+\begin{figure}[H]
+	\centering
+	\input{tikz/generator-paketdiagramm}
+	\caption{Aufteilung SWID Generator in Python Packages}
+\end{figure}
+
+Das Hauptpackage -- \texttt{swid\_generator} -- enthält folgende Module:
+
+\begin{itemize}
+	\item \texttt{main.py}: Der Einstiegspunkt in das Programm
+	\item \texttt{argparser.py}: Klassen und Funktionen um
+		Kommandozeilenargumente zu parsen
+	\item \texttt{print\_functions.py}: Funktionen um Tag- und
+		Software-ID-Generatoren auf die Standardausgabe auszugeben
+	\item \texttt{package\_info.py}: DTO\footnote{Data Transfer Object, eine
+		Klasse die kein Eigenverhalten aufweist sondern lediglich Daten in
+		einem Objekt bündelt.}-Klassen für Dateien und Softwarepakete
+	\item \texttt{settings.py}: Globale Variablen, wie z.\ B.
+		\texttt{DEFAULT\_ENTITY\_NAME}
+	\item \texttt{meta.py}: Metainformationen zum Generator, wie z.\ B. der
+		Programmname, die Lizenz oder die Version
+\end{itemize}
+
+Die zwei Subpackages sind für Input respektive Output zuständig. Im
+\texttt{environments} Package sind die Environment-Klassen für die verschiedenen
+Paketmanager enthalten. Die Klassen greifen auf die jeweiligen Paketdatenbanken
+zu und geben diese Informationen an das Hauptprogramm zurück. Auch die
+Environment-Registry befindet sich in diesem Package. Mehr dazu im Abschnitt
+\ref{swidgenerator:architektur:environments}.
+
+Das \texttt{generators} Package enthält die nötigen Funktionen um aus den (vom
+entsprechenden Environment zurückgegebenen) Paketinformationen die dazugehörigen
+Software-ID Strings oder SWID XML Tags zu generieren. Diese Funktionen sind als
+Python
+Generators\footnote{\url{https://docs.python.org/2/tutorial/classes.html\#generators}}
+implementiert, die einzelnen Einträge können also schon während der Generierung
+laufend ausgegeben werden. Mehr dazu im Abschnitt
+\ref{swidgenerator:architektur:printers}.
+
+Als Einstiegspunkt in den SWID Generator dient das \texttt{main.py} Modul. Um
+das Programm direkt aus dem Quellcode-Ordner heraus zu starten, sollte Python
+mit der \texttt{-m} Option und dem vollständigen Modulpfad gestartet werden:
+
+\begin{bashcode}
+python -m swid_generator.main
+\end{bashcode}
+
+Wenn das Programm über pip oder setup.py installiert wird (siehe
+\autoref{swidgenerator:architektur:deployment}), kann es natürlich auch direkt
+über den Programmnamen aufgerufen werden:
+
+\begin{bashcode}
+swid_generator
+\end{bashcode}
+
 \subsection{Initialisierung}
+
+- Argument parsing
+- Environment Registry
 
 \begin{figure}[H]
 	\centering
 	\input{tikz/generator-sequenzdiagramm-init}
 	\caption{Sequenzdiagramm: Initialisierung}
-	\label{img:generator-sequenzdiagramm-init}
 \end{figure}
 
 \subsection{Generierung}
@@ -241,5 +316,46 @@ pacman -Ql <package-name>
 	\centering
 	\input{tikz/generator-sequenzdiagramm-generierung}
 	\caption{Sequenzdiagramm: Generierung}
-	\label{img:generator-sequenzdiagramm-generierung}
 \end{figure}
+
+
+\subsection{Environments}
+\label{swidgenerator:architektur:environments}
+
+\subsection{Printers}
+\label{swidgenerator:architektur:printers}
+
+
+\subsection{Python 3 Kompatibilität}
+
+
+\subsection{Packaging}
+
+- Setup.py
+- Manifest.in
+- meta.py
+
+% }}}
+
+% {{{ Ergebnisse -------------------------------------------------------------%
+
+\section{Ergebnisse}
+
+- Beispiel
+- Speed
+
+% }}}
+
+% {{{ Qualitätsmanagement ----------------------------------------------------%
+
+\section{Qualitätsmanagement}
+\label{swidgenerator:architektur:qa}
+
+% }}}
+
+% {{{ Deployment -------------------------------------------------------------%
+
+\section{Deployment}
+\label{swidgenerator:architektur:deployment}
+
+% }}}
