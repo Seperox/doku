@@ -153,6 +153,11 @@ auflistet. \\
 
 \section{Paketmanager}
 
+Im Rahmen dieser Arbeit wurde die Unterstützung für drei der am weitesten
+verbreiteten Paketverwaltungssysteme (DPKG, RPM und Pacman) implementiert. Damit
+werden 8 der 10 führenden Linux- und BSD-Distributionen gemäss
+DistroWatch.com\cite{distrowatch:2014} abgedeckt.
+
 \subsubsection{DPKG}
 
 DPKG\footnote{\url{https://alioth.debian.org/projects/dpkg}} (Abkürzung für
@@ -161,55 +166,62 @@ verwandten Distributionen wie Ubuntu. DPKG verwaltet unter anderem alle
 installierten Software-Pakete inklusive Meta-Informationen. Diese Paketliste
 kann mit \texttt{dpkg-query} abgefragt werden.
 
-\paragraph{Installierte Pakete abfragen} \hspace{0pt} \\
-
-\noindent Mit \texttt{dpkg ---show} wird eine Liste aller installierter Pakete
-ausgegeben, ein Paket pro Zeile. Um die Ausgabe zu personalisieren kann das
-\texttt{---showformat} Flag verwendet werden. Im Falle des swidGenerators
-ist folgendes Format ideal:
+\textbf{Liste installierter Pakete abfragen}
 
 \begin{bashcode}
 dpkg-query --show --showformat='${Package}\t${Version}\t${Status}\n'
 \end{bashcode}
 
-\noindent Hierbei ist noch anzumerken, dass entfernte DPKG Pakete einen sogenannten RC Status haben können. Dieser liegt vor, wenn ein Paket deinstalliert, aber die Konfigurationsdateien auf dem System belassen wurden. Die \texttt{---show} Option liefert auch diese Pakete . Dieser Der Zustand im Status Feld als \texttt{deinstall ok config-files} ersichtlich, entsprechende Pakete können so nachträglich im swidGenerator noch gefiltert werden.
-\paragraph{Paket-Dateien abfragen} \hspace{0pt} \\
-
-\noindent Um die zu einem Paket zugehörigen Dateien abzufragen, kann das
-\texttt{---listfiles} Flag verwendet werden:
+\textbf{Dateien zu Paket abfragen}
 
 \begin{bashcode}
 dpkg-query --listfiles <package-name>
 \end{bashcode}
 
-\paragraph{Datei-Hashes abfragen} \hspace{0pt} \\
+\textbf{Bemerkungen}
 
-\noindent Es besteht die Möglichkeit, aus DPKG MD5-Hashes der Dateien abzufragen. Weitere
-Hash-Algorithmen (beispielsweise SHA) sind nicht verfügbar.
+Entfernte DPKG Pakete können einen sogenannten RC Status haben. Dieser liegt
+vor, wenn ein Paket deinstalliert wurde, aber die Konfigurationsdateien auf dem
+System belassen wurden. Die \texttt{---show} Option liefert auch diese Pakete.
+Der Status ist in der Ausgabe als \texttt{"deinstall ok config-files"}
+ersichtlich, entsprechende Pakete können so nachträglich herausgefiltert werden.
 
 
 \subsubsection{RPM}
 
-RPM\footnote{\url{https://rpm.org}} (Abkürzung für
-\textit{Red Hat Package Manager}) ist der Standard-Paketmanager für Red Hat Systeme sowie zahlreichen verwandten Distributionen wie SUSE, Mandriva und Fedora.
+RPM\footnote{\url{https://rpm.org}} (Abkürzung für \textit{Red Hat Package
+Manager}) ist der Standard-Paketmanager für Red Hat Linux Systeme sowie
+zahlreichen verwandten Distributionen wie openSUSE, Mandriva und Fedora.
 
-\paragraph{Installierte Pakete abfragen} \hspace{0pt} \\
-
-\noindent Ähnlich wie bei dpkg können alle auf dem System vorhandenen Pakete abgefragt werden. Die Ausgabe kann auch via Format String personalisiert werden. Für den swidGenerator ist folgendes Format ideal:
+\textbf{Liste installierter Pakete abfragen}
 
 \begin{bashcode}
 rpm -qa --queryformat %{name}\t%{version}-%{release}
 \end{bashcode}
 
-\paragraph{Paket-Dateien abfragen} \hspace{0pt} \\
-
-\noindent Um die zu einem Paket zugehörigen Dateien abzufragen, können die Parameter \texttt{--ql} verwendet werden:
+\textbf{Dateien zu Paket abfragen}
 
 \begin{bashcode}
 rpm -ql <package-name>
 \end{bashcode}
 
-\noindent TODO
+
+\subsubsection{Pacman}
+
+Pacman\footnote{\url{https://www.archlinux.org/pacman/}} ist der Paketmanager
+unter Arch Linux und allen Derivaten wie Manjaro Linux oder Chakra.
+
+\textbf{Liste installierter Pakete abfragen}
+
+\begin{bashcode}
+pacman -Q --color never
+\end{bashcode}
+
+\textbf{Dateien zu Paket abfragen}
+
+\begin{bashcode}
+pacman -Ql <package-name>
+\end{bashcode}
 
 
 \section{Architektur}
