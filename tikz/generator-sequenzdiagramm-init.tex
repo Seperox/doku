@@ -4,15 +4,24 @@
 		% Objekte
 
 		\umlobject{main}
-		\umlcreatecall{main}{environment registry}
-		\umlcreatecall{main}{argparser}
+		\umlcreatecall[dt=5, x=8, class=EnvironmentRegistry]{main}{registry}
 
 		% Calls
 
-		\begin{umlcall}[op={register(dpkg,rpm,pacman)},return=registry]{main}{environment registry}
+		\begin{umlfragment}[type=loop, label=foreach env, inner xsep=10]
+			\begin{umlcall}[dt=7, padding=2, op={register(env)}]{main}{registry}
+			\end{umlcall}
+		\end{umlfragment}
+
+		\umlcreatecall[dt=7, x=4, class=MainArgumentParser]{main}{parser}
+		\begin{umlcall}[dt=3, padding=4, op={parse(registry)},return=options]{main}{parser}
 		\end{umlcall}
 
-		\begin{umlcall}[op={parse(registry)},return=options]{main}{argparser}
+		\begin{umlcall}[dt=7, padding=3, op={get\_environment(options)},return=env]{main}{registry}
+			\begin{umlfragment}[type=opt, label=if !options.env, inner xsep=15]
+				\begin{umlcallself}[op=autodetect\_env()]{registry}
+				\end{umlcallself}
+			\end{umlfragment}
 		\end{umlcall}
 
 	\end{umlseqdiag}
