@@ -1,0 +1,29 @@
+\begin{tikzpicture}
+	\begin{umlseqdiag}[font=\footnotesize]
+
+		% Objekte
+
+		\umlobject{main}
+		\umlobject{generator}
+		\umlobject{printer}
+
+		% Calls
+
+		\begin{umlfragment}[type=alt, label={command = "{}swid"}, inner xsep=27, inner ysep=2]
+
+			\begin{umlcall}[padding=4, dt=10, op=create\_swid\_tags(), return=tags]{main}{generator}
+			\end{umlcall}
+			\begin{umlcall}[dt=7, op=print\_swid\_tags(tags)]{main}{printer}
+			\end{umlcall}
+
+			\umlfpart[command = "{}software-id"]
+
+			\begin{umlcall}[padding=4, op=create\_software\_ids(), return=ids]{main}{generator}
+			\end{umlcall}
+			\begin{umlcall}[dt=0, op=print\_software\_ids(ids)]{main}{printer}
+			\end{umlcall}
+
+		\end{umlfragment}
+
+	\end{umlseqdiag}
+\end{tikzpicture}
