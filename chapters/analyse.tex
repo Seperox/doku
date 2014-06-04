@@ -35,6 +35,9 @@ und darum nicht ausschliesslich von Django verwendet wird, kann dieses Feature
 nicht genutzt werden. Das Datenbankschema kann im Anhang eingesehen werden
 (<TODO: Ref>)
 
+\subsection{Architektur}
+In Grafik 1 ist eine Gröbübersicht über die Architektur der Involvierten Komponenten ersichtlich. 
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{images/architecture/django_apps_ist}
@@ -84,7 +87,7 @@ bestehenden Python Code zu 21\% abdecken.\\
 	Umgebung als nicht mehr überschaubar erwiesen (TODO Hr. Steffen). Tendentiell
 	ist der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen
 	Unternehmungen zu erwarten, dementsprechend grösser ist auch die Menge der
-	Daten die verwaltet werden müssen.
+	zu verwaltenden Daten.
 
 \item[Aufteilung in Apps] 
 	
@@ -99,7 +102,7 @@ bestehenden Python Code zu 21\% abdecken.\\
 	wir bei vorhandener Kapazität noch umsetzen möchten.
 
 \subsection{Entkopplung der Datenbank} Wie bereits erwähnt entstehen durch die
-gemeinsame nutzung einer SQLite Datenbank einige Probleme. Nachfolgend möchten wir kurz auf die daraus resultierenden Nachteile eingehen.
+gemeinsame Nutzung einer SQLite Datenbank einige Probleme. Nachfolgend möchten wir kurz auf die daraus resultierenden Nachteile eingehen.
 \begin{description}
 \item[Mehrbenutzerfähigkeit]
 Die Daten einer SQLite Datenbank kann nur von einem Prozess gleichzeitig geändert werden.
@@ -108,27 +111,36 @@ Da es sich bei der aktuellen Situation aber bereits um eine Multiprozessumgebung
 \item[Verteilung der Komponenten] Die Policy Decision Komponente (TNC Server aus
 strongSwan Projekt) kann derzeit nicht getrennt von der strongTNC Webserver
 Komponente betrieben werden. Dies kann aber in einem Enterprise Deployment
-durchaus erwünscht sein. Beispielsweise der Einsatz eines Windows Webservers mit der strongTNC App, während der Enforcement Point auf einem Linux System läuft. Zusätzlich kann es aus Netzwerktechnischen Gründen bedingt sein, im Internet exponierte komponenten, in diesem Fall der strongSwan VPN Gateway, und einen Webserver in getrennten Netzwerksegmenten zu halten. Oder aus Performancegründen die Komponenten auf unterschiedliche Hosts zu verteilen.
+durchaus erwünscht sein. Beispielsweise der Einsatz eines Windows Webservers mit der strongTNC App, während der Enforcement Point auf einem Linux System läuft. Zusätzlich kann es aus Netzwerktechnischen Gründen bedingt sein, im Internet exponierte Komponenten, in diesem Fall den strongSwan VPN Gateway, und einen Webserver in getrennten Netzwerksegmenten zu halten. Oder zur Lastverteilung die Komponenten auf unterschiedliche Hosts zu verteilen.
 
 \item[Anbindung an Drittsysteme]
 Die Anbindung an Umsysteme gestaltet sich als kaum realisierbar. Das TNC Framework sieht aber bereits weitere Komponenten, wie bspw. IF-MAP Devices vor, die integriert werden könnten. Auch eine Integration in bestehende Geschäftsprozesse (z.B CMDB) ist nur sehr schwer realisierbar.
+\end{description} 
+
+\begin{description}
+
+	\item[Datenbankschema] Das Schema wird nicht grundlegend
+	geändert, sondern übernommen wie es ist.
+
+	\item[Benutzerschnittstelle] Das Frontend der Webapp wird nicht grundlegend
+	verändert, es werden Korrekturen, Ergänzungen und Anpassungen vorgenommen,
+	jedoch ohne dabei das bestehende Layout grundsätzlich zu ändern.
+
+	\item[Software Versionen] Wenn nicht unbedingt nötig werden keine
+	Versionsmigrationen durchgeführt.
+
+	\item[Schemaänderungen] Es ist nicht klar welche Komponente auf welchen
+	Tabellen zugreift. Daher ist es bei Schemaänderungen, die von einer Komponente
+	gefordert werden, nur schwer herauszufinden welche Anpassungen bei den anderen
+	Komponenten vorgenommen werden müssen. Die Anpassungen müssen im schlimmsten
+	Falle in allen Komponenten vorgenommen werden.
 \end{description}
+
+Durch eine völlige Trennung der Datenbank, könnte Django verwendet werden um bei Anpassungen
 
 \section{Abgrenzung}
 Folgende Punkte werden von uns als gegeben Betrachtet und sind nicht zentraler
 Bestandteil unserer Arbeit:
-\begin{description}
-	\item[Datenbankschema] Das Schema wird nicht grundlegend geändert, sondern
-	übernommen wie es ist.
-	
-	\item[Benutzerschnittstelle] Das Frontend der Webapp wird nicht grundlegend
-	verändert, es werden Korrekturen, Ergänzungen und Anpassungen vorgenommen,
-	jedoch ohne dabei das bestehende Layout grundsätzlich zu ändern.
-	
-	\item[Software Versionen] Wenn nicht unbedingt nötig werden keine
-	Versionsmigrationen durchgeführt.
-\end{description}
-
 
 \section{ISO Standard 19770-2} 
 
