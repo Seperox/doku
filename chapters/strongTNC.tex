@@ -151,7 +151,7 @@ Der Benutzer kann auflisten, welche Tags ein bestimmtes File enthalten.
 \section{Datenmodellierung}
 Die Erweiterung des bestehenden Datenmodells ist in Abbilung (TODO Referenz) zu sehen. Die hinzugefügten Tabellen sind im grünen Teil hervorgehoben. Bei den Tabellen mit grauen Rahmen handelt es sich um Zwischentabellen, welche eine N zu N Beziehung auflösen. Beim modellieren der zusätzlichen Tabellen wurde darauf geachtet, dass keine bestehenden Tabellen geändert werden müssen. Die Beziehungen werden daher alle von extern, seitens der Erweiterung, hergestellt.
 \begin{description}
-\item [swid\_entities] Ein SWID Tag kann mehrere Entities enthalten. Entities haben in einem Tag eine Rollen oder eine beliebige Kombination aus (Tag creator, Publisher oder Licensor). Pro SWID Tag darf es aber nur einen Tag creator geben. Dieser Constraint wird aber erst in den Models vom \gls{ORM}
+\item [swid\_entities] Ein SWID Tag kann mehrere Entities enthalten. Entities haben in einem Tag eine Rollen oder eine beliebige Kombination aus (Tag creator, Publisher oder Licensor). Pro SWID Tag darf es aber nur einen Tag creator geben. Dieser Constraint wird aber erst in den Models vom \gls{ORM} angewandt. 
 
 \end{description}
 \begin{figure}
