@@ -163,7 +163,7 @@ Folgendes ist eine Zusammenstellung der Bestandteile eines SWID Tags wie sie in
 diesem Projekt verwendet werden. Der Standard beschreibt noch weitere Elemente
 und Anwendungsmöglichkeiten, welche in dieser Arbeit allerdings nicht verwendet
 werden. Die jeweiligen Listen der Attribute sind nicht vollständig, sondern eine
-Auswahl wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8.6)
+Auswahl, wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8.6)
 
 \begin{description}
 	\item[SoftwareIdentity] Repräsentation des Wurzelelementes eines SWID Tags.
@@ -216,7 +216,7 @@ Auswahl wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8.
 	\texttt{SoftwareIdentity} Elements und hat keine Attribute.
 	
 	\item[File] \texttt{File} Elemente sind Kinder des \texttt{Payload} Elements.
-	Sie enthalten Informationen zu den Dateien die einer Software angehören.
+	Sie enthalten Informationen zu den Dateien, die einer Software angehören.
 	\begin{description}
 		\item[name] Name der Datei, ohne Verzeichnis.
 		\item[location] Verzeichnis in dem die Datei zu finden ist, dieses Attribut
@@ -227,7 +227,7 @@ Auswahl wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8.
 
 \subsection{Wichtige Punkte}
 \begin{itemize}
-	\item Ein Tag darf nur durch die Organisation modifiziert werden, die in
+	\item Ein Tag darf nur durch die Organisation modifiziert werden, die ihn
 	initial erstellt hat. Diese Organisation hat mindestens die Rolle des
 	\enquote{Tag Creator}. Dieser Tag heisst \enquote{Primary Tag}. (<TODO:
 	REF>Siehe Seite 6, 5.3)
@@ -253,10 +253,10 @@ Auswahl wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8.
 	http://www.w3.org/TR/xmldsig-core/> implementiert werden. Echtheitsprüfung ist
 	nicht Bestandteil dieser Arbeit. (<TODO: REF>Siehe Seite 14, 6.1.19)
 	
-	\item Die minimale Information die ein valider SWID Tag enthalten muss ist
-	\texttt{SoftwareIdentity.name} und \texttt{Entity.role}, bei der Rolle muss es
-	sich um den die Rolle des \enquote{Tag Creators} handeln. Das empfohlene
-	Minimum besteht allerdings aus folgenden Informationen:
+	\item Die minimale Information, die ein valider SWID Tag enthalten muss, ist
+	\texttt{SoftwareIdentity.name} und \texttt{Entity.role}. Bei der Rolle muss es
+	sich um die Rolle des \enquote{Tag Creators} handeln. Das empfohlene
+	Minimum besteht aus folgenden Informationen:
 	\begin{itemize*}
 		\item SoftwareIdentity
 			\begin{itemize*}
@@ -312,13 +312,10 @@ conforming with this part of ISO/IEC 19770.}
 \end{quote}
 \textit{<TODO: Ref, Seite 4>}\\
 
-Diese Anforderung ist bereits erfüllt, wenn nur der Name der Software und der
-Name der Organisation die den Tag erstellt hat vorhanden sind.
+Diese Anforderung ist bereits erfüllt, wenn der Name der Software und der Organisation, welche den Tag erstellt hat, vorhanden sind.
 
-In dieser Arbeit ist dieses Problem derzeit nicht schwerwiegend, da der SWID
-Generator Tags generiert welche eindeutig Identifiziert werden können. Im
-weiteren muss davon ausgegangen werden, dass es im Interesse des Tag Erstellers
-liegt, dass seine SWID Tags nicht Ursache eines Konfliktes werden.
+In dieser Arbeit ist dieses Problem dadurch entschärft, dass der SWID
+Generator die einzige Tag creator Instanz ist und damit eindeutige Tags kreiert. Sobald jedoch mehrere Tag creator vorhanden sind, und die Eindeutigkeit nicht mehr zentral geregelt ist (z.b durch namespaces durch präfixe) könnten Probleme entstehen. Desweiteren muss davon ausgegangen werden, dass es im Interesse des Tag Erstellers liegt, dass seine SWID Tags nicht Ursache eines Konfliktes werden.
 
 \subsubsection{SWID Tag XML Dateien}
 \begin{quote}
@@ -329,16 +326,16 @@ file system in the same file directory as the application they represent.}
 
 Diese Anforderung ist bei Linux Systemen nicht direkt umsetzbar, da
 Softwarepakete unter Linux oft nicht nur in einem Verzeichnis installiert
-werden, sonder an Dateien in verschiedene Verzeichnisse kopieren.
+werden, sondern Dateien in verschiedene Verzeichnisse kopieren.
 
 In dieser Arbeit wird diese Anforderung nicht beachtet. Der SWID Generator
 kreiert Tags dynamisch aus den Informationen des Linux Paketmanagement Systems
-und liefert diese direkt auf die Standardausgabe der Konsole. Die SIWD Tags
-werden nie als Datei gespeichert.
+und liefert diese direkt auf die Standardausgabe der Konsole. Die SWID Tags
+werden nicht in einer Datei gespeichert. 
 
 \subsubsection{Doppelpunkte in der UniqueId} 
-Der SWID Generator setzt die \texttt{uniqueId} aus dem Betriebsystem, der
-Architektur, dem Paketnamen sowie der Versionsnummer zusammen:
+Der SWID Generator setzt die \texttt{uniqueId} aus dem Betriebsystemnamen, der
+Prozessorarchitektur, dem Paketnamen sowie der Versionsnummer zusammen:
 \texttt{<OS>\_<Arch>\_<Package>\_<Version>}. Versionen unter der Linux
 Distribution \enquote{Ubuntu} enthalten oft Sonderzeichen wie Doppelpunkte oder
 Plus-Zeichen. Anhand der Folgenden Aussage aus dem Standard kann man darauf
@@ -367,5 +364,5 @@ einer URI mit einem \texttt{swid:} Prefix verwendent werden. Daraus folgt, dass
 die \texttt{uniqueId} zum \enquote{Authority} Teil einer URI gehört und somit
 keine Doppelpunkte enthalten sollte.
 
-In dieser Arbeit werden daher Zeichen welche in URIs als Reserviert gelten in
+In dieser Arbeit werden daher Zeichen, welche in URIs als reserviert gelten, in
 der \texttt{uniqueId} durch eine Tilde ersetzt.
