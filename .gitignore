@@ -12,6 +12,8 @@
 *.dvi
 *.glg
 *.gls
+*.glsdefs
+*.xdy
 *.ilg
 *.ind
 *.lof
