@@ -61,6 +61,7 @@ Der Akteur kann sich in der Entity Ansicht alle erfassten Entities auflisten las
 \end{usecase}
 
 \subsubsection{UC04: Verfügbare SWID-Tags auflisten}
+\label{strongTNC:UC04}
 \begin{usecase}
 \hline
 \textbf{Akteur} & strongTNC Benutzer \\
@@ -113,7 +114,8 @@ Bei Systemeinführung wird diese Operation häufig auftreten. Idealerweise sieht
 \hline
 \end{usecase}
 
-\subsubsection{UC05: Durchführen einer SWID Messung für ein Gerät}
+\subsubsection{UC06: Durchführen einer SWID Messung für ein Gerät}
+\label{strongTNC:UC06}
 \begin{usecase}
 \hline
 \textbf{Akteur} & strongSwan TNC Server \\
@@ -149,18 +151,48 @@ Der Benutzer kann auflisten, welche Tags ein bestimmtes File enthalten.
 
 \section{SWID Erweiterung}
 \section{Datenmodellierung}
-Die Erweiterung des bestehenden Datenmodells ist in Abbilung (TODO Referenz) zu sehen. Die hinzugefügten Tabellen sind im grünen Teil hervorgehoben. Bei den Tabellen mit grauen Rahmen handelt es sich um Zwischentabellen, welche eine N zu N Beziehung auflösen. Beim modellieren der zusätzlichen Tabellen wurde darauf geachtet, dass keine bestehenden Tabellen geändert werden müssen. Die Beziehungen werden daher alle von extern, seitens der Erweiterung, hergestellt.
-\begin{description}
-\item [swid\_entities] Ein SWID Tag kann mehrere Entities enthalten. Entities haben in einem Tag eine Rollen oder eine beliebige Kombination aus (Tag creator, Publisher oder Licensor). Pro SWID Tag darf es aber nur einen Tag creator geben. Dieser Constraint wird aber erst in den Models vom \gls{ORM} angewandt. 
-
-\end{description}
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./images/db/database-model}
-\caption{}
+\includegraphics[angle=90,width=0.8\textwidth]{./images/db/database-model}
+\caption{Bestehendes Datenmodel inklusive SWID Erweiterung (grün)}
 \label{fig:database-model}
 \end{figure}
+Die Erweiterung des bestehenden Datenmodells ist in \autoref{fig:database-model} zu sehen. Die hinzugefügten Tabellen sind durch den grünen Hintergrund hervorgehoben. Bei Tabellen mit grauem Rahmen handelt es sich um Zwischentabellen, welche eine N zu M Beziehung auflösen. Beim modellieren der zusätzlichen Tabellen wurde darauf geachtet, dass keine bestehenden Tabellen angepasst werden mussten. Die Beziehungen werden daher alle von der Seite der Erweiterung hergestellt.
+\begin{description}
+\item [swid\_entityroles] Ein SWID Tag kann mehrere Entities enthalten. Entities haben nehmen in einem Tag eine oder eine Kombination von Rollen ein. Es existieren die Rollen Tag Creator, Licensor und Publisher. Pro SWID Tag darf es allerdings nur einen Tag Creator geben. Dieser Constraint wird jedoch erst in den Django Models durch das \gls{ORM} angewandt.
 
+\item [swid\_tags\_files] In dieser Tabelle wird die Beziehung zwischen einem File und einem SWID Tag festgehalten. Ein SWID Tag kann mehrere Files beinhalten (\nameref{strongTNC:UC04}).
+
+\item[swid\_tags\_sessions] Beim Durchführen einer Messung von SWID Tags werden die entsprechenden Tags in dieser Tabelle abgespeichert (\nameref{strongTNC:UC06}). Im dieser Tabelle werden die gemessenen Tags mit passenden Session verknüpft.
+
+\item[swid\_entity] 
+Diese Tabelle beinhaltet alle erfassten Entities. In der Regel ist eine kleine Anzahl unterschiedlicher Entities zu erwarten, weshalb diese in einer eigenen Tabelle gehalten werden und über die swid\_entityroles mit den SWID Tags verknüpft werden.
+
+\end{description}
+
+\section{Implementation SWID Messung}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{./images/architecture/SWID_strongTNC.png}
+\caption{Ablauf SWID Tag Messung eines Gerätes}
+\label{fig:swid-measurement}
+\end{figure}
+In \autoref{fig:swid-measurement} ist der Ablauf der SWID Tag Messung (\nameref{strongTNC:UC06}) ersichtlich.
+Eine Messung läuft wie folgt ab:
+\begin{enumerate}
+\item Auf dem Client werden die Software\_IDs aller installierten Pakete generiert. 
+\item Die Liste der generierten Software\-IDs wird versucht mit einer Session zu verknüpfen.
+	\begin{itemize}
+	\item Existiert zu allen Software\-IDs ein entsprechender SWID Tag, ist die Messung abgeschlossen und die SWID Tags sind mit der Session verknüpft.
+	\item Existiert für mindestens eine Software\-ID kein entsprechender SWID Tag, wird die Messung abgebrochen und eine Liste jener Software\-IDs, für welche kein SWID Tag existiert, zurückgeliefert. Weiter zu Punkt 3.
+	\end{itemize}
+\item Die fehlenden SWID Tags müssen erfasst werden. Die erforderlichen XML Dokumente der SWID Tags generiert der Client anhand sogenannter Targeted Requests (TODO Referenz swidgenerator), d.h er generiert nur gezielt für die zurückgelieferten Software-IDs Tags und nicht für alle installierten Software Pakete.
+\item Der Client erfasst alle neu generierten SWID Tags in strongTNC.
+\item Der Client versucht erneut eine Messung zu starten und nochmals alle Software-IDs zu übermitteln. Nun sind für alle Software-IDs entsprechende SWID Tags vorhanden sein und die Messung wird erfolgreich abgeschlossen. Ansonsten wieder zu Schritt 2.
+\end{enumerate}
+Dieses Vorgehen erzwingt ein Update der strongTNC Datenbank bevor die Messung erfolgreich abgeschlossen werden kann. Dadurch wird erreicht, dass auf Serverseite kein Zustand gewahrt werden muss für eine nicht komplett abgeschlossene Messung. Eine Messung ist erfolgreich oder nicht.
+\subsubsection{Technische Umsetzung}
+Die SWID Messung wurde als Prototyp verwendet um die Machbarkeit der, im Rahmen dieser Arbeit konzipierten, \gls{REST} Schnittstelle aufzuzeigen (TODO REST Referenz). Eine ausführliche Beschreibung der Kommunikation mit dem REST Endpoint für die SWID Messung ist im Anhang \ref{REST:swid-measurement-manual} zu finden.
 
 \section{Verbesserungen}
 
@@ -174,7 +206,6 @@ soll eine Read-Only Rolle eingeführt werden.
 
 
 \subsubsection{Ziel}
-
 In einem ersten Schritt soll ein Rollen-Modell mit zwei Rollen eingeführt werden. 
 Eine Rolle für Read-Only Zugriff und eine für den Vollzugriff. Der Zugriff soll, 
 so wie es gegenwärtig implementiert ist, nicht personalisiert sein. Die Möglichkeit, 
