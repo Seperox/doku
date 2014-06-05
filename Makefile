@@ -16,7 +16,7 @@ $(TARGET): $(TARGET:%.pdf=%.tex) $(SRC)
 	$(LL) $<
 
 clean:
-	$(CLEAN)
+	$(CLEAN) && rm -f *.log *.aux *.toc *.xdy *.acn *.out *.run.xml *.bbl
 
 mupdf:
 	mupdf $(TARGET) &
