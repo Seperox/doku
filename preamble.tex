@@ -43,17 +43,14 @@
 \usepackage{booktabs} % Nicer tables
 \usepackage{parskip} % Spaces instead of indentation between paragraphs
 \usepackage[babel,german=swiss]{csquotes} % quotes: \enquote{}
-\usepackage{mdwlist} % lists with less spacing, use itemize*
-\usepackage{caption} % used for subfigures with subcaptions
-\usepackage{subcaption} % used for subfigures with subcaption
-\usepackage{pdfpages} % include pdfs: \includepdf[pages={1}]{myfile.pdf}, pages={-} for all pages
+\usepackage{mdwlist} % Lists with less spacing, use itemize*
+\usepackage{caption} % Used for subfigures with subcaptions
+\usepackage{subcaption} % Used for subfigures with subcaption
+\usepackage{pdfpages} % Include pdfs: \includepdf[pages={1}]{myfile.pdf}, pages={-} for all pages
 
-% used for the glossary
-\usepackage[nomain,acronym,xindy,toc]{glossaries} 
-\makeglossaries
-%\makeindex
+% Spacing
 
-\usepackage{setspace} % linespacing
+\usepackage{setspace}
 \setstretch{1.3}
 
 % Font configuration
@@ -97,6 +94,12 @@
 \addto\captionsngerman{\renewcommand*{\bibname}{Literaturverzeichnis}}
 \usepackage[backend=bibtex]{biblatex} % Use BibLaTeX
 \addbibresource{bibliography.bib}
+
+% Glossary
+
+\usepackage[nomain,acronym,xindy,toc]{glossaries}
+\makeglossaries
+%\makeindex
 
 % Custom functions
 
