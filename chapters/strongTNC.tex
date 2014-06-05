@@ -180,19 +180,19 @@ Diese Tabelle beinhaltet alle erfassten Entities. In der Regel ist eine kleine A
 In \autoref{fig:swid-measurement} ist der Ablauf der SWID Tag Messung (\nameref{strongTNC:UC06}) ersichtlich.
 Eine Messung läuft wie folgt ab:
 \begin{enumerate}
-\item Auf dem Client werden die Software\_IDs aller installierten Pakete generiert. 
-\item Die Liste der generierten Software\-IDs wird versucht mit einer Session zu verknüpfen.
+\item Auf dem Client werden die Software-IDs aller installierten Pakete generiert. 
+\item Es wird versucht die Liste der generierten Software-IDs mit einer Session zu verknüpfen.
 	\begin{itemize}
-	\item Existiert zu allen Software\-IDs ein entsprechender SWID Tag, ist die Messung abgeschlossen und die SWID Tags sind mit der Session verknüpft.
-	\item Existiert für mindestens eine Software\-ID kein entsprechender SWID Tag, wird die Messung abgebrochen und eine Liste jener Software\-IDs, für welche kein SWID Tag existiert, zurückgeliefert. Weiter zu Punkt 3.
+	\item Existiert zu allen Software-IDs ein entsprechender SWID Tag, ist die Messung abgeschlossen und die SWID Tags sind mit der Session verknüpft.
+	\item Existiert für mindestens eine Software-ID kein entsprechender SWID Tag, wird die Messung abgebrochen und eine Liste jener Software-IDs, für welche kein SWID Tag existiert, zurückgeliefert. Weiter zu Punkt 3.
 	\end{itemize}
-\item Die fehlenden SWID Tags müssen erfasst werden. Die erforderlichen XML Dokumente der SWID Tags generiert der Client anhand sogenannter Targeted Requests (TODO Referenz swidgenerator), d.h er generiert nur gezielt für die zurückgelieferten Software-IDs Tags und nicht für alle installierten Software Pakete.
+\item Bevor die Messung durchgeführt werden kann, müssen die fehlenden SWID Tags erfasst werden. Die einzelnen XML Dokumente der SWID Tags werden vom Client anhand sogenannter \enquote{Targeted Requests} (TODO Referenz swidgenerator) erstellt, das heisst, der Generator kreiert gezielt die Tags für die gegebenen Software-IDs und nicht für alle installierten Software Pakete.
 \item Der Client erfasst alle neu generierten SWID Tags in strongTNC.
-\item Der Client versucht erneut eine Messung zu starten und nochmals alle Software-IDs zu übermitteln. Nun sind für alle Software-IDs entsprechende SWID Tags vorhanden sein und die Messung wird erfolgreich abgeschlossen. Ansonsten wieder zu Schritt 2.
+\item Der Client startet erneut eine Messung und übermittelt nochmals alle Software-IDs. Nun sind für alle Software-IDs die entsprechenden SWID Tags vorhanden und die Messung wird erfolgreich abgeschlossen. Ansonsten weiter zu Schritt 2.
 \end{enumerate}
-Dieses Vorgehen erzwingt ein Update der strongTNC Datenbank bevor die Messung erfolgreich abgeschlossen werden kann. Dadurch wird erreicht, dass auf Serverseite kein Zustand gewahrt werden muss für eine nicht komplett abgeschlossene Messung. Eine Messung ist erfolgreich oder nicht.
-\subsubsection{Technische Umsetzung}
-Die SWID Messung wurde als Prototyp verwendet um die Machbarkeit der, im Rahmen dieser Arbeit konzipierten, \gls{REST} Schnittstelle aufzuzeigen (TODO REST Referenz). Eine ausführliche Beschreibung der Kommunikation mit dem REST Endpoint für die SWID Messung ist im Anhang \ref{REST:swid-measurement-manual} zu finden.
+Dieses Vorgehen erzwingt eine Aktualisierung der strongTNC Datenbank wenn diese nicht alle SWID Tags enthält, bevor eine Messung erfolgreich abgeschlossen werden kann. Dadurch wird erreicht, dass auf Serverseite kein Zustand gewahrt werden muss, wie es für eine nicht abgeschlossene Messung, welche später abgeschlossen wird, der Fall wäre. Dieses Vorgehen entspricht den Prinzipien von HTTP, eine Messung kann jederzeit durchgeführt werden ohne das ein Zustand oder Kontextinformationen vorhanden sein müssen. Das heisst, wenn eine Messung nicht vollständig und korrekt durchgeführt werden kann, werden keine Daten verändert. 
+\subsection{Technische Umsetzung}
+Die HTTP Schnittstelle der SWID Messung wurde als Prototyp verwendet um die Machbarkeit der, im Rahmen dieser Arbeit konzipierten, \gls{REST} TNC Schnittstelle aufzuzeigen (TODO REST Referenz). Eine ausführliche Beschreibung der Kommunikation mit dem REST Endpoint für die SWID Messung ist im Anhang \ref{REST:swid-measurement-manual} zu finden.
 
 \section{Verbesserungen}
 
