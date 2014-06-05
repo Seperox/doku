@@ -1,29 +1,33 @@
 \begin{tikzpicture}
-	\begin{umlseqdiag}[font=\footnotesize]
+	\begin{umlseqdiag}[font=\sffamily]
 
 		% Objekte
 
-		\umlobject{main}
-		\umlobject{generator}
-		\umlobject{printer}
+		\umlobject[x=0]{main}
+		\umlobject[x=4]{generator}
+		\umlobject[x=6.5]{printer}
+		\umlobject[x=9]{sys}
 
 		% Calls
 
-		\begin{umlfragment}[type=alt, label={command = "{}swid"}, inner xsep=27, inner ysep=2]
+		\begin{umlfragment}[type=alt, label={command = "{}swid"}, inner xsep=23, inner ysep=2]
 
 			\begin{umlcall}[padding=4, dt=10, op=create\_swid\_tags(), return=tags]{main}{generator}
 			\end{umlcall}
-			\begin{umlcall}[dt=7, op=print\_swid\_tags(tags)]{main}{printer}
+			\begin{umlcall}[dt=6, op=print\_swid\_tags(tags), return={\ }]{main}{printer}
 			\end{umlcall}
 
 			\umlfpart[command = "{}software-id"]
 
 			\begin{umlcall}[padding=4, op=create\_software\_ids(), return=ids]{main}{generator}
 			\end{umlcall}
-			\begin{umlcall}[dt=0, op=print\_software\_ids(ids)]{main}{printer}
+			\begin{umlcall}[dt=0, op=print\_software\_ids(ids), return={\ }]{main}{printer}
 			\end{umlcall}
 
 		\end{umlfragment}
+
+		\begin{umlcall}[dt=2, op=exit(0)]{main}{sys}
+		\end{umlcall}
 
 	\end{umlseqdiag}
 \end{tikzpicture}

@@ -299,10 +299,36 @@ Wenn das Programm über pip oder setup.py installiert wird (siehe
 swid_generator
 \end{bashcode}
 
-\subsection{Initialisierung}
+\subsection{Ablauf: Initialisierung}
+\label{swidgenerator:architektur:initialisierung}
 
-- Argument parsing
-- Environment Registry
+Wenn der SWID Generator gestartet wird, beginnt die Code-Ausführung im
+\texttt{main.py} Modul. Zuerst müssen alle Kommandozeilen-Argumente verarbeitet
+werden. Danach müssen die modular aufgebauten Environment Klassen registriert
+werden. Mit diesen Informationen muss entschieden werden, welches Environment
+dass effektiv verwendet werden soll -- entweder durch den Benutzer definiert
+oder durch eine automatische Packetmanager-Erkennung.
+
+Der Ablauf ist wie folgt:
+
+\begin{enumerate}
+	\item Die Environment Registry
+		(\ref{swidgenerator:architektur:environments:registry}) wird initialisiert.
+	\item Alle verfügbaren Environment Klassen
+		(\ref{swidgenerator:architektur:environments:interface}) werden der Registry
+		übergeben.
+	\item Der Argument Parser wird mit einer Referenz auf die Registry instanziert.
+	\item Die Parser Instanz parst mithilfe des \texttt{argparse} Moduls aus der
+		Python Stanardbibliothek die Kommandozeilen-Argument und generiert daraus ein
+		\enquote{Options}-Objekt.  \item Dieses Objekt wird nun der Environment Registry
+		übergeben. Diese kann mit den Informationen darin die geeignete Environment
+		Klasse finden und an das Hauptprogramm zurückgeben. Das Environment kann per
+		Kommandozeilen-Argument vorgegeben werden, andernfalls wird es automatisch
+		detektiert.
+\end{enumerate}
+
+In der folgenden Abbildung ist dieser Ablauf als UML Sequenzdiagramm
+dargestellt:
 
 \begin{figure}[H]
 	\centering
@@ -310,7 +336,27 @@ swid_generator
 	\caption{Sequenzdiagramm: Initialisierung}
 \end{figure}
 
-\subsection{Generierung}
+\subsection{Ablauf: Generierung}
+\label{swidgenerator:architektur:generierung}
+
+Nachdem nun im Abschnitt \ref{swidgenerator:architektur:initialisierung} alle
+nötigen Informationen gesammelt wurden, kann nun die Hauptarbeit geschehen: Die
+Generierung der Daten aus den Paketmanager-Informationen. Ob SWID Tags oder
+Software-IDs generiert werden, ist abhängig vom ersten Kommandozeilenargument,
+welches entweder \texttt{swid} oder \texttt{software-id} sein kann.
+
+\begin{enumerate}
+	\item Zuerst werden mithilfe des SWID Tag Generators
+		(\ref{swidgenerator:architektur:generatoren}) die gewünschen Tags aus
+		der Paketmanager-Datenbank geholt.
+	\item Die zurückgegebenen Tags werden mithilfe der entsprechenden
+		Print-Funktionen (\ref{swidgenerator:architektur:printers}) auf die
+		Standardausgabe ausgegeben.
+	\item Falls im ganzen Programmablauf keine Fehler aufgetreten sind, wird
+		das Programm nun mit dem Status Code 0 (=keine Fehler) beendet.
+\end{enumerate}
+
+Dieser Ablauf ist im folgenden UML Sequenzdiagramm visualisiert:
 
 \begin{figure}[H]
 	\centering
@@ -319,14 +365,23 @@ swid_generator
 \end{figure}
 
 
-\subsection{Environments}
+\subsection{Implementationsdetails: Environments}
 \label{swidgenerator:architektur:environments}
 
-\subsection{Printers}
+\subsubsection{Die Registry}
+\label{swidgenerator:architektur:environments:registry}
+
+\subsubsection{Environment Interface}
+\label{swidgenerator:architektur:environments:interface}
+
+\subsection{Implementationsdetails: Generatoren}
+\label{swidgenerator:architektur:generatoren}
+
+\subsection{Implementationsdetails: Printers}
 \label{swidgenerator:architektur:printers}
 
 
-\subsection{Python 3 Kompatibilität}
+\subsection{Implementationsdetails: Python 3 Kompatibilität}
 
 
 \subsection{Packaging}
