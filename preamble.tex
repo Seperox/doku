@@ -48,8 +48,8 @@
 \usepackage{subcaption} % used for subfigures with subcaption
 
 % used for the glossary
-\usepackage[nomain,acronym,xindy]{glossaries} 
-\makenoidxglossaries
+\usepackage[nomain,acronym,xindy,toc]{glossaries} 
+\makeglossaries
 %\makeindex
 
 \usepackage{setspace} % linespacing
@@ -85,13 +85,11 @@
 \renewcommand{\arraystretch}{1.2}
 
 % Numbering depth
-
 \setcounter{secnumdepth}{3}
 
 % Page break before each section
-
-\let\stdsection\section
-\renewcommand\section{\newpage\stdsection}
+%\let\stdsection\section
+%\renewcommand\section{\newpage\stdsection}
 
 % Bibliography
 

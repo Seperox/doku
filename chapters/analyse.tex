@@ -1,8 +1,5 @@
 \chapter{Analyse}
 
-\section{Aufgabe und Ziel}
-Diesen punkt streichen!
-
 \section{Ist Situation}
 In der Vorgängerarbeit \enquote{Cygnet} von Stefan Rohner und Marco Tanner
 <TODO: Ref> wurde der Policy Server \enquote{strongTNC} implementiert. Das
@@ -11,32 +8,32 @@ Im Bereich des SWID Generators gibt es zur Zeit noch keine bestehenden Produkte.
 
 \subsection{Stand der strongTNC Webapplikation} 
 strongTNC ist eine Umsetzung des TNC Policy Servers, implementiert wurde dieser
-als Webapp mit dem Python basierten \enquote{Django Web Framework} in Version 1.6 <TODO: Ref>.
-Die Applikation bietet Unterstützung für das Verwalten von Geräten, Policies,
-Enforcements und erlaubt es die Anwendung der Enforcements mittels
-hierarchischer Gruppen zu steuern. Stammdaten wie Dateien oder Softwarepakete
-und Messresultate können eingesehen und teilweise bearbeitet werden. Für SWID
-Tags besteht derzeit keine Unterstützung, allerdings wurden bereits Views für
-SWID Tags und Regids erstellt, diese haben jedoch keine Funktionalität und
-dienen gewissermassen als Vorschau für zukünftige Features. \\
-Im Frontend der Webapplikation wurden Bootstrap 2.3 sowie jQuery 1.9 <TODO:
+als Webapp mit dem Python basierten \enquote{Django Web Framework} in Version
+1.6 <TODO: Ref>. Die Applikation bietet Unterstützung für das Verwalten von
+Geräten, Policies, Enforcements und erlaubt es die Anwendung der Enforcements
+mittels hierarchischer Gruppen zu steuern. Stammdaten wie Dateien oder
+Softwarepakete und Messresultate können eingesehen und teilweise bearbeitet
+werden. Für SWID Tags besteht derzeit keine Unterstützung, allerdings wurden
+bereits Views für SWID Tags und Regids erstellt, diese haben jedoch keine
+Funktionalität und dienen gewissermassen als Vorschau für zukünftige Features.
+\\ Im Frontend der Webapplikation wurden Bootstrap 2.3 sowie jQuery 1.9 <TODO:
 Ref> eingesetzt. Grundsätzlich werden die Ansichten als \enquote{Master-Detail
-View} <TODO: Ref> dargestellt.
-Als Schnittstelle zur strongSwan IPsec Infrastruktur dient eine gemeinsam
-genutzte SQLite <TODO: Ref> Datenbank. 
+View} <TODO: Ref> dargestellt. Als Schnittstelle zur strongSwan IPsec
+Infrastruktur dient eine gemeinsam genutzte SQLite <TODO: Ref> Datenbank.
 
 Django Webapplikationen lassen sich in Module, sogenannte \enquote{Apps},
-aufteilen, diese Möglichkeit wird allerdings nicht genutzt wie man dem
-Diagramm der Applikation entnehmen kann, \autoref{django-ist-diagram}. Die
-Django-Models sind sehr eng an das Datenbankschema angelehnt, es ist gängig,
-dass die Datenbank aus den Models generiert wird, dadurch wird die Datenbank für
-den Entwickler vollständig abstrahiert. Da die Datenbank als Schnittstelle dient
-und darum nicht ausschliesslich von Django verwendet wird, kann dieses Feature
-nicht genutzt werden. Das Datenbankschema kann im Anhang eingesehen werden
-(<TODO: Ref>)
+aufteilen, diese Möglichkeit wird allerdings nicht genutzt wie man dem Diagramm
+der Applikation entnehmen kann, \autoref{django-ist-diagram}. Die Django-Models
+sind sehr eng an das Datenbankschema angelehnt, es ist gängig, dass die
+Datenbank aus den Models generiert wird, dadurch wird die Datenbank für den
+Entwickler vollständig abstrahiert. Da die Datenbank als Schnittstelle dient und
+darum nicht ausschliesslich von Django verwendet wird, kann dieses Feature nicht
+genutzt werden. Das Datenbankschema kann im Anhang eingesehen werden (<TODO:
+Ref>)
 
 \subsection{Architektur}
-In Grafik 1 ist eine Gröbübersicht über die Architektur der Involvierten Komponenten ersichtlich. 
+In \autoref{django-ist-diagram} ist eine Grobübersicht über die Architektur der
+Involvierten Komponenten ersichtlich.
 
 \begin{figure}[H]
 	\centering
@@ -91,34 +88,46 @@ bestehenden Python Code zu 21\% abdecken.\\
 
 \item[Aufteilung in Apps] 
 	
-	\item[Codequalität]
+\item[Codequalität]
 	
 	
 \end{description}
 
-\section{Soll Situation} Nebst den geforderten Pflichttteilen, der
-	Implementation eines SWID Generators für Linux Systeme und der Integration der
-	SWID Erweiterung in strongTNC, schlagen wir nachfolgende Anpassungen vor, die
-	wir bei vorhandener Kapazität noch umsetzen möchten.
+\section{Soll Situation}
+Nebst den geforderten Pflichtteilen, der Implementation eines SWID Generators
+für Linux Systeme und der Integration der SWID Erweiterung in strongTNC,
+schlagen wir nachfolgende Anpassungen vor, die wir bei vorhandener Kapazität
+noch umsetzen möchten.
 
-\subsection{Entkopplung der Datenbank} Wie bereits erwähnt entstehen durch die
-gemeinsame Nutzung einer SQLite Datenbank einige Probleme. Nachfolgend möchten wir kurz auf die daraus resultierenden Nachteile eingehen.
+\subsection{Entkopplung der Datenbank}
+Wie bereits erwähnt entstehen durch die gemeinsame Nutzung einer SQLite
+Datenbank einige Probleme. Nachfolgend möchten wir kurz auf die daraus
+resultierenden Nachteile eingehen.
+
 \begin{description}
-\item[Mehrbenutzerfähigkeit]
-Die Daten einer SQLite Datenbank kann nur von einem Prozess gleichzeitig geändert werden.
-Da es sich bei der aktuellen Situation aber bereits um eine Multiprozessumgebung handelt ist dieser Einsatz denkbar schlecht, und kann zu unerwünschten Locks führen.
+	\item[Mehrbenutzerfähigkeit] Die Daten einer SQLite Datenbank kann nur von
+	einem Prozess gleichzeitig geändert werden. Da es sich bei der aktuellen
+	Situation aber bereits um eine Multiprozessumgebung handelt ist dieser Einsatz
+	denkbar schlecht, und kann zu unerwünschten Locks führen.
 
-\item[Verteilung der Komponenten] Die Policy Decision Komponente (TNC Server aus
-strongSwan Projekt) kann derzeit nicht getrennt von der strongTNC Webserver
-Komponente betrieben werden. Dies kann aber in einem Enterprise Deployment
-durchaus erwünscht sein. Beispielsweise der Einsatz eines Windows Webservers mit der strongTNC App, während der Enforcement Point auf einem Linux System läuft. Zusätzlich kann es aus Netzwerktechnischen Gründen bedingt sein, im Internet exponierte Komponenten, in diesem Fall den strongSwan VPN Gateway, und einen Webserver in getrennten Netzwerksegmenten zu halten. Oder zur Lastverteilung die Komponenten auf unterschiedliche Hosts zu verteilen.
+	\item[Verteilung der Komponenten] Die Policy Decision Komponente (TNC Server
+	aus strongSwan Projekt) kann derzeit nicht getrennt von der strongTNC Webserver
+	Komponente betrieben werden. Dies kann aber in einem Enterprise Deployment
+	durchaus erwünscht sein. Beispielsweise der Einsatz eines Windows Webservers
+	mit der strongTNC App, während der Enforcement Point auf einem Linux System
+	läuft. Zusätzlich kann es aus Netzwerktechnischen Gründen bedingt sein, im
+	Internet exponierte Komponenten, in diesem Fall den strongSwan VPN Gateway, und
+	einen Webserver in getrennten Netzwerksegmenten zu halten. Oder zur
+	Lastverteilung die Komponenten auf unterschiedliche Hosts zu verteilen.
 
-\item[Anbindung an Drittsysteme]
-Die Anbindung an Umsysteme gestaltet sich als kaum realisierbar. Das TNC Framework sieht aber bereits weitere Komponenten, wie bspw. IF-MAP Devices vor, die integriert werden könnten. Auch eine Integration in bestehende Geschäftsprozesse (z.B CMDB) ist nur sehr schwer realisierbar.
+	\item[Anbindung an Drittsysteme] Die Anbindung an Umsysteme gestaltet sich als
+	kaum realisierbar. Das TNC Framework sieht aber bereits weitere Komponenten,
+	wie bspw. IF-MAP Devices vor, die integriert werden könnten. Auch eine
+	Integration in bestehende Geschäftsprozesse (z.B CMDB) ist nur sehr schwer
+	realisierbar.
 \end{description} 
 
 \begin{description}
-
 	\item[Datenbankschema] Das Schema wird nicht grundlegend
 	geändert, sondern übernommen wie es ist.
 
@@ -136,19 +145,60 @@ Die Anbindung an Umsysteme gestaltet sich als kaum realisierbar. Das TNC Framewo
 	Falle in allen Komponenten vorgenommen werden.
 \end{description}
 
-Durch eine völlige Trennung der Datenbank, könnte Django verwendet werden um bei Anpassungen
+Durch eine völlige Trennung der Datenbank, könnte Django verwendet werden um bei
+Anpassungen
 
 \section{Abgrenzung}
 Folgende Punkte werden von uns als gegeben Betrachtet und sind nicht zentraler
 Bestandteil unserer Arbeit:
 
-\section{ISO Standard 19770-2} 
+\section{ISO Standard 19770-2:2014} 
+Der ISO Standard 19770-2:2014 ist der zweite Teil einer Gruppe von ISO Standards
+die sich mit den Prozessen sowie mit der Technologie von Software Asset
+Management auseinandersetzen. Der Standard befindet sich derzeit noch im
+Entwurfsstadium (\enquote{Draft}).\\
+Der Standard beschreibt den Aufbau und die Verwendung von Software
+Identification Tags.
+
+\subsection{Bestandteile eines SWID Tags}
+Folgendes ist eine Zusammenstellung der Bestandteile eines SWID Tags wie sie in
+diesem Projekt verwendet werden. Der Standard beschreibt noch weitere Elemente
+und Anwendungsmöglichkeiten welche in dieser Arbeit allerdings nicht verwendet
+werden.
+
+\begin{description}
+	\item[SoftwareIdentity] Repräsentation des Wurzelelementes eines SWID Tags.
+	Dieses Element hat Attribute welche die Anwendung des Tags und dessen Identität
+	innerhalb seiner Entität beschreiben. Folgende Liste von Attribute ist nicht
+	vollständig, sondern eine Auswahl wie sie für diese Arbeit relevant ist,
+	weggelassen wurden, \texttt{media, supplemental, tagVersion, versionScheme}.
+	\begin{description*}
+		\item[delta] Das \texttt{delta} Attribut beschreibt ob es sich um ein Patch
+		oder eine Modifikation der Software handelt. Dieses Attribut wird von uns
+		nicht verwendend, da bei Linux Systemen üblicherweise keine Patches verteilt
+		werden, sondern gepatchte Softwarepakete. Der Standardwert ist \texttt{false}.
+
+		\item[name] Dieses Pflichtfeld enthält den Namen der Software so wie man
+		üblibcherweise darauf verweisen würde.
+		
+		\item[uniqueId] Die \texttt{uniqueId} ist eine Kennung die eine Software
+		innerhalb des Namespaces des Tag Creators eindeutig identifizieren kann.
+		Vorschläge für den Aufbau einer \texttt{uniqueId} sind \texttt{publisher +
+		product + version} oder eine GUID. Die \texttt{uniqueId} ist optional.
+		
+		\item[version] In diesem Attribut wird die Version der Software festgelegt.
+		Das Attribut ist optional und hat einen Standardwert von \texttt{0.0}.
+		
+	\end{description*}
+	
+	\item[Entity] Beschreibt die Organisation die für diesen SWID Tag verantwortlich ist. In einem Tag können theoretisch beliebig viele 
+\end{description}
 
 \subsection{Probleme}
+Bei der Analyse und der Implementation des ISO Standard 19770-2:2014, sind einige Ungereimtheiten aufgefallen. 
 
-\subsubsection{Identität ist nicht gegeben}
-software\_id ist tagcreator regid\_unique id\\
-aber die regid ist nicht zwingend eindeutig
+\subsubsection{Keine garantierte Identität}
+
 
 \subsubsection{XSD wiederspiegelt nicht den Standard}
 
@@ -176,7 +226,8 @@ Die Unique ID unterliegt den Restrikitonen einer URI. Bei URIs gilt, ein
 Doppelpunkt ist kein unerlaubtes Zeichen jedoch ein reserviertes:
 
 \begin{verbatim} 
-reserved = gen-delims / sub-delims gen-delims = ":" / "/" / "?"/ "#" / "[" / "]" / "@" 
+reserved = gen-delims / sub-delims 
+gen-delims = ":" / "/" / "?"/ "#" / "[" / "]" / "@" 
 sub-delims = "!" / "\$" / "&" / "'" / "(" / ")" / "*" /"+" / "," / ";" / "=" 
 unreserved = ALPHA / DIGIT / "-" / "." / "_ " / "~"
 \end{verbatim}
