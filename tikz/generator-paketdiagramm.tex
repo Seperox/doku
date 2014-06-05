@@ -1,0 +1,20 @@
+\definecolor{GeneratorColor}{RGB}{116,143,204}
+\definecolor{GeneratorColorLight}{RGB}{195,206,230}
+
+\begin{tikzpicture}[
+		package/.style={fill=GeneratorColorLight},
+		subpackage/.style={fill=GeneratorColor},
+		every node/.style={font=\footnotesize}
+	]
+
+	% Packages
+	\filldraw[package] (0, 0) rectangle  (5.75, 2.25);
+
+	% Subackages
+	\filldraw[subpackage] (0.25, 0.25) rectangle node {environments} (2.75, 1.5);
+	\filldraw[subpackage] (3, 0.25) rectangle node {generators} (5.5, 1.5);
+
+	% Labels
+	\draw (3, 1.875) node {swid\_generator};
+
+\end{tikzpicture}

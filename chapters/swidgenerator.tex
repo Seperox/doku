@@ -1,5 +1,7 @@
 \chapter{SWID Generator}
 
+% {{{ Requirements -----------------------------------------------------------%
+
 \section{Requirements}
 
 \subsection{Zweck}
@@ -13,7 +15,7 @@ den Informationen in Paket Management Systemen SWID Tags generiert.
 		\item Als Implementationsprache wird Python verwendet.
 		\item Es sollen möglichst wenig Abhängigkeiten zu Drittkomponenten wie
 			Libraries/Frameworks entstehen.
-    \item Die Software soll einfach zu installieren sein, beispielsweise durch
+		\item Die Software soll einfach zu installieren sein, beispielsweise durch
 			Upload in den Python Package Index ($\rightarrow$ \texttt{pip install
 			swid-generator}) oder durch Erstellen von \texttt{.deb}- und
 			\texttt{.rpm}-Paketen.
@@ -150,21 +152,27 @@ auflistet. \\
 \hline
 \end{usecase}
 
+% }}}
+
+% {{{ Paketmanager -----------------------------------------------------------%
 
 \section{Paketmanager}
+\label{swidgenerator:paketmanager}
 
 Im Rahmen dieser Arbeit wurde die Unterstützung für drei der am weitesten
 verbreiteten Paketverwaltungssysteme (DPKG, RPM und Pacman) implementiert. Damit
 werden 8 der 10 führenden Linux- und BSD-Distributionen gemäss
 DistroWatch.com\cite{distrowatch:2014} abgedeckt.
 
-\subsubsection{DPKG}
+Ein Paketmanager verwaltet unter anderem alle verfügbaren und installierten
+Softwarepakete inklusive Meta-Informationen wie Paketname, Version oder
+Installationsstatus.
+
+\subsection{DPKG}
 
 DPKG\footnote{\url{https://alioth.debian.org/projects/dpkg}} (Abkürzung für
 \textit{Debian Package}) ist die Basis der Paketverwaltung in Debian und in
-verwandten Distributionen wie Ubuntu. DPKG verwaltet unter anderem alle
-installierten Software-Pakete inklusive Meta-Informationen. Diese Paketliste
-kann mit \texttt{dpkg-query} abgefragt werden.
+verwandten Distributionen wie Ubuntu.
 
 \textbf{Liste installierter Pakete abfragen}
 
@@ -187,7 +195,7 @@ Der Status ist in der Ausgabe als \texttt{"deinstall ok config-files"}
 ersichtlich, entsprechende Pakete können so nachträglich herausgefiltert werden.
 
 
-\subsubsection{RPM}
+\subsection{RPM}
 
 RPM\footnote{\url{https://rpm.org}} (Abkürzung für \textit{Red Hat Package
 Manager}) ist der Standard-Paketmanager für Red Hat Linux Systeme sowie
@@ -206,7 +214,7 @@ rpm -ql <package-name>
 \end{bashcode}
 
 
-\subsubsection{Pacman}
+\subsection{Pacman}
 
 Pacman\footnote{\url{https://www.archlinux.org/pacman/}} ist der Paketmanager
 unter Arch Linux und allen Derivaten wie Manjaro Linux oder Chakra.
@@ -223,23 +231,204 @@ pacman -Q --color never
 pacman -Ql <package-name>
 \end{bashcode}
 
+% }}}
+
+% {{{ Architektur ------------------------------------------------------------%
 
 \section{Architektur}
 
-\subsection{Initialisierung}
+\subsection{Übersicht}
+
+Der SWID Generator wurde komplett in Python geschrieben und nutzt keine externen
+Libraries. Es wird sowohl Python 2 wie auch Python 3 unterstützt.
+
+Der Quellcode ist modular aufgebaut, gewisse Komponenten wurden in separate
+Subpackages aufgeteilt:
+
+\begin{figure}[H]
+	\centering
+	\input{tikz/generator-paketdiagramm}
+	\caption{Aufteilung SWID Generator in Python Packages}
+\end{figure}
+
+Das Hauptpackage -- \texttt{swid\_generator} -- enthält folgende Module:
+
+\begin{itemize}
+	\item \texttt{main.py}: Der Einstiegspunkt in das Programm
+	\item \texttt{argparser.py}: Klassen und Funktionen um
+		Kommandozeilenargumente zu parsen
+	\item \texttt{print\_functions.py}: Funktionen um Tag- und
+		Software-ID-Generatoren auf die Standardausgabe auszugeben
+	\item \texttt{package\_info.py}: DTO\footnote{Data Transfer Object, eine
+		Klasse die kein Eigenverhalten aufweist sondern lediglich Daten in
+		einem Objekt bündelt.}-Klassen für Dateien und Softwarepakete
+	\item \texttt{exceptions.py}: Eigene Fehlerklassen
+	\item \texttt{settings.py}: Globale Variablen, wie z.\ B.
+		\texttt{DEFAULT\_ENTITY\_NAME}
+	\item \texttt{meta.py}: Metainformationen zum Generator, wie z.\ B. der
+		Programmname, die Lizenz oder die Version
+\end{itemize}
+
+Die zwei Subpackages sind für Input respektive Output zuständig. Im
+\texttt{environments} Package sind die Environment-Klassen für die verschiedenen
+Paketmanager enthalten. Die Klassen greifen auf die jeweiligen Paketdatenbanken
+zu und geben diese Informationen an das Hauptprogramm zurück. Auch die
+Environment-Registry befindet sich in diesem Package. Mehr dazu im Abschnitt
+\ref{swidgenerator:architektur:environments}.
+
+Das \texttt{generators} Package enthält die nötigen Funktionen um aus den (vom
+entsprechenden Environment zurückgegebenen) Paketinformationen die dazugehörigen
+Software-ID Strings oder SWID XML Tags zu generieren. Diese Funktionen sind als
+Python
+Generators\footnote{\url{https://docs.python.org/2/tutorial/classes.html\#generators}}
+implementiert, die einzelnen Einträge können also schon während der Generierung
+laufend ausgegeben werden. Mehr dazu im Abschnitt
+\ref{swidgenerator:architektur:printers}.
+
+Als Einstiegspunkt in den SWID Generator dient das \texttt{main.py} Modul. Um
+das Programm direkt aus dem Quellcode-Ordner heraus zu starten, sollte Python
+mit der \texttt{-m} Option und dem vollständigen Modulpfad gestartet werden:
+
+\begin{bashcode}
+python -m swid_generator.main
+\end{bashcode}
+
+Wenn das Programm über pip oder setup.py installiert wird (siehe
+\autoref{swidgenerator:architektur:deployment}), kann es natürlich auch direkt
+über den Programmnamen aufgerufen werden:
+
+\begin{bashcode}
+swid_generator
+\end{bashcode}
+
+\subsection{Ablauf: Initialisierung}
+\label{swidgenerator:architektur:initialisierung}
+
+Wenn der SWID Generator gestartet wird, beginnt die Code-Ausführung im
+\texttt{main.py} Modul. Zuerst müssen alle Kommandozeilen-Argumente verarbeitet
+werden. Danach müssen die modular aufgebauten Environment Klassen registriert
+werden. Mit diesen Informationen muss entschieden werden, welches Environment
+dass effektiv verwendet werden soll -- entweder durch den Benutzer definiert
+oder durch eine automatische Packetmanager-Erkennung.
+
+Der Ablauf ist wie folgt:
+
+\begin{enumerate}
+	\item Die Environment Registry
+		(\ref{swidgenerator:architektur:environments:registry}) wird initialisiert.
+	\item Alle verfügbaren Environment Klassen
+		(\ref{swidgenerator:architektur:environments:interface}) werden der Registry
+		übergeben.
+	\item Der Argument Parser wird mit einer Referenz auf die Registry instanziert.
+	\item Die Parser Instanz parst mithilfe des \texttt{argparse} Moduls aus der
+		Python Stanardbibliothek die Kommandozeilen-Argument und generiert daraus ein
+		\enquote{Options}-Objekt. \item Dieses Objekt wird nun der Environment Registry
+		übergeben. Diese kann mit den Informationen darin die geeignete Environment
+		Klasse finden und an das Hauptprogramm zurückgeben. Das Environment kann per
+		Kommandozeilen-Argument vorgegeben werden, andernfalls wird es automatisch
+		detektiert.
+\end{enumerate}
+
+In der folgenden Abbildung ist dieser Ablauf als UML Sequenzdiagramm
+dargestellt:
 
 \begin{figure}[H]
 	\centering
 	\input{tikz/generator-sequenzdiagramm-init}
 	\caption{Sequenzdiagramm: Initialisierung}
-	\label{img:generator-sequenzdiagramm-init}
 \end{figure}
 
-\subsection{Generierung}
+\subsection{Ablauf: Generierung}
+\label{swidgenerator:architektur:generierung}
+
+Nachdem nun im Abschnitt \ref{swidgenerator:architektur:initialisierung} alle
+nötigen Informationen gesammelt wurden, kann nun die Hauptarbeit geschehen: Die
+Generierung der Daten aus den Paketmanager-Informationen. Ob SWID Tags oder
+Software-IDs generiert werden, ist abhängig vom ersten Kommandozeilenargument,
+welches entweder \texttt{swid} oder \texttt{software-id} sein kann.
+
+\begin{enumerate}
+	\item Zuerst werden mithilfe des SWID Tag Generators
+		(\ref{swidgenerator:architektur:generatoren}) die gewünschen Tags aus
+		der Paketmanager-Datenbank geholt.
+	\item Die zurückgegebenen Tags werden mithilfe der entsprechenden
+		Print-Funktionen (\ref{swidgenerator:architektur:printers}) auf die
+		Standardausgabe ausgegeben.
+	\item Falls im ganzen Programmablauf keine Fehler aufgetreten sind, wird
+		das Programm nun mit dem Status Code 0 (=keine Fehler) beendet.
+\end{enumerate}
+
+Dieser Ablauf ist im folgenden UML Sequenzdiagramm visualisiert:
 
 \begin{figure}[H]
 	\centering
 	\input{tikz/generator-sequenzdiagramm-generierung}
 	\caption{Sequenzdiagramm: Generierung}
-	\label{img:generator-sequenzdiagramm-generierung}
 \end{figure}
+
+
+\subsection{Implementationsdetails: Environments}
+\label{swidgenerator:architektur:environments}
+
+Die Environments sind das Kernstück des SWID-Generators, denn sie greifen auf
+den System-Paketmanager zu und bereiten die Liste der installierten Pakete für
+die weitere Verarbeitung auf.
+
+Wie bereits im Abschnitt \ref{swidgenerator:paketmanager} erwähnt, bietet der
+SWID Generator zum aktuellen Zeitpunkt Unterstützung für drei weit verbreitete
+Paketmanager an. Damit das Tool in Zukunft auch auf bisher noch nicht
+unterstützten Systemen wie Slackware Linux oder FreeBSD einsatzfähig ist, haben
+wir grossen Wert darauf gelegt, dass es möglichst einfach ist neue
+Environment-Klassen hinzuzufügen und diese zentral zu registrieren.
+
+\subsubsection{Environment Interface}
+\label{swidgenerator:architektur:environments:interface}
+
+Um dieses Ziel zu erreichen, ist ein einheitliches Interface für die
+Environment-Klassen essentiell.
+
+WIP
+
+\subsubsection{Die Registry}
+\label{swidgenerator:architektur:environments:registry}
+
+\subsection{Implementationsdetails: Generatoren}
+\label{swidgenerator:architektur:generatoren}
+
+\subsection{Implementationsdetails: Printers}
+\label{swidgenerator:architektur:printers}
+
+
+\subsection{Implementationsdetails: Python 3 Kompatibilität}
+
+
+\subsection{Packaging}
+
+- Setup.py
+- Manifest.in
+- meta.py
+
+% }}}
+
+% {{{ Ergebnisse -------------------------------------------------------------%
+
+\section{Ergebnisse}
+
+- Beispiel
+- Speed
+
+% }}}
+
+% {{{ Qualitätsmanagement ----------------------------------------------------%
+
+\section{Qualitätsmanagement}
+\label{swidgenerator:architektur:qa}
+
+% }}}
+
+% {{{ Deployment -------------------------------------------------------------%
+
+\section{Deployment}
+\label{swidgenerator:architektur:deployment}
+
+% }}}

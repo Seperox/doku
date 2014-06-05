@@ -1,25 +1,25 @@
 \begin{tikzpicture}
-	\begin{umlseqdiag}[font=\footnotesize]
+	\begin{umlseqdiag}[font=\sffamily]
 
 		% Objekte
 
 		\umlobject{main}
-		\umlcreatecall[dt=5, x=8, class=EnvironmentRegistry]{main}{registry}
+		\umlcreatecall[dt=5, x=8]{main}{envregistry}
 
 		% Calls
 
 		\begin{umlfragment}[type=loop, label=foreach env, inner xsep=10]
-			\begin{umlcall}[dt=7, padding=2, op={register(env)}]{main}{registry}
+			\begin{umlcall}[dt=7, padding=2, op={register(env)}]{main}{envregistry}
 			\end{umlcall}
 		\end{umlfragment}
 
-		\umlcreatecall[dt=7, x=4, class=MainArgumentParser]{main}{parser}
-		\begin{umlcall}[dt=3, padding=4, op={parse(registry)},return=options]{main}{parser}
+		\umlcreatecall[dt=10, x=6]{main}{argparser}
+		\begin{umlcall}[dt=4, padding=4, op={parse(registry)},return=options]{main}{argparser}
 		\end{umlcall}
 
-		\begin{umlcall}[dt=7, padding=3, op={get\_environment(options)},return=env]{main}{registry}
-			\begin{umlfragment}[type=opt, label=if !options.env, inner xsep=15]
-				\begin{umlcallself}[op=autodetect\_env()]{registry}
+		\begin{umlcall}[dt=10, padding=3, op={get\_environment(options)},return=env]{main}{envregistry}
+			\begin{umlfragment}[type=opt, label=if !options.env, inner xsep=12]
+				\begin{umlcallself}[op=autodetect\_env()]{envregistry}
 				\end{umlcallself}
 			\end{umlfragment}
 		\end{umlcall}
