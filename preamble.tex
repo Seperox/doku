@@ -76,6 +76,7 @@
 \newminted{python}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 \newminted{bash}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 \newminted{ini}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{xml}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 \newminted{text}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 
 % Configure table spacing
@@ -101,10 +102,16 @@
 \makeglossaries
 %\makeindex
 
+% Tabularx
+
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}%
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+\newcolumntype{C}{>{\centering\arraybackslash}X}%
+
 % Custom functions
 
 \newenvironment{usecase}%
-{\tabularx{\textwidth}{lX}}%
-{\endtabularx}
+	{\tabularx{\textwidth}{lX}}%
+	{\endtabularx}
 
 \newcommand{\zb}{z.\ B.}

@@ -503,8 +503,115 @@ entgegen und führt folgende Schritte aus:
 
 \section{Ergebnisse}
 
-- Beispiel
-- Speed
+\subsection{Generieren von Software-IDs}
+
+Der SWID Generator kann folgendermassen verwendet werden um Software-IDs zu
+generieren:
+
+\begin{textcode}
+usage: swid_generator software-id [-h] [--env {auto,dpkg,pacman,rpm}]
+                                  [--doc-separator DOCUMENT_SEPARATOR]
+                                  [--regid REGID]
+\end{textcode}
+
+Nachfolgend ein Beispielaufruf auf einem Debian-System:
+
+\begin{textcode}
+$ swid_generator software-id --regid=regid.1998-05.ch.hsr
+regid.1998-05.ch.hsr_debian_7.4-x86_64-acpi-1.6-1
+regid.1998-05.ch.hsr_debian_7.4-x86_64-acpi-support-base-0.140-5
+...
+regid.1998-05.ch.hsr_debian_7.4-x86_64-zlib1g-1:1.2.7.dfsg-13
+regid.1998-05.ch.hsr_debian_7.4-x86_64-zlib1g-dev-1:1.2.7.dfsg-13
+\end{textcode}
+
+Die vollständige Dokumentation der Optionen kann auf der Kommandozeile mit dem
+\texttt{-{}-help} Parameter ausgegeben werden.
+
+
+\subsection{Generieren von SWID Tags}
+
+Die Syntax um SWID Tags zu generieren sieht folgendermassen aus:
+
+\begin{textcode}
+usage: swid_generator swid [-h] [--env {auto,dpkg,pacman,rpm}]
+                           [--doc-separator DOCUMENT_SEPARATOR]
+                           [--regid REGID] [--entity-name ENTITY_NAME]
+                           [--full] [--pretty]
+                           [--software-id SOFTWARE-ID | --package PACKAGE]
+\end{textcode}
+
+Hier ein Beispiel eines Targeted Requests auf dem \texttt{cowsay}-Paket mit
+Pretty-Printing:
+
+\begin{xmlcode}
+$ swid_generator swid --package cowsay --pretty
+<?xml version="1.0" encoding="utf-8"?>
+<SoftwareIdentity name="cowsay" uniqueId="debian_7.4-x86_64-cowsay-3.03+dfsg1-4"
+      version="3.03+dfsg1-4" versionScheme="alphanumeric"
+      xmlns="http://standards.iso.org/iso/19770/-2/2014/schema.xsd">
+  <Entity name="strongSwan" regid="regid.2004-03.org.strongswan" role="tagcreator"/>
+</SoftwareIdentity>
+\end{xmlcode}
+
+
+\subsection{Performance}
+
+Durch die in den Abschnitten \ref{swidgenerator:architektur:generatoren} und
+\ref{swidgenerator:architektur:printers} beschriebenen Optimierungen ist der
+SWID Generator generell recht schnell. Nachfolgend ein paar
+Geschwindigkeitsmessungen, die wir auf verschiedenen Systemen durchgeführt
+haben. Getestet wurden dabei die folgenden Befehle:
+
+\begin{itemize}
+	\item ids: \texttt{swid\_generator software-id > /dev/null}
+	\item tags: \texttt{swid\_generator swid > /dev/null}
+	\item tags-full: \texttt{swid\_generator swid -{}-full > /dev/null}
+	\item tags-full-pretty: \texttt{swid\_generator swid -{}-pretty -{}-full > /dev/null}
+\end{itemize}
+
+Die Befehle wurden jeweils mehrmals ausgeführt, um mögliche Caching-Effekte
+auszugleichen. Nachfolgend die getesteten Systeme:
+
+\begin{itemize}
+	\item dpkg-952: DPKG, 952 installierte Pakete
+	\item pacman-1223: Pacman, 1223 installierte Pakete
+	\item rpm-437: RPM, 437 installierte Pakete
+\end{itemize}
+
+Die Ergebnisse:
+
+\begin{tabularx}{\textwidth}{rCCC}
+	& \textbf{dpkg-952} & \textbf{pacman-1223} & rpm-437 \\
+	\hline
+	\textbf{ids} & 0.143s & 0.054s & 0.511s \\
+	\hline
+	\textbf{tags} & 0.227s & 0.102s & 0.534\\
+	\hline
+	\textbf{tags-full} & 34.256s & 13.822s & 6.213s \\
+	\hline
+	\textbf{tags-full-pretty} & 54.039s & 31.202s & 8.920s \\
+	\hline
+\end{tabularx}
+
+Da auf den Systemen nicht gleich viele und gleich grosse Pakete installiert
+sind, sind diese Resultate etwas schwer vergleichbar. Man kann jedoch die
+ungefähr zu erwartende Laufzeit abschätzen.
+
+Klar ersichtlich ist, dass der grösste Zeitaufwand beim Generieren von SWID Tags
+\mit der texttt{-{}-full} Option geschieht. Dies ist verständlich, da hierbei
+jede Datei in jedem Paket auf dem System vom SWID Generator auf Existenz geprüft
+wird. An diesem Punkt gäbe es möglicherweise noch Optimierungspotential.
+
+Auch das Pretty Printing ist ein \enquote{Zeitfresser}, da die generierten Tags
+hierfür ein zweites mal geparsed und in einer \enquote{schöneren} Variante
+ausgegeben werden müssen. Der Mehraufwand gegenüber der Variante ohne
+\texttt{-{}-pretty} betrug in den drei gemessenen Beispielfällen zwischen 43\%
+und 125\%. Da diese Option jedoch nur für Debugging-Zwecke gebraucht werden
+sollte, ist dies in der Praxis kein nenneswertes Problem und auch kaum
+ein sinnvolles Ziel für Optimierungen (auch wenn es da bestimmt noch Potential
+gäbe).
+
 
 % }}}
 
