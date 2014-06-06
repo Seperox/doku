@@ -7,6 +7,7 @@
 Nachfolgend werden die identifizierten Use Cases beschrieben. Als \enquote{System under Decision} wird die strongTNC Django Webapp als Ganzes betrachtet.
 
 \subsubsection{UC01: CMDB, Softwareinventar eines Gerätes}
+\label{strongTNC:UC01}
 \begin{usecase}
 \hline
 \textbf{Akteur} & strongTNC Benutzer \\
@@ -46,6 +47,7 @@ Ansicht und findet dort die Liste der gemessenen Dateien. \\
 \end{usecase}
 
 \subsubsection{UC03: Verfügbare Entities auflisten}
+\label{strongTNC:UC03}
 \begin{usecase}
 \hline
 \textbf{Akteur} & strongTNC Benutzer \\
@@ -147,8 +149,6 @@ Der Akteur kann sich in der Entity Ansicht alle erfassten Entities auflisten las
 
 Der Benutzer kann auflisten, welche Tags ein bestimmtes File enthalten.
 
-
-
 \section{SWID Erweiterung}
 \section{Datenmodell}
 \begin{figure}[H]
@@ -170,7 +170,7 @@ Diese Tabelle beinhaltet alle erfassten Entities. In der Regel ist eine kleine A
 
 \end{description}
 
-\section{Implementation SWID Messung}
+\section{Architektur SWID Messung}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{./images/architecture/SWID_strongTNC.png}
@@ -195,13 +195,40 @@ Dieses Vorgehen erzwingt eine Aktualisierung der strongTNC Datenbank wenn diese 
 
 
 \subsection{Technische Umsetzung}
-Die HTTP Schnittstelle der SWID Messung wurde als Prototyp verwendet um die Machbarkeit der, im Rahmen dieser Arbeit konzipierten, \gls{REST} TNC Schnittstelle aufzuzeigen (TODO REST Referenz). Eine ausführliche Beschreibung der Kommunikation mit dem REST Endpoint für die SWID Messung ist im Anhang \ref{REST:swid-measurement-manual} zu finden.
+Der Zugriff auf die beschriebene Systemoperation erfolgt durch die, in dieser Arbeit ausgearbeiteten, RESTful HTTP Schnittstelle. Das komplette Konzept ist in (TODO Referenz REST Konzept) zu finden.
 
-\paragraph{REST Kommunikation}
-Nachfolgend so Beispielhaft die konkrete umsetzung der HTTP Kommunikation mit dem swid-measurement Endpoint aufgezeigt werden.
+\subsubsection{REST Kommunikation}
+Im Folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels illustriert werden.
+In diesem Beispiel soll eine Messung für 3 Tags mit folgenden Software-IDs erfolgen:
+\begin{textcode}
+regid.2004-03.org.strongswan Ubuntu 12.04-i686-logrotate-3.7.8-6ubuntu5
+regid.2004-03.org.strongswan Ubuntu 12.04-i686-lsb-base-4.0-0ubuntu20
+regid.2004-03.org.strongswan Ubuntu 12.04-i686-strongswan-4.5.2-1.5+deb7u3
+\end{textcode}
 
-\begin{description}
-\item[Schritt 1: Übermitteln von Software-IDs]asdfasdf \\
+Der HTTP/REST Endpunkt wurde wie folgt definiert:
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/products/}
+	\item[Archetype] Collection
+	\item[Methods] GET, POST
+	\item[JSON Format Response] \hfill
+	
+\begin{jsoncode}
+{"data" : 
+	[
+	"software-ids TODO vom api konzept kopieren!" 
+	]
+}
+\end{jsoncode}
+\end{description*}
+\end{mdframed}
+
+
+
+\subsubsection*{Übermitteln von Software-IDs}
+Die Daten werden als JSON-Liste an den entsprechenden Endpoint gesendet.
+Der HTTP Request sieht folgendermassen aus:
 
 \begin{httpcode}
 POST /api/sessions/2/swid-measurement/ HTTP/1.1
@@ -211,35 +238,167 @@ Accept: application/json
 Content-Type: application/json; charset=utf-8
 Content-Length: 232
 
-[
-"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-logrotate-3.7.8-6ubuntu5",
-"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20",
-"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"
-]
+{
+	"data":
+	[
+		"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-logrotate-3.7.8-6ubuntu5",
+		"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20",
+		"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"
+	]
+}
 \end{httpcode}
 
+Der entsprechende CURL Befehl:
 
-\end{description}
+\begin{bashcode}
+curl -i -X POST http://tncserver:8000/api/sessions/2/swid-measurement/ \
+		 -u username:password \
+		 -H "Accept: application/json" \
+		 -H "Content-Type: application/json; charset=utf-8" \
+		 -d "$DATA"
+\end{bashcode}
+
+\subsubsection*{Antwort - Status 412 Precondition Failed}
+
+Sind noch nicht alle Tags in der strongTNC Datenbank vorhanden, werden die
+Software-IDs der fehlenden Tags zurückgeliefert. Der HTTP Status Code ist
+``\texttt{412 Precondition Failed}''. Es werden zu diesem Zeitpunkt noch keine
+Tags mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt
+aussehen:
+
+\begin{httpcode}
+HTTP/1.0 412 PRECONDITION FAILED
+Date: Wed, 14 May 2014 15:21:45 GMT
+Server: WSGIServer/0.1 Python/2.7
+Vary: Accept, Cookie
+Content-Type: application/json
+Allow: POST, OPTIONS
+
+["regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"]
+\end{httpcode}
+
+\subsubsection*{Antwort - Status 200 OK}
+
+Wären für alle Software-IDs bereits Tags in der Datenbank vorhanden, könnte die Antwort wie folgt aussehen:
+
+\begin{httpcode}
+HTTP/1.0 200 OK
+Date: Wed, 14 May 2014 15:21:45 GMT
+Server: WSGIServer/0.1 Python/2.7
+Vary: Accept, Cookie
+Content-Type: application/json
+Allow: POST, OPTIONS
+
+[]
+\end{httpcode}
+
+\subsubsection*{Nacherfassen von SWID Tags}
+War die Messung nicht erfolgreich (HTTP 412), müssen für die zurüuckgelieferten Software-IDs
+zuerst komplette SWID Tags erfasst werden. Die Daten für diesen Request bestehen aus einer JSON-Liste von XML Strings, dadurch können auch
+mehrere Tags auf einmal erfasst werden. Empfehlenswert ist allerdings ein Batching in mehrere Gruppen, da die Requests sonst unter Umständen sehr lange
+dauern können. 
+
+\pagebreak
+Der Request sieht folgendermassen aus:
+
+\begin{httpcode}
+POST /api/swid/add-tags/ HTTP/1.1
+Authorization: Basic cm9vdDpyb290
+Host: tncserver:8000
+Accept: application/json
+Content-Type: application/json; charset="utf-8"
+Content-Length: 239
+
+{ "data" : 
+	[
+		"<?xml version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
+	]
+}
+\end{httpcode}
+
+Curl Befehl:
+
+\begin{bashcode}
+curl -i -X POST http://tncserver:8000/api/swid/add-tags/ \
+		 -u username:password \
+		 -H "Accept: application/json" \
+		 -H "Content-Type: application/json; charset=utf-8" \
+		 -d "{ \"data\" : $DATA }"
+\end{bashcode}
+
+Eine ausführliche Spezifikation zur Kommunikation mit diesem REST Endpoint ist im Anhang \nameref{REST:swid-measurement-manual} zu finden.
+Darin sind unter anderem noch weitere Informationen zu Fehlersituationen aufgeführt.
+
+\subsection{SWID Views}
+Für die SWID Tag Erweiterungen wurden drei zusätzliche Views implementiert.
+\subsubsection{Regid View}
+Der Zweck der Regid Ansicht ist das auflisten im System vorhandener Entitys (\nameref*{strongTNC:UC03}).
+Beim wählen einer Entity werden die referenzierten Tags aufgelistet. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{./images/mockups/swid-regid-view}
+\caption{Mockup Regid View.}
+\label{fig:swid-regid-view}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{./images/Views/regid-view}
+\caption{Regid View mit Detailansicht}
+\label{fig:regid-view}
+\end{figure}
+
+\subsubsection{SWID Tag View}
+Der Zweck der SWID Tag Ansicht ist das Auflisten im System vorhandener SWID Tags (\nameref{strongTNC:UC04}).
+Beim wählen eines SWID Tags werden Detailinformationen angezeigt.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{./images/Views/tag-detail-view}
+\caption{SWID Tag View mit Anzeige detaillierter Tag Informationen}
+\label{fig:tag-detail-view}
+\end{figure}
+
+\subsubsection{SWID Inventory View}
+
+Anhand der SWID Inventory View kann festgestellt werden, welche Software für eine ausgewählte Sitzung (Session) auf einem Gerät installiert war (\nameref{strongTNC:UC01}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{./images/mockups/swid-inventory}
+\caption{}
+\label{fig:swid-inventory}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{./images/Views/inventory-view}
+\caption{SWID Inventory View}
+\label{fig:tag-detail-view}
+\end{figure}
 
 
-\begin{mdframed}[style=def]
-\begin{description*}
-	\item[URI Path] \texttt{/products/}
-	\item[Archetype] Collection
-	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
-	
-\begin{jsoncode}
-[
-	{
-		"id": 4,
-		"uri": "http://apiserver/ressurce/1",
-		"name": "Debian 7.0"	
-	}
-]
-\end{jsoncode}
-\end{description*}
-\end{mdframed}
+\subsubsection{SWID Log View}
+
+Die Log View zeigt den Verlauf der Installation und Entfernung von Software Paketen auf
+einem ausgewählten Gerät (\nameref{strongTNC:UC01}). Da bei jeder SWID Tag Messung jeweils alle
+vorhanden SWID Tags übermittelt werden, lässt sich für jedes Paket sagen, wann
+es installiert, beziehungsweise entfernt wurde. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{./images/mockups/swid-log}
+\caption{SWID Log View Mockup}
+\label{fig:swid-log}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{./images/Views/log-view}
+\caption{SWID Log View mit Details für eine ausgewählte Session}
+\label{fig:log-view}
+\end{figure}
+
 
 \section{Verbesserungen}
 
