@@ -40,11 +40,11 @@ Wir haben uns für folgende Artefakte <TODO: Ref> entschieden:
 
 	\item[Scrumboard] Sämtliche Tasks werden zur verbesserten Visualisierung auf
 	einem klassischen Scrumboard mit Post-It Zetteln gepflegt, zusätzlich werden
-	alle Task auch im Github Issue Tracker erfasst, um die die Nachvollziehbarkeit
+	alle Task auch im Github Issue Tracker erfasst, um die Nachvollziehbarkeit
 	zu gewährleisten.
 	
 	\item[Backlog] Sämtliche geplanten Features und offenen Bugs wurden in einem
-	Backlog gehalten, so ist der Umfang der offenen Arbeit klar ersichtlich
+	Backlog gehalten, so ist der Umfang der offenen Arbeit klar ersichtlich.
 	
 	\item[Iteration Backlog] Ebenfalls wird auch für jede Iteration ein Backlog
 	geführt.
@@ -70,34 +70,35 @@ Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
 
 \begin{description}
 	\item[Continous Integration] Zur fortlaufenden Integration des entwickelten
-	Codes wird Travis CI eingesetzt. \enquote{Travis CI is a hosted, distributed
-	continuous integration service used to build and test projects hosted at
-	GitHub...} <TODO: Ref>. So wird sichergestellt, dass sich stets lauffähiger Code
-	im Master Branch des Repositories befindet oder fehlerhafter Code schnell
-	entdeckt wird und nicht erst bei einem Release. Als zusätzliches Hilfsmittel
-	wurde auf der Webseite des Github Repositories Statusindikator integriert
-	welcher optisch über den aktuellen Stand informiert.
+	Codes wird Travis CI\footnote{\url\{http://www.travis-ci.org}} eingesetzt.
+	\enquote{Travis CI is a hosted, distributed continuous integration service used
+	to build and test projects hosted at GitHub...} <TODO: Ref>. So wird
+	sichergestellt, dass sich stets lauffähiger Code im Master Branch des
+	Repositories befindet oder fehlerhafter Code schnell entdeckt wird und nicht
+	erst bei einem Release. Als zusätzliches Hilfsmittel wurde auf der Webseite des
+	Github Repositories Statusindikator integriert welcher optisch über den
+	aktuellen Stand informiert.
 
-	\item[Statische Code-Analyse] Durch die Integration von Landscape.io, <TODO:
-	Ref> einem online Service welcher statische Code-Analysen durchführt und die
-	Codequalität bewertet, kann sichergestellt werden, dass Code-Smells welche
-	nicht durch Unit Tests oder während der Entwicklung erkasfdasfdasdfasdfasdfannt
-	werden, trotzdem bemerkt werden. Um immer über den Stand des Codes informiert
-	zu sein, wurde auch für Landscape.io auf GitHub ein optischer Statusindikator
-	integriert.
+	\item[Statische Code-Analyse] Durch die Integration von Landscape.io
+	\footnote{\url{http://landscape.io}} einem online Service welcher statische
+	Code-Analysen durchführt und die Codequalität bewertet, kann sichergestellt
+	werden, dass Code-Smells, welche nicht durch Unit Tests oder während der
+	Entwicklung erkannt werden, trotzdem bemerkt werden. Um immer über den Stand
+	des Codes informiert zu sein, wurde auch für Landscape.io auf GitHub ein
+	optischer Statusindikator integriert.
 
-	\item[Coding-Styleguide] Es wurden Coding-Styleguidelines definiert (siehe
-	Anhang <TODO: Ref>) welche zusammengefasst folgende Punkte definieren: 
-	\begin{itemize*} 
+	\item[Coding-Styleguide] Es wurde eine \nameref{anhang:coding-styleguide}
+	definiert, welche zusammengefasst folgende Punkte definiert: 
+	\begin{itemize*}
 		\item Anwedung und Format von Docstrings zur inline Dokumentation von Code
-		\item Code-Style, PEP8
+		\item Code-Style, PEP8 
 		\item Future Imports für Vorwärtskompatibilität zu Python 3 
-		\item PEP8 Style Checking Konfiguration
-		\item Pytest Testing Framework Konfiguration
-	\end{itemize*}
+		\item PEP8 Style Checking Konfiguration 
+		\item Pytest Testing Framework
+	Konfiguration \end{itemize*}
 
 	\item[Git Guidelines] Zum einheitlichen Umgang mit Git wurden Guidelines
-	verfasst (siehe Anhang Git Guidelines<TODO: Ref>) welche folgende Punkte
+	verfasst (siehe \autoref{ref:git-guidelines}) welche folgende Punkte
 	beschreiben
 	\begin{itemize*}
 		\item Aussehen von Commit Messages (Sprache, Format, Referenzierungen)
@@ -107,54 +108,6 @@ Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
 	\end{itemize*}
 
 \end{description}
-
-Bei der Einarbeitung in die vorhandene strongTNC Umgebung haben wir
-festgestellt, dass die Architektur und die Codequalität einige Mängel aufweist.
-Deshalb haben wir uns entschieden, diesem Aspekt spezielles Augenmerk zu geben
-und haben entsprechende Massnahmen definiert.\\ 
-Diese Massnahmen sollen die Qualität dieser Arbeit, als auch von möglichen
-Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
-
-\begin{description}
-	\item[Continous Integration] Zur fortlaufenden Integration des entwickelten
-	Codes wird Travis CI eingesetzt. \enquote{Travis CI is a hosted, distributed
-	continuous integration service used to build and test projects hosted at
-	GitHub...} <TODO: Ref>. So wird sichergestellt, dass sich stets lauffähiger Code
-	im Master Branch des Repositories befindet oder fehlerhafter Code schnell
-	entdeckt wird und nicht erst bei einem Release. Als zusätzliches Hilfsmittel
-	wurde auf der Webseite des Github Repositories Statusindikator integriert
-	welcher optisch über den aktuellen Stand informiert.
-
-	\item[Statische Code-Analyse] Durch die Integration von Landscape.io, <TODO:
-	Ref> einem online Service welcher statische Code-Analysen durchführt und die
-	Codequalität bewertet, kann sichergestellt werden, dass Code-Smells welche
-	nicht durch Unit Tests oder während der Entwicklung erkasfdasfdasdfasdfasdfannt
-	werden, trotzdem bemerkt werden. Um immer über den Stand des Codes informiert
-	zu sein, wurde auch für Landscape.io auf GitHub ein optischer Statusindikator
-	integriert.
-
-	\item[Coding-Styleguide] Es wurden Coding-Styleguidelines definiert (siehe
-	Anhang <TODO: Ref>) welche zusammengefasst folgende Punkte definieren: 
-	\begin{itemize*} 
-		\item Anwedung und Format von Docstrings zur inline Dokumentation von Code
-		\item Code-Style, PEP8
-		\item Future Imports für Vorwärtskompatibilität zu Python 3 
-		\item PEP8 Style Checking Konfiguration
-		\item Pytest Testing Framework Konfiguration
-	\end{itemize*}
-
-	\item[Git Guidelines] Zum einheitlichen Umgang mit Git wurden Guidelines
-	verfasst (siehe Anhang Git Guidelines<TODO: Ref>) welche folgende Punkte
-	beschreiben
-	\begin{itemize*}
-		\item Aussehen von Commit Messages (Sprache, Format, Referenzierungen)
-		\item Wann und wie \enquote{History Rewriting} vorgenommen werden soll
-		\item Wie Pull Requests erstellt werden sollen
-		\item Wie Merging in den Master abläuft
-	\end{itemize*}
-
-\end{description}
-
 
 \section{Zeitplanung / Phasen}
 Die zur verfügung stehende Arbeitszeit wurde in sechs Iterationen zu jeweils
