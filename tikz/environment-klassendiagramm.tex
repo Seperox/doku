@@ -1,0 +1,33 @@
+\begin{tikzpicture}
+
+	\begin{umlpackage}{environments}[font=\sffamily]
+
+		\umlclass[x=5.5, y=4]{CommonEnvironment}{}{
+			get\_architecture() \\
+			get\_os\_string() \\
+			is\_installed() \\
+			\_is\_file(path)
+		}
+
+		\umlclass[x=0, y=0]{DpkgEnvironment}{}{
+			get\_package\_list() \\
+			get\_files\_for\_package(name) \\
+			\_package\_installed(package)
+		}
+		\umlinherit{DpkgEnvironment}{CommonEnvironment}
+
+		\umlclass[x=5.5, y=0.25]{RpmEnvironment}{}{
+			get\_package\_list() \\
+			get\_files\_for\_package(name)
+		}
+		\umlinherit{RpmEnvironment}{CommonEnvironment}
+
+		\umlclass[x=11, y=0.25]{PacmanEnvironment}{}{
+			get\_package\_list() \\
+			get\_files\_for\_package(name)
+		}
+		\umlinherit{PacmanEnvironment}{CommonEnvironment}
+
+	\end{umlpackage}
+
+\end{tikzpicture}
