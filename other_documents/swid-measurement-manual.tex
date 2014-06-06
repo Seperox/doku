@@ -30,11 +30,9 @@
 	nobreak=true
 }
 
-
-\lstset{
-	basicstyle=\linespread{.94}\ttfamily,
-	tabsize=2,
-}
+\definecolor{tango-bg}{HTML}{F8F8F8}
+\newminted{http}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{bash}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 
 \linespread{1.3}
 
@@ -100,11 +98,11 @@ Eine Messung läuft wie folgt ab:
 Im Folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels
 illustriert werden. In diesem Beispiel soll eine Messung für 3 Tags mit
 folgenden Software-IDs erfolgen:
-\begin{itemize}
+\begin{itemize*}
 	\item \texttt{regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-logrotate-3.7.8-6ubuntu5}
 	\item \texttt{regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-lsb-base-4.0-0ubuntu20}
 	\item \texttt{regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-strongswan-4.5.2-1.5+deb7u3}
-\end{itemize}
+\end{itemize*}
 
 \subsection{Request - SWID Measurement}
 
@@ -112,30 +110,30 @@ folgenden Software-IDs erfolgen:
 
 Zuerst wird versucht eine Messung für die Session mit der ID 2 zu erfassen.
 
-\begin{small}\begin{lstlisting}
+\begin{httpcode}
 POST /api/sessions/2/swid-measurement/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
 Host: tncserver:8000
 Accept: application/json
 Content-Type: application/json; charset=utf-8
-Content-Length: 239
+Content-Length: 232
 
 [
 "regid.2004-03.org.strongswan_Ubuntu_12.04-i686-logrotate-3.7.8-6ubuntu5",
 "regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20",
-"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3
+"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"
 ]
-\end{lstlisting}\end{small}
+\end{httpcode}
 
 Curl Befehl:
 
-\begin{small}\begin{lstlisting}
+\begin{bashcode}
 curl -i -X POST http://tncserver:8000/api/sessions/2/swid-measurement/ \
 		 -u username:password \
 		 -H "Accept: application/json" \
 		 -H "Content-Type: application/json; charset=utf-8" \
 		 -d "$DATA"
-\end{lstlisting}\end{small}
+\end{bashcode}
 
 \subsubsection{Antwort - Status 412 Precondition Failed}
 
@@ -145,7 +143,7 @@ Software-IDs der fehlenden Tags zurückgeliefert. Der HTTP Status Code ist
 Tags mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt
 aussehen:
 
-\begin{small}\begin{lstlisting}
+\begin{httpcode}
 HTTP/1.0 412 PRECONDITION FAILED
 Date: Wed, 14 May 2014 15:21:45 GMT
 Server: WSGIServer/0.1 Python/2.7
@@ -154,13 +152,13 @@ Content-Type: application/json
 Allow: POST, OPTIONS
 
 ["regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"]
-\end{lstlisting}\end{small}
+\end{httpcode}
 
 \subsubsection{Antwort - Status 200 OK}
 
 Wären für alle Software-IDs bereits Tags in der Datenbank vorhanden, könnte die Antwort wie folgt aussehen:
 
-\begin{small}\begin{lstlisting}
+\begin{httpcode}
 HTTP/1.0 200 OK
 Date: Wed, 14 May 2014 15:21:45 GMT
 Server: WSGIServer/0.1 Python/2.7
@@ -169,7 +167,7 @@ Content-Type: application/json
 Allow: POST, OPTIONS
 
 []
-\end{lstlisting}\end{small}
+\end{httpcode}}
 
 \subsection{Nacherfassen von SWID Tags}
 
@@ -225,11 +223,8 @@ Falls bereits ein Tag mit der selben Software-ID existiert, wird er komplett
 
 \pagebreak
 Der Request sieht folgendermassen aus:
-\lstset{
-	basicstyle=\linespread{.94}\ttfamily,
-	tabsize=2,
-}
-\begin{small}\begin{lstlisting}
+
+\begin{httpcode}
 POST /api/swid/add-tags/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
 Host: tncserver:8000
@@ -241,17 +236,17 @@ Content-Length: 239
 "<?xml version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
 ]
-\end{lstlisting}\end{small}
+\end{httpcode}
 
 Curl Befehl:
 
-\begin{small}\begin{lstlisting}
+\begin{bashcode}
 curl -i -X POST http://tncserver:8000/api/swid/add-tags/ \
 		 -u username:password \
 		 -H "Accept: application/json" \
 		 -H "Content-Type: application/json; charset=utf-8" \
 		 -d "$DATA"
-\end{lstlisting}\end{small}
+\end{bashcode}
 
 
 \subsubsection{Antwort - Status 400 Bad Request}
@@ -259,7 +254,7 @@ curl -i -X POST http://tncserver:8000/api/swid/add-tags/ \
 Falls der Request nicht in Ordnung ist (zB fehlerhaftes oder unvollständiges
 XML), könnte die Antwort wie folgt aussehen:
 
-\begin{small}\begin{lstlisting}
+\begin{httpcode}
 HTTP/1.0 400 BAD REQUEST
 Date: Thu, 15 May 2014 21:31:10 GMT
 Server: WSGIServer/0.1 Python/2.7.6
@@ -269,14 +264,14 @@ Allow: POST, OPTIONS
 
 {"status": "error", "message": "version: This field cannot be blank.
 package_name: This field cannot be blank."}
-\end{lstlisting}\end{small}
+\end{httpcode}
 
 
 \subsubsection{Antwort - Status 200 OK}
 
 Wenn mit dem Request alles in Ordnung ist, könnte die Antwort wie folgt aussehen:
 
-\begin{small}\begin{lstlisting}
+\begin{httpcode}
 HTTP/1.0 200 OK
 Date: Thu, 15 May 2014 21:19:19 GMT
 Server: WSGIServer/0.1 Python/2.7.6
@@ -285,7 +280,7 @@ Content-Type: application/json
 Allow: POST, OPTIONS
 
 {"status": "success", "message": "Added 1 SWID tags, replaced 0 SWID tags."}
-\end{lstlisting}\end{small}
+\end{httpcode}
 
 
 \newpage
