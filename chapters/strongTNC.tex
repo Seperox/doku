@@ -114,6 +114,10 @@ Es wurde ein invalides XML Dokument ans System geliefert. Das System informiert 
 \textbf{Häufigkeit des Auftretens} &
 Bei Systemeinführung wird diese Operation häufig auftreten. Idealerweise sieht das Deployment vor, dass für jeden Produktetyp ein Referenzgerät vorhanden ist, mit welchem initial alle Tags generiert und erfasst werden und danach in regelmässigen Abständen aktualisiert werden. Dadurch ist die Anzahl der nötigen Erfassungs-Operationen durch User Endgeräte klein zu halten.\\
 \hline
+\textbf{Datenvariation} &
+Es soll möglich sein ein Liste mit mehreren XML Dokumenten auf einmal ans System auszuliefern (Batch-Create). Das Erfassen soll in diesem Fall so erfolgen, sodass
+entweder alle übermittelten SWID Tags oder keine gespeichert werden. Dadurch kann die Anzahl nötiger Systemaufrufe erheblich reduziert werden.\\
+\hline
 \end{usecase}
 
 \subsubsection{UC06: Durchführen einer SWID Messung für ein Gerät}
@@ -230,6 +234,8 @@ Der HTTP/REST Endpunkt wurde wie folgt definiert:
 Die Daten werden als JSON-Liste an den entsprechenden Endpoint gesendet.
 Der HTTP Request sieht folgendermassen aus:
 
+\begin{listing}
+\caption{Übermitteln von Software-IDs via HTTP/REST API}
 \begin{httpcode}
 POST /api/sessions/2/swid-measurement/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
@@ -247,6 +253,7 @@ Content-Length: 232
 	]
 }
 \end{httpcode}
+\end{listing}
 
 Der entsprechende CURL Befehl:
 
@@ -266,6 +273,8 @@ Software-IDs der fehlenden Tags zurückgeliefert. Der HTTP Status Code ist
 Tags mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt
 aussehen:
 
+\begin{listing}
+\caption{HTTP Response mit Status Code 412 PRECONDITION FAILED}
 \begin{httpcode}
 HTTP/1.0 412 PRECONDITION FAILED
 Date: Wed, 14 May 2014 15:21:45 GMT
@@ -276,11 +285,14 @@ Allow: POST, OPTIONS
 
 ["regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"]
 \end{httpcode}
+\end{listing}
 
 \subsubsection*{Antwort - Status 200 OK}
 
 Wären für alle Software-IDs bereits Tags in der Datenbank vorhanden, könnte die Antwort wie folgt aussehen:
 
+\begin{listing}
+\caption{HTTP Response mit Status Code 200 OK}
 \begin{httpcode}
 HTTP/1.0 200 OK
 Date: Wed, 14 May 2014 15:21:45 GMT
@@ -291,9 +303,10 @@ Allow: POST, OPTIONS
 
 []
 \end{httpcode}
+\end{listing}
 
 \subsubsection*{Nacherfassen von SWID Tags}
-War die Messung nicht erfolgreich (HTTP 412), müssen für die zurüuckgelieferten Software-IDs
+War die Messung nicht erfolgreich (HTTP 412), müssen für die zurückgelieferten Software-IDs
 zuerst komplette SWID Tags erfasst werden. Die Daten für diesen Request bestehen aus einer JSON-Liste von XML Strings, dadurch können auch
 mehrere Tags auf einmal erfasst werden. Empfehlenswert ist allerdings ein Batching in mehrere Gruppen, da die Requests sonst unter Umständen sehr lange
 dauern können. 
@@ -301,6 +314,8 @@ dauern können.
 \pagebreak
 Der Request sieht folgendermassen aus:
 
+\begin{listing}
+\caption{SWID Tags erfassen via HTTP/REST API}
 \begin{httpcode}
 POST /api/swid/add-tags/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
@@ -315,7 +330,9 @@ Content-Length: 239
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
 	]
 }
+
 \end{httpcode}
+\end{listing}
 
 Curl Befehl:
 
@@ -327,7 +344,7 @@ curl -i -X POST http://tncserver:8000/api/swid/add-tags/ \
 		 -d "{ \"data\" : $DATA }"
 \end{bashcode}
 
-Eine ausführliche Spezifikation zur Kommunikation mit diesem REST Endpoint ist im Anhang \nameref{REST:swid-measurement-manual} zu finden.
+Eine ausführliche Spezifikation zur Kommunikation mit diesem REST Endpoint ist im Anhang \autoref{REST:swid-measurement-manual} zu finden.
 Darin sind unter anderem noch weitere Informationen zu Fehlersituationen aufgeführt.
 
 \subsection{SWID Views}
