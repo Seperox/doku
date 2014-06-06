@@ -1,35 +1,38 @@
 \chapter{Analyse}
 
 \section{Ist Situation}
-In der Vorgängerarbeit \enquote{Cygnet} von Stefan Rohner und Marco Tanner
-<TODO: Ref> wurde der Policy Server \enquote{strongTNC} implementiert. Das
-Produkt und die Codebasis dieser Arbeit dient als Grundlage für diese Arbeit.\\
+In der Vorgängerarbeit \enquote{Cygnet} von Stefan Rohner und Marco
+Tanner\cite{cygnet:2013} wurde der Policy Server \enquote{strongTNC}
+implementiert. Das Produkt und die Codebasis dieser Arbeit dient als Grundlage
+für diese Arbeit.\\
 Im Bereich des SWID Generators gibt es zur Zeit noch keine bestehenden Produkte.
 
 \subsection{Stand der strongTNC Webapplikation} 
 strongTNC ist eine Umsetzung des TNC Policy Servers, implementiert wurde dieser
 als Webapp mit dem Python basierten \enquote{Django Web Framework} in Version
-1.6 <TODO: Ref>. Die Applikation bietet Unterstützung für das Verwalten von
-Geräten, Policies, Enforcements und erlaubt es die Anwendung der Enforcements
-mittels hierarchischer Gruppen zu steuern. Stammdaten wie Dateien oder
-Softwarepakete und Messresultate können eingesehen und teilweise bearbeitet
-werden. Für SWID Tags besteht derzeit keine Unterstützung, allerdings wurden
-bereits Views für SWID Tags und Regids erstellt, diese haben jedoch keine
-Funktionalität und dienen gewissermassen als Vorschau für zukünftige Features.
-\\ Im Frontend der Webapplikation wurden Bootstrap 2.3 sowie jQuery 1.9 <TODO:
-Ref> eingesetzt. Grundsätzlich werden die Ansichten als \enquote{Master-Detail
-View} <TODO: Ref> dargestellt. Als Schnittstelle zur strongSwan IPsec
-Infrastruktur dient eine gemeinsam genutzte SQLite <TODO: Ref> Datenbank.
+1.6\footnote{\url{https://www.djangoproject.com/}}. Die Applikation bietet
+Unterstützung für das Verwalten von Geräten, Policies, Enforcements und erlaubt
+es die Anwendung der Enforcements mittels hierarchischer Gruppen zu steuern.
+Stammdaten wie Dateien oder Softwarepakete und Messresultate können eingesehen
+und teilweise bearbeitet werden. Für SWID Tags besteht derzeit keine
+Unterstützung, allerdings wurden bereits Views für SWID Tags und Regids
+erstellt, diese haben jedoch keine Funktionalität und dienen gewissermassen als
+Vorschau für zukünftige Features. \\ Im Frontend der Webapplikation wurden
+Bootstrap 2.3\footnote{\url{http://getbootstrap.com/2.3.2/}} sowie jQuery
+1.9\footnote{\url{http://jquery.com/1.9}} eingesetzt. Grundsätzlich werden die
+Ansichten als \enquote{Master-Detail View} dargestellt. Als Schnittstelle zur
+strongSwan IPsec Infrastruktur dient eine gemeinsam genutzte
+SQLite\footnote{\url{http://www.sqlite.org/}} Datenbank.
 
 Django Webapplikationen lassen sich in Module, sogenannte \enquote{Apps},
 aufteilen, diese Möglichkeit wird allerdings nicht genutzt wie man dem Diagramm
-der Applikation entnehmen kann, \autoref{django-ist-diagram}. Die Django-Models
+der Applikation (\autoref{django-ist-diagram}) entnehmen kann. Die Django-Models
 sind sehr eng an das Datenbankschema angelehnt, es ist gängig, dass die
 Datenbank aus den Models generiert wird, dadurch wird die Datenbank für den
 Entwickler vollständig abstrahiert. Da die Datenbank als Schnittstelle dient und
 darum nicht ausschliesslich von Django verwendet wird, kann dieses Feature nicht
-genutzt werden. Das Datenbankschema kann im Anhang eingesehen werden (<TODO:
-Ref>)
+genutzt werden. Das Datenbankschema der bestehenden Tabellen, inklusive der
+Erweiterung, ist in \autoref{fig:database-model} abgebildet.
 
 \subsection{Architektur}
 In \autoref{django-ist-diagram} ist eine Grobübersicht über die Architektur der
@@ -51,10 +54,10 @@ Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
 	\label{architecture-sequence-diagramm}
 \end{figure}
 
-Laut dem technischen Bericht der der Vorgängerarbeit \enquote{Cygnet} <TODO:
-Ref> sollen die Richtlinien des \enquote{Style Guide for Python Code} <TODO:
-Ref>, genannt PEP8, eingehalten werden. Es existieren elf Unit-Tests welche den
-bestehenden Python Code zu 21\% abdecken.\\
+Laut dem technischen Bericht der der Vorgängerarbeit
+\enquote{Cygnet}\cite{cygnet:2013} sollen die Richtlinien des \enquote{Style
+Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
+existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.\\
 
 
 \subsubsection{Einschätzung}
@@ -75,16 +78,17 @@ bestehenden Python Code zu 21\% abdecken.\\
 	
 	\item[Benutzerschnittstelle] 
 	Die Benutzeroberfläche wurde noch nicht für den Umgang mit grossen Datenmengen
-	optimiert. Bei einer grossen Anzahl Objekten gibt es keinen Paging Mechanismus,
-	der ein Stückweises ausliefern von Daten oder Filtern erlaubt. Beispielsweise
-	kann das Inventar der Dateinamen in einem Linux System kann durchaus 40000
-	Objekte umfassen. Wird die vorhandene File View aufgerufen, werden alle 40000
-	Einträge angezeigt. Diesen möglichen Dimensionen wird zur Zeit noch nicht
-	Rechnung getragen, und hat sich bereits beim Entwickeln in einer kleinen
-	Umgebung als nicht mehr überschaubar erwiesen (TODO Hr. Steffen). Tendentiell
-	ist der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen
-	Unternehmungen zu erwarten, dementsprechend grösser ist auch die Menge der
-	zu verwaltenden Daten.
+	optimiert. Bei einer hohen Anzahl Objekten gibt es keinen Paging Mechanismus,
+	der ein Stückweises ausliefern von Daten oder ein Filtern erlaubt.
+	Beispielsweise kann das Inventar der Dateinamen in einem Linux System kann
+	durchaus 40000 Objekte umfassen. Wird die vorhandene File View aufgerufen,
+	werden alle 40000 Einträge angezeigt.\\
+	Diesen Datenmenten wird zur Zeit noch nicht Rechnung getragen und es hat sich
+	bereits beim Entwickeln in einer kleinen Umgebung als nicht mehr überschaubar
+	erwiesen. Aus diesem Grund ist das Lösen dieses Problems auch. Tendentiell ist
+	der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen Unternehmungen zu
+	erwarten, dementsprechend ist auch die Menge der zu verwaltenden Daten als hoch
+	einzuschätzen.
 
 \item[Aufteilung in Apps] 
 	
@@ -357,7 +361,7 @@ gen-delims = ":" / "/" / "?"/ "#" / "[" / "]" / "@"
 sub-delims = "!" / "\$" / "&" / "'" / "(" / ")" / "*" /"+" / "," / ";" / "=" 
 unreserved = ALPHA / DIGIT / "-" / "." / "_ " / "~"
 \end{verbatim}
-\textit{<TODO: REF >Siehe: http://www.ietf.org/rfc/rfc3986.txt}\\
+\textit{IETF RFC 3986\cite{berners2005rfc}}\\
 
 Die \texttt{uniqueId} kann als \texttt{href} Attribut des Link Tags, in Form
 einer URI mit einem \texttt{swid:} Prefix verwendent werden. Daraus folgt, dass
