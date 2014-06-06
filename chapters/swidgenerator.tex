@@ -435,6 +435,58 @@ Die aktuell vorhandenen Environment-Klassen sind folgendermassen organisiert:
 \subsubsection{Die Registry}
 \label{swidgenerator:architektur:environments:registry}
 
+Nachdem eine Environment-Klasse definiert wurde (siehe Abschnitt
+\ref{swidgenerator:architektur:environments}), muss diese irgendwie im
+Hauptprogramm registriert und verwaltet werden. Dies ist die Aufgabe der
+\texttt{EnvironmentRegistry}-Klasse.
+
+Das Kernstück dieser Klasse ist die \texttt{register()}-Funktion. Sie benötigt als
+Argumente eine Kurzbezeichnung für das Environment sowie eine Referenz auf die
+Environment-Klasse. Beispiel:
+
+\begin{pythoncode}
+registry = EnvironmentRegistry()
+registry.register('rpm', RpmEnvironment)
+registry.register('dpkg', DpkgEnvironment)
+registry.register('pacman', PacmanEnvironment)
+\end{pythoncode}
+
+Die Klassen werden instanziert intern in einem Dictionary gespeichert. Um die
+Liste der verfügbaren Environments abzufragen, kann die
+\texttt{get\_environment\_strings()} Methode verwendet werden:
+
+\begin{pythoncode}
+>>> registry.get_environment_strings()
+['auto', 'dpkg', 'pacman', 'rpm']
+\end{pythoncode}
+
+Wie man sieht, werden die Kurzbezeichnungen der registrierten Environments
+alphabetisch sortiert aufgelistet. Zusätzlich wird noch der String
+\texttt{'auto'} zurückgeliefert, welcher für die automatische
+Environment-Erkennung steht. Diese Liste wird beispielsweise vom Argument Parser
+verwendet um die Liste der gültigen Werte für die \texttt{-{}-env} Option zu
+finden.
+
+Die dritte wichtige Methode der \texttt{EnvironmentRegistry}-Klasse ist
+\texttt{get\_environment()}. Diese nimmt eine Environment-Kurzbezeichnung
+entgegen und führt folgende Schritte aus:
+
+\begin{enumerate}
+	\item Wenn die Kurzbezeichnung \texttt{'auto'} ist, wird versucht das
+		installierte Environment automatisch zu finden, indem über die Liste der
+		registrierten Environments iteriert wird und für jedes Environment geprüft
+		wird, ob es auf dem System installiert ist. Das erste Environment, bei dem
+		dies der Fall ist, wird zurückgegeben. Falls keines der Environments
+		installiert sein sollte, wird die \texttt{EnvironmentNotInstalledError}
+		Exception ausgelöst.
+	\item Ansonsten wird die passende Environment Instanz aus dem internen
+		Dictionary geholt. Wenn keine entsprechende Instanz gefunden wird, wird ein
+		\texttt{KeyError} ausgelöst.
+	\item Zuletzt wird geprüft, ob das so zurückgegebene Environment installiert
+		ist. Wenn nicht, wird eine \texttt{EnvironmentNotInstalledError} Exception
+		ausgelöst. Ansonsten wird die Environment-Instanz zurückgegeben.
+\end{enumerate}
+
 \subsubsection{Generatoren}
 \label{swidgenerator:architektur:generatoren}
 
