@@ -132,7 +132,7 @@ curl -i -X POST http://tncserver:8000/api/sessions/2/swid-measurement/ \
 		 -u username:password \
 		 -H "Accept: application/json" \
 		 -H "Content-Type: application/json; charset=utf-8" \
-		 -d "$DATA"
+		 -d "{ \"data\" : $DATA }"
 \end{bashcode}
 
 \subsubsection{Antwort - Status 412 Precondition Failed}
@@ -232,10 +232,12 @@ Accept: application/json
 Content-Type: application/json; charset="utf-8"
 Content-Length: 239
 
-[
-"<?xml version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
-]
+{ "data" : 
+	[
+		"<?xml version=\"1.0\" encoding=\"utf-8\"?><SoftwareIdentity name=\"fortune-mod\"...",
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?><SoftwareIdentity name=\"strongswan\"..."
+	]
+}
 \end{httpcode}
 
 Curl Befehl:
@@ -245,7 +247,7 @@ curl -i -X POST http://tncserver:8000/api/swid/add-tags/ \
 		 -u username:password \
 		 -H "Accept: application/json" \
 		 -H "Content-Type: application/json; charset=utf-8" \
-		 -d "$DATA"
+		 -d "{ \"data\" : $DATA }"
 \end{bashcode}
 
 
