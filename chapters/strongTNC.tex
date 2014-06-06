@@ -183,7 +183,7 @@ Eine Messung läuft wie folgt ab:
 \item Auf dem Client werden die Software-IDs aller installierten Pakete generiert. 
 \item Es wird versucht die Liste der generierten Software-IDs mit einer Session zu verknüpfen.
 	\begin{itemize}
-	\item Existiert zu allen Software-IDs ein entsprechender SWID Tag, ist die Messung abgeschlossen und die SWID Tags sind mit der Session verknüpft.
+	\item Existiert zu allen Software-IDs ein entsprechender SWID Tag, ist die Messung abgeschlossen und die SWID Tags sind mit der Session verknüpft. ENDE
 	\item Existiert für mindestens eine Software-ID kein entsprechender SWID Tag, wird die Messung abgebrochen und eine Liste jener Software-IDs, für welche kein SWID Tag existiert, zurückgeliefert. Weiter zu Punkt 3.
 	\end{itemize}
 \item Bevor die Messung durchgeführt werden kann, müssen die fehlenden SWID Tags erfasst werden. Die einzelnen XML Dokumente der SWID Tags werden vom Client anhand sogenannter \enquote{Targeted Requests} (TODO Referenz swidgenerator) erstellt, das heisst, der Generator kreiert gezielt die Tags für die gegebenen Software-IDs und nicht für alle installierten Software Pakete.
@@ -191,8 +191,55 @@ Eine Messung läuft wie folgt ab:
 \item Der Client startet erneut eine Messung und übermittelt nochmals alle Software-IDs. Nun sind für alle Software-IDs die entsprechenden SWID Tags vorhanden und die Messung wird erfolgreich abgeschlossen. Ansonsten weiter zu Schritt 2.
 \end{enumerate}
 Dieses Vorgehen erzwingt eine Aktualisierung der strongTNC Datenbank wenn diese nicht alle SWID Tags enthält, bevor eine Messung erfolgreich abgeschlossen werden kann. Dadurch wird erreicht, dass auf Serverseite kein Zustand gewahrt werden muss, wie es für eine nicht abgeschlossene Messung, welche später abgeschlossen wird, der Fall wäre. Dieses Vorgehen entspricht den Prinzipien von HTTP, eine Messung kann jederzeit durchgeführt werden ohne das ein Zustand oder Kontextinformationen vorhanden sein müssen. Das heisst, wenn eine Messung nicht vollständig und korrekt durchgeführt werden kann, werden keine Daten verändert. 
+
+
+
 \subsection{Technische Umsetzung}
 Die HTTP Schnittstelle der SWID Messung wurde als Prototyp verwendet um die Machbarkeit der, im Rahmen dieser Arbeit konzipierten, \gls{REST} TNC Schnittstelle aufzuzeigen (TODO REST Referenz). Eine ausführliche Beschreibung der Kommunikation mit dem REST Endpoint für die SWID Messung ist im Anhang \ref{REST:swid-measurement-manual} zu finden.
+
+\paragraph{REST Kommunikation}
+Nachfolgend so Beispielhaft die konkrete umsetzung der HTTP Kommunikation mit dem swid-measurement Endpoint aufgezeigt werden.
+
+\begin{description}
+\item[Schritt 1: Übermitteln von Software-IDs]asdfasdf \\
+
+\begin{httpcode}
+POST /api/sessions/2/swid-measurement/ HTTP/1.1
+Authorization: Basic cm9vdDpyb290
+Host: tncserver:8000
+Accept: application/json
+Content-Type: application/json; charset=utf-8
+Content-Length: 232
+
+[
+"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-logrotate-3.7.8-6ubuntu5",
+"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20",
+"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"
+]
+\end{httpcode}
+
+
+\end{description}
+
+
+\begin{mdframed}[style=def]
+\begin{description*}
+	\item[URI Path] \texttt{/products/}
+	\item[Archetype] Collection
+	\item[Methods] GET, POST
+	\item[JSON Format Response] \hfill
+	
+\begin{jsoncode}
+[
+	{
+		"id": 4,
+		"uri": "http://apiserver/ressurce/1",
+		"name": "Debian 7.0"	
+	}
+]
+\end{jsoncode}
+\end{description*}
+\end{mdframed}
 
 \section{Verbesserungen}
 

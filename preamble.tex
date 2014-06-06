@@ -48,6 +48,21 @@
 \usepackage{subcaption} % Used for subfigures with subcaption
 \usepackage{pdfpages} % Include pdfs: \includepdf[pages={1}]{myfile.pdf}, pages={-} for all pages
 
+% Frames used for REST API blocks
+\usepackage[framemethod=TikZ]{mdframed}
+\mdfdefinestyle{def}{%
+	linecolor=gray!50!white,
+	outerlinewidth=0.5pt,
+	roundcorner=3pt,
+	skipabove=\topskip,
+	skipbelow=\topskip
+	innertopmargin=\baselineskip,
+	innerbottommargin=\baselineskip,
+	innerrightmargin=10pt,
+	innerleftmargin=10pt,
+	nobreak=true
+}
+
 % Spacing
 
 \usepackage{setspace}
@@ -78,6 +93,8 @@
 \newminted{ini}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 \newminted{xml}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 \newminted{text}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{http}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{json}{tabsize=4,samepage=true,baselinestretch=1,fontsize=\footnotesize}
 
 % Configure table spacing
 
