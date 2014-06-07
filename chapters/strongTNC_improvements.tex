@@ -1,133 +1,156 @@
-\section{Verbesserungen}
+\section{Erweiterungen}
 
-\subsection{Multi-Rollen Konzept}
+\subsection{Qualität}
 
-\subsubsection{Einleitung}
+\subsubsection{Aufteilung in Apps}
 
-Um die Informationen in strongTNC zu Präsentationszwecken zugänglich machen zu können, 
-ohne dass Änderungen vorgenommen werden können, weder absichtlich noch aus Versehen, 
-soll eine Read-Only Rolle eingeführt werden.
+\subsubsection{Continous Integration}
 
+\subsubsection{Testing und Code Standards (PEP8)}
 
-\subsubsection{Ziel}
-In einem ersten Schritt soll ein Rollen-Modell mit zwei Rollen eingeführt werden. 
-Eine Rolle für Read-Only Zugriff und eine für den Vollzugriff. Der Zugriff soll, 
-so wie es gegenwärtig implementiert ist, nicht personalisiert sein. Die Möglichkeit, 
-den Login zu personalisieren sollte nicht grundsätzlich ausgeschlossen werden, jedoch 
-steht die Implementation eines nicht personalisierten Read-Only Zugriffs im Vordergrund.
+\subsubsection{Konsequente verwendung von URL names}
 
+\subsubsection{Konsequente Frontend Validierung}
 
-\subsubsection{Technische Umsetzung}
+\subsubsection{Konsistente Datums verwendung UTC}
 
-Django hat ein vollständiges Authentication- und Permission-System integriert. Damit 
-lassen sich komplexe Permission-Szenarien abbilden, jedoch besteht auch die Möglichkeit 
-nur Teile daraus zu verwenden und so ein einfacheres Rollen-Modell zu simulieren.
+\subsubsection{Depolyment Dokus, Vagrant, Ansible}
 
-\paragraph*{User / Permissions}
+\subsection{Features}
 
-Wenn keine personalisierten Login erwünscht sind, werden zwei technische User
-erstellt, die für die beiden Rollen stehen. Das heisst es gibt beispielsweise
-einen User \texttt{admin-user} und einen User \texttt{readonly-user}. Dem
-\texttt{admin-user} wird die Permission \texttt{write\_access} erteilt, diese
-Permission kann dann mittels \texttt{@permission\_required()} Decorator geprüft
-werden.
+\subsubsection{Aufteilung der Zugriffsrechte}
+Um die Informationen in strongTNC zu Präsentationszwecken zugänglich zu machen,
+ohne dass Änderungen vorgenommen werden können, weder absichtlich noch aus
+Versehen, soll eine Readonly Rolle eingeführt werden.
 
-Diese Umsetzungsvariante erlaubt es mit sehr wenig Aufwand personaliserte Logins
-einzuführen. Für die Verwaltung der User stellt Django ein Admin-Interface zur
-Verfügung, dieses müsste also nicht selber entwickelt werden.
+In einem ersten Schritt soll ein Modell mit zwei Rollen eingeführt werden. Eine
+Rolle für den readonly Zugriff und eine für den Vollzugriff. Die Rollen sollen,
+so wie es gegenwärtig implementiert ist, nicht personalisiert sein. Die
+Möglichkeit, den Login zu personalisieren sollte nicht grundsätzlich
+ausgeschlossen werden, jedoch steht die Implementation eines nicht
+personalisierten readonly Zugriffs im Vordergrund.
 
-\paragraph*{Templates}
+\paragraph{Technische Umsetzung} \hspace{0pt} \\
+Das Django Webframework hat ein vollständiges Authentication- und
+Permission-System integriert. Damit lassen sich komplexe Permission-Szenarien
+abbilden, jedoch besteht auch die Möglichkeit nur Teile daraus zu verwenden und
+so ein einfacheres Rollen-Modell zu simulieren.
 
-In den Templates können die Permissions über das perms Objekt im Context geprüft werden. 
-Beispiel:
+Da keine personalisierten Logins benötigt sind, werden zwei technische Benutzer
+erstellt, die für die beiden Rollen eingesetzt werden. Das heisst es gibt einen
+User \texttt{admin-user} und einen User \texttt{readonly-user}. Dem
+\texttt{admin-user} wird eine \texttt{write\_access} Berechtigung erteilt, diese
+kann in den Views mittels Django-Internem \texttt{@permission\_required()}
+Decorator geprüft werden.
+
+Diese Variante der Umsetzung erlaubt es mit wenig Aufwand personaliserte Logins
+einzuführen. Für die Verwaltung der Benutzer stellt Django ein Admin-Interface
+zur Verfügung, die Benutzerverwaltung muss also nicht selber entwickelt werden.
+
+In den Templates können die Zugriffsrechte über das \texttt{perms} Objekt im
+\texttt{Context} geprüft werden:
 
 \begin{pythoncode}
-{% if 'tncapp' in perms and 'tncapp.read-write' in perms %}
+{% if 'auth.write_access' in perms %}
     <p>Read-write access.</p>
 {% endif %}
 \end{pythoncode}
 
-\paragraph*{Alternativen}
+Die zusätzliche Implementation eines Templatetags erleichtert die Steuerung von HTML Formularelementen deren Bedienung nur für schreibberechtigte Benutzer erlaubt sein soll:
 
-Als Alternative zum Permission-System könnten auch die standardmässig vorhandenen Flags 
-\texttt{user.is\_admin} und \texttt{user.is\_staff} verwendet werden. Dies wäre bedeutend 
-einfacher zu implementieren, die Lösung ist jedoch nicht ausbaufähig. Deshalb wird das 
-Permission-System bevorzugt.
+\begin{pythoncode}
+@register.simple_tag(takes_context=True)
+def input_editability(context):
+    perms = context.get('perms', [])
+    if 'auth.write_access' not in perms:
+        return 'disabled="disabled"'
+    return ''
+\end{pythoncode}
+
+Die Anwendung sieht wie folgt aus:
+
+\begin{pythoncode}
+<input type="text"name="name" value="{{ group }}" {% input_editability %} />
+\end{pythoncode}
+
+Um die beiden benötigten Benutzer initial zu erstellen, wurde das Django
+Management-Kommando \texttt{setpassword} angepasst. Das Kommando erstellt direkt
+die beiden Benutzer und erlaubt es die Passwörter interaktiv oder per Parameter
+festzulegen.
+
+\paragraph{Alternativen} \hspace{0px} \\
+Als Alternative zum Django Permission-System könnten auch die standardmässig
+vorhandenen Flags \texttt{user.is\_admin} und \texttt{user.is\_staff} verwendet
+werden. Dies wäre bedeutend einfacher zu implementieren, jedoch ist die Lösung
+nicht ausbaufähig. Deshalb wird das Permission-System bevorzugt.
+
+\subsubsection{Nachladen von grossen Datenmengen}
+strongTNC muss grossen Datenmengen umgehen können. Wenn Datei-Messungen
+durchgeführt- oder SWID Tags erfasst werden, ist beispielsweise die Zahl der
+erfassten Dateien schnell im fünfstelligen Bereich. Wenn einzelne dieser Dateien
+ausgewählt werden sollen, muss verhindert werden, dass immer die gesamte Menge
+der Daten geladen wird.
+
+\paragraph{Technische Umsetzung} \hspace{0pt} \\
+Die gesuchten Datensätze werden mittels einer inkrementellen Suche per Ajax
+nachgeladen.
+
+Die Ajax Endpunkte werden mit Hilfe von
+\enquote{Dajax-ice}\footnote{\url{http://www.dajaxproject.com/}} realisiert.
+\enquote{Dajax-ice} übernimmt sämtliche Vorkehrungen die nötig sind um mit Django
+einen Ajax Request zu behandeln. So werden zum Beispiel benötigte HTTP Header
+automatisch gesetzt und geprüft. Ausserdem generiert \enquote{Dajax-ice} für
+jeden Ajax Endpunkt eine Javascript Funktion mit welcher ein ohne weiteren
+Aufwand ein Ajax Request abgesetzt werden kann.\\
+Dadurch kann der Ajax Endpunk wie eine übliche Django View entwickelt werden.
+
+\begin{pythoncode}
+@dajaxice_register
+@ajax_login_required
+def directories_autocomplete(request, search_term):
+    dirs = Directory.objects.filter(path__icontains=search_term)
+    results = {'results': [{'id': d.id, 'directory': d.path} for d in dirs]}
+    return json.dumps(results)
+\end{pythoncode}
+
+Der Javascript-Aufruf für diesen Endpunkt sieht wie folgt aus:
+
+\begin{jscode}
+Dajaxice.apps.filesystem.directories_autocomplete(callback, {search_term: 'system'});
+\end{jscode} 
+
+Damit bei der inkrementellen Suche nicht bei jedem Tastenanschlag ein Request
+abgesetzt wird, wurde ein Wrapper implementiert, welcher erst einen Request
+absetzt wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde.
+
+<TODO: Evtl. sequenz diagramm oder code? Erwähnen, dass das filtern der files schwierig ist?>
+
+\subsubsection{Ajax Pagination}
+Um in grossen Datenmengen zu navigieren mit der Möglichkeit diese auch zu
+filtern wurde die bestehende statische Pagination durch eine dyamische Ajax
+basierte Version ausgetauscht. Diese hatte die Anforderung, dass es möglich sein
+sollte jegliche Art von Daten seitenweise auszuliefern, sowie die Daten zuvor zu
+Filtern. Um dies zu erreichen wurde eine generische Paginiation implementiert,
+welche es erlaubt, die zu unterteilenden Daten mittels \enquote{Strategy
+Pattern}\cite{gamma1994design} aufzubereiten.
+
+Die Implementation der Paginierung besteht aus den folgenden vier Teilen:
+\begin{enumerate}
+	\item Javascript Frontend Komponente
+	\item Template Tag, Templates und HTML Markup
+	\item Generischer Ajax Endpunkt
+	\item \enquote{List Producer} für die Datenaufbereitung
+\end{enumerate}
 
 
-\subsubsection{Frontend Änderungen}
-Folgende Änderungen müssen im User Interface vorgenommen werden.
 
-\paragraph*{Login Screen}
-
-Es muss eine Auswahl für die gewünschte Rolle zur Verfügung stehen. Diese kann bei zwei fix 
-definierten Gruppen als Dropdown realisiert werden. Optional kann auch ein Inputfeld mit einem 
-Username verwendet werden. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{images/rollen-konzept/login-admin.jpg}
-	\caption{Mögliches Aussehen der Loginmaske für den Adminlogin}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{images/rollen-konzept/login-read-only.jpg}
-	\caption{Mögliches Aussehen der Loginmaske für den Read-Only-Zugriff}
-\end{figure}
-
-\subsubsection{Configuration- und Data-Templates}
-
-Alle Form-Elemente die einen Input erlauben werden deaktiviert, dies kann durch das 
-Hinzufügen des HTML-Attribut \text2tt{disabled} erreicht werden. Alle Buttons werden entfernt.
-
-\paragraph{Ausnahmen} \hspace{0pt} \\
-\begin{itemize}
-    \item In allen Views, das Filter-Feld
-    \item In der Device-View, der Button "View device report"
-\end{itemize}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{images/rollen-konzept/group-view-admin.jpg}
-	\caption{Mögliches Aussehen der einer View für den Vollzugriff, am Beispiel der aktuellen Group-View}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{images/rollen-konzept/group-view-read-only.jpg}
-	\caption{Mögliches Aussehen der einer View für den Read-Only Zugriff, am Beispiel der aktuellen Group-View}
-\end{figure}
+\paragraph{Technische Umsetzung} \hspace{0pt} \\
 
 
-\subsubsection{Backend Änderungen}
+\subsubsection{Erstellen von Files und Versions}
 
-Die meisten Views sind sehr ähnlich aufgebaut und verfügen über die gleichen Grundfunktionen, 
-diese sind wie folgt einzuschränken:
+\subsubsection{Models für mySQL Support erstellt}
 
-\begin{description}
-    \item [\texttt{models}] Nicht eingeschränkt
-    \item [\texttt{model}] Nicht eingeschränkt
-    \item [\texttt{add}] Eingeschränkt, nur für Admin
-    \item [\texttt{save}] Eingeschränkt, nur für Admin
-    \item [\texttt{delete}] Eingeschränkt, nur für Admin
-    \item [\texttt{search}] Nicht eingeschränkt
-    \item [\texttt{check}] Eingeschränkt, nur für Admin
-\end{description}
+\subsubsection{Split der Configfiles}
 
-Mit \texttt{models}, bzw. \texttt{models} sind die Funktionen einer View gemeint, die jeweils mit dem
-Namen des Models benannt sind, zum Beispiel in der View \texttt{policy\_views.py}, die Funktionen
-\texttt{policy()} und \texttt{policies()}.
-
-\paragraph{Ausnahmen} \hspace{0pt} \\
-
-\textbf{Device View:}
-\begin{description}
-    \item [\texttt{report} ] Nicht eingeschränkt
-    \item [\texttt{session} ] Nicht eingeschränkt
-\end{description}
-
-\textbf{Package View:}
-\begin{description}
-    \item [\texttt{toggle\_version}] Eingeschränkt, nur für Admin
-\end{description}
+\subsubsection{Django Admin-Interface}
