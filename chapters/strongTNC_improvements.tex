@@ -132,7 +132,7 @@ absetzt wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde.
 
 \paragraph{Langlaufende Operationen / Fehlerbehandlung}
 Asynchrone Aufrufe bringen zwei wesentliche Probleme mit sich. Zum einen kann es sein, dass Fehler auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt. Um zum anderen, muss für den Benutzer ersichtlich sein, ob Datenübertragungen im Hintergrund anstehen und falls ja, wann diese erfolgreich abgeschlossen sind. Speziell für langlaufende Operationen durch Datenbankintensive Abfragen oder grosse Datenmengen können Antwortzeiten im Sekundenbereich entstehen. \\
-Zu diesem Zweck wurde eine Proxy Komponente implementiert, welche Anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt wird. Komponenten, deren Inhalte per Ajax nachladen werden, werden vom Proxy mit einem Statusindikator besetzt. Zusätzlich wurde ein globaler Statusindikator eingeführt, der anzeigt, ob mindestens eine asynchrone Datenübertragung stattfindet.\\
+Zu diesem Zweck wurde eine Proxy Komponente \cite{gamma1994design} implementiert, welche Anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt wird. Komponenten, deren Inhalte per Ajax nachladen werden, werden vom Proxy mit einem Statusindikator besetzt. Zusätzlich wurde ein globaler Statusindikator eingeführt, der anzeigt, ob mindestens eine asynchrone Datenübertragung stattfindet.\\
 Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer mittels Alert Box über den Fehler informiert.
 
 \subsubsection{Ajax Pagination}
@@ -159,7 +159,15 @@ Die Implementation der Paginierung besteht aus den folgenden vier Teilen:
 
 \subsubsection{Erstellen von Files und Versions}
 
-\subsubsection{Models für mySQL Support erstellt}
+\subsubsection{Models für MySQL Support erstellt}
+\paragraph{Empfehlung für Wechsel der Datenbank}
+Durch die angesprochene enge Kopplung von strongSwan und strongTNC durch eine gemeinsame Datenbank, bedingen Anpassungen des Datenbankschemas Änderungen an allen Komponenten.
+Desweiteren ist zu erwarten, dass für grössere Installationen SQLite zu leichtgewichtig wird.
+Optimierungen und Profiling sind sehr eingeschränkt, zu dem wird keine referenzielle Integrität unterstützt.
+\paragraph{Generierung des Datenbankschemas}
+Django unterstütz diverse Datenbankbackends \footnote{\url{https://docs.djangoproject.com/en/dev/ref/databases/}}, so unter anderem MySQL, PostgreSQL, MSSQL und das zur Zeit verwendete SQLite.
+Wir empfehlen das SQLite Backend möglichst bald durch eine vollausgewachsene Datenbank zu ersetzen. Aus diesem Grund haben wir die Models dahingehend angepasst, dass Sie dem aktuellen Dantebankschema entsprechen. 
+Der Django ORM kann daraus Datenbankspezifisches SQL DDL generieren, und so die Migration erheblich erleichtern.
 
 \subsubsection{Split der Configfiles}
 
