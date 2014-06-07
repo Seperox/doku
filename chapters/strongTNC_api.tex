@@ -247,7 +247,88 @@ nicht der gesamte Umfang implementiert.\\
 Für die Implementation wurde das \enquote{Django REST
 Framework}\footnote{\url{http://www.django-rest-framework.org/}} (DRF)
 verwendet. <TODO: Ein, zwei Gründe für die Wahl von DRF>.
+- Class Based Views
+- Browsable API
+- Mozilla verwendet es auch
+- Contribution
+- ...
 
+\subsubsection{Serialisierung}
+\label{api:serialisierung}
+Die Django Models müssen für die Übermittlung in ein entsprechendes Format serialisiert werden.
+Das von Client gewünschte Format wird durch den \texttt{Content-Type} Header spezifiziert. DRF liefert bereits von Haus aus Serialisierer für das JSON und XML Format mit.
+Wie im REST Konzept beschrieben, wäre es hilfreich den Clients der API die Möglichkeit anzubieten, via Filter nur ausgewählte Daten zu erhalten.
+Das heisst, dass nicht immer alle Felder eines Objektes zu serialisieren, sondern nur ein Subset davon (analog zum SQL \texttt{SELECT feld1, feld2 ...} Statement).
+DRF bietet diese Möglichkeit standardmässig nicht. 
+Um dieses Verhalten zu erreichen wurde Komponente entwickelt welches die Auswahl der Felder durch Query-Parameter in der URL erlaubt.
+Der Aufruf von \texttt{https://strongtnc:8000/api/swid-tags/2/?fields=packageName,version} liefert beispielsweise nur die Felder \texttt{packageName} und \texttt{version} des SWID-Tags mit der ID 2. Die Umsetzung wurde mittels Mixin-based Inheritance\cite{bracha1990mixin} realisiert.
+
+Der Aufruf von \texttt{https://strongtnc:8000/api/swid-tags/2/?fields=packageName,version} liefert beispielsweise nur die Felder \texttt{packageName} und \texttt{version} des SWID-Tags mit der ID 2.
+Serverseitig werden die Model-Serialisierer durch das DynamicFieldsMixin erweitert. Dieses extrahiert vor dem serialisieren die Parameter aus dem Request und übergibt sie dem Serialisierer (\ref{api:tagserializer}). Das Mixin ist vollständig entkoppelt von der Serialisierer Implementierung und kann für alle Serialisierer verwendet werden.
+
+\begin{listing}
+\label{api:tagserializer}
+\caption{Erweiterung durch \texttt{DynamicFieldsMixin} zur Abfrage gewünschter Felder}
+\begin{pythoncode}
+class TagSerializer(DynamicFieldsMixin, serializers.HyperlinkedModelSerializer):
+    entities = EntityRoleSerializer(source='entityrole_set', many=True)
+\end{pythoncode}
+\end{listing}
+
+\subsubsection{Fehlerbehandlung}
+Um für API Clients die Fehlerbehandlung zu erleichtern, werden bei auftretenden Fehlern detaillierte Informationen im Response-Body ausgeliefert. 
+Ein möglicher Fehler ist zum Beispiel das übermitteln eines ungültig formatierten JSON Objektes: (TODO kann man das so generell sagen, wird das überall gemacht? oder nur bei der SWID Messung? Nur im Debugmode?)
+
+\begin{listing}
+\caption{Fehlerinformation beim übermitteln eines ungültigen JSON Objektes}
+\begin{httpcode}
+HTTP/1.0 400 BAD REQUEST
+Content-Type: application/json
+Vary: Accept
+Allow: POST, OPTIONS
+
+{
+    "detail": "JSON parse error - Expecting , delimiter: line 1 column 27 (char 27)"
+}
+\end{httpcode}
+\end{listing}
+
+\subsubsection{Verlinkung}
+Vielfach haben Objekte nicht nur einfache Attribute sondern Verweise auf andere Objekte, beispielsweise besitzt ein SWID-Tag mindestens eine Entity.
+Bei der Entity handelt es sich um ein Objekt mit weiteren Attributen. Diese entfernten Objekte werden nicht mitserialisiert, anstelle des serialisierten Objektes wird eine URI ausgeliefert, über welche das Objekt aufgerufen werden kann. Das API Konzept sieht jedoch vor, einen Parameter einzuführen, welcher es erlaubt, die Serialisierungstiefe zu wählen. Aus zeitlichen Gründen konnte diese Erweiterung nicht mehr implementiert werden.
+
+\begin{listing}
+\caption{Zu JSON serialisierter SWID-Tag}
+\begin{httpcode}
+HTTP/1.0 200 OK
+Content-Type: application/json
+Vary: Accept
+Allow: GET, HEAD, OPTIONS
+
+{
+    "id": 2, 
+    "uri": "http://strongtnc:8000/api/swid-tags/2/", 
+    "packageName": "account-plugin-facebook", 
+    "version": "0.11+14.04.20140409.1-0ubuntu1", 
+    "uniqueId": "Ubuntu_14.04-x86_64-account-plugin-facebook-0.11+14.04.20140409.1-0ubuntu1", 
+    "entities": [
+        {
+            "entity": "http://strongtnc:8000/api/swid-entities/11/", 
+            "role": 2
+        }
+    ], 
+    "swidXml": "<?xml version='1.0' encoding='UTF-8'?>\n<SoftwareIdentity ..."
+}
+\end{httpcode}
+\end{listing}
+
+TODO Depth
+
+\subsubsection{Paging}
+TODO Paging
+
+\subsubsection{Browsable API}
+Das Django REST Framework bietet die möglichkeit die API mittels Browser zu durchsuchen. Dies erlaubt die
 
 
 
