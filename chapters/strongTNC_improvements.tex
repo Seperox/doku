@@ -87,14 +87,14 @@ werden. Dies wäre bedeutend einfacher zu implementieren, jedoch ist die Lösung
 nicht ausbaufähig. Deshalb wird das Permission-System bevorzugt.
 
 \subsubsection{Nachladen von grossen Datenmengen}
-strongTNC muss grossen Datenmengen umgehen können. Wenn Datei-Messungen
+strongTNC muss grossen mit Datenmengen umgehen können. Wenn Datei-Messungen
 durchgeführt- oder SWID Tags erfasst werden, ist beispielsweise die Zahl der
 erfassten Dateien schnell im fünfstelligen Bereich. Wenn einzelne dieser Dateien
 ausgewählt werden sollen, muss verhindert werden, dass immer die gesamte Menge
 der Daten geladen wird.
 
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
-Die gesuchten Datensätze werden mittels einer inkrementellen Suche per Ajax
+Die gesuchten Datensätze werden mittels inkrementeller Suche per Ajax
 nachgeladen.
 
 Die Ajax Endpunkte werden mit Hilfe von
@@ -102,10 +102,12 @@ Die Ajax Endpunkte werden mit Hilfe von
 \enquote{Dajax-ice} übernimmt sämtliche Vorkehrungen die nötig sind um mit Django
 einen Ajax Request zu behandeln. So werden zum Beispiel benötigte HTTP Header
 automatisch gesetzt und geprüft. Ausserdem generiert \enquote{Dajax-ice} für
-jeden Ajax Endpunkt eine Javascript Funktion mit welcher ein ohne weiteren
-Aufwand ein Ajax Request abgesetzt werden kann.\\
-Dadurch kann der Ajax Endpunk wie eine übliche Django View entwickelt werden.
+jeden Ajax Endpunkt eine Javascript Funktion, welche die benötige Infrastruktur bereitstellt um Ajax Requests auszuführen.
+\\
+Ein Ajax Endpunkt kann wie eine übliche Django View entwickelt werden.
 
+\begin{listing}
+\caption{Beispiel eines Ajax Endpunktes}
 \begin{pythoncode}
 @dajaxice_register
 @ajax_login_required
@@ -114,6 +116,7 @@ def directories_autocomplete(request, search_term):
     results = {'results': [{'id': d.id, 'directory': d.path} for d in dirs]}
     return json.dumps(results)
 \end{pythoncode}
+\end{listing}
 
 Der Javascript-Aufruf für diesen Endpunkt sieht wie folgt aus:
 
@@ -126,6 +129,11 @@ abgesetzt wird, wurde ein Wrapper implementiert, welcher erst einen Request
 absetzt wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde.
 
 <TODO: Evtl. sequenz diagramm oder code? Erwähnen, dass das filtern der files schwierig ist?>
+
+\paragraph{Langlaufende Operationen / Fehlerbehandlung}
+Asynchrone Aufrufe bringen zwei wesentliche Probleme mit sich. Zum einen kann es sein, dass Fehler auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt. Um zum anderen, muss für den Benutzer ersichtlich sein, ob Datenübertragungen im Hintergrund anstehen und falls ja, wann diese erfolgreich abgeschlossen sind. Speziell für langlaufende Operationen durch Datenbankintensive Abfragen oder grosse Datenmengen können Antwortzeiten im Sekundenbereich entstehen. \\
+Zu diesem Zweck wurde eine Proxy Komponente implementiert, welche Anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt wird. Komponenten, deren Inhalte per Ajax nachladen werden, werden vom Proxy mit einem Statusindikator besetzt. Zusätzlich wurde ein globaler Statusindikator eingeführt, der anzeigt, ob mindestens eine asynchrone Datenübertragung stattfindet.\\
+Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer mittels Alert Box über den Fehler informiert.
 
 \subsubsection{Ajax Pagination}
 Um in grossen Datenmengen zu navigieren mit der Möglichkeit diese auch zu
