@@ -37,15 +37,15 @@ abbilden, jedoch besteht auch die Möglichkeit nur Teile daraus zu verwenden und
 so ein einfacheres Rollen-Modell zu simulieren.
 
 Da keine personalisierten Logins benötigt sind, werden zwei technische Benutzer
-erstellt, die für die beiden Rollen eingesetzt werden. Das heisst es gibt einen
-User \texttt{admin-user} und einen User \texttt{readonly-user}. Dem
-\texttt{admin-user} wird eine \texttt{write\_access} Berechtigung erteilt, diese
+erstellt, die für die beiden Rollen eingesetzt werden. Die Namen der beiden Benutzer sind 
+ \texttt{admin-user} und \texttt{readonly-user}. Dem
+\texttt{admin-user} Benutzer wird eine \texttt{write\_access} Berechtigung erteilt, diese
 kann in den Views mittels Django-Internem \texttt{@permission\_required()}
 Decorator geprüft werden.
 
-Diese Variante der Umsetzung erlaubt es mit wenig Aufwand personaliserte Logins
+Diese Variante der Umsetzung erlaubt es, mit wenig Aufwand personaliserte Logins
 einzuführen. Für die Verwaltung der Benutzer stellt Django ein Admin-Interface
-zur Verfügung, die Benutzerverwaltung muss also nicht selber entwickelt werden.
+zur Verfügung, die Benutzerverwaltung muss nicht selber entwickelt werden.
 
 In den Templates können die Zugriffsrechte über das \texttt{perms} Objekt im
 \texttt{Context} geprüft werden:
@@ -72,6 +72,8 @@ Die Anwendung sieht wie folgt aus:
 \begin{pythoncode}
 <input type="text"name="name" value="{{ group }}" {% input_editability %} />
 \end{pythoncode}
+
+Diese Umsetzung folgt einer Variation, dem in \cite{posa1} vorgeschlagenen Pattern \enquote{Full Access With Errors}. Alle Funktionen sind stets für den Benutzer sichtbar. Dadurch kann das User Interface einheitlich gestaltet werden und vermeidet auf diese Weise mögliche Verwirrungen. Diejenigen Elemente, die der Benutzer nicht bearbeiten darf, werden deaktiviert. 
 
 Um die beiden benötigten Benutzer initial zu erstellen, wurde das Django
 Management-Kommando \texttt{setpassword} angepasst. Das Kommando erstellt direkt
