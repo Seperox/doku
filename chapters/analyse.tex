@@ -1,42 +1,58 @@
 \chapter{Analyse}
 
 \section{Ist Situation}
+
 In der Vorgängerarbeit \enquote{Cygnet} von Stefan Rohner und Marco
-Tanner\cite{cygnet:2013} wurde der Policy Server \enquote{strongTNC}
+Tanner\cite{cygnet:2013} wurde der Policy Manager \enquote{strongTNC}
 implementiert. Das Produkt und die Codebasis dieser Arbeit dient als Grundlage
-für diese Arbeit.\\
+für diese Arbeit.
+
 Im Bereich des SWID Generators gibt es zur Zeit noch keine bestehenden Produkte.
 
 \subsection{Stand der strongTNC Webapplikation} 
-strongTNC ist eine Umsetzung des TNC Policy Servers, implementiert wurde dieser
-als Webapp mit dem Python basierten \enquote{Django Web Framework} in Version
-1.6\footnote{\url{https://www.djangoproject.com/}}. Die Applikation bietet
-Unterstützung für das Verwalten von Geräten, Policies, Enforcements und erlaubt
-es die Anwendung der Enforcements mittels hierarchischer Gruppen zu steuern.
-Stammdaten wie Dateien oder Softwarepakete und Messresultate können eingesehen
-und teilweise bearbeitet werden. Für SWID Tags besteht derzeit keine
-Unterstützung, allerdings wurden bereits Views für SWID Tags und Regids
-erstellt, diese haben jedoch keine Funktionalität und dienen gewissermassen als
-Vorschau für zukünftige Features. \\ Im Frontend der Webapplikation wurden
-Bootstrap 2.3\footnote{\url{http://getbootstrap.com/2.3.2/}} sowie jQuery
+
+strongTNC ist eine Implementierung eines TNC Policy Managers. Umgesetzt wurde
+diese als Webapp mit dem Python basierten \textit{Django Web Framework} in
+Version 1.5\footnote{\url{https://www.djangoproject.com/}}. Die Applikation
+bietet Unterstützung für das Verwalten von Geräten, Policies und Enforcements
+und erlaubt es, die Ausführung der Enforcements mittels hierarchischer Gruppen
+zu steuern. Stammdaten wie Dateien oder Softwarepakete können eingesehen und
+teilweise bearbeitet werden. Auch Messresultate werden passend aufbereitet.
+
+Für SWID Tags besteht derzeit keine Unterstützung. Es wurden zwar bereits Views
+für SWID Tags und Regids erstellt, diese haben jedoch ausser der Auflistung der
+Datenbankinhalte keine weitere Funktionalität und dienen lediglich als Vorschau
+für zukünftige Features.
+
+Im Frontend der Webapplikation wurden Bootstrap
+2.3\footnote{\url{http://getbootstrap.com/2.3.2/}} sowie jQuery
 1.9\footnote{\url{http://jquery.com/1.9}} eingesetzt. Grundsätzlich werden die
-Ansichten als \enquote{Master-Detail View} dargestellt. Als Schnittstelle zur
+Views als \enquote{Master-Detail Ansichten} dargestellt. Als Schnittstelle zur
 strongSwan IPsec Infrastruktur dient eine gemeinsam genutzte
 SQLite\footnote{\url{http://www.sqlite.org/}} Datenbank.
 
 Django Webapplikationen lassen sich in Module, sogenannte \enquote{Apps},
-aufteilen, diese Möglichkeit wird allerdings nicht genutzt wie man dem Diagramm
-der Applikation (\autoref{django-ist-diagram}) entnehmen kann. Die Django-Models
-sind sehr eng an das Datenbankschema angelehnt, es ist gängig, dass die
-Datenbank aus den Models generiert wird, dadurch wird die Datenbank für den
-Entwickler vollständig abstrahiert. Da die Datenbank als Schnittstelle dient und
-darum nicht ausschliesslich von Django verwendet wird, kann dieses Feature nicht
-genutzt werden. Das Datenbankschema der bestehenden Tabellen, inklusive der
-Erweiterung, ist in \autoref{fig:database-model} abgebildet.
+aufteilen. Diese Möglichkeit wird allerdings bisher nicht genutzt, wie man dem
+Diagramm der Applikation (\autoref{django-ist-diagram}) entnehmen kann.
+Stattdessen befindet sich der gesamte Code in einer einzelnen App namens
+\enquote{tncapp}.
+
+Bei der Umsetzung von Webapplikationen mit Django ist es gängig, dass das
+Datenbankschema aus den Models generiert wird. Dadurch muss man sich als
+Entwickler nicht um Schema-Detailfragen kümmern, sondern kann sich auf die
+abstrakten Models konzentrieren. Ein weiterer sich daraus ergebener Vorteil ist,
+dass das genutzte DBMS beliebig austauschbar ist. Da die Datenbank bei strongTNC
+jedoch als Schnittstelle dient und darum nicht ausschliesslich von Django
+verwendet wird, können dieses Feature aktuell nicht genutzt werden. Stattdessen
+bilden die Model-Definitionen den jeweiligen Stand der Datenbank (siehe
+\autoref{fig:database-model}) ab. Weil die Datenbank nicht aus den Models
+generiert wird, ist es möglich dass die Models und das effektive Schema bei
+Änderungen nicht mehr synchron sind und manuell angepasst werden müssen.
 
 \subsection{Architektur}
-In \autoref{django-ist-diagram} ist eine Grobübersicht über die Architektur der
-Involvierten Komponenten ersichtlich.
+
+In \autoref{django-ist-diagram} ist eine Grobübersicht der Architektur der
+involvierten Komponenten ersichtlich.
 
 \begin{figure}[H]
 	\centering
@@ -57,7 +73,7 @@ Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
 Laut dem technischen Bericht der der Vorgängerarbeit
 \enquote{Cygnet}\cite{cygnet:2013} sollen die Richtlinien des \enquote{Style
 Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
-existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.\\
+existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.
 
 
 \subsubsection{Einschätzung}
@@ -83,7 +99,7 @@ existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.\\
 	Beispielsweise kann das Inventar der Dateinamen in einem Linux System kann
 	durchaus 40000 Objekte umfassen. Wird die vorhandene File View aufgerufen,
 	werden alle 40000 Einträge angezeigt.\\
-	Diesen Datenmenten wird zur Zeit noch nicht Rechnung getragen und es hat sich
+	Diesen Datenmengen wird zur Zeit noch nicht Rechnung getragen und es hat sich
 	bereits beim Entwickeln in einer kleinen Umgebung als nicht mehr überschaubar
 	erwiesen. Aus diesem Grund ist das Lösen dieses Problems auch. Tendentiell ist
 	der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen Unternehmungen zu
