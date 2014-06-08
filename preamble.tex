@@ -107,8 +107,11 @@
 \setcounter{secnumdepth}{3}
 
 % Page break before each section
-%\let\stdsection\section
-%\renewcommand\section{\newpage\stdsection}
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
+% Vertical space before chapter start
+\renewcommand*{\chapterheadstartvskip}{\vspace*{5mm}}
 
 % Bibliography
 
