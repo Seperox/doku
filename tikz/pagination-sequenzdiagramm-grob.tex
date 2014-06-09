@@ -1,0 +1,44 @@
+\begin{tikzpicture}
+	\begin{umlseqdiag}[font=\sffamily]
+
+		% Objekte
+
+		\umlobject{Template/HTML}
+		\umlobject{Javascript}
+		\umlobject{Ajax Endpunkt}
+		
+		% Calls
+		\begin{umlcall}[dt=6, padding=4, op=readInitConfig(), return=confName]{Javascript}{Template/HTML}
+		\end{umlcall}
+		
+		\begin{umlcall}[dt=6, type=asynchron, op={getPage(confName, pageNo)}]{Javascript}{Ajax Endpunkt}
+		
+			\begin{umlcallself}[padding=3, op=getConfFromRegistry(confName)]{Ajax Endpunkt}
+			\end{umlcallself}
+			
+			\umlcreatecall[dt=5]{Ajax Endpunkt}{conf}
+				
+			\begin{umlcall}[dt=5, padding=3, op=getProducerReference() return=ProducerRef]{Ajax Endpunkt}{conf}
+			\end{umlcall}	
+				
+			\umlcreatecall[dt=5]{Ajax Endpunkt}{Producer}
+				
+			\begin{umlcall}[dt=5, padding=3, op={getDataSlice(from, to)}, return=dataSlice]{Ajax Endpunkt}{Producer}
+			\end{umlcall}
+			
+			\begin{umlcall}[dt=5, padding=3, op=getListTemplate(), return=template]{Ajax Endpunkt}{conf}
+			\end{umlcall}
+			
+			\begin{umlcallself}[dt=5, padding=3, op={renderData(template, dataSlice)}]{Ajax Endpunkt}
+			\end{umlcallself}
+			
+			\begin{umlcall}[padding=3, type=return, op=HTML]{Ajax Endpunkt}{Javascript}
+			\end{umlcall}
+			
+		\end{umlcall}
+		
+		\begin{umlcall}[padding=3, op={setNewHTML(HTML)}]{Javascript}{Template/HTML}
+		\end{umlcall}
+			
+	\end{umlseqdiag}
+\end{tikzpicture}

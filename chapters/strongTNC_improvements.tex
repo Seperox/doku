@@ -12,6 +12,7 @@
 
 \subsubsection{Konsequente Frontend Validierung}
 
+
 \subsubsection{Konsistente Datums verwendung UTC}
 
 \subsubsection{Depolyment Dokus, Vagrant, Ansible}
@@ -144,20 +145,70 @@ Filtern. Um dies zu erreichen wurde eine generische Paginiation implementiert,
 welche es erlaubt, die zu unterteilenden Daten mittels \enquote{Strategy
 Pattern}\cite{gamma1994design} aufzubereiten.
 
-Die Implementation der Paginierung besteht aus den folgenden vier Teilen:
+\paragraph{Technische Umsetzung} \hspace{0pt} \\
+Die Implementation der Paginierung besteht aus den folgenden fünf Teilen:
 \begin{enumerate}
 	\item Javascript Frontend Komponente
 	\item Template Tag, Templates und HTML Markup
 	\item Generischer Ajax Endpunkt
-	\item \enquote{List Producer} für die Datenaufbereitung
+	\item Individuelle Konfiguration pro Pagination Instanz
+	\item \enquote{List Producer} für die Datenaufbereitung, wiederverwendbar
 \end{enumerate}
 
+\autoref{paginationSequence} zeigt den Grobablauf, für das Anfordern einer
+neuen Seite.
 
+\begin{figure}[H]
+	\centering
+	\input{tikz/pagination-sequenzdiagramm-grob}
+	\label{paginationSequence}
+	\caption{Sequenzdiagramm: Grobablauf}
+\end{figure}
 
-\paragraph{Technische Umsetzung} \hspace{0pt} \\
+Die Idee hinter diesem Aufbau ist, dass Teile die sich zwischen den einzelnen
+Instanzen unterscheiden einerseits austauschbar und trotzdem wiederverwendbar
+sind. In diesem Setup sind das die Templates die je nach Inhalt einer Liste oder
+Tabelle variieren und die sogenannten \enquote{Producer} welche die Daten
+sammeln und aufbereiten, wenn jedoch an zwei stellen die gleichen Daten benötigt
+werden, können die Producer wiederverwendet werden.
+Producer sind eine Implementation des \enquote{Strategy Pattern}, jeder Instanz
+muss ein bestimmtes Interface erfüllen und kann darum ausgetauscht werden.\\
+Eine Implementation eines Producers sieht wie folgt aus:
 
+\begin{pythoncode}
+def swid_files_list_producer(from_idx, to_idx, filter_query, dynamic_params, static_params=None):
+    if not dynamic_params:
+        return []
+    tag_id = dynamic_params['tag_id']
+    return Tag.objects.get(pk=tag_id).files.all()[from_idx:to_idx]
+\end{pythoncode}
+
+Für generische List Producer, welche lediglich eine Liste von Objekten eines
+bestimmten Models liefert, existiert zusätzlich eine \enquote{Factory}:
+
+\begin{pythoncode}
+swid_producer_factory = ProducerFactory(Tag, 'unique_id__icontains')
+swid_producer_factory.list()
+\end{pythoncode}
+
+Um einen Pagination Block in eine Seite einzubinden existiert ein Template Tag.
+Dieser inkludiert einen vorgegeben HTML Block und überträgt allfällige
+Konfigurationen in Daten-Attribute des HTML Blocks.\\
+Ein so eingebundener Block wird durch die Javascript Komponente gefunden und die
+Pagination wird initialisiert.
+
+Konfiguriert wird eine Pagination Instanz über ein \enquote{Config-Dictionary}.
+Dieses muss an zwei Stellen referenziert werden. Einerseits wird dieses im
+Template Tag angegeben, andererseits muss die Konfiguration im Ajax Endpunkt
+registriert werden.
 
 \subsubsection{Erstellen von Files und Versions}
+Bisher war es nicht möglich über das Oberfläche von strongTNC in der
+File-Ansicht neue Files zu erstellen. Ebenso konnte man in der Package-Ansicht
+zwar neue Packages erstellen, nicht aber neue Versionen.\\
+Beide fehlenden Features wurden erstellt. Umgesetzt wurde dies nach dem Muster
+der bestehenden Views, so dass sich ein Benutzer dank einer konsistenten
+Oberfläche schnell zurecht findet.
 
 \subsubsection{Models für MySQL Support erstellt}
 \paragraph{Empfehlung für Wechsel der Datenbank}
