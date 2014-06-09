@@ -6,30 +6,29 @@
 
 \subsection{Zweck}
 
-Der SWID Generator soll ein kleines Programm für Linux-Systeme sein, welches aus
-den Informationen in Paket Management Systemen SWID Tags generiert.
+Der SWID Generator soll ein Programm für Linux-Systeme sein, welches aus den
+Informationen aus Paket Management Systemen SWID Tags generiert.
 
 \subsection{Nichtfunktionale Anforderungen}
 
 \begin{itemize}
-		\item Als Implementationsprache wird Python verwendet.
-		\item Es sollen möglichst wenig Abhängigkeiten zu Drittkomponenten wie
-			Libraries/Frameworks entstehen.
-		\item Die Software soll einfach zu installieren sein, beispielsweise durch
-			Upload in den Python Package Index ($\rightarrow$ \texttt{pip install
-			swid-generator}) oder durch Erstellen von \texttt{.deb}- und
-			\texttt{.rpm}-Paketen.
-		\item Als Quelle der Paketinformationen sollen Paketmanager wie DPKG und RPM
-			verwendet werden.
+	\item Als Implementationsprache wird Python verwendet.
+	\item Es sollen möglichst wenig Abhängigkeiten zu Drittkomponenten wie
+		Libraries oder Frameworks entstehen.
+	\item Die Software soll einfach zu installieren sein, beispielsweise durch
+		Upload in den Python Package Index ($\rightarrow$ \texttt{pip install
+		swid-generator}) oder durch Bereitstellen von \texttt{.deb}- und
+		\texttt{.rpm}-Paketen.
+	\item Als Quelle der Paketinformationen sollen Paketmanager wie DPKG und RPM
+		verwendet werden.
 \end{itemize}
 
 \subsection{Use Cases}
 
-Nachfolgend sind sind die identifizierten Use Cases für die Client Komponenten
-des SWID-Generator aufgeführt.
+Nachfolgend sind die identifizierten Use Cases des SWID-Generators aufgeführt.
 
-Dabei werden die folgen drei Systemkomponenten berücksichtigt, welche
-gegenseitig über die Standardeingabe und -ausgabe kommunizieren.
+Dabei werden die folgen drei Systemkomponenten berücksichtigt, diese
+kommunizieren untereinander über die Standardeingabe und -ausgabe.
 
 \vspace{1em}
 
@@ -55,7 +54,7 @@ Der SWID Generator erkennt den System-Paketmanager automatisch. \\
 \hline
 \textbf{Alternatives Szenario} &
 Mittels optionalem Parameter kann der zu verwendende Paketmanager definiert
-werden, die automatische Erkennung wird dadurch übersteuert. \\
+werden, die automatische Erkennung wird in diesem Fall nicht durchgeführt. \\
 \hline
 \end{usecase}
 
@@ -67,18 +66,18 @@ werden, die automatische Erkennung wird dadurch übersteuert. \\
 \textbf{Akteur} & strongSwan IMC \\
 \hline
 \textbf{Story} &
-Der Akteur will Software IDs aller installierten Pakete generieren. Das Format
-dieser IDs folgt dem ISO Draft 19770-2-5 \cite{iso19770-2-5} und besteht
+Der Akteur will die Software IDs aller installierten Pakete generieren. Das Format
+dieser IDs folgt dem ISO Draft 19770-2\cite{iso19770-2} und besteht
 aus der Regid des Tag Creators sowie der Unique ID des Tags. \\
 \hline
 \textbf{Standard Szenario} &
 Alle Software IDs werden generiert und auf der Standardausgabe durch Newlines
 (\texttt{\textbackslash{n}}) getrennt ausgegeben. Es wird eine Software ID pro Zeile
-ausgegeben. \\
+dargestellt. \\
 \hline
 \textbf{Alternatives Szenario} &
 Die Trennzeichen zur Ausgabe der Software IDs können mittels optionalem
-Parameter spezifiziert werden. \\
+Parameter definiert werden. \\
 \hline
 \end{usecase}
 
@@ -91,15 +90,14 @@ Parameter spezifiziert werden. \\
 \hline
 \textbf{Story} &
 Der Akteur will SWID Tags aller installierten Pakete generieren. Das Format
-dieser Dokumente folgt dem ISO Draft 19770-2-5 \cite{iso19770-2-5}. Für jedes
+dieser XML Dokumente folgt dem ISO Draft 19770-2\cite{iso19770-2}. Für jedes
 installierte Paket wird ein eigenes XML Dokument generiert. \\
 \hline
 \textbf{Standard Szenario} &
 Alle Tags werden generiert und auf der Standardausgabe durch Newlines
 (\texttt{\textbackslash{n}}) getrennt ausgegeben. Es wird ein Tag pro Zeile
-ausgegeben. Die Attribute des Tag Creators werden mit vordefinierten
-Standardwerten befüllt. Es sind nur die minimal benötigten Elemente und
-Attribute enthalten. \\
+dargestellt. Die Attribute des Tag Creators werden mit vordefinierten Werten
+befüllt. Es ist ein definiertes Set Elemente und Attribute enthalten. \\
 \hline
 \textbf{Alternatives Szenario 1} &
 Die Attribute des Tag Creators können mittels optionalen Parametern spezifiziert
@@ -132,9 +130,9 @@ auflistet. \\
 Der Akteur möchte nur den SWID Tag eines bestimmten Paketes erhalten. \\
 \hline
 \textbf{Standard Szenario} &
-Mittels Parameter kann dem Generator ein Filterwert angegeben werden,
-um einen bestimmten Tag herauszufiltern. Als Filterwert gibt es 2 Varianten:
-Entweder über den Package Name oder über die Software ID. \\
+Mittels Parameter kann dem Generator ein Filterwert mitgegeben werden,
+um einen bestimmten Tag herauszufiltern. Als Filterwert gibt es zwei Varianten:
+Entweder den Package Name oder die Software ID. \\
 \hline
 \textbf{Alternatives Szenario 1} &
 Die Attribute des Tag Creators können mittels optionalen Parametern spezifiziert
@@ -162,7 +160,7 @@ auflistet. \\
 Im Rahmen dieser Arbeit wurde die Unterstützung für drei der am weitesten
 verbreiteten Paketverwaltungssysteme (DPKG, RPM und Pacman) implementiert. Damit
 werden 8 der 10 führenden Linux- und BSD-Distributionen gemäss
-DistroWatch.com\cite{distrowatch:2014} abgedeckt.
+\enquote{DistroWatch.com}\cite{distrowatch:2014} abgedeckt.
 
 Ein Paketmanager verwaltet unter anderem alle verfügbaren und installierten
 Softwarepakete inklusive Meta-Informationen wie Paketname, Version oder
@@ -188,18 +186,18 @@ dpkg-query --listfiles <package-name>
 
 \textbf{Bemerkungen}
 
-Entfernte DPKG Pakete können einen sogenannten RC Status haben. Dieser liegt
+Entfernte DPKG Pakete können einen sogenannten \texttt{RC} Status haben. Dieser liegt
 vor, wenn ein Paket deinstalliert wurde, aber die Konfigurationsdateien auf dem
 System belassen wurden. Die \texttt{---show} Option liefert auch diese Pakete.
 Der Status ist in der Ausgabe als \texttt{"deinstall ok config-files"}
-ersichtlich, entsprechende Pakete können so nachträglich herausgefiltert werden.
+ersichtlich, diese Pakete können so nachträglich herausgefiltert werden.
 
 
 \subsection{RPM}
 
 RPM\footnote{\url{https://rpm.org}} (Abkürzung für \textit{Red Hat Package
 Manager}) ist der Standard-Paketmanager für Red Hat Linux Systeme sowie
-zahlreichen verwandten Distributionen wie openSUSE, Mandriva und Fedora.
+verwandten Distributionen wie openSUSE, CentOS, Mandriva und Fedora.
 
 \textbf{Liste installierter Pakete abfragen}
 
@@ -272,18 +270,16 @@ Das Hauptpackage -- \texttt{swid\_generator} -- enthält folgende Module:
 Die zwei Subpackages sind für Input respektive Output zuständig. Im
 \texttt{environments} Package sind die Environment-Klassen für die verschiedenen
 Paketmanager enthalten. Die Klassen greifen auf die jeweiligen Paketdatenbanken
-zu und geben diese Informationen an das Hauptprogramm zurück. Auch die
-Environment-Registry befindet sich in diesem Package. Mehr dazu im Abschnitt
-\ref{swidgenerator:architektur:environments}.
+zu und geben diese Informationen an das Hauptprogramm zurück. Die
+Environment-Registry befindet sich ebenfalls in diesem Package. Mehr dazu im
+Abschnitt \ref{swidgenerator:architektur:environments}.
 
-Das \texttt{generators} Package enthält die nötigen Funktionen um aus den (vom
-entsprechenden Environment zurückgegebenen) Paketinformationen die dazugehörigen
-Software-ID Strings oder SWID XML Tags zu generieren. Diese Funktionen sind als
-Python
-Generators\footnote{\url{https://docs.python.org/2/tutorial/classes.html\#generators}}
-implementiert, die einzelnen Einträge können also schon während der Generierung
-laufend ausgegeben werden. Mehr dazu im Abschnitt
-\ref{swidgenerator:architektur:printers}.
+Das \texttt{generators} Package enthält die nötigen Funktionen um aus den, durch
+das entsprechenden Environment zurückgegebenen, Paketinformationen die
+dazugehörigen Software IDs oder SWID Tags zu generieren. Diese Funktionen sind
+als Python Generators\footnote{\url{https://docs.python.org/2/tutorial/classes.html\#generators}}
+implementiert. Die einzelnen Einträge können dadurch schon während der Generierung 
+laufend ausgegeben werden. Mehr dazu im Abschnitt \ref{swidgenerator:architektur:printers}.
 
 Als Einstiegspunkt in den SWID Generator dient das \texttt{main.py} Modul. Um
 das Programm direkt aus dem Quellcode-Ordner heraus zu starten, sollte Python
@@ -293,7 +289,7 @@ mit der \texttt{-m} Option und dem vollständigen Modulpfad gestartet werden:
 python -m swid_generator.main
 \end{bashcode}
 
-Wenn das Programm über pip oder setup.py installiert wird (siehe
+Wenn das Programm über \texttt{pip} oder \texttt{setup.py} installiert wird (siehe
 \autoref{swidgenerator:architektur:deployment}), kann es natürlich auch direkt
 über den Programmnamen aufgerufen werden:
 
@@ -307,19 +303,20 @@ swid_generator
 \label{swidgenerator:architektur:initialisierung}
 
 Wenn der SWID Generator gestartet wird, beginnt die Code-Ausführung im
-\texttt{main.py} Modul. Zuerst müssen alle Kommandozeilen-Argumente verarbeitet
-werden. Danach müssen die modular aufgebauten Environment Klassen registriert
-werden. Mit diesen Informationen muss entschieden werden, welches Environment
-dass effektiv verwendet werden soll -- entweder durch den Benutzer definiert
-oder durch eine automatische Packetmanager-Erkennung.
+\texttt{main.py} Modul. Zuerst müssen die modular aufgebauten
+Environment-Klassen registriert werden. Danach werden alle
+Kommandozeilen-Argumente verarbeitet. Mit den nun vorhandenen Informationen muss
+entschieden werden, welches Environment effektiv verwendet werden soll --
+entweder durch den Benutzer definiert oder durch die automatische
+Packetmanager-Erkennung.
 
 Der Ablauf ist wie folgt:
 
 \begin{enumerate}
 	\item Die Environment Registry
-		(\ref{swidgenerator:architektur:environments:registry}) wird initialisiert.
+		(Abschnitt \ref{swidgenerator:architektur:environments:registry}) wird initialisiert.
 	\item Alle verfügbaren Environment Klassen
-		(\ref{swidgenerator:architektur:environments}) werden der Registry
+		(Abschnitt \ref{swidgenerator:architektur:environments}) werden der Registry
 		übergeben.
 	\item Der Argument Parser wird mit einer Referenz auf die Registry instanziert.
 	\item Die Parser Instanz parst mithilfe des \texttt{argparse} Moduls aus der
@@ -337,27 +334,30 @@ dargestellt:
 \begin{figure}[H]
 	\centering
 	\input{tikz/generator-sequenzdiagramm-init}
-	\caption{Sequenzdiagramm: Initialisierung}
+	\caption{Sequenzdiagramm, Initialisierung}
 \end{figure}
 
 \subsubsection{Generierung}
 \label{swidgenerator:architektur:generierung}
 
-Nachdem nun im Abschnitt \ref{swidgenerator:architektur:initialisierung} alle
-nötigen Informationen gesammelt wurden, kann nun die Hauptarbeit geschehen: Die
-Generierung der Daten aus den Paketmanager-Informationen. Ob SWID Tags oder
-Software-IDs generiert werden, ist abhängig vom ersten Kommandozeilenargument,
-welches entweder \texttt{swid} oder \texttt{software-id} sein kann.
+Nachdem nun, wie im Abschnitt \ref{swidgenerator:architektur:initialisierung}
+beschrieben, alle nötigen Informationen gesammelt wurden, kann nun die
+Hauptarbeit geschehen: Die Generierung der Daten aus den
+Paketmanager-Informationen. Ob SWID Tags oder Software-IDs generiert werden, ist
+abhängig vom ersten Kommandozeilenargument, welches entweder \texttt{swid} oder
+\texttt{software-id} sein kann.
 
 \begin{enumerate}
-	\item Zuerst werden mithilfe des SWID Tag Generators
-		(\ref{swidgenerator:architektur:generatoren}) die gewünschen Tags aus
-		der Paketmanager-Datenbank geholt.
-	\item Die zurückgegebenen Tags werden mithilfe der entsprechenden
-		Print-Funktionen (\ref{swidgenerator:architektur:printers}) auf die
-		Standardausgabe ausgegeben.
-	\item Falls im ganzen Programmablauf keine Fehler aufgetreten sind, wird
-		das Programm nun mit dem Status Code 0 (=keine Fehler) beendet.
+	\item Zuerst werden mithilfe des SWID Tag Generators (Abschnitt
+	\ref{swidgenerator:architektur:generatoren}) die benötigten Informationen aus
+	der Paketmanager-Datenbank ausgelesen und daraus SWID Tags generiert.
+		
+	\item Die zurückgegebenen Tags werden mit Hilfe der entsprechenden
+	Print-Funktionen (Abschnitt \ref{swidgenerator:architektur:printers}) auf die
+	Standardausgabe ausgegeben.
+		
+	\item Falls im ganzen Programmablauf keine Fehler aufgetreten sind, wird das
+	Programm nun mit dem Status Code 0 (=keine Fehler) beendet.
 \end{enumerate}
 
 Dieser Ablauf ist im folgenden UML Sequenzdiagramm visualisiert:
@@ -365,7 +365,7 @@ Dieser Ablauf ist im folgenden UML Sequenzdiagramm visualisiert:
 \begin{figure}[H]
 	\centering
 	\input{tikz/generator-sequenzdiagramm-generierung}
-	\caption{Sequenzdiagramm: Generierung}
+	\caption{Sequenzdiagramm, Generierung}
 \end{figure}
 
 
@@ -374,16 +374,15 @@ Dieser Ablauf ist im folgenden UML Sequenzdiagramm visualisiert:
 \subsubsection{Environments}
 \label{swidgenerator:architektur:environments}
 
-Die Environments sind das Kernstück des SWID-Generators, denn sie greifen auf
+Die Environments sind das Kernstück des SWID Generators, sie greifen auf
 den System-Paketmanager zu und bereiten die Liste der installierten Pakete für
 die weitere Verarbeitung auf.
 
 Wie bereits im Abschnitt \ref{swidgenerator:paketmanager} erwähnt, bietet der
 SWID Generator zum aktuellen Zeitpunkt Unterstützung für drei Paketmanager an.
-Damit das Tool in Zukunft auch auf bisher noch nicht unterstützten Systemen wie
-Slackware Linux oder FreeBSD einsatzfähig ist, haben wir grossen Wert darauf
-gelegt, dass man möglichst einfach die Unterstützung für neue Environments
-hinzufügen kann.
+Damit der SWID Generator in Zukunft auch auf bisher noch nicht unterstützten
+Systemen wie Slackware Linux, FreeBSD oder Windows einsatzfähig ist, wurde Wert
+darauf gelegt, dass sich das Hinzugfügen neuer Environments einfach gestaltet.
 
 Um dieses Ziel zu erreichen, ist eine einheitliche Schnittstelle für die
 Environment-Klassen essentiell. Wie es in Python üblich
@@ -400,12 +399,12 @@ fünf Methoden:
 		welche die installierten Softwarepakete auf dem aktuellen System
 		repräsentiert.
 	\item \texttt{get\_files\_for\_package(package\_name)}: Akzeptiert einen
-		Paket-Namen und gibt eine Liste von
+		Paketnamen und gibt eine Liste von
 		\texttt{swid\_generator.\-package\_info.\-FileInfo}-Instanzen zurück, welche
 		die zu einem Softwarepaket gehörigen Dateien repräsentiert.
 	\item \texttt{is\_installed()}: Prüft, ob der repräsentierte Paketmanager auf
 		dem aktuellen System installiert ist oder nicht. Dies kann beispielseweise
-		getan werden, indem geprüft wird ob die wichtigen Executables (\zb
+		getan werden, indem geprüft wird ob zentrale Executables (\zb
 		\texttt{dpkg-query} bei DPKG) vorhanden sind.
 	\item \texttt{get\_architecture()}: Gibt den System-Architekturtyp (\zb
 		\texttt{x86\_64} oder \texttt{i386}) zurück.
@@ -414,11 +413,11 @@ fünf Methoden:
 		\texttt{fedora\_19}).
 \end{itemize}
 
-Da viele Environments gemeinsam benötigte Funktionalität aufweisen --
+Da Environments meist gemeinsam benötigte Funktionalität aufweisen --
 beispielsweise die Überprüfung ob eine vom Paketmanager gemeldete Datei auch
-wirklich auf dem System vorhanden ist -- haben wir diese in eine Basisklasse
-namens \texttt{CommonEnvironment} ausgegliedert. Diese kann -- aber muss nicht
--- von einem Environment erweitert werden.
+wirklich auf dem System vorhanden ist -- wurden diese in eine Basisklasse namens
+\texttt{CommonEnvironment} ausgegliedert. Diese kann wahlweise von einem
+Environment erweitert werden.
 
 Die aktuell vorhandenen Environment-Klassen sind folgendermassen organisiert:
 
@@ -436,8 +435,8 @@ Die aktuell vorhandenen Environment-Klassen sind folgendermassen organisiert:
 \label{swidgenerator:architektur:environments:registry}
 
 Nachdem eine Environment-Klasse definiert wurde (siehe Abschnitt
-\ref{swidgenerator:architektur:environments}), muss diese irgendwie im
-Hauptprogramm registriert und verwaltet werden. Dies ist die Aufgabe der
+\ref{swidgenerator:architektur:environments}), muss diese im Hauptprogramm
+registriert und verwaltet werden. Dies ist die Aufgabe der
 \texttt{EnvironmentRegistry}-Klasse.
 
 Das Kernstück dieser Klasse ist die \texttt{register()}-Funktion. Sie benötigt als
@@ -451,7 +450,7 @@ registry.register('dpkg', DpkgEnvironment)
 registry.register('pacman', PacmanEnvironment)
 \end{pythoncode}
 
-Die Klassen werden instanziert intern in einem Dictionary gespeichert. Um die
+Die Klassen werden als Instanzen intern in einem Dictionary gespeichert. Um die
 Liste der verfügbaren Environments abzufragen, kann die
 \texttt{get\_environment\_strings()} Methode verwendet werden:
 
@@ -460,12 +459,11 @@ Liste der verfügbaren Environments abzufragen, kann die
 ['auto', 'dpkg', 'pacman', 'rpm']
 \end{pythoncode}
 
-Wie man sieht, werden die Kurzbezeichnungen der registrierten Environments
-alphabetisch sortiert aufgelistet. Zusätzlich wird noch der String
-\texttt{'auto'} zurückgeliefert, welcher für die automatische
-Environment-Erkennung steht. Diese Liste wird beispielsweise vom Argument Parser
-verwendet um die Liste der gültigen Werte für die \texttt{-{}-env} Option zu
-finden.
+Als Resultat werden die Kurzbezeichnungen der registrierten Environments
+alphabetisch sortiert aufgelistet. Zusätzlich wird der String \texttt{'auto'}
+zurückgeliefert, welcher für die automatische Environment Erkennung steht. Diese
+Liste wird vom Argument Parser verwendet um die Liste der gültigen Werte für die
+\texttt{-{}-env} Option zu finden.
 
 Die dritte wichtige Methode der \texttt{EnvironmentRegistry}-Klasse ist
 \texttt{get\_environment()}. Diese nimmt eine Environment-Kurzbezeichnung
@@ -473,29 +471,32 @@ entgegen und führt folgende Schritte aus:
 
 \begin{enumerate}
 	\item Wenn die Kurzbezeichnung \texttt{'auto'} ist, wird versucht das
-		installierte Environment automatisch zu finden, indem über die Liste der
-		registrierten Environments iteriert wird und für jedes Environment geprüft
-		wird, ob es auf dem System installiert ist. Das erste Environment, bei dem
-		dies der Fall ist, wird zurückgegeben. Falls keines der Environments
-		installiert sein sollte, wird die \texttt{EnvironmentNotInstalledError}
-		Exception ausgelöst.
-	\item Ansonsten wird die passende Environment Instanz aus dem internen
-		Dictionary geholt. Wenn keine entsprechende Instanz gefunden wird, wird ein
-		\texttt{KeyError} ausgelöst.
-	\item Zuletzt wird geprüft, ob das so zurückgegebene Environment installiert
-		ist. Wenn nicht, wird eine \texttt{EnvironmentNotInstalledError} Exception
-		ausgelöst. Ansonsten wird die Environment-Instanz zurückgegeben.
+	installierte Environment automatisch zu finden, indem über die Liste der
+	registrierten Environments iteriert wird und für jedes Environment geprüft
+	wird, ob der passende Packetmanager auf dem System installiert ist. Das erste
+	Environment, bei dem dies zutrifft, wird zurückgegeben. Falls dies für keines
+	der Environments der Fall sein sollte, wird eine \texttt{AutodetectionError}
+	Exception ausgelöst.
+	
+	\item Wenn die Kurzbeschreibung nicht \texttt{'auto'} ist, wird die passende
+	Environment Instanz aus dem internen Dictionary geholt. Wenn keine
+	entsprechende Instanz gefunden wird, wird ein \texttt{KeyError} ausgelöst.
+		
+	\item Zuletzt wird geprüft, ob das zurückgegebene Environment installiert
+	ist. Wenn nicht, wird eine \texttt{EnvironmentNotInstalledError} Exception
+	ausgelöst. Ansonsten wird die Environment-Instanz zurückgegeben.
 \end{enumerate}
 
 \subsubsection{Generatoren}
 \label{swidgenerator:architektur:generatoren}
+TODO: Danilo
 
 \subsubsection{Printers}
 \label{swidgenerator:architektur:printers}
-
+TODO: Danilo
 
 \subsubsection{Python 3 Kompatibilität}
-
+TODO: Danilo
 
 % }}}
 
@@ -503,7 +504,7 @@ entgegen und führt folgende Schritte aus:
 
 \section{Ergebnisse}
 
-\subsection{Generieren von Software-IDs}
+\subsection{Generieren von Software IDs}
 
 Der SWID Generator kann folgendermassen verwendet werden um Software-IDs zu
 generieren:
@@ -542,7 +543,7 @@ usage: swid_generator swid [-h] [--env {auto,dpkg,pacman,rpm}]
 \end{textcode}
 
 Hier ein Beispiel eines Targeted Requests auf dem \texttt{cowsay}-Paket mit
-Pretty-Printing:
+\enquote{Pretty-Printing}:
 
 \begin{xmlcode}
 $ swid_generator swid --package cowsay --pretty
@@ -558,10 +559,10 @@ $ swid_generator swid --package cowsay --pretty
 \subsection{Performance}
 
 Durch die in den Abschnitten \ref{swidgenerator:architektur:generatoren} und
-\ref{swidgenerator:architektur:printers} beschriebenen Optimierungen ist der
-SWID Generator generell recht schnell. Nachfolgend ein paar
-Geschwindigkeitsmessungen, die wir auf verschiedenen Systemen durchgeführt
-haben. Getestet wurden dabei die folgenden Befehle:
+\ref{swidgenerator:architektur:printers} beschriebenen Optimierungen konnte die
+Ausgabe des SWID Generators beschleunigt werden. Nachfolgend ein paar
+Geschwindigkeitsmessungen, die auf verschiedenen Systemen durchgeführt wurden.
+Getestet wurden dabei die folgenden Befehle:
 
 \begin{itemize}
 	\item ids: \texttt{swid\_generator software-id > /dev/null}
@@ -595,22 +596,22 @@ Die Ergebnisse:
 \end{tabularx}
 
 Da auf den Systemen nicht gleich viele und gleich grosse Pakete installiert
-sind, sind diese Resultate etwas schwer vergleichbar. Man kann jedoch die
-ungefähr zu erwartende Laufzeit abschätzen.
+sind, sind diese Resultate schwer vergleichbar. Man kann jedoch die zu
+erwartende Laufzeit abschätzen.
 
 Klar ersichtlich ist, dass der grösste Zeitaufwand beim Generieren von SWID Tags
-\mit der texttt{-{}-full} Option geschieht. Dies ist verständlich, da hierbei
-jede Datei in jedem Paket auf dem System vom SWID Generator auf Existenz geprüft
-wird. An diesem Punkt gäbe es möglicherweise noch Optimierungspotential.
+mit der \texttt{-{}-full} Option auftritt. Dies ist erklärbar, da hierbei jede
+Datei in jedem installierten Paket auf dem System vom SWID Generator auf
+Existenz geprüft wird. An diesem Punkt gibt es möglicherweise noch
+Optimierungspotential.
 
-Auch das Pretty Printing ist ein \enquote{Zeitfresser}, da die generierten Tags
-hierfür ein zweites mal geparsed und in einer \enquote{schöneren} Variante
-ausgegeben werden müssen. Der Mehraufwand gegenüber der Variante ohne
-\texttt{-{}-pretty} betrug in den drei gemessenen Beispielfällen zwischen 43\%
-und 125\%. Da diese Option jedoch nur für Debugging-Zwecke gebraucht werden
-sollte, ist dies in der Praxis kein nenneswertes Problem und auch kaum
-ein sinnvolles Ziel für Optimierungen (auch wenn es da bestimmt noch Potential
-gäbe).
+Das Pretty Printing ist ebenfalls ein Zeitaufwändiger Vorgang, da die
+generierten Tags hierfür ein zweites mal geparsed und in einer
+\enquote{schöneren} Variante ausgegeben werden müssen. Der Mehraufwand gegenüber
+der Variante ohne \texttt{-{}-pretty} betrug in den drei gemessenen
+Beispielfällen zwischen 43\% und 125\%. Da diese Option nur für Debugging-Zwecke
+gebraucht werden sollte, ist dies in der Praxis kein nenneswertes Problem und
+auch kaum ein sinnvolles Ziel für Optimierungen.
 
 
 % }}}
