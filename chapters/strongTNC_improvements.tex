@@ -2,11 +2,66 @@
 
 \subsection{Qualität}
 
-\subsubsection{Aufteilung in Apps}
-TODO Danilo
+\subsubsection{Aufteilung in mehrere Django Apps}
+
+Bereits in der Analyse (Abschnitt \ref{analyse:stand}) fiel uns auf, dass
+die bestehende Codebasis von strongTNC als einzelne Django App namens
+\texttt{tncapp} umgesetzt wurde. Innerhalb der App waren alle Models in einer
+einzigen Datei enthalten (\texttt{models.py}), während die Views in mehrere
+thematisch gruppierte Dateien aufgeteilt wurden (\texttt{device\_views.py},
+\texttt{product\_views.py}, etc).
+
+Diese Aufteilung der Views deutet darauf hin, dass die \texttt{tncapp} App für
+mehrere thematische Bereiche zuständig ist, welche in der Codebasis separariert
+werden könnten und sollten. Die Aufteilung in mehrere Python-Dateien ist jedoch
+in Django Projekten der falsche Weg um dies zu erreichen. Stattdessen bietet
+Django für solche Fälle das Konzept einer App an.
+
+Eine App ist ein Verzeichnis innerhalb eines Django Projektes, welches seine eigenen
+Models, Views und eventuell Templates enthält. Die Apps werden in der
+Projektweiten \texttt{setting.py} registriert. Ein einzelnes Projekt lässt sich
+so in mehrere kleine MVC Container aufteilen.
+
+Die Voraussetzung dafür, dass eine Aufteilung einer Codebasis in mehrere Apps
+Sinn ergibt, ist eine hohe Kohäsion der Codebasis innerhalb einer App. Das führt
+dazu, dass eine App \enquote{pluggable} wird und einfach aktiviert- und
+deaktiviert werden kann. Die Separierung von hochkohäsivem Code in mehrere Apps
+führt automatisch zu tiefer Kopplung (\cite[p.~232--237]{larman2002applying})
+und dadurch zu wartbarerem Code.
+
+Aus obengenannten Gründen haben wir die bestehende monolithische App in folgende
+zehn moderat bis hoch kohäsive Apps aufgeteilt:
+
+\begin{itemize}
+	\item core: Enthält zentrale Elemente die von fast allen Apps verwendet
+		werden, wie beispielsweise das \texttt{Session} Model oder die
+		\texttt{WorkItemType} Klasse.
+	\item front: Enthält alle Elemente zum darstellen der Seite, welche nicht
+		App-spezifisch sind. Beispiele hierfür sind das Base-Template, der
+		\texttt{highlight} Template Filter oder der \texttt{paging} Ajax Endpoint.
+	\item auth: Enthält Hilfsfunktionen, Mixins und Template Tags im Bezug auf die
+		Authentisierung und Berechtigungsprüfung.
+	\item api: Enthält Hilfsfunktionen und Mixins im Bezug auf die API.
+	\item devices: Enthält Models und Code im Bezug auf Geräte, wie
+		\texttt{Product}, \texttt{Device} und \texttt{Group}.
+	\item filesystem: Enthält Models und Code im Bezug auf das Dateisystem
+		(\texttt{File}, \texttt{Directory}, etc).
+	\item packages: Enthält Models und Code im Bezug auf Softwarepakete und deren
+		verfügbaren Versionen.
+	\item policies: Enthält Models und Code im Bezug auf Policies und deren
+		Durchsetzung mithilfe von Enforcements.
+	\item swid: Enthält Models und Code im Bezug auf die SWID Integration in
+		strongTNC.
+	\item tpm: Enthält Models im Bezug auf die TPM Integration in
+		strongTNC. Diese App bietet aktuell noch keine Funktionalität.
+\end{itemize}
+
 \subsubsection{Continous Integration}
+
 TODO Danilo
+
 \subsubsection{Deployment Dokus, Vagrant, Ansible}
+
 TODO Danilo
 
 \subsubsection{Weitere Punkte}
