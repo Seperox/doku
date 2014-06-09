@@ -152,7 +152,7 @@ Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer mittels Al
 \subsubsection{Ajax Pagination} Um in grossen Datenmengen zu navigieren wurde
 die bestehende statische Pagination durch eine dynamische, Ajax basierte
 Version, ausgetauscht. Mit dem Ziel, jegliche Art von Daten seitenweise auszuliefern, sowie die Daten filtern zu können. 
-Bei der Architektur der Pagingkomponente wurde darauf geachtet, dass sie einfach wiederverwendet werden kann. Der Inhalt, der seitenweise ausgeliefert werden soll, wurde völlig vom Paging entkoppelt und kann mittels Strategy (Strategy Pattern \cite{gamma1994design}) festgelegt werden.
+Bei der Architektur der Pagingkomponente wurde darauf geachtet, dass sie einfach wiederverwendet werden kann. Der Inhalt, der seitenweise ausgeliefert werden soll, wurde von der Pagination entkoppelt und kann mittels Strategy (\enquote{Strategy Pattern}\cite{gamma1994design}) festgelegt werden.
 
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
 Die Implementation der Paginierung besteht aus den folgenden fünf Teilen:
@@ -173,6 +173,67 @@ neuen Seite.
 	\caption{Sequenzdiagramm: Grobablauf}
 	\label{paginationSequence}
 \end{figure}
+
+
+\begin{description}
+\item[HtmlPage]
+Auf der HTML Seite werden Container (\texttt{<div>} Elemente) definiert, welche mit den Inhalten später befüllt werden. Die Container können entweder direkt in HTML  (Listing~\ref{paging:container})
+
+\begin{listing}
+\caption{Paging Div Container}
+\label{paging:container}
+\begin{htmlcode}
+<div class="ajax-paged"
+     data-config="regid_list_config"
+     data-args="{}"
+     data-initial="True"
+     data-urlparams="True"
+     data-filter="True">
+	[...]
+	<div class="paged-content"></div>
+	[...]
+</div>
+\end{htmlcode}
+\end{listing}
+
+definiert werden, oder mittels des eigens dafür kreierten Template Tags (Listing~\ref{paging:templatetag}), generiert werden.
+
+\begin{listing}
+\caption{Verwendung eines \enquote{Paged Blocks}}
+\label{paging:templatetag}
+\begin{pythoncode}
+{% paged_block config_name="regid_list_config" with_filter=True %}
+\end{pythoncode}
+\end{listing}
+
+
+\item[Javascript]
+Eine Aufgabe der Javascript Komponente ist das Auslesen aller Paged Block Konfigurationen aus der Html Seite. Gefunden werden diese durch die gemeinsame CSS Klasse \texttt{ajax-paged}. Es können so mehrere Paged Block Komponenten pro Seite definiert werden. Für jeden der gefunden Paging Container wird ein Pager Objekt instanziert, welches für die Kommunikation mit dem AjaxEndpoint verantwortlich ist.
+Nach der Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Blocke in den entsprechenden Container geladen.
+
+\item [AjaxEndpoint]
+Der AjaxEndpoint nimmt die Requests entgegen und kann anhand des übergebenen Konfigurationsnamens die zugehörige Konfiguration laden.
+Die Konfiguration beinhaltet ein Producer und ein Template.
+Die Datengenerierung wird an den Producer delegiert und die Daten anschliessend als Kontext verwendet, um das Template zu HTML Code zu rendern.
+Durch diese Separierung wird eine hohe Wiederverwendbarkeit erreicht. Für verschiedene Datenquellen (Producer) können dieselben Templates und umgekehrt verwendet werden.
+
+\begin{listing}
+\caption{Beispiel einer Paging Config}
+\begin{pythoncode}
+regid_list_paging = {
+    'template_name': 'front/paging/default_list',
+    'list_producer': regid_producer_factory.list(),
+    'stat_producer': regid_producer_factory.stat(),
+    'url_name': 'swid:regid_detail',
+    'page_size': 50,
+}
+\end{pythoncode}
+\end{listing}
+
+\item[Producer]
+Die Datenaufbereitung, in der Regel Datenbankabfragen, inkl. Slicing und Filtering wird hier definiert.
+
+\end{description}
 
 Die Idee hinter diesem Aufbau ist, dass Bestandteile, die sich zwischen den einzelnen
 Instanzen unterscheiden, austauschbar und wiederverwendbar sind. In diesem Setup sind das die Templates, die für die Darstellung von Daten verantwortlich sind und die sogenannten \enquote{Producer}, welche Daten sammeln und aufbereiten.

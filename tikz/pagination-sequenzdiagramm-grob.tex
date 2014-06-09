@@ -3,41 +3,42 @@
 
 		% Objekte
 
-		\umlobject{Template/HTML}
-		\umlobject{Javascript}
-		\umlobject{Ajax Endpunkt}
+		\umlobject[x=0]{Javascript}
+		\umlobject[x=3]{HtmlPage}
+		\umlobject[x=6]{AjaxEndpoint}
+		\umlobject[x=10]{ConfigRegistry}
+		\umlobject[x=13]{Config}
+		\umlobject[x=15]{Producer}
 		
 		% Calls
-		\begin{umlcall}[dt=6, padding=4, op=readInitConfig(), return=confName]{Javascript}{Template/HTML}
+		\begin{umlfragment}[type=loop, label=foreach paging container, inner xsep=2]
+		\begin{umlcall}[dt=12, padding=4, op=readPagingConfig(), return=confName]{Javascript}{HtmlPage}
 		\end{umlcall}
+		\end{umlfragment}
 		
-		\begin{umlcall}[dt=6, type=asynchron, op={getPage(confName, pageNo)}]{Javascript}{Ajax Endpunkt}
+		\begin{umlcall}[dt=6, type=asynchron, op={getPage(confName, pageNo)}]{Javascript}{AjaxEndpoint}
 		
-			\begin{umlcallself}[padding=3, op=getConfFromRegistry(confName)]{Ajax Endpunkt}
-			\end{umlcallself}
-			
-			\umlcreatecall[dt=5]{Ajax Endpunkt}{conf}
+			\begin{umlcall}[padding=3, op=getConf(confName),return=conf]{AjaxEndpoint}{ConfigRegistry}
+			\end{umlcall}
 				
-			\begin{umlcall}[dt=5, padding=3, op=getProducerReference() return=ProducerRef]{Ajax Endpunkt}{conf}
+			\begin{umlcall}[dt=5, padding=3, op=getProducer(), return=Producer]{AjaxEndpoint}{Config}
 			\end{umlcall}	
 				
-			\umlcreatecall[dt=5]{Ajax Endpunkt}{Producer}
-				
-			\begin{umlcall}[dt=5, padding=3, op={getDataSlice(from, to)}, return=dataSlice]{Ajax Endpunkt}{Producer}
+			\begin{umlcall}[dt=5, padding=3, op={getDataSlice(from, to)}, return=dataSlice]{AjaxEndpoint}{Producer}
 			\end{umlcall}
 			
-			\begin{umlcall}[dt=5, padding=3, op=getListTemplate(), return=template]{Ajax Endpunkt}{conf}
+			\begin{umlcall}[dt=5, padding=3, op=getTemplate(), return=template]{AjaxEndpoint}{Config}
 			\end{umlcall}
 			
-			\begin{umlcallself}[dt=5, padding=3, op={renderData(template, dataSlice)}]{Ajax Endpunkt}
+			\begin{umlcallself}[dt=5, padding=3, op={renderToHtml(template, dataSlice)}]{AjaxEndpoint}
 			\end{umlcallself}
 			
-			\begin{umlcall}[padding=3, type=return, op=HTML]{Ajax Endpunkt}{Javascript}
+			\begin{umlcall}[padding=3, type=return, op=HTML]{AjaxEndpoint}{Javascript}
 			\end{umlcall}
 			
 		\end{umlcall}
 		
-		\begin{umlcall}[padding=3, op={setNewHTML(HTML)}]{Javascript}{Template/HTML}
+		\begin{umlcall}[padding=3, op={setNewHTML(HTML)}]{Javascript}{HtmlPage}
 		\end{umlcall}
 			
 	\end{umlseqdiag}
