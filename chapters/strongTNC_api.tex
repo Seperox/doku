@@ -264,11 +264,11 @@ Um dieses Verhalten zu erreichen wurde Komponente entwickelt welches die Auswahl
 Der Aufruf von \texttt{https://strongtnc:8000/api/swid-tags/2/?fields=packageName,version} liefert beispielsweise nur die Felder \texttt{packageName} und \texttt{version} des SWID-Tags mit der ID 2. Die Umsetzung wurde mittels Mixin-based Inheritance\cite{bracha1990mixin} realisiert.
 
 Der Aufruf von \texttt{https://strongtnc:8000/api/swid-tags/2/?fields=packageName,version} liefert beispielsweise nur die Felder \texttt{packageName} und \texttt{version} des SWID-Tags mit der ID 2.
-Serverseitig werden die Model-Serialisierer durch das DynamicFieldsMixin erweitert. Dieses extrahiert vor dem serialisieren die Parameter aus dem Request und übergibt sie dem Serialisierer (\ref{api:tagserializer}). Das Mixin ist vollständig entkoppelt von der Serialisierer Implementierung und kann für alle Serialisierer verwendet werden.
+Serverseitig werden die Model-Serialisierer durch das DynamicFieldsMixin erweitert. Dieses extrahiert vor dem serialisieren die Parameter aus dem Request und übergibt sie dem Serialisierer (Listing \ref{api:tagserializer}). Das Mixin ist vollständig entkoppelt von der Serialisierer Implementierung und kann für alle Serialisierer verwendet werden.
 
 \begin{listing}
-\label{api:tagserializer}
 \caption{Erweiterung durch \texttt{DynamicFieldsMixin} zur Abfrage gewünschter Felder}
+\label{api:tagserializer}
 \begin{pythoncode}
 class TagSerializer(DynamicFieldsMixin, serializers.HyperlinkedModelSerializer):
     entities = EntityRoleSerializer(source='entityrole_set', many=True)

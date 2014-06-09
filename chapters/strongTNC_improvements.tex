@@ -3,19 +3,33 @@
 \subsection{Qualität}
 
 \subsubsection{Aufteilung in Apps}
-
+TODO Danilo
 \subsubsection{Continous Integration}
+TODO Danilo
+\subsubsection{Deployment Dokus, Vagrant, Ansible}
+TODO Danilo
 
-\subsubsection{Testing und Code Standards (PEP8)}
+\subsubsection{Weitere Punkte}
+\begin{description}
+\item[Code Standards (PEP8)] Damit die Einhaltung der PEP8 Richtlinien
+garantiert ist, wurde eine entsprechende Prüfung in den Build Prozess
+integriert. Dadurch gilt ein Build als fehlgeschlagen, falls die Richtlinien
+nicht vollständig eingehalten wurden.
 
-\subsubsection{Konsequente verwendung von URL names}
+\item[Vermeidung von Hardcoded URLs] Gemäss Empfehlung des Django Frameworks
+soll das verwenden von absoluten URLs in Templates und Views vermieden werden.
+Anstelle sollen URLs nur einmal, in der URLConf, konfiguriert und danach via
+Rückwärtssuche durch den Namen aufgelöst werden. Auf diese Weise können zentral
+Änderungen an URLs vorgenommen werden, ohne Templates oder Views anpassen zu
+müssen.
 
-\subsubsection{Konsequente Frontend Validierung}
+\item[Konsequente Frontend Validierung] Die bestehende Frontend Validierung
+wurde an diversen Orten nicht konsequent oder fehlerhaft eingesetzt. Diese
+Mängel wurden behoben und damit die Validierung vereinheitlicht.
 
-
-\subsubsection{Konsistente Datums verwendung UTC}
-
-\subsubsection{Depolyment Dokus, Vagrant, Ansible}
+\item[Konsistente Datums verwendung UTC]
+TODO Danilo
+\end{description}
 
 \subsection{Features}
 
@@ -158,11 +172,11 @@ Die Implementation der Paginierung besteht aus den folgenden fünf Teilen:
 \autoref{paginationSequence} zeigt den Grobablauf, für das Anfordern einer
 neuen Seite.
 
-\begin{figure}[H]
+\begin{figure}[H]	
 	\centering
 	\input{tikz/pagination-sequenzdiagramm-grob}
-	\label{paginationSequence}
 	\caption{Sequenzdiagramm: Grobablauf}
+	\label{paginationSequence}
 \end{figure}
 
 Die Idee hinter diesem Aufbau ist, dass Teile die sich zwischen den einzelnen
@@ -202,14 +216,6 @@ Dieses muss an zwei Stellen referenziert werden. Einerseits wird dieses im
 Template Tag angegeben, andererseits muss die Konfiguration im Ajax Endpunkt
 registriert werden.
 
-\subsubsection{Erstellen von Files und Versions}
-Bisher war es nicht möglich über das Oberfläche von strongTNC in der
-File-Ansicht neue Files zu erstellen. Ebenso konnte man in der Package-Ansicht
-zwar neue Packages erstellen, nicht aber neue Versionen.\\
-Beide fehlenden Features wurden erstellt. Umgesetzt wurde dies nach dem Muster
-der bestehenden Views, so dass sich ein Benutzer dank einer konsistenten
-Oberfläche schnell zurecht findet.
-
 \subsubsection{Models für MySQL Support erstellt}
 \paragraph{Empfehlung für Wechsel der Datenbank}
 Durch die angesprochene enge Kopplung von strongSwan und strongTNC durch eine gemeinsame Datenbank, bedingen Anpassungen des Datenbankschemas Änderungen an allen Komponenten.
@@ -221,5 +227,33 @@ Wir empfehlen das SQLite Backend möglichst bald durch eine vollausgewachsene Da
 Der Django ORM kann daraus Datenbankspezifisches SQL DDL generieren, und so die Migration erheblich erleichtern.
 
 \subsubsection{Split der Configfiles}
+TODO Danilo
 
-\subsubsection{Django Admin-Interface}
+\subsubsection{Weitere Punkte}
+\begin{description}
+\item[Django Admin-Interface] Django bietet die Möglichkeit die Datenbank über
+ein automatisch generiertes Admin-Interface zu verwalten. Auf diese Weise
+können, potentiell fehleranfällige, Datenmanipulationen per SQL vermieden
+werden. Die Models wurden mit den nötigen Metadaten erweitert, damit dieses
+Feature aktiviert werden konnte.
+
+\item[Erstellen von Files und Versions] Bisher war es nicht möglich über das
+Oberfläche von strongTNC neue Files und neue Versionen zu erstellen. Die
+Ansichten wurden um diese Funktionalität ergänzt.
+
+\item[Verknüpfung von Daten in Views] Die Views wurden durch sinnvolle
+Verknüpfungen ergänzt. Die  Verknüpfungen waren bereits in der Datenbank
+vorhanden, jedoch in den Views nicht direkt ersichtlich, so zum Beispiel welche
+Enforcements einer Gruppe zugeordnet sind.
+
+\item[URL Hash Parameter] Um Parameter in der URL abzulegen und auszulesen,
+wurde eine Javascript Hilfsbibliothek erstellt. Die Bibliothek erlaubt es, die
+Parameter in der URL abzulegen ohne einen Reload auszulösen. Ausserdem kann auf
+Änderungen Eventbasiert (Observer Pattern \cite{gof94}) reagiert werden.
+Änderungen welche mittels Ajax ausgelöst und somit keinen Reload zur folge
+haben, können so über die URL und die Browser History zugänglich gemacht werden.
+\end{description}
+
+
+
+
