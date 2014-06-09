@@ -143,21 +143,16 @@ Damit bei der inkrementellen Suche nicht bei jedem Tastenanschlag ein Request
 abgesetzt wird, wurde ein Verzögerungsmechanismus implementiert, welcher erst einen Request
 absetzt, wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde (angelehnt an Nagle's Algorithmus \cite{nagle1984congestion}).
 Durch die Minimierung der Anzahl HTTP Request, wird auch die Anzahl der teilweise komplexen und zeitintensiven Abfragen auf die Datenbank vermindert.
-So erfolgt beispielsweise beim filtern von Dateien auf Datenbanklevel ein Join zwischen der Files und Directories Tabelle.
 
 \paragraph{Langlaufende Operationen / Fehlerbehandlung}
 Asynchrone Aufrufe bringen zwei wesentliche Probleme mit sich. Zum einen kann es sein, dass Fehler auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt. Um zum anderen, muss für den Benutzer ersichtlich sein, ob Datenübertragungen im Hintergrund anstehen und falls ja, wann diese erfolgreich abgeschlossen sind. Speziell für langlaufende Operationen durch Datenbankintensive Abfragen oder grosse Datenmengen können Antwortzeiten im Sekundenbereich entstehen. \\
 Zu diesem Zweck wurde eine Proxy Komponente \cite{gamma1994design} implementiert, welche Anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt wird. Komponenten, deren Inhalte per Ajax nachladen werden, werden vom Proxy mit einem Statusindikator besetzt. Zusätzlich wurde ein globaler Statusindikator eingeführt, der anzeigt, ob mindestens eine asynchrone Datenübertragung stattfindet.\\
 Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer mittels Alert Box über den Fehler informiert.
 
-\subsubsection{Ajax Pagination}
-Um in grossen Datenmengen zu navigieren mit der Möglichkeit diese auch zu
-filtern wurde die bestehende statische Pagination durch eine dyamische Ajax
-basierte Version ausgetauscht. Diese hatte die Anforderung, dass es möglich sein
-sollte jegliche Art von Daten seitenweise auszuliefern, sowie die Daten zuvor zu
-Filtern. Um dies zu erreichen wurde eine generische Paginiation implementiert,
-welche es erlaubt, die zu unterteilenden Daten mittels \enquote{Strategy
-Pattern}\cite{gamma1994design} aufzubereiten.
+\subsubsection{Ajax Pagination} Um in grossen Datenmengen zu navigieren wurde
+die bestehende statische Pagination durch eine dynamische, Ajax basierte
+Version, ausgetauscht. Mit dem Ziel, jegliche Art von Daten seitenweise auszuliefern, sowie die Daten filtern zu können. 
+Bei der Architektur der Pagingkomponente wurde darauf geachtet, dass sie einfach wiederverwendet werden kann. Der Inhalt, der seitenweise ausgeliefert werden soll, wurde völlig vom Paging entkoppelt und kann mittels Strategy (Strategy Pattern \cite{gamma1994design}) festgelegt werden.
 
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
 Die Implementation der Paginierung besteht aus den folgenden fünf Teilen:
@@ -179,14 +174,10 @@ neuen Seite.
 	\label{paginationSequence}
 \end{figure}
 
-Die Idee hinter diesem Aufbau ist, dass Teile die sich zwischen den einzelnen
-Instanzen unterscheiden einerseits austauschbar und trotzdem wiederverwendbar
-sind. In diesem Setup sind das die Templates die je nach Inhalt einer Liste oder
-Tabelle variieren und die sogenannten \enquote{Producer} welche die Daten
-sammeln und aufbereiten, wenn jedoch an zwei stellen die gleichen Daten benötigt
-werden, können die Producer wiederverwendet werden.
-Producer sind eine Implementation des \enquote{Strategy Pattern}, jeder Instanz
-muss ein bestimmtes Interface erfüllen und kann darum ausgetauscht werden.\\
+Die Idee hinter diesem Aufbau ist, dass Bestandteile, die sich zwischen den einzelnen
+Instanzen unterscheiden, austauschbar und wiederverwendbar sind. In diesem Setup sind das die Templates, die für die Darstellung von Daten verantwortlich sind und die sogenannten \enquote{Producer}, welche Daten sammeln und aufbereiten.
+Producer sind eine Implementation des \enquote{Strategy Pattern}, jede Instanz
+implementiert ein gemeinsames Interface und wird dadurch austauschbar.\\
 Eine Implementation eines Producers sieht wie folgt aus:
 
 \begin{pythoncode}
@@ -205,7 +196,7 @@ swid_producer_factory = ProducerFactory(Tag, 'unique_id__icontains')
 swid_producer_factory.list()
 \end{pythoncode}
 
-Um einen Pagination Block in eine Seite einzubinden existiert ein Template Tag.
+Um einen Pagination Block in eine Seite einzubinden, existiert ein Template Tag.
 Dieser inkludiert einen vorgegeben HTML Block und überträgt allfällige
 Konfigurationen in Daten-Attribute des HTML Blocks.\\
 Ein so eingebundener Block wird durch die Javascript Komponente gefunden und die
@@ -218,7 +209,7 @@ registriert werden.
 
 \subsubsection{Models für MySQL Support erstellt}
 \paragraph{Empfehlung für Wechsel der Datenbank}
-Durch die angesprochene enge Kopplung von strongSwan und strongTNC durch eine gemeinsame Datenbank, bedingen Anpassungen des Datenbankschemas Änderungen an allen Komponenten.
+Durch die angesprochene enge Kopplung von strongSwan und strongTNC, durch eine gemeinsame Datenbank, bedingen Anpassungen des Datenbankschemas Änderungen an allen Komponenten.
 Desweiteren ist zu erwarten, dass für grössere Installationen SQLite zu leichtgewichtig wird.
 Optimierungen und Profiling sind sehr eingeschränkt, zu dem wird keine referenzielle Integrität unterstützt.
 \paragraph{Generierung des Datenbankschemas}
