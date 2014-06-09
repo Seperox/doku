@@ -112,17 +112,15 @@ der Daten geladen wird.
 Die gesuchten Datensätze werden mittels inkrementeller Suche per Ajax
 nachgeladen.
 
-Die Ajax Endpunkte werden mit Hilfe von
-\enquote{Dajax-ice}\footnote{\url{http://www.dajaxproject.com/}} realisiert.
-\enquote{Dajax-ice} übernimmt sämtliche Vorkehrungen die nötig sind um mit Django
-einen Ajax Request zu behandeln. So werden zum Beispiel benötigte HTTP Header
-automatisch gesetzt und geprüft. Ausserdem generiert \enquote{Dajax-ice} für
-jeden Ajax Endpunkt eine Javascript Funktion, welche die benötige Infrastruktur bereitstellt um Ajax Requests auszuführen.
+Die Ajax Endpunkte wurden mit Hilfe der \enquote{Dajax-ice}\footnote{\url{http://www.dajaxproject.com/}} Django Erweiterung realisiert.
+\enquote{Dajax-ice} stellt die nötigen Bibliotheken bereit, um Ajax Endpunkte wie gewöhnliche Views zu implementieren. So werden zum Beispiel benötigte HTTP Header
+automatisch gesetzt und geprüft. Ausserdem generiert \enquote{Dajax-ice} Javascript Funktionen, welche die benötige Infrastruktur clientseitig bereitstellen, um Ajax Requests auszuführen.
 \\
-Ein Ajax Endpunkt kann wie eine übliche Django View entwickelt werden.
 
+In Listing \autoref{strongTNC:ajaxendpoint} ist die Beispielimplementation eines Ajax Endpoints zu sehen. Um auch bei Ajax Anfragen eine Authentifizierung zu erzwingen, wurde ein eigener Decorator (\texttt{@ajax\_login\_required}) erstellt. 
 \begin{listing}
 \caption{Beispiel eines Ajax Endpunktes}
+\label{strongTNC:ajaxendpoint}
 \begin{pythoncode}
 @dajaxice_register
 @ajax_login_required
@@ -133,17 +131,19 @@ def directories_autocomplete(request, search_term):
 \end{pythoncode}
 \end{listing}
 
-Der Javascript-Aufruf für diesen Endpunkt sieht wie folgt aus:
-
+Clientseitig kann der Endpunkt wie folgt mit Javascript angesprochen werden:
+\begin{listing}
+\caption{Absenden eines Ajax Requests}
 \begin{jscode}
 Dajaxice.apps.filesystem.directories_autocomplete(callback, {search_term: 'system'});
 \end{jscode} 
+\end{listing}
 
 Damit bei der inkrementellen Suche nicht bei jedem Tastenanschlag ein Request
-abgesetzt wird, wurde ein Wrapper implementiert, welcher erst einen Request
-absetzt wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde.
-
-<TODO: Evtl. sequenz diagramm oder code? Erwähnen, dass das filtern der files schwierig ist?>
+abgesetzt wird, wurde ein Verzögerungsmechanismus implementiert, welcher erst einen Request
+absetzt, wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde (angelehnt an Nagle's Algorithmus \cite{nagle1984congestion}).
+Durch die Minimierung der Anzahl HTTP Request, wird auch die Anzahl der teilweise komplexen und zeitintensiven Abfragen auf die Datenbank vermindert.
+So erfolgt beispielsweise beim filtern von Dateien auf Datenbanklevel ein Join zwischen der Files und Directories Tabelle.
 
 \paragraph{Langlaufende Operationen / Fehlerbehandlung}
 Asynchrone Aufrufe bringen zwei wesentliche Probleme mit sich. Zum einen kann es sein, dass Fehler auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt. Um zum anderen, muss für den Benutzer ersichtlich sein, ob Datenübertragungen im Hintergrund anstehen und falls ja, wann diese erfolgreich abgeschlossen sind. Speziell für langlaufende Operationen durch Datenbankintensive Abfragen oder grosse Datenmengen können Antwortzeiten im Sekundenbereich entstehen. \\
