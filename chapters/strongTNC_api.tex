@@ -86,15 +86,15 @@ Komplexere Abläufe, welche bei der gegenwärtigen Schnittstelle direkt mit
 mehreren Datenbankzugriffen ablaufen, werden im REST Konzept durch
 \enquote{Controller} abgebildet. Zu diesen Abläufen gehören das Starten und
 Stoppen einer \enquote{Session}. Ebenfalls wurde die bisher noch nicht
-existierende Funktion der SWID Tag Messung, beschrieben in <TODO: REF
-swiderweiterung>, als \enquote{Controller} umgesetzt.
+existierende Funktion der SWID Tag Messung, beschrieben in Abschnitt
+\ref{swiderweiterung}, als \enquote{Controller} umgesetzt.
 
 \subsubsection{Session Steuerung und Ablauf}
 Das grundsätzliche Konzept der Session Steuerung wurde gegenüber der jetzigen
 Schnittstelle nicht geändert, es werden weiterhin sogenannte \enquote{Workitems}
 verwendet, um anzuzeigen, welche Messungen durchgeführt werden müssen. Der Ablauf
-einer Session nach dem gegenwärtigen Verfahren kann der
-\autoref{architecture-sequence-diagramm} entnommen werden. Ausführliche
+einer Session nach dem gegenwärtigen Verfahren kann der 
+\autoref{masurement-diagramm} entnommen werden. Ausführliche
 Informationen dazu sind in der Vorgängerarbeit
 \enquote{Cygnet}\cite{cygnet:2013} zu finden.
 
@@ -344,8 +344,6 @@ Allow: GET, HEAD, OPTIONS
 \end{httpcode}
 \end{listing}
 
-\subsubsection{Paging}
-TODO Paging
-
 \subsubsection{Browsable API}
+TODO Danilo
 Das Django REST Framework bietet die möglichkeit die API mittels Browser zu durchsuchen. 
