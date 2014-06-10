@@ -13,7 +13,7 @@ Im Bereich des SWID Generators gibt es zur Zeit noch keine bestehenden Produkte.
 \label{analyse:stand}
 
 strongTNC ist eine Implementierung eines TNC Policy Managers. Umgesetzt wurde
-diese als Webapp mit dem Python basierten \textit{Django Web Framework} in
+dieser als Webapp mit dem Python basierten \textit{Django Web Framework} in
 Version 1.5\footnote{\url{https://www.djangoproject.com/}}. Die Applikation
 bietet Unterstützung für das Verwalten von Geräten, Policies und Enforcements
 und erlaubt es, die Ausführung der Enforcements mittels hierarchischer Gruppen
@@ -44,7 +44,7 @@ Entwickler nicht um Schema-Detailfragen kümmern, sondern kann sich auf die
 abstrakten Models konzentrieren. Ein weiterer sich daraus ergebener Vorteil ist,
 dass das genutzte DBMS beliebig austauschbar ist. Da die Datenbank bei strongTNC
 jedoch als Schnittstelle dient und darum nicht ausschliesslich von Django
-verwendet wird, können dieses Feature aktuell nicht genutzt werden. Stattdessen
+verwendet wird, kann dieses Feature derzeit nicht genutzt werden. Stattdessen
 bilden die Model-Definitionen den jeweiligen Stand der Datenbank (siehe
 \autoref{fig:database-model}) ab. Weil die Datenbank nicht aus den Models
 generiert wird, ist es möglich dass die Models und das effektive Schema bei
@@ -55,39 +55,39 @@ Laut dem technischen Bericht der der Vorgängerarbeit
 Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
 existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.
 
-\subsection{Elemente der strongTNC App}
-Folgendes sind die zentralen Elemente der strongTNC Umgebung. Diese sind mit den
-im folgenden verwendeten Namen als Django-Model implementiert. Diese Liste dient
-dem Überblick, ausführlichere Beschreibungen sind in der Dokumentation
+\subsection{Elemente der strongTNC App} Im Folgenden werden die zentralen
+Elemente der strongTNC Umgebung beschrieben. Die verwendeten Namen entsprechen
+der Benennung der bestehenden Django-Models. Diese Liste soll dem kurzen Überblick dienen,
+eine ausführliche Beschreibung ist in der Dokumentation
 \enquote{Cygnet}\cite{cygnet:2013} zu finden.
 \begin{description}
-	\item[Policy] Eine Policy hat ein Typ der besagt welche Eigenschaft eines
-	Gerätes überprüft werden soll, ausserdem werden abhängig vom Typ Details zur
-	Messung angegeben. Zum Beispiel kann der Typ eine Überprüfung von offenen Ports
-	darstellen, mit den Details, welche Ports geprüft werden sollen. Es wird
-	weiterhin festgelegt welche Aktion bei positivem oder negativen Ausgang der
-	Messung ausgeführt werden soll.
+	\item[Policy] Eine Policy beschreibt eine zu überprüfende Richtlinie. Durch einen Policytyp wird
+	festgelegt, was überprüft werden soll (z.B erlaubte offene Ports, installierte Software).
+	Typabhängige Optionen beschreiben, unter welchen Bedingungen eine Policy eingehalten wird.
+	Im Falle von erlaubten offenen Ports sind dies jene Ports, welche geöffnet sein dürfen.
+	Weiterhin kann festgelegt werden, welche Aktion bei positivem oder negativen Ausgang der
+	Messung (überprüfen der Richtlinie) ausgeführt werden soll.
 	
-	\item[Enforcement] Policies werden durch Enforcements erzwungen. Das
-	Enforcement wird einer Gruppe zugeteilt und bestimmt in welchen zeitlichen
-	Abständen die verknüpfe Policy ausgeführt werden soll. Es können gegebenenfalls
+	\item[Enforcement] Policies werden durch Enforcements erzwungen. 
+	Ein Enforcement wird einer Gruppe von Geräten zugeteilt. Spezifiert wird zudem in welchen zeitlichen
+	Abständen die verknüpfe Policy überprüft wird. Es können gegebenenfalls
 	die Aktionen der Policy überschrieben werden.
 	
-	\item[Group] Verschiedene Elemente können Gruppen zugeteilt werden. Gruppen
-	dienen letztendlich dazu, zu bestimmen welche Enforcements zur Anwendung
+	\item[Group] Geräte können in Gruppen zusammengefasst werden. Gruppen
+	dienen letztendlich dazu, zu bestimmen, welche Enforcements zur Anwendung
 	kommen. Gruppen lassen sich hierarchisch aufbauen.
 		
-	\item[Session] Eine Session stellt den zeitlichen Rahmen einer Serie von
-	Messungen dar. Wenn sich ein Gerät mit einem strongSwan VPN Netzwerk verbindet,
-	wird durch strongSwan eine strongTNC Session für das Verbundene Gerät erstellt.
+	\item[Session] Wenn sich ein Gerät mit einem strongSwan TNC Netzwerk verbindet,
+	wird durch strongSwan eine Session für das verbundene Gerät erstellt. Sämtliche
+	Messungen werden mit einer Session verknüpft.
 	
-	\item[Workitem] Für jede Policy die durch ein Enforcement währen einer Session
-	geprüft werden muss wird ein Workitem erstellt. Diese Workitems werden durch
+	\item[Workitem] Für jede Policy, die durch ein Enforcement während einer Session
+	geprüft werden muss, wird ein Workitem erstellt. Diese Workitems werden durch
 	die IMVs (Integrity Measurement Validator) von strongSwan abgearbeitet. Die
-	Resultate werden nach den Messungen wieder in die Workitems zurück geschrieben.
+	Resultate werden nach den Messungen in die Workitems zurück geschrieben.
 	
 	\item[Device] Ein Device repräsentiert ein Gerät, welches sich in ein
-	strongSwan VPN Netzwerk verbinden kann. Ein Gerät wird durch die Kombination
+	strongSwan TNC Netzwerk verbinden kann. Ein Gerät wird durch die Kombination
 	einer eindeutigen Hardware Id, sowie dem Betriebssystem (siehe Product)
 	identifiziert. Ein Device ist Mitglied einer oder mehrerer Gruppen, diese
 	Mitgliedschaft bestimmt welche Policies auf das Gerät angewendet werden.
@@ -95,24 +95,23 @@ dem Überblick, ausführlichere Beschreibungen sind in der Dokumentation
 	\item[Product] Ein Product entspricht dem Betriebsystem eines Devices. Einem
 	Product können Gruppen zugeteilt werden, diese Gruppen werden auf Devices mit
 	dem jeweiligen Product übertragen. Diese Gruppen stellen insofern die
-	Standardgruppen eines Gerätes mit einem bestimmten Betriebsystem dar.
+	Standardgruppen eines Gerätes mit einem bestimmten Betriebssystem dar.
 	
-	\item[Package] Ein Package ist ein Softwarepaket, es muss mindestens eine
-	Version des Packages existieren, das heisst ein Version Element zugeordnet
-	werden sein.
+	\item[Package] Ein Package beschreibt ein Softwarepaket. Packes werden mit Versionen verknüpft.
 	
-	\item[Version] Eine Version ist immer mit einem Package verknüpft. Die Version
-	repräsentiert eine bestimmte Version des verknüpften Packages. Neben der
-	Versionsbezeichnung muss auch ein Product für die Version erfasst sein. Eine
-	Version kann \enquote{blacklisted} sein und so als Objekt einer Messung dienen.
-	
+	\item[Version] Eine Version ist immer mit einem Package verknüpft. 
+	Zusätzlich zur Verknüpfung mit einem Package, ist eine Version auch an ein Product gebunden.
+	Das heisst, für jedes Betriebssystem existiert eine eigene Version, auch wenn die Versionsbezeichnung dieselbe ist.
+	Versionen können global als \enquote{blacklisted} \enquote{Security patch} markiert werden.
+	Versionen können Messobjekte einer Policy sein (ist Version XY auf dem Gerät vorhanden).
+		
 	\item[Directory] Ein Directory steht für ein Verzeichnis auf einem zu messenden
 	Gerät. Es kann als Bestandteil einer Policy, Grundlage einer Messung sein.
 	
 	\item[File] Ähnlich wie ein Directory, steht ein File für eine Datei auf einem
 	Gerät. Sie dienen als Grundlage für File-Messungen.
 	
-	\item[FileHash] Bei File-Messungen könne Hashes einer gewissen Datei erfasst
+	\item[FileHash] Bei File-Messungen können Hashes einer gewissen Datei erfasst
 	werden, diese werden zusammen mit dem Product des gemessenen Gerätes auf einem
 	File zugewiesen.
 	
@@ -132,7 +131,7 @@ zu sehen:
 \end{figure}
 
 \subsection{Ablauf einer TNC Messung mit strongSwan und strongTNC}
-Wenn sich ein Gerät in ein strongSwan VPN Netzwerk verbindet, wird durch den OS
+Wenn sich ein Gerät in ein strongSwan TNC Netzwerk verbindet, wird durch den OS
 IMV eine strongTNC Session gestartet, darauf wird das Gerät anhand seiner
 Hardware Id und des Betriebssystems identifiziert. Falls sich das Gerät zum
 ersten mal verbindet, wird es neu erfasst. Anhand der Gruppen denen das Gerät
