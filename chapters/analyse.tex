@@ -50,11 +50,80 @@ bilden die Model-Definitionen den jeweiligen Stand der Datenbank (siehe
 generiert wird, ist es möglich dass die Models und das effektive Schema bei
 Änderungen nicht mehr synchron sind und manuell angepasst werden müssen.
 
-\subsection{Architektur}
+Laut dem technischen Bericht der der Vorgängerarbeit
+\enquote{Cygnet}\cite{cygnet:2013} sollen die Richtlinien des \enquote{Style
+Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
+existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.
 
-In \autoref{django-ist-diagram} ist eine Grobübersicht der Architektur der
-involvierten Komponenten ersichtlich.
+\subsection{Elemente der strongTNC App}
+Folgendes sind die zentralen Elemente der strongTNC Umgebung. Diese sind mit den
+im folgenden verwendeten Namen als Django-Model implementiert. Diese Liste dient
+dem Überblick, ausführlichere Beschreibungen sind in der Dokumentation
+\enquote{Cygnet}\cite{cygnet:2013} zu finden.
+\begin{description}
+	\item[Policy] Eine Policy hat ein Typ der besagt welche Eigenschaft eines
+	Gerätes überprüft werden soll, ausserdem werden abhängig vom Typ Details zur
+	Messung angegeben. Zum Beispiel kann der Typ eine Überprüfung von offenen Ports
+	darstellen, mit den Details, welche Ports geprüft werden sollen. Es wird
+	weiterhin festgelegt welche Aktion bei positivem oder negativen Ausgang der
+	Messung ausgeführt werden soll.
+	
+	\item[Enforcement] Policies werden durch Enforcements erzwungen. Das
+	Enforcement wird einer Gruppe zugeteilt und bestimmt in welchen zeitlichen
+	Abständen die verknüpfe Policy ausgeführt werden soll. Es können gegebenenfalls
+	die Aktionen der Policy überschrieben werden.
+	
+	\item[Group] Verschiedene Elemente können Gruppen zugeteilt werden. Gruppen
+	dienen letztendlich dazu, zu bestimmen welche Enforcements zur Anwendung
+	kommen. Gruppen lassen sich hierarchisch aufbauen.
+		
+	\item[Session] Eine Session stellt den zeitlichen Rahmen einer Serie von
+	Messungen dar. Wenn sich ein Gerät mit einem strongSwan VPN Netzwerk verbindet,
+	wird durch strongSwan eine strongTNC Session für das Verbundene Gerät erstellt.
+	
+	\item[Workitem] Für jede Policy die durch ein Enforcement währen einer Session
+	geprüft werden muss wird ein Workitem erstellt. Diese Workitems werden durch
+	die IMVs (Integrity Measurement Validator) von strongSwan abgearbeitet. Die
+	Resultate werden nach den Messungen wieder in die Workitems zurück geschrieben.
+	
+	\item[Device] Ein Device repräsentiert ein Gerät, welches sich in ein
+	strongSwan VPN Netzwerk verbinden kann. Ein Gerät wird durch die Kombination
+	einer eindeutigen Hardware Id, sowie dem Betriebssystem (siehe Product)
+	identifiziert. Ein Device ist Mitglied einer oder mehrerer Gruppen, diese
+	Mitgliedschaft bestimmt welche Policies auf das Gerät angewendet werden.
+	
+	\item[Product] Ein Product entspricht dem Betriebsystem eines Devices. Einem
+	Product können Gruppen zugeteilt werden, diese Gruppen werden auf Devices mit
+	dem jeweiligen Product übertragen. Diese Gruppen stellen insofern die
+	Standardgruppen eines Gerätes mit einem bestimmten Betriebsystem dar.
+	
+	\item[Package] Ein Package ist ein Softwarepaket, es muss mindestens eine
+	Version des Packages existieren, das heisst ein Version Element zugeordnet
+	werden sein.
+	
+	\item[Version] Eine Version ist immer mit einem Package verknüpft. Die Version
+	repräsentiert eine bestimmte Version des verknüpften Packages. Neben der
+	Versionsbezeichnung muss auch ein Product für die Version erfasst sein. Eine
+	Version kann \enquote{blacklisted} sein und so als Objekt einer Messung dienen.
+	
+	\item[Directory] Ein Directory steht für ein Verzeichnis auf einem zu messenden
+	Gerät. Es kann als Bestandteil einer Policy, Grundlage einer Messung sein.
+	
+	\item[File] Ähnlich wie ein Directory, steht ein File für eine Datei auf einem
+	Gerät. Sie dienen als Grundlage für File-Messungen.
+	
+	\item[FileHash] Bei File-Messungen könne Hashes einer gewissen Datei erfasst
+	werden, diese werden zusammen mit dem Product des gemessenen Gerätes auf einem
+	File zugewiesen.
+	
+\end{description}
 
+Wenn in auf den folgenden Seiten dieser Arbeite einer der eben gelisteten Namen
+genannt wird, ist wenn nicht anders vermerkt das hier beschriebenen Element oder
+das passende Django-Model gemeint.
+
+In \autoref{django-ist-diagram} ist eine Übersicht der verwendeten Django-Models
+zu sehen:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{images/architecture/django_apps_ist}
@@ -62,22 +131,34 @@ involvierten Komponenten ersichtlich.
     \label{django-ist-diagram}
 \end{figure}
 
+\subsection{Ablauf einer TNC Messung mit strongSwan und strongTNC}
+Wenn sich ein Gerät in ein strongSwan VPN Netzwerk verbindet, wird durch den OS
+IMV eine strongTNC Session gestartet, darauf wird das Gerät anhand seiner
+Hardware Id und des Betriebssystems identifiziert. Falls sich das Gerät zum
+ersten mal verbindet, wird es neu erfasst. Anhand der Gruppen denen das Gerät
+angehört werden die relevanten Enforcements gesammelt und daraus Workitems
+generiert. Diese Vorgänge werden derzeit alle durch den IMV durch direkten
+Zugriff auf die Datenbank durchgeführt.\\
+Die Workitems werden abgeholt und durch strongSwan verwaltet.
+Verschiedene IMV führen dann die Messungen, anhand der Workitems durch. Die
+Ergebnisse der Messungen werden durch die IMVs in die Workitems der strongTNC
+Datenbank geschrieben. Wenn die Workitems abgearbeitet sind wird die Session
+abgeschlossen. Der OS IMV schliesst die Session in der strongTNC Datenbank ab,
+die Resultate der Workitems werden in archiviert.\\
+Anhand der einzelnen Resultate der Workitems fällt der TNC Server nun eine
+abschliessende Entscheidung daüber, ob das Gerät in das Netzwerk zugelassen wird
+oder nicht.
+
 Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
-\autoref{architecture-sequence-diagramm}, entnehmen:
-\begin{figure}[H]
+\autoref{masurement-diagramm}, entnehmen:
+\begin{figure}[H]	
 	\centering
-	\includegraphics[width=\textwidth]{./images/architecture/architecture_sequence_diagramm-2014-03-12}
-	\caption{}
-	\label{architecture-sequence-diagramm}
+	\input{tikz/measurement-diagramm}
+	\caption{Sequenzdiagramm, strongSwan TNC Messung}
+	\label{masurement-diagramm}
 \end{figure}
 
-Laut dem technischen Bericht der der Vorgängerarbeit
-\enquote{Cygnet}\cite{cygnet:2013} sollen die Richtlinien des \enquote{Style
-Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
-existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.
-
-
-\subsubsection{Einschätzung}
+\subsubsection{Einschätzung der Ist Situation}
 \begin{description}
 	\item[Ergänzungen] Es existiert noch keine Möglichkeit zur Erfassung und
 	Verwaltung von SWID Tags, diese müssen im Rahmen dieser Arbeit erstellt werden.
@@ -108,9 +189,9 @@ existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.
 	einzuschätzen.
 
 \item[Aufteilung in Apps] 
-	
+	TODO: Danilo
 \item[Codequalität]
-	
+	TODO: Danilo
 	
 \end{description}
 
@@ -148,7 +229,7 @@ resultierenden Nachteile eingehen.
 	schwer realisierbar.
 \end{description} 
 
-<TODO: Mehr noch zum Thema Django Models und eigene unabhängige Datenbank.
+<TODO: Danilo Mehr noch zum Thema Django Models und eigene unabhängige Datenbank.
 Einheitliche Schittstelle, serviceorientiert. etc>
 
 \section{Abgrenzung}
@@ -156,29 +237,22 @@ Folgende Punkte werden von uns als gegeben Betrachtet und sind nicht zentraler
 Bestandteil unserer Arbeit:
 
 \begin{description}
-	\item[Datenbankschema] Das Schema wird nicht grundlegend
-	geändert, sondern übernommen wie es ist.
+	\item[Datenbankschema] Das Schema wird nicht grundlegend geändert, sondern
+	übernommen wie es ist. Da verschiedene Komponenten auf die Datenbank zugreifen
+	kann eine Änderung im schlechtesten Fall eine Anpassung in allen Komponenten
+	mit Datenbankzugriff zur Folge haben.
 
 	\item[Benutzerschnittstelle] Das Frontend der Webapp wird nicht grundlegend
 	verändert, es werden Korrekturen, Ergänzungen und Anpassungen vorgenommen,
 	jedoch ohne dabei das bestehende Layout grundsätzlich zu ändern.
 
-	\item[Software Versionen] Wenn nicht unbedingt nötig werden keine
-	Versionsmigrationen durchgeführt.
-
-	\item[Schemaänderungen] Es ist nicht klar welche Komponente auf welchen
-	Tabellen zugreift. Daher ist es bei Schemaänderungen, die von einer Komponente
-	gefordert werden, nur schwer herauszufinden welche Anpassungen bei den anderen
-	Komponenten vorgenommen werden müssen. Die Anpassungen müssen im schlimmsten
-	Falle in allen Komponenten vorgenommen werden.
-	
 	\item[strongSwan] Anpassungen und Ergänzungen seitens strongSwan sind nicht
 	Bestandteil dieser Arbeit. Änderungen in strongTNC welche Einfluss auf
 	strongSwan haben, werden mit den Verantwortlichen strongSwan Entwicklern
 	besprochen.
 \end{description}
 
-\section{ISO Standard 19770-2:2014} 
+\section{ISO Standard 19770-2} 
 Der ISO Standard 19770-2:2014 ist der zweite Teil einer Gruppe von ISO Standards
 zu den Prozessen und Technologien des Software Asset Management. Dieser Teil des
 Standards beschreibt den Aufbau und die Verwendung von Software Identification
@@ -189,7 +263,8 @@ Folgendes ist eine Zusammenstellung der Bestandteile eines SWID Tags wie sie in
 diesem Projekt verwendet werden. Der Standard beschreibt noch weitere Elemente
 und Anwendungsmöglichkeiten, welche in dieser Arbeit allerdings nicht verwendet
 werden. Die jeweiligen Listen der Attribute sind nicht vollständig, sondern eine
-Auswahl, wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8.6)
+Auswahl, wie sie für diese Arbeit relevant sind. (ISO
+19770-2\cite{iso19770-2}, Seite 19, 8.6)
 
 \begin{description}
 	\item[SoftwareIdentity] Repräsentation des Wurzelelementes eines SWID Tags.
@@ -233,7 +308,9 @@ Auswahl, wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8
 		Standardwert \texttt{invalid.unavailable} befüllt.
 		
 		\item[role] Die Rolle beschreibt in welcher Beziehung die Organisation zu
-		diesem SWID Tag steht. Das \texttt{role} Attribut ist ein Aufzählungstyp mit den möglichen Werten \texttt{publisher, tagcreator, licensor} und ist obligatorisch.
+		diesem SWID Tag steht. Das \texttt{role} Attribut ist ein Aufzählungstyp mit
+		den möglichen Werten \texttt{publisher, tagcreator, licensor} und ist
+		obligatorisch.
 	\end{description}
 	
 	\item[Payload] Das \texttt{Payload} Element enthält die zu erwartenden
@@ -255,29 +332,30 @@ Auswahl, wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8
 \begin{itemize}
 	\item Ein Tag darf nur durch die Organisation modifiziert werden, die ihn
 	initial erstellt hat. Diese Organisation hat mindestens die Rolle des
-	\enquote{Tag Creator}. Dieser Tag heisst \enquote{Primary Tag}. (<TODO:
-	REF>Siehe Seite 6, 5.3)
+	\enquote{Tag Creator}. Dieser Tag heisst \enquote{Primary Tag}. (ISO
+	19770-2\cite{iso19770-2}, Seite 6, 5.3)
 	
 	\item Wenn ein Tag ergänzt werden soll, muss dies mit Hilfe eines
 	\enquote{Supplemental Tags} geschehen, da der \enquote{Primary Tag} nicht
-	modifiziert werden darf. (<TODO: REF>Siehe Seite 7, 5.4.2)
+	modifiziert werden darf. ((ISO 19770-2\cite{iso19770-2}, Seite 7, 5.4.2)
 	
 	\item Ein SWID Tag wird grundsätzlich als XML Datei abgelegt, diese Datei muss
 	sich im Installationsverzeichnis der repräsentierten Software befinden. Der Tag
 	kann zusätzlich über andere Kanäle wie URIs oder zentrale Verwaltungen
-	zugänglich gemacht werden. (<TODO: REF>Siehe Seite 10, 6.1.3 und Seite 15, 7.1)
+	zugänglich gemacht werden. (ISO 19770-2\cite{iso19770-2}, Seite 10, 6.1.3 und
+	Seite 15, 7.1)
 	
 	\item Als eindeutige Kennung für einen SWID Tag dient die Kombination von
 	\texttt{tag\_createor\_regid} und \texttt{uniqueId}. Diese Kennung wird
 	\enquote{software\_id} genannt. Es liegt in der Verantwortung des \enquote{Tag
-	Creators} dafür zu sorgen, dass seine Tags Eindeutig sind. (<TODO: REF>Siehe
-	Seite 10, 6.1.5 und Seite 16, 8.1)
+	Creators} dafür zu sorgen, dass seine Tags Eindeutig sind. (ISO
+	19770-2\cite{iso19770-2}, Seite 10, 6.1.5 und Seite 16, 8.1)
 	
 	\item Es ist nicht obligatorisch die Echtheit von SWID Tags zu garantieren,
 	falls eine Echtheitsvalidierung gewünscht oder nötig ist, kann dies durch den
-	Einsatz von der \enquote{XML signature syntax} <TODO: Ref
-	http://www.w3.org/TR/xmldsig-core/> implementiert werden. Echtheitsprüfung ist
-	nicht Bestandteil dieser Arbeit. (<TODO: REF>Siehe Seite 14, 6.1.19)
+	Einsatz von der \enquote{XML signature syntax}\cite{bartel2002xml}
+	implementiert werden. Echtheitsprüfung ist nicht Bestandteil dieser Arbeit.
+	(ISO 19770-2\cite{iso19770-2}, Seite 14, 6.1.19)
 	
 	\item Die minimale Information, die ein valider SWID Tag enthalten muss, ist
 	\texttt{SoftwareIdentity.name} und \texttt{Entity.role}. Bei der Rolle muss es
@@ -299,7 +377,7 @@ Auswahl, wie sie für diese Arbeit relevant sind. (<TODO: Ref, Siehe Seite 19, 8
 			\item role
 			\end{itemize*}
 	\end{itemize*}	
-	(<TODO: REF>Siehe Seite 16, 8.2)
+	(ISO 19770-2\cite{iso19770-2}, Seite 16, 8.2)
 	
 \end{itemize}
 
@@ -318,7 +396,7 @@ eindeutige Identität für jeden SWID Tag.
 \textit{(...) so it is up to each tag creator to ensure each of their tags is
 unique.}
 \end{quote}
-\textit{<TODO: Ref, Seite 16>}\\
+\textit{ISO 19770-2\cite{iso19770-2}, Seite 16}\\
 
 Da der \enquote{Tag Creator} für die Eindeutigkeit seiner Tags verantwortlich
 ist, muss man davon ausgehen, dass ein erhaltener Tag Eindeutig identifizierbar
@@ -328,7 +406,7 @@ Konsumenten:
 \textit{A conforming consumer shall not reject any conforming SWID tag
 document.}
 \end{quote}
-\textit{<TODO: Ref, Seite 4>}\\
+\textit{ISO 19770-2\cite{iso19770-2}, Seite 4}\\
 
 Vom Tag Ersteller wird lediglich erwartet, dass die produzierten Tags
 standardkonform sind:
@@ -336,7 +414,7 @@ standardkonform sind:
 \textit{A conforming producer shall be able to produce SWID tag documents
 conforming with this part of ISO/IEC 19770.}
 \end{quote}
-\textit{<TODO: Ref, Seite 4>}\\
+\textit{ISO 19770-2\cite{iso19770-2}, Seite 4}\\
 
 Diese Anforderung ist bereits erfüllt, wenn der Name der Software und der Organisation, welche den Tag erstellt hat, vorhanden sind.
 
@@ -348,7 +426,7 @@ Generator die einzige Tag creator Instanz ist und damit eindeutige Tags kreiert.
 \textit{SWID tag data is stored in an XML file and shall be located on a devices
 file system in the same file directory as the application they represent.}
 \end{quote}
-\textit{<TODO: Ref, Seite 10>}\\
+\textit{ISO 19770-2\cite{iso19770-2}, Seite 10}\\
 
 Diese Anforderung ist bei Linux Systemen nicht direkt umsetzbar, da
 Softwarepakete unter Linux oft nicht nur in einem Verzeichnis installiert
@@ -372,7 +450,7 @@ schliessen, dass diese Zeichen in einer \texttt{uniqueId} nicht erlaubt sind.
 for the tag\_creator\_regid. The unique\_id shall follow the restrictions for
 URI character use as specified in IETF RFC 3986, section 2, characters.}
 \end{quote} 
-\textit{<TODO: Ref, Seite 13>}\\
+\textit{ISO 19770-2\cite{iso19770-2}, Seite 13}\\
 
 Die \texttt{uniqueId} unterliegt den Restriktionen einer URI. Für URIs gilt, ein
 Doppelpunkt ist kein unerlaubtes Zeichen jedoch ein reserviertes:

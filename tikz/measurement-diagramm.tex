@@ -1,0 +1,71 @@
+\begin{tikzpicture}
+	\begin{umlseqdiag}[font=\sffamily]
+
+		% Objekte
+		\umlobject{TNC Server}
+		\umlobject{IMV Manager}
+		\umlmulti{IMVs}
+		\umlobject{strongTNC}
+		
+		% Calls
+		\begin{umlcall}[dt=5, op=startSession]
+			{TNC Server}{IMV Manager}
+		\end{umlcall}
+		
+		\begin{umlcall}[dt=5, op=startSession]
+			{IMV Manager}{IMVs}
+		\end{umlcall}	
+		
+		\begin{umlcall}[dt=5, op=startSession]
+			{IMVs}{strongTNC}
+		\end{umlcall}
+		
+		\begin{umlcall}[dt=5, op=evaluateEnforcements]
+			{IMVs}{strongTNC}
+		\end{umlcall}
+		
+		\begin{umlcall}[dt=5, op=generateWorkitems]
+			{IMVs}{strongTNC}
+		\end{umlcall}
+		
+		\begin{umlcall}[dt=5, op=setWorkitemList]
+			{IMVs}{IMV Manager}
+		\end{umlcall}	
+		
+		\begin{umlfragment}[type=loop, label={foreach Workitem}, inner xsep=15, inner ysep=2]
+			\begin{umlcall}[dt=9, op=getOpenWorkitem]
+				{IMVs}{IMV Manager}
+			\end{umlcall}	
+			
+			\begin{umlcallself}[dt=5, op=doMeasurement]
+				{IMVs}
+			\end{umlcallself}	
+			
+			\begin{umlcall}[dt=5, op=storeResult]
+				{IMVs}{strongTNC}
+			\end{umlcall}
+			
+		\end{umlfragment}
+
+		\begin{umlcall}[dt=25, op=noWorkitemsLeft]
+			{IMV Manager}{TNC Server}
+		\end{umlcall}			
+		
+		\begin{umlcall}[dt=5, op=stopSession]
+			{TNC Server}{IMV Manager}
+		\end{umlcall}
+		
+		\begin{umlcall}[dt=5, op=stopSession]
+			{IMV Manager}{IMVs}
+		\end{umlcall}	
+		
+		\begin{umlcall}[dt=5, op=stopSession]
+			{IMVs}{strongTNC}
+		\end{umlcall}
+		
+		\begin{umlcall}[dt=5, op=cleanUpWorkitems]
+			{IMVs}{strongTNC}
+		\end{umlcall}
+
+	\end{umlseqdiag}
+\end{tikzpicture}
