@@ -219,7 +219,7 @@ Die Implementation der Paginierung besteht aus den folgenden fünf Teilen:
 	\item \enquote{List Producer} für die Datenaufbereitung, wiederverwendbar
 \end{enumerate}
 
-\autoref{paginationSequence} zeigt den Grobablauf, für das Anfordern einer
+\autoref{paginationSequence} zeigt den Grobablauf, beim dynamischen Anfordern einer
 neuen Seite.
 
 \begin{figure}[H]	
@@ -232,7 +232,8 @@ neuen Seite.
 
 \begin{description}
 \item[HtmlPage]
-Auf der HTML Seite werden Container (\texttt{<div>} Elemente) definiert, welche mit den Inhalten später befüllt werden. Die Container können entweder direkt in HTML  (Listing~\ref{paging:container})
+Auf der HTML Seite werden Container definiert, welche mit später den Seiteninhalten befüllt werden. Die Container können entweder direkt in HTML  (Listing~\ref{paging:container})
+definiert werden oder mittels, des eigens dafür kreierten, Template Tags (Listing~\ref{paging:templatetag}) generiert werden.
 
 \begin{listing}[H]
 \caption{Paging Div Container}
@@ -251,8 +252,6 @@ Auf der HTML Seite werden Container (\texttt{<div>} Elemente) definiert, welche 
 \end{htmlcode}
 \end{listing}
 
-definiert werden, oder mittels des eigens dafür kreierten Template Tags (Listing~\ref{paging:templatetag}), generiert werden.
-
 \begin{listing}
 \caption{Verwendung eines \enquote{Paged Blocks}}
 \label{paging:templatetag}
@@ -263,8 +262,7 @@ definiert werden, oder mittels des eigens dafür kreierten Template Tags (Listin
 
 
 \item[Javascript]
-Eine Aufgabe der Javascript Komponente ist das Auslesen aller Paged Block Konfigurationen aus der Html Seite. Gefunden werden diese durch die gemeinsame CSS Klasse \texttt{ajax-paged}. Es können so mehrere Paged Block Komponenten pro Seite definiert werden. Für jeden der gefunden Paging Container wird ein Pager Objekt instanziert, welches für die Kommunikation mit dem AjaxEndpoint verantwortlich ist.
-Nach der Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Block in den entsprechenden Container geladen.
+Eine Aufgabe der Javascript Komponente ist das Auslesen aller Paged Block Konfigurationen aus der Html Seite. Gefunden werden diese durch die gemeinsame \texttt{ajax-paged} CSS Klasse. Es können so mehrere Paged Block Komponenten pro Seite definiert werden. Für jeden der gefunden Paging Container wird ein Pager Objekt instanziert, welches für die Kommunikation mit dem AjaxEndpoint verantwortlich ist. Nach erfolgreicher Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Block in den entsprechenden Container geladen.
 
 \item [AjaxEndpoint]
 Der AjaxEndpoint nimmt die Requests entgegen und kann anhand des übergebenen Konfigurationsnamens die zugehörige Konfiguration laden.
