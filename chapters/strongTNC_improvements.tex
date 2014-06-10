@@ -618,7 +618,35 @@ datenbankspezifisches SQL-DDL generieren, und so die Migration erheblich
 erleichtern.
 
 \subsubsection{Split der Configfiles}
-TODO Danilo
+
+Um beim Deployment von strongTNC den Code und die Konfiguration trennen zu
+können, sollte man eine Möglichkeit haben um wichtige Einstellungen wie die
+Datenbank-Connection-Strings in einer nicht versionierten Datei zu
+konfigurieren. Drei verbreitete Möglichkeiten sind:
+
+\begin{itemize}
+	\item Konfiguration über Umgebungsvariablen, wie es durch die \enquote{12
+		Factor App} Methodologie empfohlen
+		wird\footnote{\url{http://12factor.net/config}}.
+	\item Eine \texttt{settings\_local.py} Datei, welche alle Konfigurationen von
+		der regulären \texttt{settings.py} Datei importiert und zu konfigurierende
+		Werte überschreibt.
+	\item Eine \texttt{settings.ini} Datei, welche durch die \texttt{ConfigParser}
+		Klasse aus der Python Standardbibliothek geparsed wird.
+\end{itemize}
+
+Die erste Methode ist äusserst gut geeignet wenn man seine Applikation auf einem
+Cloud-Hosting Provider wie Heroku deployen will. Für Systemadminstratoren die
+sich Konfigurationsdateien gewöhnt sind, ist dies allerdings etwas umständlich.
+
+Die zweite Möglichkeit bietet grosse Flexibilität, weist jedoch auch Gefahren
+auf, da in einer solchen Datei beliebiger Code ausgeführt werden kann.
+
+Wir haben deshalb den dritten Ansatz gewählt: Eine \texttt{settings.ini} Datei,
+welche lediglich nichtausführbare Konfigurationsdaten enthält. Die Datei darf
+sich entweder im Projektverzeichnis oder im \texttt{/etc/strongTNC/} Verzeichnis
+befinden. Eine Beispielkonfiguration mit dem Namen \texttt{settings.sample.ini}
+wird mit strongTNC mitgeliefert.
 
 \subsubsection{Weitere Punkte}
 \begin{description}
