@@ -69,8 +69,8 @@ Die ursprüngliche Codebasis verwendete das
 Modul aus der Python Standardbibliothek. Alle Tests befanden sich in einer
 einzigen Datei.  Während \texttt{unittest} eine stabile Lösung ist, merkt man
 bei der Verwendung doch recht schnell, dass das stark von Java Unittests
-inspirierte Projekt relativ umständlich zu nutzen ist. Alle Tests müssen als
-Methoden in einer Klasse geschrieben werden. Um die Assertions zu definieren,
+inspirierte Projekt, relativ umständlich zu nutzen ist. Alle Tests müssen als
+Methoden in einer Klasse geschrieben werden. Um Assertions zu definieren,
 müssen ebenfalls Methodenaufrufe wie \texttt{assertEqual} oder
 \texttt{assertLessThan} verwendet werden. Nachfolgend ein Minimalbeispiel:
 
@@ -95,10 +95,10 @@ mehrere Module (Dateien) zu organisieren.
 Gleich zu Beginn haben wir deshalb die Test-Infrastruktur von Unittest auf
 Pytest\footnote{\url{http://pytest.org/}} umgestellt. Das Pytest Projekt
 beinhaltet Test-Discovery und -Ausführung, viele Hilfsfunktionen und
-Unerstützung für Plugins.
+Unterstützung für Plugins.
 
-Nachfoglend das selbe Minimalbeispiel wie in Listing
-\ref{improvements:unittest-beispiel}, diesmal mit Pytest:
+Nachfolgend dasselbe Minimalbeispiel wie in Listing
+\ref{improvements:unittest-beispiel}, mit Pytest:
 
 \begin{listing}
 \caption{Pytest Minimalbeispiel}
@@ -109,7 +109,7 @@ def test_the_answer():
 \end{pythoncode}
 \end{listing}
 
-Falls mehrere Tests auf die selben Daten zugreifen, kann man natürlich wie bei
+Falls mehrere Tests auf dieselben Daten zugreifen, kann man natürlich wie bei
 Unittest eine Klasse schreiben, es gibt jedoch noch eine weitere Möglichkeit:
 Fixtures. Eine Fixture ist eine Funktion, deren Rückgabewert über Dependency
 Injection einem Test übergeben wird. Eine selbst definierte Fixture könnte
@@ -131,7 +131,7 @@ def test_the_database(database):
 \end{pythoncode}
 \end{listing}
 
-Ein weiteres von uns sehr häufig genutztes Feature ist die Parametrisierung von
+Ein weiteres, von uns sehr häufig genutztes Feature, ist die Parametrisierung von
 Tests. Ein \enquote{klassischer} Unittest könnte folgendermassen aussehen:
 
 \begin{listing}
@@ -152,8 +152,8 @@ Der Nachteil eines solchen Tests ist, dass obwohl vier verschiedene unabhängige
 Bedingungen getestet werden, in einem Fehlerfall der gesamte Test als
 \textit{failing} angezeigt wird.
 
-Pytest bietet hier als Abhilfe parametrisierte Tests. Dabei wird mithilfe eines
-Decorators aus einer einzelnen Funktion zur Laufzeit mehrere Tests generiert.
+Pytest bietet hier als Abhilfe parametrisierte Tests. Dabei werden, mithilfe eines
+Decorators, aus einer einzelnen Funktion zur Laufzeit mehrere Tests generiert.
 
 \begin{listing}
 \caption{Parametrisierte Tests}
@@ -194,13 +194,13 @@ Testabdeckung und Qualitäts-Score.
 
 \textbf{Ausführung der Tests}
 
-Unsere Test Suite (siehe Absatz \ref{improvements:tests}) automatisiert
+Um unsere Test Suite (siehe Absatz \ref{improvements:tests}) automatisiert
 auszuführen, haben wir Travis
 CI\footnote{\url{https://travis-ci.org/}} verwendet. Travis ist
 eine CI-Platform mit Python-Unterstützung, die für Open Source Projekte
 kostenfrei verwendet werden darf. Mit wenigen Zeilen in einer Datei namens
 \texttt{.travis.yml} kann die Test-Ausführung konfiguriert werden. In einem
-Fehlerfall wird der Autor des entspechenden Commits per E-Mail benachrichtigt.
+Fehlerfall wird der Autor des entsprechenden Commits per E-Mail benachrichtigt.
 
 \textbf{Überwachen der Testabdeckung}
 
@@ -230,7 +230,7 @@ im Code wie ungenutzte Variablen oder unerreichbaren Code.
 Während wir bei der Entwicklung bereits auf Tools wie
 Pyflakes\footnote{\url{https://pypi.python.org/pypi/pyflakes}} und
 Pylint\footnote{\url{http://www.pylint.org/}} gesetzt haben, ist es auch dann
-noch möglich dass man bestimmte Punkte übersieht. Das noch sehr neue Projekt
+noch möglich, dass man bestimmte Punkte übersieht. Das noch sehr neue Projekt
 Landscape\footnote{\url{https://landscape.io/}} will hier Abhilfe schaffen,
 indem verschiedene Tools automatisch für jedem Commit ausgeführt werden. Den
 Report kann man danach über den Webbrowser detailliert analysieren.
