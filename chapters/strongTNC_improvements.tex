@@ -252,16 +252,48 @@ Auf Landscape liegt das Projekt aktuell bei einem Quality Score von 90\%.
 Wichtig ist dabei jedoch, dass Landscape einige False Positives liefert. Das
 liegt daran dass das Projekt noch jung ist und gewisse Spezialfälle -- welche in
 einer dynamischen Sprache wie Python häufig vorkommen können -- nicht erkennt.
-Zudem sind gewisse Kennzahlen wie die maximale Zeilenlänge noch nicht
+Zudem sind gewisse Kennzahlen, wie die maximale Zeilenlänge, noch nicht
 konfigurierbar und werden deshalb als Fehler angezeigt, obwohl in unserem Coding
 Styleguide (Abschnitt \ref{anhang:coding-styleguide}) andere Regeln vereinbart
 wurden. Damit sich diese Situation in Zukunft verbessert, haben wir Feature
-Requests für die entsprechenden Anpassungen in er Konfiguration gestellt.
+Requests für die entsprechenden Anpassungen
+gestellt\footnote{\url{http://git.io/BqNWMw}, \url{http://git.io/O8MaNA}}.
 
 
-\subsubsection{Deployment Dokus, Vagrant, Ansible}
+\subsubsection{Deployment Dokumentation, Vagrant, Ansible}
 
-TODO Danilo
+Wenn man strongTNC in Produktion deployen will, müssen einige Dinge beachtet
+werden. Beispielsweise sollte die Applikation nie ohne TLS produktiv über ein
+Netzwerk genutzt werden, da die API Endpoints nur mithilfe von Basic Auth
+geschützt sind.
+
+Um den Nutzern von strongTNC in diesen Punkten eine Hilfestellung zu geben,
+haben wir im Projekt-Repository ein Dokument mit allen nötigen Informationen
+erstellt. Das Dokument findet sich im Repository unter
+\texttt{doc/deployment.rst}\footnote{\url{https://github.com/strongswan/strongTNC/blob/master/docs/deployment.rst}}
+sowie im Anhang dieser Dokumentation auf Seite
+\pageref{anhang:deployment-manual}.
+
+Falls man strongTNC jedoch nicht gleich produktiv nutzen will, sondern zuerst
+testen möchte, wäre es etwas umständlich all diese Konfigurationsschritte
+manuell durchzuführen. Für diesen Fall haben wir eine
+Vagrant\footnote{\url{http://www.vagrantup.com/}}- und eine
+Ansible\footnote{\url{http://www.ansible.com/}}-Konfiguration vorbereitet.
+Vagrant ist ein Tool um die Erstellung und Konfiguration von Virtuellen
+Maschinen zu automatisieren, während Ansible ein System zur Automation von
+Deployments ist. Durch die Kombination der beiden Tools kann mit folgenden zwei
+Befehlen eine komplett konfigurierte VM erstellt werden, mit welcher strongTNC
+getetstet werden kann:
+
+\begin{textcode}
+$ cd /path/to/strongtnc/vagrant/
+$ vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+...
+\end{textcode}
+
+Alle weiteren Informationen befinden sich im Projekt-Repository unter
+\texttt{vagrant/README.rst}\footnote{\url{https://github.com/strongswan/strongTNC/blob/master/vagrant/README.rst}}.
 
 \subsubsection{Weitere Punkte}
 \begin{description}
