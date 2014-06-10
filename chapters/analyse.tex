@@ -1,10 +1,10 @@
 \chapter{Analyse}
 
-\section{Ist Situation}
+\section{Ist-Situation}
 
 In der Vorgängerarbeit \enquote{Cygnet} von Stefan Rohner und Marco
 Tanner\cite{cygnet:2013} wurde der Policy Manager \enquote{strongTNC}
-implementiert. Das Produkt und die Codebasis dieser Arbeit dient als Grundlage
+implementiert. Das Produkt und die Codebasis dienen als Grundlage
 für diese Arbeit.
 
 Im Bereich des SWID Generators gibt es zur Zeit noch keine bestehenden Produkte.
@@ -41,19 +41,19 @@ Stattdessen befindet sich der gesamte Code in einer einzelnen App namens
 Bei der Umsetzung von Webapplikationen mit Django ist es gängig, dass das
 Datenbankschema aus den Models generiert wird. Dadurch muss man sich als
 Entwickler nicht um Schema-Detailfragen kümmern, sondern kann sich auf die
-abstrakten Models konzentrieren. Ein weiterer sich daraus ergebener Vorteil ist,
+abstrakten Models konzentrieren. Ein weiterer sich daraus ergebender Vorteil ist,
 dass das genutzte DBMS beliebig austauschbar ist. Da die Datenbank bei strongTNC
 jedoch als Schnittstelle dient und darum nicht ausschliesslich von Django
 verwendet wird, kann dieses Feature derzeit nicht genutzt werden. Stattdessen
 bilden die Model-Definitionen den jeweiligen Stand der Datenbank (siehe
 \autoref{fig:database-model}) ab. Weil die Datenbank nicht aus den Models
-generiert wird, ist es möglich dass die Models und das effektive Schema bei
+generiert wird, ist es möglich, dass die Models und das effektive Schema bei
 Änderungen nicht mehr synchron sind und manuell angepasst werden müssen.
 
 Laut dem technischen Bericht der der Vorgängerarbeit
 \enquote{Cygnet}\cite{cygnet:2013} sollen die Richtlinien des \enquote{Style
 Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
-existieren elf Unit-Tests welche den bestehenden Python Code zu 21\% abdecken.
+existieren elf Unit-Tests, welche den bestehenden Python Code zu 21\% abdecken.
 
 \subsection{Elemente der strongTNC App} Im Folgenden werden die zentralen
 Elemente der strongTNC Umgebung beschrieben. Die verwendeten Namen entsprechen
@@ -169,21 +169,20 @@ Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
 	andererseits wird die Wartbarkeit und Ausbaufähigkeit aller beteiligten
 	Komponenten erschwert oder verunmöglicht. In diesem Fall wird ausserdem SQLite
 	als Datenbank verwendet. SQLite ist nur bei lesendem Zugriff mehrbenutzerfähig,
-	bei schreibendem Zugriff wird die Datenbank gesperrt, da eine gemeinsam
+	bei schreibendem Zugriff wird die Datenbank gesperrt. Da eine gemeinsam
 	genutzte Datenbank Mehrbenutzerbetrieb impliziert, sollte auch in diesem Bereich
 	etwas unternommen werden. 
 	
-	\item[Benutzerschnittstelle] 
-	Die Benutzeroberfläche wurde noch nicht für den Umgang mit grossen Datenmengen
-	optimiert. Bei einer hohen Anzahl Objekten gibt es keinen Paging Mechanismus,
-	der ein Stückweises ausliefern von Daten oder ein Filtern erlaubt.
-	Beispielsweise kann das Inventar der Dateinamen in einem Linux System kann
-	durchaus 40000 Objekte umfassen. Wird die vorhandene File View aufgerufen,
-	werden alle 40000 Einträge angezeigt.\\
+	\item[Benutzerschnittstelle] Die Benutzeroberfläche wurde noch nicht für den
+	Umgang mit grossen Datenmengen optimiert. Bei einer hohen Anzahl Objekten gibt
+	es keinen Paging Mechanismus, der ein stückweises Ausliefern von Daten oder ein
+	Filtern erlaubt. Beispielsweise kann das Inventar der Dateinamen in einem Linux
+	System durchaus 40000 Objekte umfassen. Wird die vorhandene File View
+	aufgerufen, werden alle 40000 Einträge angezeigt.\\ 
 	Diesen Datenmengen wird zur Zeit noch nicht Rechnung getragen und es hat sich
 	bereits beim Entwickeln in einer kleinen Umgebung als nicht mehr überschaubar
-	erwiesen. Aus diesem Grund ist das Lösen dieses Problems auch. Tendentiell ist
-	der Einsatz einer Endpoint Compliance Lösung ab Mittelgrossen Unternehmungen zu
+	erwiesen. Tendentiell ist
+	der Einsatz einer Endpoint Compliance Lösung ab mittelgrossen Unternehmungen zu
 	erwarten, dementsprechend ist auch die Menge der zu verwaltenden Daten als hoch
 	einzuschätzen.
 
@@ -194,7 +193,7 @@ Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
 	
 \end{description}
 
-\section{Soll Situation}
+\section{Soll-Situation}
 Nebst den geforderten Pflichtteilen, der Implementation eines SWID Generators
 für Linux Systeme und der Integration der SWID Erweiterung in strongTNC,
 schlagen wir nachfolgende Anpassungen vor, die wir bei vorhandener Kapazität
@@ -206,7 +205,7 @@ Datenbank einige Probleme. Nachfolgend möchten wir kurz auf die daraus
 resultierenden Nachteile eingehen.
 
 \begin{description}
-	\item[Mehrbenutzerfähigkeit] Die Daten einer SQLite Datenbank kann nur von
+	\item[Mehrbenutzerfähigkeit] Die Daten einer SQLite Datenbank können nur von
 	einem Prozess gleichzeitig geändert werden. Da es sich bei der aktuellen
 	Situation aber bereits um eine Multiprozessumgebung handelt ist dieser Einsatz
 	denkbar schlecht, und kann zu unerwünschten Locks führen.
@@ -216,7 +215,7 @@ resultierenden Nachteile eingehen.
 	Komponente betrieben werden. Dies kann in einem Enterprise Deployment
 	durchaus erwünscht sein. Beispielsweise der Einsatz eines Windows Webservers
 	mit der strongTNC App, während der Enforcement Point auf einem Linux System
-	läuft. Zusätzlich kann es aus Netzwerktechnischen Gründen bedingt sein, im
+	läuft. Zusätzlich kann es aus netzwerktechnischen Gründen bedingt sein, im
 	Internet exponierte Komponenten, in diesem Fall den strongSwan VPN Gateway und
 	einen Webserver, in getrennten Netzwerksegmenten zu halten. Oder zur
 	Lastverteilung auf unterschiedliche Hosts zu verteilen.
@@ -232,22 +231,22 @@ resultierenden Nachteile eingehen.
 Einheitliche Schittstelle, serviceorientiert. etc>
 
 \section{Abgrenzung}
-Folgende Punkte werden von uns als gegeben Betrachtet und sind nicht zentraler
+Folgende Punkte werden von uns als gegeben betrachtet und sind nicht zentraler
 Bestandteil unserer Arbeit:
 
 \begin{description}
 	\item[Datenbankschema] Das Schema wird nicht grundlegend geändert, sondern
-	übernommen wie es ist. Da verschiedene Komponenten auf die Datenbank zugreifen
-	kann eine Änderung im schlechtesten Fall eine Anpassung in allen Komponenten
-	mit Datenbankzugriff zur Folge haben.
+	übernommen wie es ist. Da verschiedene Komponenten auf die Datenbank zugreifen,
+	kann eine Änderung am Schema im schlechtesten Fall eine Anpassung in allen
+	Komponenten mit Datenbankzugriff zur Folge haben.
 
 	\item[Benutzerschnittstelle] Das Frontend der Webapp wird nicht grundlegend
 	verändert, es werden Korrekturen, Ergänzungen und Anpassungen vorgenommen,
 	jedoch ohne dabei das bestehende Layout grundsätzlich zu ändern.
 
 	\item[strongSwan] Anpassungen und Ergänzungen seitens strongSwan sind nicht
-	Bestandteil dieser Arbeit. Änderungen in strongTNC welche Einfluss auf
-	strongSwan haben, werden mit den Verantwortlichen strongSwan Entwicklern
+	Bestandteil dieser Arbeit. Änderungen in strongTNC, welche Einfluss auf
+	strongSwan haben, werden mit den verantwortlichen strongSwan Entwicklern
 	besprochen.
 \end{description}
 
