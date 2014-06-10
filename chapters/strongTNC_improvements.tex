@@ -56,9 +56,204 @@ zehn moderat bis hoch kohäsive Apps aufgeteilt:
 		strongTNC. Diese App bietet aktuell noch keine Funktionalität.
 \end{itemize}
 
-\subsubsection{Continous Integration}
+\subsubsection{Verbesserung der Testing-Infrastruktur}
+\label{improvements:tests}
 
-TODO Danilo
+Unit- und Integration-Tests sind zentral für die agile Entwicklung und
+längerfristige Wartbarkeit eines Softwareprojektes. Wir haben deshalb viel Zeit
+und Aufwand in die Konfiguration unserer Testing-Umgebung gesteckt, um diese
+besser und flexibler zu machen.
+
+Die ursprüngliche Codebasis verwendete das
+\texttt{unittest}\footnote{\url{https://docs.python.org/2/library/unittest.html}}
+Modul aus der Python Standardbibliothek. Alle Tests befanden sich in einer
+einzigen Datei.  Während \texttt{unittest} eine stabile Lösung ist, merkt man
+bei der Verwendung doch recht schnell, dass das stark von Java Unittests
+inspirierte Projekt relativ umständlich zu nutzen ist. Alle Tests müssen als
+Methoden in einer Klasse geschrieben werden. Um die Assertions zu definieren,
+müssen ebenfalls Methodenaufrufe wie \texttt{assertEqual} oder
+\texttt{assertLessThan} verwendet werden. Nachfolgend ein Minimalbeispiel:
+
+\begin{listing}
+\caption{UnitTest Minimalbeispiel}
+\label{improvements:unittest-beispiel}
+\begin{pythoncode}
+import unittest
+
+class TestTheAnswer(unittest.TestCase):
+    def testIt(self):
+        self.assertEqual(19 + 23, 42)
+\end{pythoncode}
+\end{listing}
+
+In Python gibt es jedoch bereits ein \texttt{assert} Keyword, welches beliebige
+Assertions testen kann. Zudem ist es in Python-Code üblich auf Klassen zu
+verzichten, wenn sie keinen Mehrwert bringen. Im Fall der Tests ist es oft
+sinnvoller, diese direkt als top-level Funktionen zu definieren und in
+mehrere Module (Dateien) zu organisieren.
+
+Gleich zu Beginn haben wir deshalb die Test-Infrastruktur von Unittest auf
+Pytest\footnote{\url{http://pytest.org/}} umgestellt. Das Pytest Projekt
+beinhaltet Test-Discovery und -Ausführung, viele Hilfsfunktionen und
+Unerstützung für Plugins.
+
+Nachfoglend das selbe Minimalbeispiel wie in Listing
+\ref{improvements:unittest-beispiel}, diesmal mit Pytest:
+
+\begin{listing}
+\caption{Pytest Minimalbeispiel}
+\label{improvements:pytest-beispiel}
+\begin{pythoncode}
+def test_the_answer():
+    assert 19 + 23 == 42
+\end{pythoncode}
+\end{listing}
+
+Falls mehrere Tests auf die selben Daten zugreifen, kann man natürlich wie bei
+Unittest eine Klasse schreiben, es gibt jedoch noch eine weitere Möglichkeit:
+Fixtures. Eine Fixture ist eine Funktion, deren Rückgabewert über Dependency
+Injection einem Test übergeben wird. Eine selbst definierte Fixture könnte
+beispielsweise folgendermassen aussehen:
+
+\begin{listing}
+\caption{Pytest Fixtures}
+\label{improvements:pytest-fixtures}
+\begin{pythoncode}
+import pytest
+
+@pytest.fixture
+def database(self):
+    conn = MyDatabaseConnection()
+    return conn
+
+def test_the_database(database):
+    assert database.status() == 'OK'
+\end{pythoncode}
+\end{listing}
+
+Ein weiteres von uns sehr häufig genutztes Feature ist die Parametrisierung von
+Tests. Ein \enquote{klassischer} Unittest könnte folgendermassen aussehen:
+
+\begin{listing}
+\caption{Kombinierte Tests}
+\label{improvements:pytest-combined}
+\begin{pythoncode}
+import pytest
+
+def test_add():
+    assert 19 + 23 == 42
+    assert 13 + 29 == 42
+    assert 42 + 1 == 42
+    assert 62 - 23 == 42
+\end{pythoncode}
+\end{listing}
+
+Der Nachteil eines solchen Tests ist, dass obwohl vier verschiedene unabhängige
+Bedingungen getestet werden, in einem Fehlerfall der gesamte Test als
+\textit{failing} angezeigt wird.
+
+Pytest bietet hier als Abhilfe parametrisierte Tests. Dabei wird mithilfe eines
+Decorators aus einer einzelnen Funktion zur Laufzeit mehrere Tests generiert.
+
+\begin{listing}
+\caption{Parametrisierte Tests}
+\label{improvements:pytest-parametrize}
+\begin{pythoncode}
+import pytest
+
+@pytest.mark.parametrize(['a', 'b'], [
+	(19, 23),
+	(13, 29),
+	(42, 1),
+	(62, -23),
+])
+def test_add(a, b):
+    assert a + b == 42
+\end{pythoncode}
+\end{listing}
+
+In diesem Beispiel werden vier unabhängige Tests generiert. Drei davon laufen
+erfolgreich durch, während der Vierte einen Fehler meldet, da die Bedingung
+\texttt{42 + 1 == 42} nicht erfüllt ist.
+
+Um das Testen mit Django zu vereinfachen, haben wir das \texttt{pytest-django}
+Plugin verwendet und ein \texttt{runtests.py} Script geschrieben, welches die
+Pfad-Variablen korrekt setzt, alle Tests ausführt und anschliessend die Test
+Coverage anzeigt. pytest-django liefert bereits mehrere häufig genutzte Fixtures
+mit, wie \zb \texttt{client} um auf einen Django Test Client zugreifen zu können
+oder \texttt{transactional\_db}, um transaktionellen Zugriff auf die Datenbank
+zu erhalten.
+
+\subsubsection{Continuous Integration}
+
+Eine Sicherstellung und langfristige Verbesserung der Softwarequalität ist nicht
+möglich, wenn diese nicht regelmässig überprüft wird. Um dieses Ziel zu
+erreichen, haben wir in verschiedenen Bereichen auf \enquote{Continuous
+Integration} (CI) gesetzt. Die Qualität wird in drei Bereichen geprüft: Tests,
+Testabdeckung und Qualitäts-Score.
+
+\textbf{Ausführung der Tests}
+
+Unsere Test Suite (siehe Absatz \ref{improvements:tests}) automatisiert
+auszuführen, haben wir Travis
+CI\footnote{\url{https://travis-ci.org/}} verwendet. Travis ist
+eine CI-Platform mit Python-Unterstützung, die für Open Source Projekte
+kostenfrei verwendet werden darf. Mit wenigen Zeilen in einer Datei namens
+\texttt{.travis.yml} kann die Test-Ausführung konfiguriert werden. In einem
+Fehlerfall wird der Autor des entspechenden Commits per E-Mail benachrichtigt.
+
+\textbf{Überwachen der Testabdeckung}
+
+Neben dem Testerfolg ist die Testabdeckung ebenfalls eine wichtige Kennzahl. Um
+diese laufend zu überwachen haben wir
+Coveralls\footnote{\url{https://coveralls.io/}} verwendet. Coveralls bietet eine
+Integration mit Travis CI und zeigt die Entwicklung der Testabdeckung an. Dank
+einer Integration mit Github wird auch für jeden Pull Request die Veränderung
+der Testabdeckung gemessen.
+
+Die Testabdeckung für strongTNC ist inzwischen bei 70\% und stieg während der
+gesamten Projektdauer kontinuierlich an:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/coveralls}
+	\caption{Coveralls: Entwicklung der Testabdeckung}
+	\label{improvements:coveralls}
+\end{figure}
+
+\textbf{Messen der Codequalität}
+
+Neben den Testing-Werkzeugen sind auch statische Codeanalyse-Tools extrem
+hilfreich zur Verbesserung der Codequalität. Sie erkennen häufige Schwachstellen
+im Code wie ungenutzte Variablen oder unerreichbaren Code.
+
+Während wir bei der Entwicklung bereits auf Tools wie
+Pyflakes\footnote{\url{https://pypi.python.org/pypi/pyflakes}} und
+Pylint\footnote{\url{http://www.pylint.org/}} gesetzt haben, ist es auch dann
+noch möglich dass man bestimmte Punkte übersieht. Das noch sehr neue Projekt
+Landscape\footnote{\url{https://landscape.io/}} will hier Abhilfe schaffen,
+indem verschiedene Tools automatisch für jedem Commit ausgeführt werden. Den
+Report kann man danach über den Webbrowser detailliert analysieren.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{images/landscape}
+	\caption{Coveralls: Entwicklung des Landscape Quality Scores}
+	\label{improvements:landscape}
+\end{figure}
+
+Auf Landscape liegen wir aktuell bei einem Quality Score von 90\%. Wichtig ist
+dabei jedoch, dass Landscape relativ viele False Positives liefert. Das liegt
+daran dass das Projekt noch jung ist und gewisse Spezialfälle -- welche in einer
+dynamischen Sprache wie Python häufig vorkommen können -- nicht erkennt. Zudem
+sind gewisse Kennzahlen wie die maximale Zeilenlänge noch nicht konfigurierbar
+und werden so als Fehler angezeigt, obwohl wir in unserem Coding Styleguide
+(Abschnitt \ref{anhang:coding-styleguide}) andere Regeln vereinbart haben. Mit
+der entsprechenden Konfiguration würden wir vermutlich sehr nah an einen Quality
+Score von 100\% herankommen. Damit sich diese Situation in Zukunft verbessert,
+haben wir Feature Requests für die entsprechenden Anpassungen in er
+Konfiguration gestellt.
+
 
 \subsubsection{Deployment Dokus, Vagrant, Ansible}
 
