@@ -367,7 +367,7 @@ Die Ajax Endpunkte wurden mit Hilfe der \enquote{Dajax-ice}\footnote{\url{http:/
 automatisch gesetzt und geprüft. Ausserdem generiert \enquote{Dajax-ice} Javascript Funktionen, welche die benötige Infrastruktur clientseitig bereitstellen, um Ajax Requests auszuführen.
 \\
 
-In Listing \autoref{strongTNC:ajaxendpoint} ist die Beispielimplementation eines Ajax Endpoints zu sehen. Um auch bei Ajax Anfragen eine Authentifizierung zu erzwingen, wurde ein eigener Decorator (\texttt{@ajax\_login\_required}) erstellt. 
+In Listing \ref{strongTNC:ajaxendpoint} ist die Beispielimplementation eines Ajax Endpoints zu sehen. Um auch bei Ajax Anfragen eine Authentifizierung zu erzwingen, wurde ein eigener Decorator (\texttt{@ajax\_login\_required}) erstellt. 
 \begin{listing}
 \caption{Beispiel eines Ajax Endpunktes}
 \label{strongTNC:ajaxendpoint}
@@ -399,18 +399,23 @@ Asynchrone Aufrufe bringen zwei wesentliche Probleme mit sich. Zum einen kann es
 Zu diesem Zweck wurde eine Proxy Komponente \cite{gamma1994design} implementiert, welche Anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt wird. Komponenten, deren Inhalte per Ajax nachladen werden, werden vom Proxy mit einem Statusindikator besetzt. Zusätzlich wurde ein globaler Statusindikator eingeführt, der anzeigt, ob mindestens eine asynchrone Datenübertragung stattfindet.\\
 Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer mittels Alert Box über den Fehler informiert.
 
-\subsubsection{Ajax Pagination} Um in grossen Datenmengen zu navigieren wurde
-die bestehende statische Pagination durch eine dynamische, Ajax basierte
-Version, ausgetauscht. Mit dem Ziel, jegliche Art von Daten seitenweise auszuliefern, sowie die Daten filtern zu können. 
-Bei der Architektur der Pagingkomponente wurde darauf geachtet, dass sie einfach wiederverwendet werden kann. Der Inhalt, der seitenweise ausgeliefert werden soll, wurde von der Pagination entkoppelt und kann mittels Strategy (\enquote{Strategy Pattern}\cite{gamma1994design}) festgelegt werden.
+\subsubsection{Ajax Pagination} 
+Um grosse Datenmengen besser handhaben zu können wurde die bestehende statische
+Pagination durch eine dynamische, Ajax basierte Version, ausgetauscht. Das Ziel
+war, jegliche Art von Daten seitenweise auszuliefern, sowie die Datenmenge mit
+Hilfe von Filtern dynamisch zu reduzieren. Bei der Architektur der
+Pagingkomponente wurde darauf geachtet, dass diese wiederverwendet werden kann.
+Der Inhalt, der seitenweise ausgeliefert werden soll, ist von der Pagination
+entkoppelt und kann mittels einer Art Strategie (\enquote{Strategy
+Pattern}\cite{gamma1994design}) festgelegt werden.
 
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
-Die Implementation der Paginierung besteht aus den folgenden fünf Teilen:
+Die Implementation der Paginination besteht aus den folgenden fünf Teilen:
 \begin{enumerate}
 	\item Javascript Frontend Komponente
 	\item Template Tag, Templates und HTML Markup
 	\item Generischer Ajax Endpunkt
-	\item Individuelle Konfiguration pro Pagination Instanz
+	\item Individuelle Konfiguration pro Pagination Block
 	\item \enquote{List Producer} für die Datenaufbereitung, wiederverwendbar
 \end{enumerate}
 
@@ -420,26 +425,27 @@ neuen Seite.
 \begin{figure}[H]	
 	\centering
 	\input{tikz/pagination-sequenzdiagramm-grob}
-	\caption{Sequenzdiagramm: Grobablauf}
+	\caption{Sequenzdiagramm, Grobablauf}
 	\label{paginationSequence}
 \end{figure}
 
 
 \begin{description}
-\item[HtmlPage]
-Auf der HTML Seite werden Container definiert, welche mit später den Seiteninhalten befüllt werden. Die Container können entweder direkt in HTML  (Listing~\ref{paging:container})
-definiert werden oder mittels, des eigens dafür kreierten, Template Tags (Listing~\ref{paging:templatetag}) generiert werden.
-
+	\item[HTMLPage] Auf der HTML Seite werden Container definiert, welche später
+	mit den Seiteninhalten befüllt werden. Die Container können entweder direkt in
+	HTML (Listing~\ref{paging:container}) definiert werden oder mittels, des dafür
+	kreierten, Template Tags (Listing~\ref{paging:templatetag}) generiert werden,
+	üblicherweise sollte der Template Tag verwendet werden.
 \begin{listing}[H]
-\caption{Paging Div Container}
+\caption{Pagination HTML Markup}
 \label{paging:container}
 \begin{htmlcode}
 <div class="ajax-paged"
-     data-config="regid_list_config"
-     data-args="{}"
-     data-initial="True"
-     data-urlparams="True"
-     data-filter="True">
+  data-config="regid_list_config"
+  data-args="{}"
+  data-initial="True"
+  data-urlparams="True"
+  data-filter="True">
 	[...]
 	<div class="paged-content"></div>
 	[...]
@@ -448,23 +454,32 @@ definiert werden oder mittels, des eigens dafür kreierten, Template Tags (Listi
 \end{listing}
 
 \begin{listing}
-\caption{Verwendung eines \enquote{Paged Blocks}}
+\caption{Verwendung eines \enquote{Paged Blocks} mittels Template Tag}
 \label{paging:templatetag}
 \begin{pythoncode}
 {% paged_block config_name="regid_list_config" with_filter=True %}
 \end{pythoncode}
 \end{listing}
 
+	\item[Javascript] Eine Aufgabe der Javascript Komponente ist das Auslesen aller
+	Paged Block Konfigurationen aus dem DOM der aktuellen HTML Seite. Identifiziert
+	werden diese Blöcke durch die CSS Klasse \texttt{ajax-paged}. Es können mehrere
+	Paged Block Komponenten pro Seite definiert werden. Für jeden der gefunden
+	Paging Container wird ein Javascipt Pager-Objekt instanziert, welches für die
+	Verwaltung des Zustandes -- zum Beispiel die aktuelle Seite -- und die
+	Kommunikation mit dem AjaxEndpoint verantwortlich ist. Nach erfolgreicher
+	Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Block in den
+	entsprechenden Container geladen. 
 
-\item[Javascript]
-Eine Aufgabe der Javascript Komponente ist das Auslesen aller Paged Block Konfigurationen aus der Html Seite. Gefunden werden diese durch die gemeinsame \texttt{ajax-paged} CSS Klasse. Es können so mehrere Paged Block Komponenten pro Seite definiert werden. Für jeden der gefunden Paging Container wird ein Pager Objekt instanziert, welches für die Kommunikation mit dem AjaxEndpoint verantwortlich ist. Nach erfolgreicher Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Block in den entsprechenden Container geladen.
-
-\item [AjaxEndpoint]
-Der AjaxEndpoint nimmt die Requests entgegen und kann anhand des übergebenen Konfigurationsnamens die zugehörige Konfiguration laden.
-Die Konfiguration beinhaltet ein Producer und ein Template.
-Die Datengenerierung wird an den Producer delegiert und die Daten anschliessend als Kontext verwendet, um das Template zu HTML Code zu rendern.
-Durch diese Separierung wird eine hohe Wiederverwendbarkeit erreicht. Für verschiedene Datenquellen (Producer) können dieselben Templates und umgekehrt verwendet werden.
-
+	\item [AjaxEndpoint] Der AjaxEndpoint nimmt Requests entgegen und kann anhand
+	des übergebenen Konfigurationsnamens die zugehörige Konfiguration laden. Diese
+	beinhaltet einen Producer und die Referenz auf ein Template. Die
+	Datengenerierung wird an den Producer delegiert, dieser übernimmt auch die
+	Unterteilung der Daten in die Angeforderte  Seiten grösse. Die Daten welche der
+	Producer zurück gibt werden anschliessend als Kontext verwendet, um das
+	Template in HTML zu rendern. Durch diese Separierung wird eine hohe
+	Wiederverwendbarkeit erreicht. Verschiedene Datenquellen und Templates können
+	kombiniert und wiederverwendet werden.
 \begin{listing}
 \caption{Beispiel einer Paging Config}
 \begin{pythoncode}
@@ -478,30 +493,27 @@ regid_list_paging = {
 \end{pythoncode}
 \end{listing}
 
-\item[Producer]
-Die eigentliche Datenaufbereitung, in der Regel Datenbankabfragen, inkl. Slicing und Filtering wird im Producer definiert.
-
-\end{description}
-
-Die Idee hinter diesem Aufbau ist, dass Bestandteile, die sich zwischen den einzelnen
-Instanzen unterscheiden, austauschen und wiederverwenden lassen. In diesem Setup sind das die Templates, die für die Darstellung von Daten verantwortlich sind und die sogenannten \enquote{Producer}, welche Daten sammeln und aufbereiten.
-Durch ein gemeinsames Producer Interface (Implementation des \enquote{Strategy Pattern}), können Producer sehr flexibel ausgetauscht und wiederverwendet werden.\\
-Eine konkrete Implementation eines Producers ist in Listing~\ref{paging:producer} zu sehen.
-
+	\item[Producer] Die Datenaufbereitung, Datenbankabfragen, Slicing der Daten in
+	Seiten und vorgängiges Filtern sind im Producer definiert. Durch ein
+	gemeinsames Producer Interface (impliziter Contract\cite{contracts:2003}),
+	können Producer flexibel ausgetauscht und wiederverwendet werden. Eine konkrete
+	Implementation eines Producers ist in Listing~\ref{paging:producer} zu sehen.
+	
 \begin{listing}
 \caption{Beispielimplementation eines Producers}
 \label{paging:producer}
 \begin{pythoncode}
 def swid_files_list_producer(from_idx, to_idx, filter_query, dynamic_params, static_params=None):
-    if not dynamic_params:
-        return []
-    tag_id = dynamic_params['tag_id']
-    return Tag.objects.get(pk=tag_id).files.all()[from_idx:to_idx]
+ if not dynamic_params:
+     return []
+ tag_id = dynamic_params['tag_id']
+ return Tag.objects.get(pk=tag_id).files.all()[from_idx:to_idx]
 \end{pythoncode}
 \end{listing}
-
-Für generische List Producer, welche lediglich eine Liste von Objekten eines bestimmten Models liefern, wurde eine eine \enquote{Factory} erstellt:
-
+	
+	Für generische List Producer, welche lediglich eine Liste von Objekten eines
+	bestimmten Models liefern, wurde eine eine \enquote{Factory} erstellt:
+	
 \begin{listing}
 \caption{Producer Factory}
 \begin{pythoncode}
@@ -509,27 +521,44 @@ swid_producer_factory = ProducerFactory(Tag, 'unique_id__icontains')
 swid_producer_factory.list()
 \end{pythoncode}
 \end{listing}
+	
 
-\paragraph{Zusammenfassung} \hspace{0pt} \\
-Um einen Pagination Block in eine Seite einzubinden, existiert ein Template Tag. Dieser inkludiert einen vorgegeben HTML Block und überträgt allfällige
-Konfigurationen in Daten-Attribute des HTML Blocks.\\
-Ein so eingebundener Block wird durch die Javascript Komponente gefunden und die
-Pagination wird initialisiert.
+\end{description}
 
-Konfiguriert wird eine Pagination Instanz über ein \enquote{Config-Dictionary}.
-Dieses muss an zwei Stellen referenziert werden. Einerseits wird dieses im
-Template Tag angegeben, andererseits muss die Konfiguration im Ajax Endpunkt
-registriert werden.
+%\paragraph{Ablauf} \hspace{0pt} \\
+%Um einen Pagination Block in eine Seite einzubinden, existiert ein Template Tag.
+%Dieser inkludiert einen vorgegeben HTML Block und überträgt allfällige
+%Konfigurationen in Daten-Attribute des HTML Blocks.\\
+%Ein so eingebundener Block wird durch die Javascript Komponente gefunden und die
+%Pagination wird initialisiert.
+%
+%Konfiguriert wird eine Pagination Instanz über ein \enquote{Config-Dictionary}.
+%Dieses muss an zwei Stellen referenziert werden. Einerseits wird dieses im
+%Template Tag angegeben, andererseits muss die Konfiguration im Ajax Endpunkt
+%registriert werden.
+%
+%Die Javascript Komponente übermittelt den Namen der Konfiguration, den Index der
+%angeforderten Seite, sowie optionale kontextabhängige Variablen zum Ajax
+%Endpunkt.
 
 \subsubsection{Models für MySQL Support erstellt}
-\paragraph{Empfehlung für Wechsel der Datenbank}
-Durch die angesprochene enge Kopplung von strongSwan und strongTNC, durch eine gemeinsame Datenbank, bedingen Anpassungen des Datenbankschemas Änderungen an allen Komponenten.
-Desweiteren ist zu erwarten, dass für grössere Installationen SQLite zu leichtgewichtig wird.
-Optimierungen und Profiling sind sehr eingeschränkt, zu dem wird keine referenzielle Integrität unterstützt.
-\paragraph{Generierung des Datenbankschemas}
-Django unterstütz diverse Datenbankbackends \footnote{\url{https://docs.djangoproject.com/en/dev/ref/databases/}}, so unter anderem MySQL, PostgreSQL, MSSQL und das zur Zeit verwendete SQLite.
-Wir empfehlen das SQLite Backend möglichst bald durch eine vollausgewachsene Datenbank zu ersetzen. Aus diesem Grund haben wir die Models dahingehend angepasst, dass Sie dem aktuellen Dantebankschema entsprechen. 
-Der Django ORM kann daraus Datenbankspezifisches SQL DDL generieren, und so die Migration erheblich erleichtern.
+\paragraph{Empfehlung für Wechsel der Datenbank} \hspace{0pt} \\
+Die enge Kopplung von strongSwan und strongTNC, durch eine gemeinsam genutzten
+Datenbank, hat zur Folge, dass Anpassungen des Datenbankschemas, Änderungen an
+allen Komponenten bedingen. Des weiteren ist zu erwarten, dass für grössere
+Installationen SQLite zu leichtgewichtig ist. Optimierungen und Profiling sind
+eingeschränkt durchführbar, zu dem wird keine referenzielle Integrität
+unterstützt. Problematisch ist auch, dass SQLite nicht mehrenuzerfähig ist.
+
+\paragraph{Generierung des Datenbankschemas} \hspace{0pt} \\
+Django unterstütz diverse Datenbankbackends
+\footnote{\url{https://docs.djangoproject.com/en/dev/ref/databases/}}, unter
+anderem MySQL, PostgreSQL, MSSQL und das zur Zeit verwendete SQLite. Wir
+empfehlen das SQLite Backend möglichst bald durch ein anders Datenbankbackend zu
+ersetzen. Aus diesem Grund wurden die Django Models so angepasst, dass sie dem
+aktuellen Dantebankschema entsprechen. Das Django ORM kann daraus
+Datenbankspezifisches SQL-DDL generieren, und so die Migration erheblich
+erleichtern.
 
 \subsubsection{Split der Configfiles}
 TODO Danilo

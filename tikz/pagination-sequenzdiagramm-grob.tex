@@ -4,7 +4,7 @@
 		% Objekte
 
 		\umlobject[x=0]{Javascript}
-		\umlobject[x=4]{HtmlPage}
+		\umlobject[x=4]{HTMLPage}
 		\umlobject[x=7]{AjaxEndpoint}
 		\umlobject[x=11]{ConfigRegistry}
 		\umlobject[x=13]{Config}
@@ -12,7 +12,7 @@
 		
 		% Calls
 		\begin{umlfragment}[type=loop, label=foreach container, inner ysep=6]
-		\begin{umlcall}[dt=16, padding=4, op=readPagingConfig(), return=confName]{Javascript}{HtmlPage}
+		\begin{umlcall}[dt=16, padding=4, op=readPagingConfig(), return=confName]{Javascript}{HTMLPage}
 		\end{umlcall}
 		\end{umlfragment}
 		
@@ -38,7 +38,7 @@
 			
 		\end{umlcall}
 		
-		\begin{umlcall}[dt=5, padding=3, op={setNewHTML(HTML)}]{Javascript}{HtmlPage}
+		\begin{umlcall}[dt=5, padding=3, op={setNewHTML(HTML)}]{Javascript}{HTMLPage}
 		\end{umlcall}
 			
 	\end{umlseqdiag}
