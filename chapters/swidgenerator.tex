@@ -197,7 +197,7 @@ ersichtlich, diese Pakete können so nachträglich herausgefiltert werden.
 
 RPM\footnote{\url{https://rpm.org}} (Abkürzung für \textit{Red Hat Package
 Manager}) ist der Standard-Paketmanager für Red Hat Linux Systeme sowie
-verwandten Distributionen wie openSUSE, CentOS, Mandriva und Fedora.
+verwandte Distributionen wie openSUSE, CentOS, Mandriva und Fedora.
 
 \textbf{Liste installierter Pakete abfragen}
 
@@ -274,8 +274,8 @@ zu und geben diese Informationen an das Hauptprogramm zurück. Die
 Environment-Registry befindet sich ebenfalls in diesem Package. Mehr dazu im
 Abschnitt \ref{swidgenerator:architektur:environments}.
 
-Das \texttt{generators} Package enthält die nötigen Funktionen um aus den, durch
-das entsprechenden Environment zurückgegebenen, Paketinformationen die
+Das \texttt{generators} Package enthält die nötigen Funktionen, um aus den durch
+das entsprechende Environment zurückgegebenen Paketinformationen, die
 dazugehörigen Software IDs oder SWID Tags zu generieren. Diese Funktionen sind
 als Python Generators\footnote{\url{https://docs.python.org/2/tutorial/classes.html\#generators}}
 implementiert. Die einzelnen Einträge können dadurch schon während der Generierung 
@@ -308,7 +308,7 @@ Environment-Klassen registriert werden. Danach werden alle
 Kommandozeilen-Argumente verarbeitet. Mit den nun vorhandenen Informationen muss
 entschieden werden, welches Environment effektiv verwendet werden soll --
 entweder durch den Benutzer definiert oder durch die automatische
-Packetmanager-Erkennung.
+Paketmanager-Erkennung.
 
 Der Ablauf ist wie folgt:
 
@@ -342,7 +342,7 @@ dargestellt:
 
 Nachdem nun, wie im Abschnitt \ref{swidgenerator:architektur:initialisierung}
 beschrieben, alle nötigen Informationen gesammelt wurden, kann nun die
-Hauptarbeit geschehen: Die Generierung der Daten aus den
+Hauptarbeit geschehen: die Generierung der Daten aus den
 Paketmanager-Informationen. Ob SWID Tags oder Software-IDs generiert werden, ist
 abhängig vom ersten Kommandozeilenargument, welches entweder \texttt{swid} oder
 \texttt{software-id} sein kann.
@@ -404,7 +404,7 @@ fünf Methoden:
 		die zu einem Softwarepaket gehörigen Dateien repräsentiert.
 	\item \texttt{is\_installed()}: Prüft, ob der repräsentierte Paketmanager auf
 		dem aktuellen System installiert ist oder nicht. Dies kann beispielseweise
-		getan werden, indem geprüft wird ob zentrale Executables (\zb
+		getan werden, indem geprüft wird, ob zentrale Executables (\zb
 		\texttt{dpkg-query} bei DPKG) vorhanden sind.
 	\item \texttt{get\_architecture()}: Gibt den System-Architekturtyp (\zb
 		\texttt{x86\_64} oder \texttt{i386}) zurück.
@@ -414,7 +414,7 @@ fünf Methoden:
 \end{itemize}
 
 Da Environments meist gemeinsam benötigte Funktionalität aufweisen --
-beispielsweise die Überprüfung ob eine vom Paketmanager gemeldete Datei auch
+beispielsweise die Überprüfung, ob eine vom Paketmanager gemeldete Datei auch
 wirklich auf dem System vorhanden ist -- wurden diese in eine Basisklasse namens
 \texttt{CommonEnvironment} ausgegliedert. Diese kann wahlweise von einem
 Environment erweitert werden.
@@ -462,7 +462,7 @@ Liste der verfügbaren Environments abzufragen, kann die
 Als Resultat werden die Kurzbezeichnungen der registrierten Environments
 alphabetisch sortiert aufgelistet. Zusätzlich wird der String \texttt{'auto'}
 zurückgeliefert, welcher für die automatische Environment Erkennung steht. Diese
-Liste wird vom Argument Parser verwendet um die Liste der gültigen Werte für die
+Liste wird vom Argument Parser verwendet, um die Liste der gültigen Werte für die
 \texttt{-{}-env} Option zu finden.
 
 Die dritte wichtige Methode der \texttt{EnvironmentRegistry}-Klasse ist
@@ -470,10 +470,10 @@ Die dritte wichtige Methode der \texttt{EnvironmentRegistry}-Klasse ist
 entgegen und führt folgende Schritte aus:
 
 \begin{enumerate}
-	\item Wenn die Kurzbezeichnung \texttt{'auto'} ist, wird versucht das
+	\item Wenn die Kurzbezeichnung \texttt{'auto'} ist, wird versucht, das
 	installierte Environment automatisch zu finden, indem über die Liste der
 	registrierten Environments iteriert wird und für jedes Environment geprüft
-	wird, ob der passende Packetmanager auf dem System installiert ist. Das erste
+	wird, ob der passende Paketmanager auf dem System installiert ist. Das erste
 	Environment, bei dem dies zutrifft, wird zurückgegeben. Falls dies für keines
 	der Environments der Fall sein sollte, wird eine \texttt{AutodetectionError}
 	Exception ausgelöst.
@@ -506,7 +506,7 @@ TODO: Danilo
 
 \subsection{Generieren von Software IDs}
 
-Der SWID Generator kann folgendermassen verwendet werden um Software-IDs zu
+Der SWID Generator kann folgendermassen verwendet werden, um Software-IDs zu
 generieren:
 
 \begin{textcode}
@@ -605,8 +605,8 @@ Datei in jedem installierten Paket auf dem System vom SWID Generator auf
 Existenz geprüft wird. An diesem Punkt gibt es möglicherweise noch
 Optimierungspotential.
 
-Das Pretty Printing ist ebenfalls ein Zeitaufwändiger Vorgang, da die
-generierten Tags hierfür ein zweites mal geparsed und in einer
+Das Pretty Printing ist ebenfalls ein zeitaufwändiger Vorgang, da die
+generierten Tags hierfür ein zweites Mal geparsed und in einer
 \enquote{schöneren} Variante ausgegeben werden müssen. Der Mehraufwand gegenüber
 der Variante ohne \texttt{-{}-pretty} betrug in den drei gemessenen
 Beispielfällen zwischen 43\% und 125\%. Da diese Option nur für Debugging-Zwecke
