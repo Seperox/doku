@@ -257,7 +257,7 @@ Standards beschreibt den Aufbau und die Verwendung von Software Identification
 Tags und befindet sich zur Zeit noch im Entwurststadium (\enquote{Draft}).
 
 \subsection{Bestandteile eines SWID Tags}
-Folgendes ist eine Zusammenstellung der Bestandteile eines SWID Tags wie sie in
+Nachfolgend eine Zusammenstellung der Bestandteile eines SWID Tags, wie sie in
 diesem Projekt verwendet werden. Der Standard beschreibt noch weitere Elemente
 und Anwendungsmöglichkeiten, welche in dieser Arbeit allerdings nicht verwendet
 werden. Die jeweiligen Listen der Attribute sind nicht vollständig, sondern eine
@@ -269,13 +269,13 @@ Auswahl, wie sie für diese Arbeit relevant sind. (ISO
 	Dieses Element hat Attribute, welche die Anwendung des Tags und dessen Identität,
 	innerhalb seiner Entität, beschreiben.
 	\begin{description}
-		\item[delta] Das \texttt{delta} Attribut beschreibt ob es sich um ein Patch
+		\item[delta] Das \texttt{delta} Attribut beschreibt, ob es sich um ein Patch
 		oder eine Modifikation der Software handelt. Dieses Attribut wird von uns
-		nicht verwendend, da bei Linux Systemen üblicherweise keine Patches verteilt
+		nicht verwendet, da bei Linux Systemen üblicherweise keine Patches verteilt
 		werden, sondern gepatchte Softwarepakete. Der Standardwert ist \texttt{false}.
 
 		\item[name] Dieses Pflichtfeld enthält den Namen der Software so wie man
-		üblibcherweise darauf verweisen würde.
+		üblicherweise darauf verweisen würde.
 		
 		\item[uniqueId] Die \texttt{uniqueId} ist eine Kennung, die eine Software
 		innerhalb des Namespaces des Tag Creators eindeutig identifizieren kann.
@@ -293,7 +293,7 @@ Auswahl, wie sie für diese Arbeit relevant sind. (ISO
 	Entity mit der Rolle \texttt{tagcreator} enthalten. Das \texttt{Entity} Element
 	ist ein Kind des \texttt{SoftwareIdentity} Elements.
 	\begin{description}
-		\item[name] Name der Organisation die eine bestimmte Rolle in diesem Tag für
+		\item[name] Name der Organisation, die eine bestimmte Rolle in diesem Tag für
 		sich beansprucht. Dieses Attribut ist ein Pflichtfeld.
 		
 		\item[regid] Die \texttt{regid} ist die \enquote{Unique registration ID} einer
@@ -305,7 +305,7 @@ Auswahl, wie sie für diese Arbeit relevant sind. (ISO
 		Domain auzusehen hat. Dieses Attribut ist optional und wird mit dem
 		Standardwert \texttt{invalid.unavailable} befüllt.
 		
-		\item[role] Die Rolle beschreibt in welcher Beziehung die Organisation zu
+		\item[role] Die Rolle beschreibt, in welcher Beziehung die Organisation zu
 		diesem SWID Tag steht. Das \texttt{role} Attribut ist ein Aufzählungstyp mit
 		den möglichen Werten \texttt{publisher, tagcreator, licensor} und ist
 		obligatorisch.
@@ -346,10 +346,10 @@ Auswahl, wie sie für diese Arbeit relevant sind. (ISO
 	\item Als eindeutige Kennung für einen SWID Tag dient die Kombination von
 	\texttt{tag\_createor\_regid} und \texttt{uniqueId}. Diese Kennung wird
 	\enquote{software\_id} genannt. Es liegt in der Verantwortung des \enquote{Tag
-	Creators} dafür zu sorgen, dass seine Tags Eindeutig sind. (ISO
+	Creators} dafür zu sorgen, dass seine Tags eindeutig sind. (ISO
 	19770-2\cite{iso19770-2}, Seite 10, 6.1.5 und Seite 16, 8.1)
 	
-	\item Es ist nicht obligatorisch die Echtheit von SWID Tags zu garantieren,
+	\item Es ist nicht obligatorisch die Echtheit von SWID Tags zu garantieren;
 	falls eine Echtheitsvalidierung gewünscht oder nötig ist, kann dies durch den
 	Einsatz von der \enquote{XML signature syntax}\cite{bartel2002xml}
 	implementiert werden. Echtheitsprüfung ist nicht Bestandteil dieser Arbeit.
@@ -381,7 +381,7 @@ Auswahl, wie sie für diese Arbeit relevant sind. (ISO
 
 
 \subsection{Probleme}
-Bei der Analyse und der Implementation des ISO Standard 19770-2:2014, sind
+Bei der Analyse und der Implementation des ISO Standard 19770-2:2014 sind
 einige Punkte aufgetaucht in denen sich der Standard widerspricht, etwas unklar
 ist oder Schwierigkeiten bei der Implementation verursacht.
 
@@ -397,7 +397,7 @@ unique.}
 \textit{ISO 19770-2\cite{iso19770-2}, Seite 16}\\
 
 Da der \enquote{Tag Creator} für die Eindeutigkeit seiner Tags verantwortlich
-ist, muss man davon ausgehen, dass ein erhaltener Tag Eindeutig identifizierbar
+ist, muss man davon ausgehen, dass ein erhaltener Tag eindeutig identifizierbar
 ist. Das Problem bei Tags mit wenig Informationen liegt allerdings beim Tag
 Konsumenten:
 \begin{quote}
@@ -414,10 +414,16 @@ conforming with this part of ISO/IEC 19770.}
 \end{quote}
 \textit{ISO 19770-2\cite{iso19770-2}, Seite 4}\\
 
-Diese Anforderung ist bereits erfüllt, wenn der Name der Software und der Organisation, welche den Tag erstellt hat, vorhanden sind.
+Diese Anforderung ist bereits erfüllt, wenn der Name der Software und der
+Organisation, welche den Tag erstellt hat, vorhanden sind.
 
-In dieser Arbeit ist dieses Problem dadurch entschärft, dass der SWID
-Generator die einzige Tag creator Instanz ist und damit eindeutige Tags kreiert. Sobald jedoch mehrere Tag creator vorhanden sind, und die Eindeutigkeit nicht mehr zentral geregelt ist (z.b durch namespaces durch präfixe) könnten Probleme entstehen. Desweiteren muss davon ausgegangen werden, dass es im Interesse des Tag Erstellers liegt, dass seine SWID Tags nicht Ursache eines Konfliktes werden.
+In dieser Arbeit ist dieses Problem dadurch entschärft, dass der SWID Generator
+die einzige Tag creator Instanz ist und damit eindeutige Tags kreiert. Sobald
+jedoch mehrere Tag creators vorhanden sind, und die Eindeutigkeit nicht mehr
+zentral geregelt ist (z.b namespacing durch präfixe), könnten Probleme
+entstehen. Des Weiteren muss davon ausgegangen werden, dass es im Interesse des
+Tag Erstellers liegt, dass seine SWID Tags nicht Ursache eines Konfliktes
+werden.
 
 \subsubsection{SWID Tag XML Dateien}
 \begin{quote}
@@ -440,7 +446,7 @@ Der SWID Generator setzt die \texttt{uniqueId} aus dem Betriebsystemnamen, der
 Prozessorarchitektur, dem Paketnamen sowie der Versionsnummer zusammen:
 \texttt{<OS>\_<Arch>\_<Package>\_<Version>}. Versionen unter der Linux
 Distribution \enquote{Ubuntu} enthalten oft Sonderzeichen wie Doppelpunkte oder
-Plus-Zeichen. Anhand der Folgenden Aussage aus dem Standard kann man darauf
+Plus-Zeichen. Anhand der folgenden Aussage aus dem Standard kann man darauf
 schliessen, dass diese Zeichen in einer \texttt{uniqueId} nicht erlaubt sind.
 
 \begin{quote}

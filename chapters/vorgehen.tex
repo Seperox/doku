@@ -1,7 +1,7 @@
 \chapter{Vorgehen}
 
 Durch die organisatorischen Anforderungen an das Projekt haben wir uns für eine
-Iterative Vorgehensweise entschieden. Für unser Team von drei Personen und einer
+iterative Vorgehensweise entschieden. Für unser Team von drei Personen und einer
 Projektdauer von rund 17 Wochen haben wir uns für ein Subset des Scrum Vorgehensmodelles
 entschieden, dabei waren die drei Säulen von Scrum von zentraler Bedeutung:
 
@@ -13,17 +13,16 @@ entschieden, dabei waren die drei Säulen von Scrum von zentraler Bedeutung:
 
 	\item[Überprüfung] Das Resultat dieser Arbeit wird zeitnah nach ihrem Abschluss
 	an einer internationalen IT Security Konferenz präsentiert. Um zu diesem
-	Zeitpunkt einen stabilen Stand zu erreichen, haben wir uns entschieden
-	regelmässig den aktuellen Stand unserer Arbeiten mittels GitHub Pull Requests
+	Zeitpunkt einen stabilen Stand zu erreichen, haben wir uns entschieden, regelmässig den aktuellen Stand unserer Arbeiten mittels GitHub Pull Requests
 	in das offizielle strongTNC Repository zu integrieren. Dadurch wird
 	sichergestellt, dass die Funktionalität von den Betreuern stets überprüft und
 	getestet werden kann und die Feedback Roundtrips minmal gehalten werden.
 
-	\item[Anpassung] Da das Produkt bereits im Einsatz ist werden bei der Bedienung
-	Probleme und neue Anforderungen entdeckt. Dadurch, dass die Anforderungen an das
-	Produkt nicht festgelegt werden, sondern laufen neu bewertet und angepasst
-	werden, entsteht ein Produkt das den Ansprüchen der Benutzer besser entspricht
-	und erhöht so die Qualität.
+	\item[Anpassung] Da das Produkt bereits im Einsatz ist, werden bei der
+	Bedienung Probleme und neue Anforderungen entdeckt. Dadurch, dass die
+	Anforderungen an das Produkt nicht ein für alle Mal festgelegt, sondern laufend
+	neu bewertet und angepasst werden, entsteht ein Produkt, welches den Ansprüchen
+	der Benutzer besser entspricht und so die Qualität erhöht.
 
 \end{description}
 
@@ -32,9 +31,9 @@ Wir haben uns für folgende Artefakte <TODO: Ref> entschieden:
 
 \begin{description}
 	\item[Definition of Done] Wir haben eine Checkliste von Aktivitäten	definiert,
-	welche festhält wie einzelne Aufgaben einheitlich gelöst werden. Damit wird
+	welche festhält, wie einzelne Aufgaben einheitlich gelöst werden. Damit wird
 	einerseits das Schätzen des Aufwandes bei der Iterationsplanung erleichtert.
-	Andererseits wird festgelegt wann ein Task als erledigt betrachtet werden kann.
+	Andererseits wird festgelegt, wann ein Task als erledigt betrachtet werden kann.
 	Auch Qualitätsmassnahmen, wie beispielsweise das Testen und Durchführen von
 	Reviews sind darin enthalten (siehe \autoref{DefinitionOfDone}).
 
@@ -46,7 +45,7 @@ Wir haben uns für folgende Artefakte <TODO: Ref> entschieden:
 	\item[Backlog] Sämtliche geplanten Features und offenen Bugs wurden in einem
 	Backlog gehalten, so ist der Umfang der offenen Arbeit klar ersichtlich.
 	
-	\item[Iteration Backlog] Ebenfalls wird auch für jede Iteration ein Backlog
+	\item[Iteration Backlog] Ebenfalls wird für jede Iteration ein Backlog
 	geführt.
 	
 	\item[Planning Meeting] Zu Beginn jeder Iteration wird ein Planning Meeting
@@ -64,9 +63,9 @@ Wir haben uns für folgende Artefakte <TODO: Ref> entschieden:
 Bei der Einarbeitung in die vorhandene strongTNC Umgebung haben wir
 festgestellt, dass die Architektur und die Codequalität einige Mängel aufweist.
 Deshalb haben wir uns entschieden, diesem Aspekt spezielles Augenmerk zu geben
-und haben entsprechende Massnahmen definiert.\\ 
-Diese Massnahmen sollen die Qualität dieser Arbeit, als auch von möglichen
-Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
+und haben entsprechende Massnahmen definiert. Diese sollen die Qualität dieser
+Arbeit, als auch jene von möglichen Nachfolgearbeiten oder Weiterentwicklungen
+durch die Community sicherstellen.
 
 \begin{description}
 	\item[Continous Integration] Zur fortlaufenden Integration des entwickelten
@@ -76,11 +75,11 @@ Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
 	sichergestellt, dass sich stets lauffähiger Code im Master Branch des
 	Repositories befindet oder fehlerhafter Code schnell entdeckt wird und nicht
 	erst bei einem Release. Als zusätzliches Hilfsmittel wurde auf der Webseite des
-	Github Repositories Statusindikator integriert welcher optisch über den
+	Github Repositories ein Statusindikator integriert, welcher optisch über den
 	aktuellen Stand informiert.
 
 	\item[Statische Code-Analyse] Durch die Integration von Landscape.io
-	\footnote{\url{http://landscape.io}} einem online Service welcher statische
+	\footnote{\url{http://landscape.io}}, einem online Service, welcher statische
 	Code-Analysen durchführt und die Codequalität bewertet, kann sichergestellt
 	werden, dass Code-Smells, welche nicht durch Unit Tests oder während der
 	Entwicklung erkannt werden, trotzdem bemerkt werden. Um immer über den Stand
@@ -88,7 +87,7 @@ Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
 	optischer Statusindikator integriert.
 
 	\item[Coding-Styleguide] Es wurde ein Coding-Styleguide
-	(\autoref{anhang:coding-styleguide}) definiert, welche zusammengefasst folgende
+	(\autoref{anhang:coding-styleguide}) definiert, welcher zusammengefasst folgende
 	Punkte definiert:
 	\begin{itemize*}
 		\item Anwedung und Format von Docstrings zur inline Dokumentation von Code
@@ -99,7 +98,7 @@ Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
 	Konfiguration \end{itemize*}
 
 	\item[Git Guidelines] Zum einheitlichen Umgang mit Git wurden Guidelines
-	verfasst (siehe \autoref{ref:git-guidelines}) welche folgende Punkte
+	verfasst (siehe \autoref{ref:git-guidelines}), welche folgende Punkte
 	beschreiben
 	\begin{itemize*}
 		\item Aussehen von Commit Messages (Sprache, Format, Referenzierungen)
@@ -111,11 +110,11 @@ Nachfolgearbeiten oder Weiterentwicklung durch die Community sicherstellen.
 \end{description}
 
 \section{Zeitplanung / Phasen}
-Die zur verfügung stehende Arbeitszeit wurde in sechs Iterationen zu jeweils
+Die zur Verfügung stehende Arbeitszeit wurde in sechs Iterationen zu jeweils
 zwei Wochen und noch zwei Iterationen zu je einer Woche eingeteilt. Anhand der
 bekannten Arbeitspaketen aus der Aufgabenstellung haben wir das Projekt in zwei
 Phasen aufgeteilt.\\
-In der ersten Phasen haben wir uns den Pflichtteilen der Aufgabenstellung
+In der ersten Phase haben wir uns den Pflichtteilen der Aufgabenstellung
 angenommen. Die wesentlichen Ziele waren die Behebung der bereits bekannten Bugs
 sowie die Implementation einer ersten Version des SWID Generators und der
 entsprechenden Erweiterung der strongTNC App. \\
