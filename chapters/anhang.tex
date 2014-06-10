@@ -227,16 +227,16 @@ Alles zum Verändern der Git History findet sich hier:\\
 
 \subsubsection{Pulling}
 
-Beim \texttt{git pull} ist es sinnvoll, immer den \texttt{--rebase} Parameter zu
+Beim \texttt{git pull} ist es sinnvoll, immer den \texttt{-{}-rebase} Parameter zu
 verwenden. Bei einem Konflikt durch neue Remote Commits wird dann nämlich lokal
 rebased statt merged. Da der lokale Code noch nicht publiziert wurde, ist dies
 unbedenklich. Ein Rebase-Konflikt kann bei Problemen jederzeit mit \texttt{git
-rebase --abort} abgebrochen werden.
+rebase -{}-abort} abgebrochen werden.
 
 \subsubsection{Force Pushing}
 
 Während der Entwicklungsphase in einem Branch ist es kein Problem wenn man
-geänderte History mit \texttt{git push --force} pushed, im \texttt{master}
+geänderte History mit \texttt{git push -{}-force} pushed, im \texttt{master}
 Branch sollte das jedoch nur in äussersten Ausnahmesituationen geschehen.
 
 \subsubsection{Merge / Rebase}
@@ -275,9 +275,9 @@ Nachfolgend der Workflow einer Code-Änderung:
 	\item Der zuständige Entwickler erstellt einen Feature Branch und entwickelt
 		darin den benötigten Code.
 	\item Wenn der entwickelte Code sich im strongTNC Repository befindet, kann
-		der Issue in ein Pull Request umgewandelt werden. Ansonsten einen separaten
-		Pull Request erstellen und darin auf den Issue verweisen (\texttt{refs
-		user/repo\#issue}).
+		der Issue in ein Pull Request umgewandelt werden (\ref{workflow:hub}).
+		Ansonsten einen separaten Pull Request erstellen und darin auf den Issue
+		verweisen (\texttt{refs user/repo\#issue}).
 	\item Code wird von jemandem reviewed. Korrekturen werden in den Branch
 		pushed.
 	\item Commits werden wenn sinnvoll reduziert.
@@ -287,6 +287,7 @@ Nachfolgend der Workflow einer Code-Änderung:
 \end{enumerate}
 
 \subsection{Umwandeln von Issues in Pull Requests}
+\label{workflow:hub}
 
 Mit dem Kommandozeilen-Tool hub\footnote{\url{https://github.com/github/hub}}
 kann ein Issue in ein Pull Request umgewandelt werden:
@@ -315,9 +316,10 @@ Ein Task gilt als abgeschlossen, wenn folgende Punkte erfüllt sind:
 	\item Die benötigte Arbeitszeit wurde erfasst.
 \end{itemize}
 
+\include{chapters/anhang/deployment}
+
 \section{SWID Measurement Endpoint REST Manual}
 \label{REST:swid-measurement-manual}
 \includepdf[height=\textheight,pages={-},offset=0mm -5mm, frame=true]{other_documents/swid-measurement-manual.pdf}
-
 
 \include{chapters/anhang/eigenstaendigkeitserklaerung}
