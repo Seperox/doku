@@ -4,7 +4,7 @@
 
 \subsubsection{Aufteilung in mehrere Django Apps}
 
-Bereits in der Analyse (Abschnitt \ref{analyse:stand}) fiel uns auf, dass
+Bereits in der Analyse (Abschnitt \ref{analyse:stand}) fiel auf, dass
 die bestehende Codebasis von strongTNC als einzelne Django App namens
 \texttt{tncapp} umgesetzt wurde. Innerhalb der App waren alle Models in einer
 einzigen Datei enthalten (\texttt{models.py}), während die Views in mehrere
@@ -12,13 +12,13 @@ thematisch gruppierte Dateien aufgeteilt wurden (\texttt{device\_views.py},
 \texttt{product\_views.py}, etc).
 
 Diese Aufteilung der Views deutet darauf hin, dass die \texttt{tncapp} App für
-mehrere thematische Bereiche zuständig ist, welche in der Codebasis separariert
-werden könnten und sollten. Die Aufteilung in mehrere Python-Dateien ist jedoch
-in Django Projekten der falsche Weg um dies zu erreichen. Stattdessen bietet
-Django für solche Fälle das Konzept einer App an.
+mehrere thematisch unterschiedliche Bereiche zuständig ist, welche in der
+Codebasis separiert werden könnten und sollten. Die Aufteilung in mehrere
+Python-Dateien ist jedoch in Django Projekten der falsche Weg um dies zu
+erreichen. Stattdessen bietet Django für solche Fälle das Konzept einer App an.
 
 Eine App ist ein Verzeichnis innerhalb eines Django Projektes, welches seine eigenen
-Models, Views und eventuell Templates enthält. Die Apps werden in der
+Models, Views und Templates enthält. Die Apps werden in der
 Projektweiten \texttt{setting.py} registriert. Ein einzelnes Projekt lässt sich
 so in mehrere kleine MVC Container aufteilen.
 
@@ -26,34 +26,43 @@ Die Voraussetzung dafür, dass eine Aufteilung einer Codebasis in mehrere Apps
 Sinn ergibt, ist eine hohe Kohäsion der Codebasis innerhalb einer App. Das führt
 dazu, dass eine App \enquote{pluggable} wird und einfach aktiviert- und
 deaktiviert werden kann. Die Separierung von hochkohäsivem Code in mehrere Apps
-führt automatisch zu tiefer Kopplung (\cite[p.~232--237]{larman2002applying})
+führt automatisch zu tiefer Kopplung (\cite[S.~232--237]{larman2002applying})
 und dadurch zu wartbarerem Code.
 
-Aus obengenannten Gründen haben wir die bestehende monolithische App in folgende
-zehn moderat bis hoch kohäsive Apps aufgeteilt:
+Aus den oben genannten Gründen haben wir die bestehende monolithische App in
+folgende zehn moderat bis hoch kohäsive Apps aufgeteilt:
 
 \begin{itemize}
-	\item core: Enthält zentrale Elemente die von fast allen Apps verwendet
-		werden, wie beispielsweise das \texttt{Session} Model oder die
-		\texttt{WorkItemType} Klasse.
-	\item front: Enthält alle Elemente zum darstellen der Seite, welche nicht
-		App-spezifisch sind. Beispiele hierfür sind das Base-Template, der
-		\texttt{highlight} Template Filter oder der \texttt{paging} Ajax Endpoint.
-	\item auth: Enthält Hilfsfunktionen, Mixins und Template Tags im Bezug auf die
-		Authentisierung und Berechtigungsprüfung.
-	\item api: Enthält Hilfsfunktionen und Mixins im Bezug auf die API.
-	\item devices: Enthält Models und Code im Bezug auf Geräte, wie
-		\texttt{Product}, \texttt{Device} und \texttt{Group}.
-	\item filesystem: Enthält Models und Code im Bezug auf das Dateisystem
-		(\texttt{File}, \texttt{Directory}, etc).
-	\item packages: Enthält Models und Code im Bezug auf Softwarepakete und deren
-		verfügbaren Versionen.
-	\item policies: Enthält Models und Code im Bezug auf Policies und deren
-		Durchsetzung mithilfe von Enforcements.
-	\item swid: Enthält Models und Code im Bezug auf die SWID Integration in
-		strongTNC.
-	\item tpm: Enthält Models im Bezug auf die TPM Integration in
-		strongTNC. Diese App bietet aktuell noch keine Funktionalität.
+	\item \texttt{core}: Enthält zentrale Elemente die von fast allen Apps
+	verwendet werden, wie beispielsweise das \texttt{Session} Model oder die
+	\texttt{WorkItemType} Klasse.
+		
+	\item \texttt{front}: Enthält alle Elemente zum darstellen der Seiten, welche
+	nicht App-spezifisch sind. Beispiele hierfür sind das Base-Template, der
+	\texttt{highlight} Template Filter oder der \texttt{pagination} Ajax Endpoint.
+	
+	\item \texttt{auth}: Enthält Hilfsfunktionen, Mixins und Template Tags aus dem
+	Bereich der Authentisierung und Berechtigungsprüfung.
+	
+	\item \texttt{api}: Enthält Hilfsfunktionen und Mixins mit Bezug zur API.
+	
+	\item \texttt{devices}: Enthält Models und Code mit Bezug zu Geräten, wie
+	\texttt{Product}, \texttt{Device} und \texttt{Group}.
+		
+	\item \texttt{filesystem}: Enthält Models und Code mit Bezug auf das
+	Dateisystem (\texttt{File}, \texttt{Directory}, etc).
+	
+	\item \texttt{packages}: Enthält Models und Code zu Softwarepakete
+	und deren verfügbaren Versionen.
+		
+	\item \texttt{policies}: Enthält Models und Code mit Bezug zu Policies und
+	deren Durchsetzung mithilfe von Enforcements.
+		
+	\item \texttt{swid}: Enthält Models und Code betreffend die SWID Integration
+	in strongTNC.
+		
+	\item \texttt{tpm}: Enthält Models für die TPM Integration in strongTNC. Diese
+	App bietet aktuell noch keine Funktionalität.
 \end{itemize}
 
 \subsubsection{Verbesserung der Testing-Infrastruktur}
@@ -61,14 +70,14 @@ zehn moderat bis hoch kohäsive Apps aufgeteilt:
 
 Unit- und Integration-Tests sind zentral für die agile Entwicklung und
 längerfristige Wartbarkeit eines Softwareprojektes. Wir haben deshalb viel Zeit
-und Aufwand in die Konfiguration unserer Testing-Umgebung gesteckt, um diese
+und Aufwand in die Konfiguration unserer Testing-Umgebung investiert, um diese
 besser und flexibler zu machen.
 
 Die ursprüngliche Codebasis verwendete das
 \texttt{unittest}\footnote{\url{https://docs.python.org/2/library/unittest.html}}
 Modul aus der Python Standardbibliothek. Alle Tests befanden sich in einer
-einzigen Datei.  Während \texttt{unittest} eine stabile Lösung ist, merkt man
-bei der Verwendung doch recht schnell, dass das stark von Java Unittests
+einzigen Datei.  Obgleich \texttt{unittest} eine stabile Lösung ist, fällt
+bei der Verwendung auf, dass das stark von Java Unittests
 inspirierte Projekt, relativ umständlich zu nutzen ist. Alle Tests müssen als
 Methoden in einer Klasse geschrieben werden. Um Assertions zu definieren,
 müssen ebenfalls Methodenaufrufe wie \texttt{assertEqual} oder
