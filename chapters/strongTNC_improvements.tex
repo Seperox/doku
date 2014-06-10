@@ -76,12 +76,12 @@ besser und flexibler zu machen.
 Die ursprüngliche Codebasis verwendete das
 \texttt{unittest}\footnote{\url{https://docs.python.org/2/library/unittest.html}}
 Modul aus der Python Standardbibliothek. Alle Tests befanden sich in einer
-einzigen Datei.  Obgleich \texttt{unittest} eine stabile Lösung ist, fällt
-bei der Verwendung auf, dass das stark von Java Unittests
-inspirierte Projekt, relativ umständlich zu nutzen ist. Alle Tests müssen als
-Methoden in einer Klasse geschrieben werden. Um Assertions zu definieren,
-müssen ebenfalls Methodenaufrufe wie \texttt{assertEqual} oder
-\texttt{assertLessThan} verwendet werden. Nachfolgend ein Minimalbeispiel:
+einzigen Datei.  Obgleich \texttt{unittest} eine stabile Lösung ist, fällt bei
+der Verwendung auf, dass das stark von Java Unittests inspirierte Projekt,
+relativ umständlich zu nutzen ist. Alle Tests müssen als Methoden in einer
+Klasse geschrieben werden. Um Assertions zu definieren, müssen ebenfalls
+Methodenaufrufe wie \texttt{assertEqual} oder \texttt{assertLessThan} verwendet
+werden. Nachfolgend ein Minimalbeispiel:
 
 \begin{listing}
 \caption{UnitTest Minimalbeispiel}
@@ -98,13 +98,13 @@ class TestTheAnswer(unittest.TestCase):
 In Python gibt es jedoch bereits ein \texttt{assert} Keyword, welches beliebige
 Assertions testen kann. Zudem ist es in Python-Code üblich auf Klassen zu
 verzichten, wenn sie keinen Mehrwert bringen. Im Fall der Tests ist es oft
-sinnvoller, diese direkt als top-level Funktionen zu definieren und in
-mehrere Module (Dateien) zu organisieren.
+sinnvoller, diese direkt als top-level Funktionen zu definieren und in mehrere
+Module zu organisieren.
 
-Gleich zu Beginn haben wir deshalb die Test-Infrastruktur von Unittest auf
-Pytest\footnote{\url{http://pytest.org/}} umgestellt. Das Pytest Projekt
-beinhaltet Test-Discovery und -Ausführung, viele Hilfsfunktionen und
-Unterstützung für Plugins.
+Um die Situation zu verbessern wurde die Test-Infrastruktur von
+Unittest auf Pytest\footnote{\url{http://pytest.org/}} umgestellt. Das
+Pytest Projekt beinhaltet Test-Discovery und -Ausführung, viele Hilfsfunktionen
+und Unterstützung für Plugins.
 
 Nachfolgend dasselbe Minimalbeispiel wie in Listing
 \ref{improvements:unittest-beispiel}, mit Pytest:
@@ -118,10 +118,10 @@ def test_the_answer():
 \end{pythoncode}
 \end{listing}
 
-Falls mehrere Tests auf dieselben Daten zugreifen, kann man natürlich wie bei
-Unittest eine Klasse schreiben, es gibt jedoch noch eine weitere Möglichkeit:
-Fixtures. Eine Fixture ist eine Funktion, deren Rückgabewert über Dependency
-Injection einem Test übergeben wird. Eine selbst definierte Fixture könnte
+Falls mehrere Tests auf dieselben Daten zugreifen, kann wie bei Unittest eine
+Klasse verwendet werden, es gibt jedoch noch eine weitere Möglichkeit: Fixtures.
+Eine Fixture ist eine Funktion, deren Rückgabewert über \enquote{Dependency
+Injection} einem Test übergeben wird. Eine selbst definierte Fixture könnte
 beispielsweise folgendermassen aussehen:
 
 \begin{listing}
@@ -140,7 +140,7 @@ def test_the_database(database):
 \end{pythoncode}
 \end{listing}
 
-Ein weiteres, von uns sehr häufig genutztes Feature, ist die Parametrisierung von
+Ein weiteres, von uns häufig genutztes Feature, ist die Parametrisierung von
 Tests. Ein \enquote{klassischer} Unittest könnte folgendermassen aussehen:
 
 \begin{listing}
@@ -185,10 +185,10 @@ In diesem Beispiel werden vier unabhängige Tests generiert. Drei davon laufen
 erfolgreich durch, während der Vierte einen Fehler meldet, da die Bedingung
 \texttt{42 + 1 == 42} nicht erfüllt ist.
 
-Um das Testen mit Django zu vereinfachen, haben wir das \texttt{pytest-django}
-Plugin verwendet und ein \texttt{runtests.py} Script geschrieben, welches die
-Pfad-Variablen korrekt setzt, alle Tests ausführt und anschliessend die Test
-Coverage anzeigt. pytest-django liefert bereits mehrere häufig genutzte Fixtures
+Um das Testen mit Django zu vereinfachen, wurde das \texttt{pytest-django}
+Plugin verwendet und ein \texttt{runtests.py} Script geschrieben, dieses setzt
+die Pfad-Variablen korrekt, führt alle Tests aus und zeigt anschliessend die
+Test Coverage an. pytest-django liefert bereits mehrere häufig genutzte Fixtures
 mit, wie \zb \texttt{client} um auf einen Django Test Client zugreifen zu können
 oder \texttt{transactional\_db}, um transaktionellen Zugriff auf die Datenbank
 zu erhalten.
@@ -197,22 +197,20 @@ zu erhalten.
 
 Eine Sicherstellung und langfristige Verbesserung der Softwarequalität ist nicht
 möglich, wenn diese nicht regelmässig überprüft wird. Um dieses Ziel zu
-erreichen, haben wir in verschiedenen Bereichen auf \enquote{Continuous
+erreichen, wurde in verschiedenen Bereichen auf \enquote{Continuous
 Integration} (CI) gesetzt. Die Qualität wird in drei Bereichen geprüft: Tests,
 Testabdeckung und Qualitäts-Score.
 
-\textbf{Ausführung der Tests}
+\paragraph{Ausführung der Tests} \hspace{0pt} \\
+Die Test Suite (siehe Absatz \ref{improvements:tests}) automatisiert
+auszuführen, haben wir Travis CI\footnote{\url{https://travis-ci.org/}}
+verwendet. Travis ist eine CI-Platform mit Python-Unterstützung, die für Open
+Source Projekte kostenfrei verwendet werden darf. Mit wenigen Zeilen in einer
+Datei namens \texttt{.travis.yml} kann die Test-Ausführung konfiguriert werden.
+In einem Fehlerfall wird dies auf Github angezeigt und der Autor des
+entsprechenden Commits wird per E-Mail benachrichtigt.
 
-Um unsere Test Suite (siehe Absatz \ref{improvements:tests}) automatisiert
-auszuführen, haben wir Travis
-CI\footnote{\url{https://travis-ci.org/}} verwendet. Travis ist
-eine CI-Platform mit Python-Unterstützung, die für Open Source Projekte
-kostenfrei verwendet werden darf. Mit wenigen Zeilen in einer Datei namens
-\texttt{.travis.yml} kann die Test-Ausführung konfiguriert werden. In einem
-Fehlerfall wird der Autor des entsprechenden Commits per E-Mail benachrichtigt.
-
-\textbf{Überwachen der Testabdeckung}
-
+\paragraph{Überwachen der Testabdeckung} \hspace{0pt} \\
 Neben dem Testerfolg ist die Testabdeckung ebenfalls eine wichtige Kennzahl. Um
 diese laufend zu überwachen haben wir
 Coveralls\footnote{\url{https://coveralls.io/}} verwendet. Coveralls bietet eine
@@ -230,19 +228,18 @@ gesamten Projektdauer kontinuierlich an:
 	\label{improvements:coveralls}
 \end{figure}
 
-\textbf{Messen der Codequalität}
+\paragraph{Messen der Codequalität} \hspace{0pt} \\
+Neben den Testing-Werkzeugen sind auch statische Codeanalyse-Tools hilfreich zur
+Verbesserung der Codequalität. Sie erkennen häufige Schwachstellen im Code, wie
+beispielsweise ungenutzte Variablen oder unerreichbaren Code.
 
-Neben den Testing-Werkzeugen sind auch statische Codeanalyse-Tools extrem
-hilfreich zur Verbesserung der Codequalität. Sie erkennen häufige Schwachstellen
-im Code wie ungenutzte Variablen oder unerreichbaren Code.
-
-Während wir bei der Entwicklung bereits auf Tools wie
+Während der Entwicklung wurde bereits auf Tools wie
 Pyflakes\footnote{\url{https://pypi.python.org/pypi/pyflakes}} und
-Pylint\footnote{\url{http://www.pylint.org/}} gesetzt haben, ist es auch dann
-noch möglich, dass man bestimmte Punkte übersieht. Das noch sehr neue Projekt
-Landscape\footnote{\url{https://landscape.io/}} will hier Abhilfe schaffen,
-indem verschiedene Tools automatisch für jedem Commit ausgeführt werden. Den
-Report kann man danach über den Webbrowser detailliert analysieren.
+Pylint\footnote{\url{http://www.pylint.org/}} gesetzt. Zusätzlich wurde das noch
+junge Projekt Landscape\footnote{\url{https://landscape.io/}} eingebunden,
+dieses überprüft den Code indem verschiedene Tools automatisch für jedem Commit
+ausgeführt werden. Den Report kann man über den Webbrowser betrachten und
+analysieren.
 
 \begin{figure}[H]
 	\centering
@@ -251,17 +248,15 @@ Report kann man danach über den Webbrowser detailliert analysieren.
 	\label{improvements:landscape}
 \end{figure}
 
-Auf Landscape liegen wir aktuell bei einem Quality Score von 90\%. Wichtig ist
-dabei jedoch, dass Landscape relativ viele False Positives liefert. Das liegt
-daran dass das Projekt noch jung ist und gewisse Spezialfälle -- welche in einer
-dynamischen Sprache wie Python häufig vorkommen können -- nicht erkennt. Zudem
-sind gewisse Kennzahlen wie die maximale Zeilenlänge noch nicht konfigurierbar
-und werden so als Fehler angezeigt, obwohl wir in unserem Coding Styleguide
-(Abschnitt \ref{anhang:coding-styleguide}) andere Regeln vereinbart haben. Mit
-der entsprechenden Konfiguration würden wir vermutlich sehr nah an einen Quality
-Score von 100\% herankommen. Damit sich diese Situation in Zukunft verbessert,
-haben wir Feature Requests für die entsprechenden Anpassungen in er
-Konfiguration gestellt.
+Auf Landscape liegt das Projekt aktuell bei einem Quality Score von 90\%.
+Wichtig ist dabei jedoch, dass Landscape einige False Positives liefert. Das
+liegt daran dass das Projekt noch jung ist und gewisse Spezialfälle -- welche in
+einer dynamischen Sprache wie Python häufig vorkommen können -- nicht erkennt.
+Zudem sind gewisse Kennzahlen wie die maximale Zeilenlänge noch nicht
+konfigurierbar und werden deshalb als Fehler angezeigt, obwohl in unserem Coding
+Styleguide (Abschnitt \ref{anhang:coding-styleguide}) andere Regeln vereinbart
+wurden. Damit sich diese Situation in Zukunft verbessert, haben wir Feature
+Requests für die entsprechenden Anpassungen in er Konfiguration gestellt.
 
 
 \subsubsection{Deployment Dokus, Vagrant, Ansible}
@@ -270,21 +265,21 @@ TODO Danilo
 
 \subsubsection{Weitere Punkte}
 \begin{description}
-\item[Code Standards (PEP8)] Damit die Einhaltung der PEP8 Richtlinien
-garantiert ist, wurde eine entsprechende Prüfung in den Build Prozess
-integriert. Dadurch gilt ein Build als fehlgeschlagen, falls die Richtlinien
-nicht vollständig eingehalten wurden.
+	\item[Code Standards (PEP8)] Damit die Einhaltung der PEP8 Richtlinien
+	garantiert ist, wurde eine entsprechende Prüfung in den Build Prozess
+	integriert. Dadurch gilt ein Build als fehlgeschlagen, falls die Richtlinien
+	nicht vollständig eingehalten wurden.
 
-\item[Vermeidung von Hardcoded URLs] Gemäss Empfehlung des Django Frameworks
-soll das Verwenden von absoluten URLs in Templates und Views vermieden werden.
-Anstelle sollen URLs nur einmal, in der URLConf, konfiguriert und danach via
-Rückwärtssuche durch den Namen aufgelöst werden. Auf diese Weise können zentral
-Änderungen an URLs vorgenommen werden, ohne Templates oder Views anpassen zu
-müssen.
+	\item[Vermeidung von Hardcoded URLs] Gemäss Empfehlung des Django Frameworks
+	soll das Verwenden von absoluten URLs in Templates und Views vermieden werden.
+	Anstelle sollen URLs nur einmal, in der URLConf, konfiguriert und danach via
+	Rückwärtssuche durch den Namen aufgelöst werden. Auf diese Weise können zentral
+	Änderungen an URLs vorgenommen werden, ohne Templates oder Views anpassen zu
+	müssen.
 
-\item[Konsequente Frontend Validierung] Die bestehende Frontend Validierung
-wurde an diversen Orten nicht konsequent oder fehlerhaft eingesetzt. Diese
-Mängel wurden behoben und damit die Validierung vereinheitlicht.
+	\item[Konsequente Frontend Validierung] Die bestehende Frontend Validierung
+	wurde an diversen Orten nicht konsequent oder fehlerhaft eingesetzt. Diese
+	Mängel wurden behoben und damit die Validierung vereinheitlicht.
 
 \item[Konsistente Datums verwendung UTC]
 TODO Danilo
