@@ -349,7 +349,12 @@ Die Anwendung sieht wie folgt aus:
 <input type="text"name="name" value="{{ group }}" {% input_editability %} />
 \end{pythoncode}
 
-Diese Umsetzung folgt einer Variation, dem in \cite{posa1} vorgeschlagenen Pattern \enquote{Full Access With Errors}. Alle Funktionen sind stets für den Benutzer sichtbar. Dadurch kann das User Interface einheitlich gestaltet werden und vermeidet auf diese Weise mögliche Verwirrungen. Diejenigen Elemente, die der Benutzer nicht bearbeiten darf, werden deaktiviert. 
+Diese Umsetzung folgt einer Variation, des in \enquote{Security
+Patterns}\cite{schumacher2013security} vorgeschlagenen Patterns \enquote{Full
+Access With Errors}. Alle Funktionen sind stets für den Benutzer sichtbar.
+Dadurch kann das User Interface einheitlich gestaltet werden und vermeidet auf
+diese Weise mögliche Verwirrungen. Diejenigen Elemente, die der Benutzer nicht
+bearbeiten darf, werden deaktiviert.
 
 Um die beiden benötigten Benutzer initial zu erstellen, wurde das Django
 Management-Kommando \texttt{setpassword} angepasst. Das Kommando erstellt direkt
