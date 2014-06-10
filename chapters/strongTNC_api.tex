@@ -1,24 +1,24 @@
 \section{Trennung, API Konzept}
 In diesem Abschnitt werden wichtige Punkte des API Konzeptes genauer betrachtet.
-Das Vollständige Konzept ist im Anhang (<TODO: Ref>) zu finden. Detaillierte
-Beschreibungen zu der, in den Beispielen verwendeten, Syntax sowie die
+Das vollständige Konzept ist im Anhang (<TODO: Ref>) zu finden. Detaillierte
+Beschreibungen zu der in den Beispielen verwendeten Syntax sowie die
 Definition der Archetypen sind ebenfalls im Konzept zu finden.
 
 \subsection{Vorgehen}
 Das Ziel der REST API war eine vollständige Ablösung der gemeinsamen Datenbank
 als Schnittstelle. Um einen Überblick über den benötigten Umfang einer TNC
-Policy Manager Schnittstelle zu bekommen wurden die Datenbankzugriffe der IMV
+Policy Manager Schnittstelle zu bekommen, wurden die Datenbankzugriffe der IMV
 Code der strongSwan Implementation betrachtet. Dazu wurden sämtliche SQL
 abfragen im IMV Quellcode gesammelt und analysiert. Das Ergebnis war eine Liste
-der Tabellen auf die schreibend oder lesend zugegriffen wurde, ebenso konnte
-ermittelt werden welche Tabelle durch einen \texttt{JOIN} verknüpft wurden.
-Basierend auf diesen Daten konnte ein Set von REST Endpunkten zusammen gestellt
+der Tabellen, auf die schreibend oder lesend zugegriffen wurde, ebenso konnte
+ermittelt werden, welche Tabelle durch einen \texttt{JOIN} verknüpft wurden.
+Basierend auf diesen Daten konnte ein Set von REST Endpunkten zusammengestellt
 werden, mit dem es möglich ist, sämtliche Datenbankzugriffe abzudecken.
 
 \subsection{Documents und Collections}
 Für alle Elemente der strongTNC Domäne wurden REST Ressourcen von den Archetype
 \enquote{Document} und \enquote{Collection} konzipiert. Oft handelt es sich
-dabei um vollständige CRUD Ressourcen wie beispielsweise bei der
+dabei um vollständige CRUD Ressourcen, wie beispielsweise bei der
 \texttt{Version} Ressource sichtbar ist:
 
 \begin{mdframed}[style=def]
@@ -56,14 +56,14 @@ dabei um vollständige CRUD Ressourcen wie beispielsweise bei der
 \end{description*}
 \end{mdframed}
 
-Die angebotenen Operationen, beziehungsweise HTTP Methoden, wurden immer soweit
+Die angebotenen Operationen, beziehungsweise HTTP Methoden, wurden immer so weit
 wie möglich eingeschränkt, so gibt es diverse Ressourcen die kein
 \texttt{DELETE} anbieten oder nur lesenden Zugriff erlauben. Dadurch soll
 erreicht werden, dass die Schnittstelle nicht zu offen wird oder durch das
-Anbieten von nicht benötigten Operationen unnötig Komplex erscheint.
+Anbieten von nicht benötigten Operationen unnötig komplex erscheint.
 
-Um den \texttt{JOIN} Verknüpfungen in einer Ressourcenorientierten weise
-rechnung zu tragen wurden verschiedene virtuelle Ressourcen geschaffen.
+Um den \texttt{JOIN} Verknüpfungen in einer ressourcenorientierten Weise
+Rechnung zu tragen, wurden verschiedene virtuelle Ressourcen geschaffen.
 Beispielsweise lassen sich die \enquote{Sessions} eines Gerätes direkt auf der
 \texttt{devices} Ressource abfragen:
 
@@ -92,7 +92,7 @@ swiderweiterung>, als \enquote{Controller} umgesetzt.
 \subsubsection{Session Steuerung und Ablauf}
 Das grundsätzliche Konzept der Session Steuerung wurde gegenüber der jetzigen
 Schnittstelle nicht geändert, es werden weiterhin sogenannte \enquote{Workitems}
-verwendet um anzuzeigen welche Messungen durchgeführt werden müssen. Der Ablauf
+verwendet, um anzuzeigen, welche Messungen durchgeführt werden müssen. Der Ablauf
 einer Session nach dem gegenwärtigen Verfahren kann der
 \autoref{architecture-sequence-diagramm} entnommen werden. Ausführliche
 Informationen dazu sind in der Vorgängerarbeit
@@ -140,18 +140,18 @@ Session:
 \end{mdframed}
 Dieser Controller erstellt und startet eine Session, das Device welches der
 Session zugeordnet werden soll wird anhand der \texttt{hardwareId} und dem
-\texttt{productName} bestimmt. Falls eines der Objekte noch nicht existiert wird
+\texttt{productName} bestimmt. Falls eines der Objekte noch nicht existiert, wird
 dieses durch den Controller erstellt.\\
 Die Id, die im Response Dokument zurück geliefert wird, dient zur zukünftigen
 Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste
-von Workitems die für diese Session abgearbeitet werden müssen.
+von Workitems, die für diese Session abgearbeitet werden müssen.
 
-Um aktive und vergangene Sessions abzugfragen existiert eine readonly
+Um aktive und vergangene Sessions abzufragen existiert eine readonly
 Collection, die Session Documents sind ebenfalls als readonly definiert.
 Sessions sollen nicht direkt geändert werden, sondern nur über die
-entsprechenden Controller, der Grund dafür ist, dass im Hintergrund noch
+entsprechenden Controller. Der Grund dafür ist, dass im Hintergrund noch
 zusätzliche Operationen vorgenommen werden müssen.\\
-Das Selbe gilt für die Workitems, für diese sind ebenfalls eine readonly
+Dasselbe gilt für die Workitems, für diese sind ebenfalls eine readonly
 Collection mir readonly Documents definiert. Worktitems werden durch den
 Session-Start Controller anhand der Enforcements eines Devices automatisch
 erstellt, darum dürfen diese nicht manuell verändert werden.
@@ -236,11 +236,11 @@ keine Voraussetzung, eine Session kann jederzeit abgeschlossen werden.
 \end{description*}
 \end{mdframed}
 
-Wenn eine Session Abgeschlossen wird, werden alle Workitems dieser Session
+Wenn eine Session abgeschlossen wird, werden alle Workitems dieser Session
 abgeräumt und die jeweiligen Resultate auf die Session übertragen.
 
 \subsection{Implementation}
-Die im Rahmen dieser Arbeit konzipierte HTTP Schnittstelle wurde Stellenweise
+Die im Rahmen dieser Arbeit konzipierte HTTP Schnittstelle wurde stellenweise
 als Machbarkeitsnachweis umgesetzt. Da die Entwicklung einer HTTP Schnittstelle
 für strongTNC nicht Bestandteil der Aufgabenstellung war, wurde aus Zeitgründen
 nicht der gesamte Umfang implementiert.\\
@@ -259,21 +259,21 @@ verwendet.\\
 Die Django Models müssen für die Übermittlung in ein passendes Format
 serialisiert werden. Das von Client gewünschte Format wird durch den
 \texttt{Content-Type} Header spezifiziert. DRF implementiert
-Standard-Serialisierer für das JSON und XML Format welche direkt verwendet
+Standard-Serialisierer für das JSON und XML Format, welche direkt verwendet
 werden können.\\ Wie im REST Konzept beschrieben, wäre es hilfreich, den
 Benutzern der API die Möglichkeit anzubieten, über Filter nur ausgewählte Felder
 der Datenstrukturen zu erhalten. Das heisst, es müssen nicht immer alle Felder
 eines Objektes zu serialisiert werden, sondern nur ein Subset davon,
 vergleichbar mit einer SQL Projektion, \texttt{SELECT feld1, feld2 ...}. DRF
 bietet diese Möglichkeit standardmässig nicht. Um dieses Verhalten zu erreichen
-wurde eine Komponente entwickelt welche die Auswahl der Felder durch
+wurde eine Komponente entwickelt, welche die Auswahl der Felder durch
 Query-Parameter in der URL erlaubt. Der Aufruf von
 \texttt{https://strongtnc/api/swid-tags/2/?fields=packageName,version} liefert
 beispielsweise nur die Felder \texttt{packageName} und \texttt{version} des
 abgefragten SWID-Tags. Die Umsetzung wurde mittels \enquote{Mixin-based
 Inheritance}\cite{bracha1990mixin} realisiert.\\
 Serverseitig werden die Model-Serialisierer durch die Klasse
-\texttt{DynamicFieldsMixin} erweitert. Diese extrahiert vor dem serialisieren
+\texttt{DynamicFieldsMixin} erweitert. Diese extrahiert vor dem Serialisieren
 die Parameter aus dem Request und übergibt sie dem Serialisierer (Listing
 \ref{api:tagserializer}). Die Mixin-Klasse ist vollständig entkoppelt von der
 Implementierung des Serialisieres und kann für alle Serialisierer verwendet
@@ -290,7 +290,7 @@ class TagSerializer(DynamicFieldsMixin, serializers.HyperlinkedModelSerializer):
 
 \subsubsection{Fehlerbehandlung}
 Um für API Benutzer die Fehlerbehandlung zu erleichtern, werden bei auftretenden
-Fehlern, detaillierte Informationen im Body der Response ausgeliefert. Ein
+Fehlern detaillierte Informationen im Body der Response ausgeliefert. Ein
 möglicher Fehler ist beispielsweise das Übermitteln eines ungültig formatierten
 JSON Objektes. (TODO kann man das so generell sagen, wird das überall gemacht?
 oder nur bei der SWID Messung? Nur im Debugmode?)
