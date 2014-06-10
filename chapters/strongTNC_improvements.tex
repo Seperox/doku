@@ -267,7 +267,7 @@ integriert. Dadurch gilt ein Build als fehlgeschlagen, falls die Richtlinien
 nicht vollständig eingehalten wurden.
 
 \item[Vermeidung von Hardcoded URLs] Gemäss Empfehlung des Django Frameworks
-soll das verwenden von absoluten URLs in Templates und Views vermieden werden.
+soll das Verwenden von absoluten URLs in Templates und Views vermieden werden.
 Anstelle sollen URLs nur einmal, in der URLConf, konfiguriert und danach via
 Rückwärtssuche durch den Namen aufgelöst werden. Auf diese Weise können zentral
 Änderungen an URLs vorgenommen werden, ohne Templates oder Views anpassen zu
@@ -298,7 +298,7 @@ personalisierten readonly Zugriffs im Vordergrund.
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
 Das Django Webframework hat ein vollständiges Authentication- und
 Permission-System integriert. Damit lassen sich komplexe Permission-Szenarien
-abbilden, jedoch besteht auch die Möglichkeit nur Teile daraus zu verwenden und
+abbilden, jedoch besteht auch die Möglichkeit, nur Teile daraus zu verwenden und
 so ein einfacheres Rollen-Modell zu simulieren.
 
 Da keine personalisierten Logins benötigt sind, werden zwei technische Benutzer
@@ -321,7 +321,9 @@ In den Templates können die Zugriffsrechte über das \texttt{perms} Objekt im
 {% endif %}
 \end{pythoncode}
 
-Die zusätzliche Implementation eines Templatetags erleichtert die Steuerung von HTML Formularelementen deren Bedienung nur für schreibberechtigte Benutzer erlaubt sein soll:
+Die zusätzliche Implementation eines Templatetags erleichtert die Steuerung von
+HTML Formularelementen, deren Bedienung nur für schreibberechtigte Benutzer
+erlaubt sein soll:
 
 \begin{pythoncode}
 @register.simple_tag(takes_context=True)
@@ -342,7 +344,7 @@ Diese Umsetzung folgt einer Variation, dem in \cite{posa1} vorgeschlagenen Patte
 
 Um die beiden benötigten Benutzer initial zu erstellen, wurde das Django
 Management-Kommando \texttt{setpassword} angepasst. Das Kommando erstellt direkt
-die beiden Benutzer und erlaubt es die Passwörter interaktiv oder per Parameter
+die beiden Benutzer und erlaubt es, die Passwörter interaktiv oder per Parameter
 festzulegen.
 
 \paragraph{Alternativen} \hspace{0px} \\
@@ -394,20 +396,29 @@ abgesetzt wird, wurde ein Verzögerungsmechanismus implementiert, welcher erst e
 absetzt, wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde (angelehnt an Nagle's Algorithmus \cite{nagle1984congestion}).
 Durch die Minimierung der Anzahl HTTP Request, wird auch die Anzahl der teilweise komplexen und zeitintensiven Abfragen auf die Datenbank vermindert.
 
-\paragraph{Langlaufende Operationen / Fehlerbehandlung}
-Asynchrone Aufrufe bringen zwei wesentliche Probleme mit sich. Zum einen kann es sein, dass Fehler auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt. Um zum anderen, muss für den Benutzer ersichtlich sein, ob Datenübertragungen im Hintergrund anstehen und falls ja, wann diese erfolgreich abgeschlossen sind. Speziell für langlaufende Operationen durch Datenbankintensive Abfragen oder grosse Datenmengen können Antwortzeiten im Sekundenbereich entstehen. \\
-Zu diesem Zweck wurde eine Proxy Komponente \cite{gamma1994design} implementiert, welche Anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt wird. Komponenten, deren Inhalte per Ajax nachladen werden, werden vom Proxy mit einem Statusindikator besetzt. Zusätzlich wurde ein globaler Statusindikator eingeführt, der anzeigt, ob mindestens eine asynchrone Datenübertragung stattfindet.\\
-Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer mittels Alert Box über den Fehler informiert.
+\paragraph{Langlaufende Operationen / Fehlerbehandlung} Asynchrone Aufrufe
+bringen zwei wesentliche Probleme mit sich. Zum einen kann es sein, dass Fehler
+auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt. Zum Anderen muss
+für den Benutzer ersichtlich sein, ob Datenübertragungen im Hintergrund anstehen
+und falls ja, wann diese erfolgreich abgeschlossen sind. Speziell für
+langlaufende Operationen durch datenbankintensive Abfragen oder grosse
+Datenmengen, können Antwortzeiten im Sekundenbereich entstehen. \\ Zu diesem
+Zweck wurde eine Proxy Komponente \cite{gamma1994design} implementiert, welche
+anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt wird. Komponenten, deren
+Inhalte per Ajax nachladen werden, werden vom Proxy mit einem Statusindikator
+besetzt. Zusätzlich wurde ein globaler Statusindikator eingeführt, der anzeigt,
+ob mindestens eine asynchrone Datenübertragung stattfindet.\\ Treten Fehler bei
+einer Ajax Datenübertragung auf, wird der Benutzer mittels Alert Box über den
+Fehler informiert.
 
 \subsubsection{Ajax Pagination} 
-Um grosse Datenmengen besser handhaben zu können wurde die bestehende statische
-Pagination durch eine dynamische, Ajax basierte Version, ausgetauscht. Das Ziel
+Um grosse Datenmengen besser handhaben zu können, wurde die bestehende statische
+Pagination durch eine dynamische, Ajax basierte Version ausgetauscht. Das Ziel
 war, jegliche Art von Daten seitenweise auszuliefern, sowie die Datenmenge mit
 Hilfe von Filtern dynamisch zu reduzieren. Bei der Architektur der
 Pagingkomponente wurde darauf geachtet, dass diese wiederverwendet werden kann.
 Der Inhalt, der seitenweise ausgeliefert werden soll, ist von der Pagination
-entkoppelt und kann mittels einer Art Strategie (\enquote{Strategy
-Pattern}\cite{gamma1994design}) festgelegt werden.
+entkoppelt und kann mittels einer Art Strategie (\enquote{Strategy Pattern}\cite{gamma1994design}) festgelegt werden.
 
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
 Die Implementation der Paginination besteht aus den folgenden fünf Teilen:
@@ -419,7 +430,7 @@ Die Implementation der Paginination besteht aus den folgenden fünf Teilen:
 	\item \enquote{List Producer} für die Datenaufbereitung, wiederverwendbar
 \end{enumerate}
 
-\autoref{paginationSequence} zeigt den Grobablauf, beim dynamischen Anfordern einer
+\autoref{paginationSequence} zeigt den Grobablauf beim dynamischen Anfordern einer
 neuen Seite.
 
 \begin{figure}[H]	
@@ -541,14 +552,14 @@ swid_producer_factory.list()
 %angeforderten Seite, sowie optionale kontextabhängige Variablen zum Ajax
 %Endpunkt.
 
-\subsubsection{Models für MySQL Support erstellt}
+\subsubsection{Models für MySQL Support}
 \paragraph{Empfehlung für Wechsel der Datenbank} \hspace{0pt} \\
-Die enge Kopplung von strongSwan und strongTNC, durch eine gemeinsam genutzten
+Die enge Kopplung von strongSwan und strongTNC durch eine gemeinsam genutzte
 Datenbank, hat zur Folge, dass Anpassungen des Datenbankschemas, Änderungen an
-allen Komponenten bedingen. Des weiteren ist zu erwarten, dass für grössere
+allen Komponenten bedingen. Des Weiteren ist zu erwarten, dass für grössere
 Installationen SQLite zu leichtgewichtig ist. Optimierungen und Profiling sind
 eingeschränkt durchführbar, zu dem wird keine referenzielle Integrität
-unterstützt. Problematisch ist auch, dass SQLite nicht mehrenuzerfähig ist.
+unterstützt. Problematisch ist auch, dass SQLite nicht mehrbenutzerfähig ist.
 
 \paragraph{Generierung des Datenbankschemas} \hspace{0pt} \\
 Django unterstütz diverse Datenbankbackends
@@ -557,7 +568,7 @@ anderem MySQL, PostgreSQL, MSSQL und das zur Zeit verwendete SQLite. Wir
 empfehlen das SQLite Backend möglichst bald durch ein anders Datenbankbackend zu
 ersetzen. Aus diesem Grund wurden die Django Models so angepasst, dass sie dem
 aktuellen Dantebankschema entsprechen. Das Django ORM kann daraus
-Datenbankspezifisches SQL-DDL generieren, und so die Migration erheblich
+datenbankspezifisches SQL-DDL generieren, und so die Migration erheblich
 erleichtern.
 
 \subsubsection{Split der Configfiles}
@@ -565,13 +576,13 @@ TODO Danilo
 
 \subsubsection{Weitere Punkte}
 \begin{description}
-\item[Django Admin-Interface] Django bietet die Möglichkeit die Datenbank über
+\item[Django Admin-Interface] Django bietet die Möglichkeit, die Datenbank über
 ein automatisch generiertes Admin-Interface zu verwalten. Auf diese Weise
-können, potentiell fehleranfällige, Datenmanipulationen per SQL vermieden
+können potentiell fehleranfällige Datenmanipulationen per SQL vermieden
 werden. Die Models wurden mit den nötigen Metadaten erweitert, damit dieses
 Feature aktiviert werden konnte.
 
-\item[Erstellen von Files und Versions] Bisher war es nicht möglich über das
+\item[Erstellen von Files und Versions] Bisher war es nicht möglich über die
 Oberfläche von strongTNC neue Files und neue Versionen zu erstellen. Die
 Ansichten wurden um diese Funktionalität ergänzt.
 
@@ -583,8 +594,8 @@ Enforcements einer Gruppe zugeordnet sind.
 \item[URL Hash Parameter] Um Parameter in der URL abzulegen und auszulesen,
 wurde eine Javascript Hilfsbibliothek erstellt. Die Bibliothek erlaubt es, die
 Parameter in der URL abzulegen ohne einen Reload auszulösen. Ausserdem kann auf
-Änderungen Eventbasiert (Observer Pattern \cite{gof94}) reagiert werden.
-Änderungen welche mittels Ajax ausgelöst und somit keinen Reload zur folge
+Änderungen eventbasiert (Observer Pattern \cite{gamma1994design}) reagiert werden.
+Änderungen welche mittels Ajax ausgelöst und somit keinen Reload zur Folge
 haben, können so über die URL und die Browser History zugänglich gemacht werden.
 \end{description}
 

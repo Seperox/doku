@@ -39,11 +39,11 @@ aufgelistet.\\
 \textbf{Akteur} & strongTNC Benutzer \\
 \hline
 \textbf{Story} &
-Der Akteur will feststellen welche Dateien zu einem bestimmten Softwarepaket gehören. \\
+Der Akteur will feststellen, welche Dateien zu einem bestimmten Softwarepaket gehören. \\
 \hline
 \textbf{Standard Szenario} &
-Der Akteur findet den SWID Tag der zum gesuchten Softwarepaket gehört in der
-SWID Tag Ansicht. Die Dateien die mit dem SWID Tag gemessen wurden sind
+Der Akteur findet den SWID Tag, der zum gesuchten Softwarepaket gehört in der
+SWID Tag Ansicht. Die Dateien, die mit dem SWID Tag gemessen wurden, sind
 aufgelistet. \\
 \hline
 \textbf{Alternatives Szenario} & 
@@ -60,7 +60,7 @@ Ansicht und findet dort die Liste der gemessenen Dateien. \\
 \textbf{Akteur} & strongTNC Benutzer \\
 \hline
 \textbf{Story} &
-Der Akteur will alle im System erfassten Entites auflisten und herausfinden
+Der Akteur will alle im System erfassten Entites auflisten und herausfinden, 
 welche SWID Tags zu der jeweiligen Entity gehören. \\
 \hline
 \textbf{Standard Szenario} &
@@ -85,8 +85,8 @@ folgenden Informationen eines Tags interessiert:
 \item Unique ID
 \item Tag Creator Entity
 \item RAW XML String
-\item Welche Files sind in diesem SWID Tag enthalten.
-\item Gibt es ein bestehendes Paket dessen Name dem des SWID Tags entspricht.
+\item Welche Files sind in diesem SWID Tag enthalten
+\item Gibt es ein bestehendes Paket dessen Name dem des SWID Tags entspricht
 \item Welche Devices haben diesen SWID Tag installiert gemeldet (TODO siehe Use
 Case UC01)
 \end{itemize}\\
@@ -142,9 +142,9 @@ regelmässigen Abständen aktualisiert werden. Dadurch ist die Anzahl der nötig
 Erfassungs-Operationen durch User Endgeräte klein zu halten.\\
 \hline
 \textbf{Datenvariation} &
-Es soll möglich sein ein Liste mit mehreren XML Dokumenten auf einmal ans System
-auszuliefern (Batch-Create). Das Erfassen soll in diesem Fall so erfolgen,
-sodass entweder alle übermittelten SWID Tags oder keine gespeichert werden.
+Es soll möglich sein, eine Liste mit mehreren XML Dokumenten auf einmal ans System
+auszuliefern (Batch-Create). Das Erfassen soll in diesem Fall so erfolgen, 
+dass entweder alle übermittelten SWID Tags oder keine gespeichert werden.
 Dadurch kann die Anzahl nötiger Systemaufrufe erheblich reduziert werden.\\
 \hline
 \end{usecase}
@@ -160,15 +160,15 @@ Der Akteur will alle auf einem Device vorhandenen SWID Tags mit einer Session
 verknüpfen\\
 \hline
 \textbf{Standard Szenario} &
-Der Akteur sendet eine Liste der software-ids an das System die er mit der
-aktuellen Session verknüpfen möchte. Der Server assoziert die entsprechenden
+Der Akteur sendet eine Liste der Software-IDs an das System, die er mit der
+aktuellen Session verknüpfen möchte. Der Server assoziiert die entsprechenden
 Tags mit der Session und bestätigt den erfolgreichen Vorgang.\\
 \hline
 \textbf{Alternatives Szenario} & 
-Es existieren nicht für alle gelieferten software-id's Tags im System. Das
+Es existieren nicht für alle gelieferten Software-IDs Tags im System. Das
 System assoziiert keine Tags mit der aktuellen Session und gibt eine Liste
-derjenigen software-id's zurück für welche keine Tags vorhanden sind. Der Akteur
-erfasst darauf hin alle Fehlenden Tags im System. Sobald alle Tags im System
+derjenigen Software-IDs zurück, für welche keine Tags vorhanden sind. Der Akteur
+erfasst daraufhin alle fehlenden Tags im System. Sobald alle Tags im System
 erfasst sind tritt das Standard Szenario ein.
 \end{usecase}
 
@@ -178,13 +178,13 @@ erfasst sind tritt das Standard Szenario ein.
 \textbf{Akteur} & strongTNC Benutzer \\
 \hline
 \textbf{Story} &
-Der Akteur will alle im System erfassten Entites auflisten und herausfinden
+Der Akteur will alle im System erfassten Entites auflisten und herausfinden, 
 welche SWID Tags zu der jeweiligen Entity gehören. \\
 \hline
 \textbf{Standard Szenario} &
 Der Akteur kann sich in der Entity Ansicht alle erfassten Entities auflisten
 lassen. Wenn eine Entity angewählt wird, sind alle SWID Tags die der Entity
-zugeordnet sind Aufgelistet. \\
+zugeordnet sind aufgelistet. \\
 \hline
 \phantom{\textbf{Alternatives Szenario}} & 
 \end{usecase}
