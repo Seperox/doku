@@ -234,7 +234,7 @@ neuen Seite.
 \item[HtmlPage]
 Auf der HTML Seite werden Container (\texttt{<div>} Elemente) definiert, welche mit den Inhalten später befüllt werden. Die Container können entweder direkt in HTML  (Listing~\ref{paging:container})
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Paging Div Container}
 \label{paging:container}
 \begin{htmlcode}
@@ -264,7 +264,7 @@ definiert werden, oder mittels des eigens dafür kreierten Template Tags (Listin
 
 \item[Javascript]
 Eine Aufgabe der Javascript Komponente ist das Auslesen aller Paged Block Konfigurationen aus der Html Seite. Gefunden werden diese durch die gemeinsame CSS Klasse \texttt{ajax-paged}. Es können so mehrere Paged Block Komponenten pro Seite definiert werden. Für jeden der gefunden Paging Container wird ein Pager Objekt instanziert, welches für die Kommunikation mit dem AjaxEndpoint verantwortlich ist.
-Nach der Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Blocke in den entsprechenden Container geladen.
+Nach der Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Block in den entsprechenden Container geladen.
 
 \item [AjaxEndpoint]
 Der AjaxEndpoint nimmt die Requests entgegen und kann anhand des übergebenen Konfigurationsnamens die zugehörige Konfiguration laden.
@@ -286,16 +286,18 @@ regid_list_paging = {
 \end{listing}
 
 \item[Producer]
-Die Datenaufbereitung, in der Regel Datenbankabfragen, inkl. Slicing und Filtering wird hier definiert.
+Die eigentliche Datenaufbereitung, in der Regel Datenbankabfragen, inkl. Slicing und Filtering wird im Producer definiert.
 
 \end{description}
 
 Die Idee hinter diesem Aufbau ist, dass Bestandteile, die sich zwischen den einzelnen
-Instanzen unterscheiden, austauschbar und wiederverwendbar sind. In diesem Setup sind das die Templates, die für die Darstellung von Daten verantwortlich sind und die sogenannten \enquote{Producer}, welche Daten sammeln und aufbereiten.
-Producer sind eine Implementation des \enquote{Strategy Pattern}, jede Instanz
-implementiert ein gemeinsames Interface und wird dadurch austauschbar.\\
-Eine Implementation eines Producers sieht wie folgt aus:
+Instanzen unterscheiden, austauschen und wiederverwenden lassen. In diesem Setup sind das die Templates, die für die Darstellung von Daten verantwortlich sind und die sogenannten \enquote{Producer}, welche Daten sammeln und aufbereiten.
+Durch ein gemeinsames Producer Interface (Implementation des \enquote{Strategy Pattern}), können Producer sehr flexibel ausgetauscht und wiederverwendet werden.\\
+Eine konkrete Implementation eines Producers ist in Listing~\ref{paging:producer} zu sehen.
 
+\begin{listing}
+\caption{Beispielimplementation eines Producers}
+\label{paging:producer}
 \begin{pythoncode}
 def swid_files_list_producer(from_idx, to_idx, filter_query, dynamic_params, static_params=None):
     if not dynamic_params:
@@ -303,17 +305,20 @@ def swid_files_list_producer(from_idx, to_idx, filter_query, dynamic_params, sta
     tag_id = dynamic_params['tag_id']
     return Tag.objects.get(pk=tag_id).files.all()[from_idx:to_idx]
 \end{pythoncode}
+\end{listing}
 
-Für generische List Producer, welche lediglich eine Liste von Objekten eines
-bestimmten Models liefert, existiert zusätzlich eine \enquote{Factory}:
+Für generische List Producer, welche lediglich eine Liste von Objekten eines bestimmten Models liefern, wurde eine eine \enquote{Factory} erstellt:
 
+\begin{listing}
+\caption{Producer Factory}
 \begin{pythoncode}
 swid_producer_factory = ProducerFactory(Tag, 'unique_id__icontains')
 swid_producer_factory.list()
 \end{pythoncode}
+\end{listing}
 
-Um einen Pagination Block in eine Seite einzubinden, existiert ein Template Tag.
-Dieser inkludiert einen vorgegeben HTML Block und überträgt allfällige
+\paragraph{Zusammenfassung} \hspace{0pt} \\
+Um einen Pagination Block in eine Seite einzubinden, existiert ein Template Tag. Dieser inkludiert einen vorgegeben HTML Block und überträgt allfällige
 Konfigurationen in Daten-Attribute des HTML Blocks.\\
 Ein so eingebundener Block wird durch die Javascript Komponente gefunden und die
 Pagination wird initialisiert.

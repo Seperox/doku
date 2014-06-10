@@ -4,19 +4,19 @@
 		% Objekte
 
 		\umlobject[x=0]{Javascript}
-		\umlobject[x=3]{HtmlPage}
-		\umlobject[x=6]{AjaxEndpoint}
-		\umlobject[x=10]{ConfigRegistry}
+		\umlobject[x=4]{HtmlPage}
+		\umlobject[x=7]{AjaxEndpoint}
+		\umlobject[x=11]{ConfigRegistry}
 		\umlobject[x=13]{Config}
 		\umlobject[x=15]{Producer}
 		
 		% Calls
-		\begin{umlfragment}[type=loop, label=foreach paging container, inner xsep=2]
-		\begin{umlcall}[dt=12, padding=4, op=readPagingConfig(), return=confName]{Javascript}{HtmlPage}
+		\begin{umlfragment}[type=loop, label=foreach container, inner ysep=6]
+		\begin{umlcall}[dt=16, padding=4, op=readPagingConfig(), return=confName]{Javascript}{HtmlPage}
 		\end{umlcall}
 		\end{umlfragment}
 		
-		\begin{umlcall}[dt=6, type=asynchron, op={getPage(confName, pageNo)}]{Javascript}{AjaxEndpoint}
+		\begin{umlcall}[dt=14, type=asynchron, op={getPage(confName, pageNo)}]{Javascript}{AjaxEndpoint}
 		
 			\begin{umlcall}[padding=3, op=getConf(confName),return=conf]{AjaxEndpoint}{ConfigRegistry}
 			\end{umlcall}
