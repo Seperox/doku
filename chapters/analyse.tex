@@ -247,13 +247,18 @@ resultierenden Nachteile eingehen.
 
 	\item[Anbindung an Drittsysteme] Die Anbindung an Umsysteme gestaltet sich als
 	kaum realisierbar. Das TNC Framework sieht aber bereits weitere Komponenten,
-	wie bspw. IF-MAP Devices vor, die integriert werden könnten. Auch eine
-	Integration in bestehende Geschäftsprozesse (zum Beispiel CMDB) ist nur sehr
-	schwer realisierbar.
+	wie beispielsweise IF-MAP Devices vor, die integriert werden könnten. Auch eine
+	Integration in bestehende Geschäftsprozesse (zum Beispiel CMDB) ist nur schwer realisierbar.
+	
+	\item[Flexiblere Arbeit mit Django] Wenn die strongTNC Anwendung ihre Datenbank
+	nicht mit anderen Systemen teilen muss, können alle
+	Datenbank-Abstraktionsfeatures von Django voll ausgenutzt werden. Im Moment,
+	muss man sich aktiv um das Datenbankschema kümmern. Dies hätte zur Folge, dass
+	auch
+	\enquote{Mirgations}\footnote{\url{https://docs.djangoproject.com/en/dev/topics/migrations/}} zu verwenden, welche es erlauben Änderungen an den Models automatisiert in die Datenbank einfliessen zu lassen.
+	
 \end{description} 
 
-<TODO: Danilo Mehr noch zum Thema Django Models und eigene unabhängige Datenbank.
-Einheitliche Schittstelle, serviceorientiert. etc>
 
 \section{Abgrenzung}
 Folgende Punkte werden von uns als gegeben betrachtet und sind nicht zentraler
