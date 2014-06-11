@@ -493,29 +493,144 @@ entgegen und führt folgende Schritte aus:
 \subsubsection{Generatoren}
 \label{swidgenerator:architektur:generatoren}
 
-Die Generatoren (im \texttt{generators} Package) sind dafür zuständig, um aus
-den durch das entsprechende Environment zurückgegebenen Paketinformationen die
-dazugehörigen Software IDs oder SWID Tags zu generieren.
+Die Generatoren im \texttt{generators} Package sind dafür zuständig, aus den
+durch das entsprechende Environment zurückgegebenen Paketinformationen die
+dazugehörigen Software-IDs oder SWID Tags zu generieren.
 
-Diese Funktionen sind als Python Generators\cite[S.~94-95]{alchin2010pro}
+Diese Funktionen sind als Python Generator-Funktionen\cite[S.~94-95]{alchin2010pro}
 implementiert und geben die einzelnen Resultat-Strings mit \texttt{yield}
-anstelle von \texttt{return} zurück. Dadurch kann man über alle SWID Tags oder
-über alle Software-IDs iterieren, ohne dass alle Strings gleichzeitig in den
+anstelle von \texttt{return} zurück. Dadurch kann über alle SWID Tags oder über
+alle Software-IDs iteriert werden, ohne dass alle Strings gleichzeitig in den
 Hauptspeicher geladen werden müssen. Jedes Mal wenn auf der Generator-Instanz
 \texttt{next()} aufgerufen wird, wird nur der nächste String berechnet. Dieses
 Prinzip ist auch als \enquote{Lazy Evaluation}\cite[S.~85--93]{meyers1995more}
 bekannt.
 
-Die Generators werden nicht direkt evaluiert, sondern nach der Instanzierung an
-die Printers weitergegeben. Mehr dazu im nächsten Abschnitt.
-
-\subsubsection{Printers}
+\subsubsection{Print-Funktionen}
 \label{swidgenerator:architektur:printers}
-TODO: Danilo
+
+Die Print-Funktionen sind im Modul \texttt{print\_functions.py} enthalten. Ihre
+Aufgabe ist es, den Output der Generatoren korrekt auf die Standardausgabe zu
+schreiben.
+
+Aktuell sind zwei Print-Funktionen definiert, eine für die SWID Tags und eine
+für die Software-IDs. Beide nehmen einen Generator entgegen und geben den Inhalt
+Zeile für Zeile aus, getrennt durch ein vordefiniertes Trennzeichen.
+
+Die Art, wie die Inhalte ausgegeben werden, ist jedoch unterschiedlich. Während
+die XML Tags normal oder in einer \enquote{prettified} Version ausgegeben werden
+können, werden die Software-IDs direkt ausgegeben, ohne sie zu manipulieren. Aus
+diesem Grund haben wir für die Implementierung das Strategy
+Pattern\cite{gamma1994design} verwendet.
+
+Es gibt eine generische Funktion namens \texttt{iterate}, welche als Argumente
+den Generator, eine Action-Funktion (die \enquote{Strategie}), einen Separator
+und einen End-String annimmt. Die Funktionsimplementation sieht folgendermassen
+aus:
+
+\begin{listing}[H]
+\caption{Implementation der Iterate-Funktion}
+\begin{pythoncode}
+def iterate(generator, action_func, separator, end):
+    item = next(generator)
+    while item:
+        action_func(item)
+        try:
+            item = next(generator)
+            safe_print(separator, end='')
+        except StopIteration:
+            safe_print(end, end='')
+            break
+\end{pythoncode}
+\end{listing}
+
+Die einfachste Form eines Aufrufes wird für die Software-IDs verwendet, wo die
+Action-Funktion keine weitere Logik enthält als die Ausgabe des Strings (siehe
+Listing \ref{swidgenerator:architektur:software-id-print}). Die SWID-Tag Version
+sieht ähnlich aus, allerdings wird dort zusätzlich das \enquote{Prettifying} der
+XML Tags durchgeführt.
+
+\begin{listing}[H]
+\caption{Implementation der Software-ID Print-Funktion}
+\label{swidgenerator:architektur:software-id-print}
+\begin{pythoncode}
+def action(swid):
+    safe_print(swid, end='')
+iterate(software_ids, action, separator, end='\n')
+\end{pythoncode}
+\end{listing}
+
+% TODO: Ev Sequenzdiagramm?
+
+Dadurch, dass die Generatoren jeweils nur ein einzelnes Element zurückgeben,
+kann dieses sofort auf die Standardausgabe geschrieben werden und dann vom
+Garbace Collector gelöscht werden. Dies spart einerseits Arbeitsspeicher,
+andererseits kann es die Wartezeit eines aufrufenden Programmes verkürzen, da es
+mit der Verarbeitung bereits beginnen kann bevor alle Daten generiert und
+ausgegeben worden sind.
 
 \subsubsection{Python 3 Kompatibilität}
-TODO: Danilo
 
+Obwohl Python 3.0 bereits im Jahr 2008 veröffentlicht wurde, hat es sich bisher
+noch nicht flächendeckend durchgesetzt. Da mit dieser Version
+Rückwärts-Inkompatibilitäten eingeführt wurden, wehrten sich viele Entwickler
+gegen einen Wechsel von der etablierten Python 2 Version auf Python 3. Erstens
+war es anfänglich schwierig, Python 2 und 3 mit einer einzigen Codebasis zu
+unterstützen, andererseits nutzten viele Programme Dritt-Bibliotheken welche
+noch nicht auf Python 3 portiert waren.
+
+Seit mit Python 3.3 der Unicode-Präfix wieder eingeführt
+wurde\cite{PEP414:2012}, ist die Unterstützung beider Sprachversionen mit einer
+einzigen Codebasis jedoch bedeutend einfacher geworden. Auch wurden mehrere
+Portierungs-Ratgeber publiziert, welche die Übergangsphase
+vereinfachen\cite{regebro2013porting, ronacher2013porting}. Die Adoptionsrate
+stieg dadurch stark an, so dass inzwischen 162 der 200 meistgenutzten Python
+Pakete mit Python 3 kompatibel sind\cite{py3adoption}.
+
+Wir haben uns bei der Entwicklung vor allem auf den Ratgeber \enquote{Quick Tips
+on Making Your Code Python 3 Ready}\cite{deshev2012porting} gestützt. Eines der
+wichtigsten Elemente daraus ist der folgende \enquote{Future-Header}:
+
+\begin{listing}[H]
+\caption{Future-Header für Python-Code}
+\begin{pythoncode}
+from __future__ import print_function, division, absolute_import, unicode_literals
+\end{pythoncode}
+\end{listing}
+
+Durch die konsequente Nutzung dieser Import-Zeile in jedem Python-Modul konnten
+wir Inkompatibilitäten stark vermeiden; die Portierung auf Python 3.3 und 3.4
+war anschliessend einfach umzusetzen.
+
+Um die Ausgabe von Unicode- wie auch Byte-Strings unter beiden Versionen zu
+vereinfachen, haben wir zusätzlich eine \texttt{safe\_print} Funktion definiert
+(siehe Listing \ref{safeprint}).
+
+\begin{listing}[h]
+\caption{Safe-Print Funktion}
+\label{safeprint}
+\begin{pythoncode}
+def safe_print(data, end='\n'):
+    # Python 3
+    if hasattr(sys.stdout, 'buffer'):
+        if isinstance(data, bytes):
+            sys.stdout.buffer.write(data)
+        else:
+            sys.stdout.write(data)
+        if isinstance(end, bytes):
+            sys.stdout.buffer.write(end)
+        else:
+            sys.stdout.write(end)
+        sys.stdout.flush()
+    # Python 2
+    else:
+        print(data, end=end)
+\end{pythoncode}
+\end{listing}
+
+Zur Sicherstellung der Kompatibilität haben wir unsere Test Suite zudem so
+konfiguriert, dass die Tests auf allen unterstützten Python-Versionen lauffähig
+ist (siehe Absatz \ref{swidgenerator:architektur:qa}).
 % }}}
 
 % {{{ Ergebnisse -------------------------------------------------------------%
@@ -652,6 +767,7 @@ auch kaum ein sinnvolles Ziel für Optimierungen.
 
 \section{Qualitätsmanagement}
 \label{swidgenerator:architektur:qa}
+
 TODO Danilo
 
 % }}}
