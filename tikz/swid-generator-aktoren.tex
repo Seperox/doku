@@ -1,7 +1,3 @@
-\definecolor{StrongswanColor}{RGB}{199,108,107}
-\definecolor{GeneratorColor}{RGB}{116,143,204}
-\definecolor{PkgMgrColor}{RGB}{227,225,107}
-
 \begin{tikzpicture}[
 		actor/.style={font=\large},
 		communication/.style={thick, shorten <= 2pt, shorten >= 2pt, font=\footnotesize}
@@ -17,6 +13,5 @@
 	\draw[<-, communication] (4, 0.5) -- node[below] {stdout} (6, 0.5);
 	\draw[->, communication] (10, 1.5) -- node[above] {stdin} (12, 1.5);
 	\draw[<-, communication] (10, 0.5) -- node[below] {stdout} (12, 0.5);
-
 
 \end{tikzpicture}

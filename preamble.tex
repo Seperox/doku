@@ -84,6 +84,15 @@
 \usepackage{tikz} % TikZ vector graphics
 \usepackage{packages/tikz-uml} % TikZ UML diagrams
 \usetikzlibrary{arrows,automata}
+\tikzumlset{
+	fill package=blue!20!cyan!10,
+	fill class=yellow!20,
+	font=\footnotesize\sffamily,
+}
+\definecolor{StrongswanColor}{RGB}{199,108,107}
+\definecolor{GeneratorColor}{RGB}{116,143,204}
+\definecolor{GeneratorColorLight}{RGB}{195,206,230}
+\definecolor{PkgMgrColor}{RGB}{227,225,107}
 
 % Syntax highlighting
 
@@ -102,8 +111,8 @@
 \newminted{js}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 \newminted{sql}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 \newminted{apache}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
-% Configure table spacing
 
+% Configure table spacing
 \renewcommand{\arraystretch}{1.2}
 
 % Numbering depth
