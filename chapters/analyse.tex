@@ -205,7 +205,7 @@ Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
 	mit den mitgelieferten generischen Views von Django, könnte die
 	Wartbarkeit verbessern. \\
 	Die Validierung von übermittelten Formulardaten wurde \enquote{von Hand}
-	gemacht, anstatt das Formular-Framework von Django zu verwenden. Auch dies
+	gemacht, anstatt das vorhandene Formular-Framework von Django zu verwenden. Auch dies
 	verursacht mehrfach vorhandenen Code und verletzt unnötigerweise das
 	DRY-Prinzip\cite[S.~26--27]{hunt1999pragmatic}. \\
 	Statische Code-Analyse zeigt viele Mängel auf, wie beispielsweise
@@ -254,8 +254,7 @@ resultierenden Nachteile eingehen.
 	
 	\item[Flexiblere Arbeit mit Django] Wenn die strongTNC Anwendung ihre Datenbank
 	nicht mit anderen Systemen teilen muss, können alle
-	Datenbank-Abstraktionsfeatures von Django voll ausgenutzt werden. Im Moment,
-	muss man sich aktiv um das Datenbankschema kümmern. Dies hätte zur Folge, dass
+	Datenbank-Abstraktionsfeatures von Django voll ausgenutzt werden. Im Moment muss man sich aktiv um das Datenbankschema kümmern. Dies hätte zur Folge, dass
 	auch
 	\enquote{Migrations}\footnote{\url{https://docs.djangoproject.com/en/dev/topics/migrations/}} zu verwenden, welche es erlauben Änderungen an den Models automatisiert in die Datenbank einfliessen zu lassen.
 	
