@@ -9,7 +9,7 @@ Durch die Einführung einer netzwerkfähigen Schnittstelle, werden zusätzliche 
 (TODO Grafiken Deployment)
 
 Für die neugeschaffenen Kommunikationspfade ist Sicherheit nun ein wichtigeres Thema als zuvor, zumal die Kommunikation von nun an auch über ein Netzwerk erfolgen kann. Durch die stärkere Exponierung der Schnittstellen werden diese auch ein potentielles Angriffsziel.
-Bei der Datenübertragung soll einerseits die Vertraulichkeit und Integrität der Daten gewährleistet sein, sowie durch Authentisierung nur für vertrauenswürdige Clients möglich sein. Die adäquate Verwendung von Transport Layer Security (TLS) würde diese Anforderungen bereits erfüllen. Das grosse Risiko hierbei ist, dass die Verantwortung der korrekten Umsetzung aus den Händen der Schnittstelle an den Anwender übergeht. Damit kann die Applikation nicht mehr als grundlegend sicher betrachtet werden, da die sachgemässe Konfiguration des Webservers nicht sichergestellt werden kann. Eine optimale Umsetzung würde daher vorsehen, Sicherheitsaspekte so in die Applikation zu integrieren, das die Kommunikation ohne entsprechende Sicherheitsmassnahmen nicht möglich ist. Im Folgenden sollen mögliche Varianten aufgezeigt und deren Vor- und Nachteile besprochen werden.
+Bei der Datenübertragung soll einerseits die Vertraulichkeit und Integrität der Daten gewährleistet sein, sowie durch Authentisierung nur für vertrauenswürdige Clients möglich sein. Die adäquate Verwendung von Transport Layer Security (TLS) würde diese Anforderungen bereits erfüllen. Das grosse Risiko hierbei ist, dass die Verantwortung der korrekten Umsetzung aus den Händen der Schnittstelle an den Anwender übergeht. Damit kann die Applikation nicht mehr als grundlegend sicher betrachtet werden, da die sachgemässe Konfiguration des Webservers nicht sichergestellt werden kann. Eine optimale Umsetzung würde daher vorsehen, Sicherheitsaspekte so in die Applikation zu integrieren, dass die Kommunikation ohne entsprechende Sicherheitsmassnahmen nicht möglich ist. Im Folgenden sollen mögliche Varianten aufgezeigt und deren Vor- und Nachteile besprochen werden.
 
 \begin{description}
 
@@ -41,7 +41,7 @@ empfehlen zudem ausdrücklich, TLS zu verwenden. Um die Konfiguration von TLS mi
 Apache zu erleichtern, haben wir eine ausführliche Deployment Dokumentation
 verfasst (siehe \ref{anhang:deployment-manual}). Darin sind unter anderem
 empfohlene Cypher-Suites, Strict-Transport-Security and eine Anleitung zum
-erstellen Serverseitiger Zertifikate enthalten.
+Erstellen Serverseitiger Zertifikate enthalten.
 
 \subsection{Empfehlung} Wir empfehlen die Implementation von HTTP Signatures mit
 zusätzlicher Verwendung von TLS. Obwohl HTTP Signatures ohne TLS verwendet
@@ -182,12 +182,12 @@ Session:
 \end{jsoncode}
 \end{description*}
 \end{mdframed}
-Dieser Controller erstellt und startet eine Session, das Device welches der
+Dieser Controller erstellt und startet eine Session, das Device, welches der
 Session zugeordnet werden soll wird anhand der \texttt{hardwareId} und dem
 \texttt{productName} bestimmt. Falls eines der Objekte noch nicht existiert, wird
 dieses durch den Controller erstellt.
 
-Die Id, die im Response Dokument zurück geliefert wird, dient zur zukünftigen
+Die ID, die im Response Dokument zurück geliefert wird, dient zur zukünftigen
 Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste
 von Workitems, die für diese Session abgearbeitet werden müssen.
 
@@ -198,7 +198,7 @@ entsprechenden Controller. Der Grund dafür ist, dass im Hintergrund noch
 zusätzliche Operationen vorgenommen werden müssen.
 
 Dasselbe gilt für die Workitems, für diese sind ebenfalls eine readonly
-Collection mir readonly Documents definiert. Worktitems werden durch den
+Collection mit readonly Documents definiert. Worktitems werden durch den
 Session-Start Controller anhand der Enforcements eines Devices automatisch
 erstellt, darum dürfen diese nicht manuell verändert werden.
 
@@ -398,4 +398,4 @@ Allow: GET, HEAD, OPTIONS
 
 \subsection{Browsable API}
 TODO Danilo
-Das Django REST Framework bietet die möglichkeit die API mittels Browser zu durchsuchen. 
+Das Django REST Framework bietet die Möglichkeit die API mittels Browser zu durchsuchen. 
