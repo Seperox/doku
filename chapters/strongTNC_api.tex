@@ -1,10 +1,11 @@
+\chapter{API Konzept}
 \section{Trennung, API Konzept}
 In diesem Abschnitt werden wichtige Punkte des API Konzeptes genauer betrachtet.
 Das vollständige Konzept ist im Anhang (<TODO: Ref>) zu finden. Detaillierte
 Beschreibungen zu der in den Beispielen verwendeten Syntax sowie die
 Definition der Archetypen sind ebenfalls im Konzept zu finden.
 
-\subsection{Vorgehen}
+\section{Vorgehen}
 Das Ziel der REST API war eine vollständige Ablösung der gemeinsamen Datenbank
 als Schnittstelle. Um einen Überblick über den benötigten Umfang einer TNC
 Policy Manager Schnittstelle zu bekommen, wurden die Datenbankzugriffe der IMV
@@ -15,7 +16,7 @@ ermittelt werden, welche Tabelle durch einen \texttt{JOIN} verknüpft wurden.
 Basierend auf diesen Daten konnte ein Set von REST Endpunkten zusammengestellt
 werden, mit dem es möglich ist, sämtliche Datenbankzugriffe abzudecken.
 
-\subsection{Documents und Collections}
+\section{Documents und Collections}
 Für alle Elemente der strongTNC Domäne wurden REST Ressourcen von den Archetype
 \enquote{Document} und \enquote{Collection} konzipiert. Oft handelt es sich
 dabei um vollständige CRUD Ressourcen, wie beispielsweise bei der
@@ -81,7 +82,7 @@ Beispielsweise lassen sich die \enquote{Sessions} eines Gerätes direkt auf der
 \end{description*}
 \end{mdframed}
 
-\subsection{Controller}
+\section{Controller}
 Komplexere Abläufe, welche bei der gegenwärtigen Schnittstelle direkt mit
 mehreren Datenbankzugriffen ablaufen, werden im REST Konzept durch
 \enquote{Controller} abgebildet. Zu diesen Abläufen gehören das Starten und
@@ -89,7 +90,7 @@ Stoppen einer \enquote{Session}. Ebenfalls wurde die bisher noch nicht
 existierende Funktion der SWID Tag Messung, beschrieben in Abschnitt
 \ref{swiderweiterung}, als \enquote{Controller} umgesetzt.
 
-\subsubsection{Session Steuerung und Ablauf}
+\subsection{Session Steuerung und Ablauf}
 Das grundsätzliche Konzept der Session Steuerung wurde gegenüber der jetzigen
 Schnittstelle nicht geändert, es werden weiterhin sogenannte \enquote{Workitems}
 verwendet, um anzuzeigen, welche Messungen durchgeführt werden müssen. Der Ablauf
@@ -239,7 +240,7 @@ keine Voraussetzung, eine Session kann jederzeit abgeschlossen werden.
 Wenn eine Session abgeschlossen wird, werden alle Workitems dieser Session
 abgeräumt und die jeweiligen Resultate auf die Session übertragen.
 
-\subsection{Implementation}
+\section{Implementation}
 Die im Rahmen dieser Arbeit konzipierte HTTP Schnittstelle wurde stellenweise
 als Machbarkeitsnachweis umgesetzt. Da die Entwicklung einer HTTP Schnittstelle
 für strongTNC nicht Bestandteil der Aufgabenstellung war, wurde aus Zeitgründen
@@ -254,7 +255,7 @@ verwendet.\\
 - Contribution
 - ...
 
-\subsubsection{Serialisierung}
+\subsection{Serialisierung}
 \label{api:serialisierung}
 Die Django Models müssen für die Übermittlung in ein passendes Format
 serialisiert werden. Das von Client gewünschte Format wird durch den
@@ -288,7 +289,7 @@ class TagSerializer(DynamicFieldsMixin, serializers.HyperlinkedModelSerializer):
 \end{pythoncode}
 \end{listing}
 
-\subsubsection{Fehlerbehandlung}
+\subsection{Fehlerbehandlung}
 Um für API Benutzer die Fehlerbehandlung zu erleichtern, werden bei auftretenden
 Fehlern detaillierte Informationen im Body der Response ausgeliefert. Ein
 möglicher Fehler ist beispielsweise das Übermitteln eines ungültig formatierten
@@ -296,7 +297,7 @@ JSON Objektes. (TODO kann man das so generell sagen, wird das überall gemacht?
 oder nur bei der SWID Messung? Nur im Debugmode?)
 
 \begin{listing}
-\caption{Fehlerinformation beim übermitteln eines ungültigen JSON Objektes}
+\caption{Fehlerinformation beim Übermitteln eines ungültigen JSON Objektes}
 \begin{httpcode}
 HTTP/1.0 400 BAD REQUEST
 Content-Type: application/json
@@ -309,7 +310,7 @@ Allow: POST, OPTIONS
 \end{httpcode}
 \end{listing}
 
-\subsubsection{Verlinkung}
+\subsection{Verlinkung}
 Meist besitzen Objekte nicht nur einfache Attribute sondern auch Verweise auf
 andere Objekte, zum Beispiel besitzt ein SWID Tag mindestens eine Entity. Bei
 einer Entity handelt es sich um ein Objekt mit weiteren Attributen.\\
@@ -344,6 +345,6 @@ Allow: GET, HEAD, OPTIONS
 \end{httpcode}
 \end{listing}
 
-\subsubsection{Browsable API}
+\subsection{Browsable API}
 TODO Danilo
 Das Django REST Framework bietet die möglichkeit die API mittels Browser zu durchsuchen. 
