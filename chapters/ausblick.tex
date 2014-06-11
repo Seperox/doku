@@ -1,40 +1,52 @@
 \chapter{Ausblick}
 
-\section{Offene Punkte} Während der gesamten Projektarbeit wurden Bugs,
-weiterführenden Arbeiten und Ideen im Github
+\section{Offene Punkte} 
+Während der gesamten Projektarbeit wurden Bugs, weiterführenden Arbeiten und
+Ideen im Github
 Issuetracker\footnote{\url{https://github.com/tnc-ba/strongTNC/issues}} erfasst,
 ungeachtet davon, ob sie im Rahmen dieser Arbeit bearbeitet werden konnten.
 Diese Issues können noch bearbeitet werden, eventuell in einer Nachfolgearbeit
 oder durch die Community.\\
-Es gibt noch offene Tickets, welche die Performance
-hinsichtlich Laufdauer einzelner Abfragen betreffen. Konkret scheint der
-Algorithmus für die Erstellung der SWID Inventory View nicht optimal zu sein.
-Die langen Laufzeiten sind durch den hohen Memory Footprint der Abfragen
-bedingt. Die dadurch entstehenden Memoryallozierungen und allfällige
-Pagingvorgänge verzögern die Ausführung erheblich. Das Problem könnte durch
-verzögertes laden einzelner Felder (vor allem des SWID XML Strings) verbessert
-werden. Aus zeitlichen Gründen konnte diese Optimierung nicht vorgenommen
-werden.\\
-Ein Verbesserungsvorschlag betrifft die SWID Log View. Durch einbauen
+Es gibt noch offene Tickets, welche die Performance hinsichtlich Laufdauer
+einzelner Abfragen betreffen. Konkret scheint der Algorithmus für die Erstellung
+der SWID Inventory View nicht optimal zu sein. Die langen Laufzeiten sind durch
+den hohen Memory Footprint der Abfragen bedingt. Die dadurch entstehenden
+Memoryallozierungen und allfällige Pagingvorgänge verzögern die Ausführung
+erheblich. Das Problem könnte durch verzögertes laden einzelner Felder, vor
+allem des SWID XML Strings, oder durch die Verwendung eines Proxy Modles für
+SWID Tags, verbessert werden. Aus zeitlichen Gründen konnte diese Optimierung
+noch nicht vorgenommen werden.\\
+Ein anderer Verbesserungsvorschlag betrifft die SWID Log View. Durch einbauen
 einer Filterfunktion wäre es möglich, schneller festzustellen wann ein Paket auf
-einem Gerät installiert beziehungsweise entfernt wurde. Dies könnte man auch bereits
-in der SWID Tag Detail unterstützen. Anhand einer zusätzlichen Spalte in der
-\enquote{Reported by Devices} Tabelle, könnte angezeigt werden, wann der Tag auf
-dem Gerät das letzte Mal als installiert gemeldet wurde.
+einem Gerät installiert beziehungsweise entfernt wurde. Dies könnte man auch
+bereits in der SWID Tag Detail unterstützen. Anhand einer zusätzlichen Spalte in
+der \enquote{Reported by Devices} Tabelle, könnte angezeigt werden, wann der Tag
+auf dem Gerät das letzte Mal als installiert gemeldet wurde.
 
-\section{Empfehlungen} \begin{description} \item[REST API vollständig umsetzen]
-Die vollständige Trennung von strongTNC und strongSwan sollte auf jeden Fall
-umgesetzt werden. \item[Wechsel von SQLite zu MySQL] Durch die Erweiterungen in
-dieser Arbeit wurde die Applikation gerüstet mit grossen Datenmengen umgehen zu
-können. Ein Aspekt der dies zur Zeit noch verhindern könnte, ist die Verwendung
-von SQLite. Daher empfehlen wir die nötigen Schritte vorzunehmen, um MySQL als
-Datenbankbackend nutzen zu können. Es wurden Workarounds implementiert, die
-lediglich der SQLite Kompatibilität dienen. Diese sollten zu diesem Zeitpunkt
-entfernt werden. \item[Class Based Views] Die Verwendung von Class Based Views
-sollte konsequenterweise für alle bestehenden Views eingesetzt werden. Bisher
-folgen nur die Views der SWID Erweiterungen diesem Konzept. \item[Django Form
-Framework] Die Formularvalidierung wird derzeit noch aufwändig \enquote{von
-Hand} gemacht. Das Django bietet mit der Form Framework Erweiterung ein
-konfortables Hilfsmittel, mit der diese aufwändige Arbeit elegant erledigt
-werden kann. Die Komplexität der Views könnte erheblich reduziert werden.
-\item[] \end{description}
+
+\section{Empfehlungen} 
+
+\begin{description} 
+
+	\item[REST API vollständig umsetzen] Die vollständige Trennung von strongTNC
+	und strongSwan sollte auf jeden Fall umgesetzt werden.
+	
+	\item[Wechsel von SQLite zu MySQL] Durch die Erweiterungen in dieser Arbeit
+	wurde die Applikation darauf vorbereitet mit grossen Datenmengen umgehen zu
+	können. Ein Aspekt der dies zur Zeit teilweise noch verhindert, ist die
+	Verwendung von SQLite. Daher empfehlen wir die nötigen Schritte vorzunehmen, um
+	MySQL als Datenbankbackend nutzen zu können. Es teilweise wurden Workarounds
+	implementiert, die lediglich der SQLite Kompatibilität dienen. Diese sollten zu
+	diesem Zeitpunkt entfernt werden.
+	
+	\item[Class Based Views] Die Verwendung von Class Based Views sollte
+	konsequenterweise für alle bestehenden Views eingesetzt werden. Bisher folgen
+	nur die Views der SWID Erweiterungen diesem Konzept.
+	
+	\item[Django Form Framework] Die Formularvalidierung wird derzeit noch manuell
+	per Javascript gemacht. Django bietet mit der \enquote{Form Framework}
+	Erweiterung ein komfortables Hilfsmittel, mit der diese aufwändige Arbeit
+	elegant erledigt werden kann. Die Komplexität der Views dadurch könnte
+	erheblich reduziert werden.
+	
+\end{description}
