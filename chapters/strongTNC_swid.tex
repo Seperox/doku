@@ -96,7 +96,7 @@ verändert.
 \subsection{Technische Umsetzung}
 Der Zugriff auf die beschriebene Systemoperation erfolgt durch die, in dieser
 Arbeit ausgearbeiteten, RESTful HTTP Schnittstelle. Das komplette Konzept ist in
-Anhang (TODO Referenz REST Konzept) zu finden.
+Anhang (\autoref{REST:api-konzept}) zu finden.
 
 \subsubsection{REST Kommunikation}
 Im Folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels
@@ -113,21 +113,36 @@ Der HTTP Endpunkt wurde wie folgt definiert:
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/products/}
-	\item[Archetype] Collection
-	\item[Methods] GET, POST
+	\item[URI Path] \texttt{/sessions/\{id\}/register-swid-measurement/}
+	\item[Archetype] Controller
+	\item[Methods] POST
+	\item[Content-Type] \texttt{application/json; charset=utf-8}
+	\item[Request Parameter] \hfill
+	\begin{description*}
+		\item[\texttt{softwareId}] Software-IDs als JSON-Liste.
+	\end{description*}
+	\item[Response Statuscodes] \hfill
+		\begin{description*}
+			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
+				und wurden für die übermittelte Session eingetragen
+			\item[404 Not Found] Session mit der spezifizierten ID wurde nicht gefunden. 
+			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die
+				übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs
+				übertragen.
+		\end{description*}
 	\item[JSON Format Response] \hfill
 	
 \begin{jsoncode}
 {"data" : 
 	[
-	"software-ids TODO vom api konzept kopieren!" 
+		"regid.2004-03.org.strongswan Ubuntu 12.04-i686-logrotate-3.7.8-6ubuntu5",
+		"regid.2004-03.org.strongswan Ubuntu 12.04-i686-lsb-base-4.0-0ubuntu20",
+		"regid.2004-03.org.strongswan Ubuntu 12.04-i686-strongswan-4.5.2-1.5+deb7u3" 
 	]
 }
 \end{jsoncode}
 \end{description*}
 \end{mdframed}
-
 
 \paragraph{Übermitteln von Software-IDs} \hspace{0pt} \\
 Die Daten werden als JSON-Liste an den entsprechenden Endpunkt gesendet.
@@ -154,7 +169,7 @@ Content-Length: 232
 \end{httpcode}
 \end{listing}
 
-Der entsprechende cURL/footnote{/url{http://curl.haxx.se/}} Befehl:
+Der entsprechende cURL\footnote{\url{http://curl.haxx.se/}} Befehl:
 
 \begin{bashcode}
 curl -i -X POST https://strongtnc/api/sessions/2/swid-measurement/ \
