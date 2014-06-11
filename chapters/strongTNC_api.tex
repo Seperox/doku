@@ -41,7 +41,7 @@ empfehlen zudem ausdrücklich, TLS zu verwenden. Um die Konfiguration von TLS mi
 Apache zu erleichtern, haben wir eine ausführliche Deployment Dokumentation
 verfasst (siehe \ref{anhang:deployment-manual}). Darin sind unter anderem
 empfohlene Cypher-Suites, Strict-Transport-Security and eine Anleitung zum
-erstellen Serverseitiger Zertifikate enthalten.\\
+erstellen Serverseitiger Zertifikate enthalten.
 
 \subsection{Empfehlung} Wir empfehlen die Implementation von HTTP Signatures mit
 zusätzlicher Verwendung von TLS. Obwohl HTTP Signatures ohne TLS verwendet
@@ -185,7 +185,8 @@ Session:
 Dieser Controller erstellt und startet eine Session, das Device welches der
 Session zugeordnet werden soll wird anhand der \texttt{hardwareId} und dem
 \texttt{productName} bestimmt. Falls eines der Objekte noch nicht existiert, wird
-dieses durch den Controller erstellt.\\
+dieses durch den Controller erstellt.
+
 Die Id, die im Response Dokument zurück geliefert wird, dient zur zukünftigen
 Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste
 von Workitems, die für diese Session abgearbeitet werden müssen.
@@ -194,7 +195,8 @@ Um aktive und vergangene Sessions abzufragen existiert eine readonly
 Collection, die Session Documents sind ebenfalls als readonly definiert.
 Sessions sollen nicht direkt geändert werden, sondern nur über die
 entsprechenden Controller. Der Grund dafür ist, dass im Hintergrund noch
-zusätzliche Operationen vorgenommen werden müssen.\\
+zusätzliche Operationen vorgenommen werden müssen.
+
 Dasselbe gilt für die Workitems, für diese sind ebenfalls eine readonly
 Collection mir readonly Documents definiert. Worktitems werden durch den
 Session-Start Controller anhand der Enforcements eines Devices automatisch
@@ -287,10 +289,12 @@ abgeräumt und die jeweiligen Resultate auf die Session übertragen.
 Die im Rahmen dieser Arbeit konzipierte HTTP Schnittstelle wurde stellenweise
 als Machbarkeitsnachweis umgesetzt. Da die Entwicklung einer HTTP Schnittstelle
 für strongTNC nicht Bestandteil der Aufgabenstellung war, wurde aus Zeitgründen
-nicht der gesamte Umfang implementiert.\\
+nicht der gesamte Umfang implementiert.
+
 Für die Implementation wurde das \enquote{Django REST
 Framework}\footnote{\url{http://www.django-rest-framework.org/}} (DRF)
-verwendet.\\
+verwendet.
+
 <TODO: Danilo, Ein, zwei Gründe für die Wahl von DRF>.
 - Class Based Views
 - Browsable API
@@ -304,7 +308,9 @@ Die Django Models müssen für die Übermittlung in ein passendes Format
 serialisiert werden. Das von Client gewünschte Format wird durch den
 \texttt{Content-Type} Header spezifiziert. DRF implementiert
 Standard-Serialisierer für das JSON und XML Format, welche direkt verwendet
-werden können.\\ Wie im REST Konzept beschrieben, wäre es hilfreich, den
+werden können.
+
+Wie im REST Konzept beschrieben, wäre es hilfreich, den
 Benutzern der API die Möglichkeit anzubieten, über Filter nur ausgewählte Felder
 der Datenstrukturen zu erhalten. Das heisst, es müssen nicht immer alle Felder
 eines Objektes zu serialisiert werden, sondern nur ein Subset davon,
@@ -315,7 +321,8 @@ Query-Parameter in der URL erlaubt. Der Aufruf von
 \texttt{https://strongtnc/api/swid-tags/2/?fields=packageName,version} liefert
 beispielsweise nur die Felder \texttt{packageName} und \texttt{version} des
 abgefragten SWID-Tags. Die Umsetzung wurde mittels \enquote{Mixin-based
-Inheritance}\cite{bracha1990mixin} realisiert.\\
+Inheritance}\cite{bracha1990mixin} realisiert.
+
 Serverseitig werden die Model-Serialisierer durch die Klasse
 \texttt{DynamicFieldsMixin} erweitert. Diese extrahiert vor dem Serialisieren
 die Parameter aus dem Request und übergibt sie dem Serialisierer (Listing
@@ -356,7 +363,8 @@ Allow: POST, OPTIONS
 \subsection{Verlinkung}
 Meist besitzen Objekte nicht nur einfache Attribute sondern auch Verweise auf
 andere Objekte, zum Beispiel besitzt ein SWID Tag mindestens eine Entity. Bei
-einer Entity handelt es sich um ein Objekt mit weiteren Attributen.\\
+einer Entity handelt es sich um ein Objekt mit weiteren Attributen.
+
 Solche entfernten Objekte werden nicht serialisiert. Anstelle des serialisierten
 Objektes wird eine URI ausgeliefert, über welche das Objekt aufgerufen werden
 kann. Das API Konzept sieht jedoch vor, einen Parameter einzuführen, welcher es
