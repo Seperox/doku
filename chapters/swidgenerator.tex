@@ -443,22 +443,27 @@ registriert und verwaltet werden. Dies ist die Aufgabe der
 Das Kernstück dieser Klasse ist die \texttt{register()}-Funktion. Sie benötigt als
 Argumente eine Kurzbezeichnung für das Environment sowie eine Referenz auf die
 Environment-Klasse. Beispiel:
-
+\begin{listing}
+\caption{Registrieren von Environments}
 \begin{pythoncode}
 registry = EnvironmentRegistry()
 registry.register('rpm', RpmEnvironment)
 registry.register('dpkg', DpkgEnvironment)
 registry.register('pacman', PacmanEnvironment)
 \end{pythoncode}
+\end{listing}
 
 Die Klassen werden als Instanzen intern in einem Dictionary gespeichert. Um die
 Liste der verfügbaren Environments abzufragen, kann die
 \texttt{get\_environment\_strings()} Methode verwendet werden:
 
+\begin{listing}
+\caption{Verfügbare Environments abfragen}
 \begin{pythoncode}
 >>> registry.get_environment_strings()
 ['auto', 'dpkg', 'pacman', 'rpm']
 \end{pythoncode}
+\end{listing}
 
 Als Resultat werden die Kurzbezeichnungen der registrierten Environments
 alphabetisch sortiert aufgelistet. Zusätzlich wird der String \texttt{'auto'}
@@ -510,14 +515,19 @@ TODO: Danilo
 Der SWID Generator kann folgendermassen verwendet werden, um Software-IDs zu
 generieren:
 
+\begin{listing}
+\caption{Generierung von Software-IDs}
 \begin{textcode}
 usage: swid_generator software-id [-h] [--env {auto,dpkg,pacman,rpm}]
                                   [--doc-separator DOCUMENT_SEPARATOR]
                                   [--regid REGID]
 \end{textcode}
+\end{listing}
 
 Nachfolgend ein Beispielaufruf auf einem Debian-System:
 
+\begin{listing}
+\caption{Software-ID Auszug eines Debian-Systems}
 \begin{textcode}
 $ swid_generator software-id --regid=regid.1998-05.ch.hsr
 regid.1998-05.ch.hsr_debian_7.4-x86_64-acpi-1.6-1
@@ -526,6 +536,7 @@ regid.1998-05.ch.hsr_debian_7.4-x86_64-acpi-support-base-0.140-5
 regid.1998-05.ch.hsr_debian_7.4-x86_64-zlib1g-1:1.2.7.dfsg-13
 regid.1998-05.ch.hsr_debian_7.4-x86_64-zlib1g-dev-1:1.2.7.dfsg-13
 \end{textcode}
+\end{listing}
 
 Die vollständige Dokumentation der Optionen kann auf der Kommandozeile mit dem
 \texttt{-{}-help} Parameter ausgegeben werden.
@@ -535,6 +546,8 @@ Die vollständige Dokumentation der Optionen kann auf der Kommandozeile mit dem
 
 Die Syntax um SWID Tags zu generieren sieht folgendermassen aus:
 
+\begin{listing}
+\caption{Generieren von SWID Tags}
 \begin{textcode}
 usage: swid_generator swid [-h] [--env {auto,dpkg,pacman,rpm}]
                            [--doc-separator DOCUMENT_SEPARATOR]
@@ -542,10 +555,13 @@ usage: swid_generator swid [-h] [--env {auto,dpkg,pacman,rpm}]
                            [--full] [--pretty]
                            [--software-id SOFTWARE-ID | --package PACKAGE]
 \end{textcode}
+\end{listing}
 
-Hier ein Beispiel eines Targeted Requests auf dem \texttt{cowsay}-Paket mit
+Hier ein Beispiel eines Targeted Requests für das \texttt{cowsay}-Paket mit
 \enquote{Pretty-Printing}:
 
+\begin{listing}
+\caption{Beispiel eines Targeted Requests}
 \begin{xmlcode}
 $ swid_generator swid --package cowsay --pretty
 <?xml version="1.0" encoding="utf-8"?>
@@ -555,6 +571,7 @@ $ swid_generator swid --package cowsay --pretty
   <Entity name="strongSwan" regid="regid.2004-03.org.strongswan" role="tagcreator"/>
 </SoftwareIdentity>
 \end{xmlcode}
+\end{listing}
 
 
 \subsection{Performance}
