@@ -314,12 +314,6 @@ Alle weiteren Informationen befinden sich im Projekt-Repository unter
 	wurde an diversen Orten inkonsequent oder fehlerhaft eingesetzt. Diese Mängel
 	wurden behoben und damit die Validierung vereinheitlicht.
 
-\item[Umstellung auf UTC] Die bestehende Konfiguration von strongTNC hatte keine
-	Unterstützung für Zeitzonen. Dies stellt ein Problem dar, wenn sich Clients
-	aus verschiedenen Zeitzonen in das Netzwerk einwählen. Mit unseren Anpassungen
-	bietet strongTNC vollständige Unterstützung für Zeitzonen und stellt alle
-	Zeiten gemäss der konfigurierten Zeitzone dar.
-
 \end{description}
 
 \subsection{Features}
@@ -672,6 +666,13 @@ Parameter in der URL abzulegen ohne einen Reload auszulösen. Ausserdem kann auf
 Änderungen eventbasiert (Observer Pattern \cite{gamma1994design}) reagiert werden.
 Änderungen welche mittels Ajax ausgelöst und somit keinen Reload zur Folge
 haben, können so über die URL und die Browser History zugänglich gemacht werden.
+
+\item[Umstellung auf UTC] Die bestehende Konfiguration von strongTNC hatte keine
+Unterstützung für Zeitzonen. Dies stellt ein Problem dar, wenn sich Clients aus
+verschiedenen Zeitzonen in das Netzwerk einwählen. Mit unseren Anpassungen
+bietet strongTNC vollständige Unterstützung für Zeitzonen und stellt alle Zeiten
+gemäss der konfigurierten Zeitzone dar.
+
 \end{description}
 
 
