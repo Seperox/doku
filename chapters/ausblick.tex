@@ -7,16 +7,7 @@ Issuetracker\footnote{\url{https://github.com/tnc-ba/strongTNC/issues}} erfasst,
 ungeachtet davon, ob sie im Rahmen dieser Arbeit bearbeitet werden konnten.
 Diese Issues können noch bearbeitet werden, eventuell in einer Nachfolgearbeit
 oder durch die Community.\\
-Es gibt noch offene Tickets, welche die Performance hinsichtlich Laufdauer
-einzelner Abfragen betreffen. Konkret scheint der Algorithmus für die Erstellung
-der SWID Inventory View nicht optimal zu sein. Die langen Laufzeiten sind durch
-den hohen Memory Footprint der Abfragen bedingt. Die dadurch entstehenden
-Memoryallozierungen und allfällige Pagingvorgänge verzögern die Ausführung
-erheblich. Das Problem könnte durch verzögertes laden einzelner Felder, vor
-allem des SWID XML Strings, oder durch die Verwendung eines Proxy Modles für
-SWID Tags, verbessert werden. Aus zeitlichen Gründen konnte diese Optimierung
-noch nicht vorgenommen werden.\\
-Ein anderer Verbesserungsvorschlag betrifft die SWID Log View. Durch einbauen
+Ein Verbesserungsvorschlag betrifft die SWID Log View. Durch einbauen
 einer Filterfunktion wäre es möglich, schneller festzustellen wann ein Paket auf
 einem Gerät installiert beziehungsweise entfernt wurde. Dies könnte man auch
 bereits in der SWID Tag Detail unterstützen. Anhand einer zusätzlichen Spalte in
