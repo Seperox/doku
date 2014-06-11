@@ -31,8 +31,8 @@
 }
 
 \definecolor{tango-bg}{HTML}{F8F8F8}
-\newminted{http}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
-\newminted{bash}{bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{http}{tabsize=4,bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
+\newminted{bash}{tabsize=4,bgcolor=tango-bg,frame=lines,framesep=2mm,samepage=true,fontsize=\footnotesize}
 
 \linespread{1.3}
 
@@ -40,7 +40,7 @@
 \title{strongTNC REST API\\SWID Endpoints \\ \small{Im Rahmen der strongTNC BA} }
 
 \pagestyle{scrheadings}
-\ihead{REST API} %linke Kopfzeile
+\ihead{SWID Measurement Manual} %linke Kopfzeile
 \ohead{strongTNC BA} %rechte Kopfzeile
 
 \newcommand*{\escape}[1]{\texttt{\textbackslash#1}}
@@ -96,8 +96,8 @@ Eine Messung läuft wie folgt ab:
 \pagebreak
 \section{Beispiel Szenario}
 Im Folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels
-illustriert werden. In diesem Beispiel soll eine Messung für 3 Tags mit
-folgenden Software-IDs erfolgen:
+illustriert werden. In diesem Beispiel soll eine Messung für die drei Tags mit
+den folgenden Software-IDs erfolgen:
 \begin{itemize*}
 	\item \texttt{regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-logrotate-3.7.8-6ubuntu5}
 	\item \texttt{regid.2004-03.org.strongswan\_Ubuntu\_12.04-i686-lsb-base-4.0-0ubuntu20}
@@ -110,6 +110,8 @@ folgenden Software-IDs erfolgen:
 
 Zuerst wird versucht eine Messung für die Session mit der ID 2 zu erfassen.
 
+\begin{listing}
+\caption{Durchführen einer SWID Messung}
 \begin{httpcode}
 POST /api/sessions/2/swid-measurement/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
@@ -124,9 +126,12 @@ Content-Length: 232
 "regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"
 ]
 \end{httpcode}
+\end{listing}
 
 Curl Befehl:
 
+\begin{listing}
+\caption{Durchführen einer SWID Messung mit cURL}
 \begin{bashcode}
 curl -i -X POST http://tncserver:8000/api/sessions/2/swid-measurement/ \
 		 -u username:password \
@@ -134,6 +139,7 @@ curl -i -X POST http://tncserver:8000/api/sessions/2/swid-measurement/ \
 		 -H "Content-Type: application/json; charset=utf-8" \
 		 -d "{ \"data\" : $DATA }"
 \end{bashcode}
+\end{listing}
 
 \subsubsection{Antwort - Status 412 Precondition Failed}
 
@@ -143,6 +149,8 @@ Software-IDs der fehlenden Tags zurückgeliefert. Der HTTP Status Code ist
 Tags mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt
 aussehen:
 
+\begin{listing}
+\caption{Antwort einer nicht erfolgreichen SWID Messung}
 \begin{httpcode}
 HTTP/1.0 412 PRECONDITION FAILED
 Date: Wed, 14 May 2014 15:21:45 GMT
@@ -153,11 +161,14 @@ Allow: POST, OPTIONS
 
 ["regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3"]
 \end{httpcode}
+\end{listing}
 
 \subsubsection{Antwort - Status 200 OK}
 
 Wären für alle Software-IDs bereits Tags in der Datenbank vorhanden, könnte die Antwort wie folgt aussehen:
 
+\begin{listing}
+\caption{Antwort einer erfolgreichen SWID Messung}
 \begin{httpcode}
 HTTP/1.0 200 OK
 Date: Wed, 14 May 2014 15:21:45 GMT
@@ -168,6 +179,7 @@ Allow: POST, OPTIONS
 
 []
 \end{httpcode}}
+\end{listing}
 
 \subsection{Nacherfassen von SWID Tags}
 
@@ -185,6 +197,8 @@ Im swidGenerator kann ein solcher wie folgt abgefragt werden:
 
 Ein solcher SWID Tag sieht wie folgt aus:
 
+\begin{listing}
+\caption{Beispiel eines SWID Tags}
 \begin{small}
 \begin{minted}{xml}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -210,6 +224,7 @@ Ein solcher SWID Tag sieht wie folgt aus:
 </SoftwareIdentity>
 \end{minted}
 \end{small}
+\end{listing}
 
 Dieser Tag kann anschliessend in der strongTNC Datenbank mittels POST Request
 auf die Ressource \texttt{/swid/add-tags/} erfasst werden. Die Daten für diesen
@@ -219,11 +234,10 @@ Batching in mehrere Gruppen, da die Requests sonst unter Umständen sehr lange
 dauern können. 
 
 Falls bereits ein Tag mit der selben Software-ID existiert, wird er komplett
-überschrieben.
+überschrieben. Der Request sieht folgendermassen aus:
 
-\pagebreak
-Der Request sieht folgendermassen aus:
-
+\begin{listing}[H]
+\caption{Erfassen eines SWID Tags}
 \begin{httpcode}
 POST /api/swid/add-tags/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
@@ -239,9 +253,12 @@ Content-Length: 239
 	]
 }
 \end{httpcode}
-
+\end{listing}
+\pagebreak
 Curl Befehl:
 
+\begin{listing}[H]
+\caption{Erfassen eines SWID Tags mit cURL}
 \begin{bashcode}
 curl -i -X POST http://tncserver:8000/api/swid/add-tags/ \
 		 -u username:password \
@@ -249,6 +266,7 @@ curl -i -X POST http://tncserver:8000/api/swid/add-tags/ \
 		 -H "Content-Type: application/json; charset=utf-8" \
 		 -d "{ \"data\" : $DATA }"
 \end{bashcode}
+\end{listing}
 
 
 \subsubsection{Antwort - Status 400 Bad Request}
@@ -256,6 +274,8 @@ curl -i -X POST http://tncserver:8000/api/swid/add-tags/ \
 Falls der Request nicht in Ordnung ist (zB fehlerhaftes oder unvollständiges
 XML), könnte die Antwort wie folgt aussehen:
 
+\begin{listing}
+\caption{Antwort beim Auftreten eines Fehlers}
 \begin{httpcode}
 HTTP/1.0 400 BAD REQUEST
 Date: Thu, 15 May 2014 21:31:10 GMT
@@ -264,15 +284,20 @@ Vary: Accept, Cookie
 Content-Type: application/json
 Allow: POST, OPTIONS
 
-{"status": "error", "message": "version: This field cannot be blank.
-package_name: This field cannot be blank."}
+{
+	"status": "error", 
+	"message": "version: This field cannot be blank. package_name: This field cannot be blank."
+}
 \end{httpcode}
+\end{listing}
 
 
 \subsubsection{Antwort - Status 200 OK}
 
 Wenn mit dem Request alles in Ordnung ist, könnte die Antwort wie folgt aussehen:
 
+\begin{listing}
+\caption{Erfolgreiches Hinzufügen eines SWID Tags}
 \begin{httpcode}
 HTTP/1.0 200 OK
 Date: Thu, 15 May 2014 21:19:19 GMT
@@ -281,8 +306,12 @@ Vary: Accept, Cookie
 Content-Type: application/json
 Allow: POST, OPTIONS
 
-{"status": "success", "message": "Added 1 SWID tags, replaced 0 SWID tags."}
+{
+	"status": "success",
+	"message": "Added 1 SWID tags, replaced 0 SWID tags."
+}
 \end{httpcode}
+\end{listing}
 
 
 \newpage

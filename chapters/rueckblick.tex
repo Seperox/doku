@@ -1,10 +1,59 @@
 \chapter{Rückblick}
 
+
 \section{Schlussfolgerungen}
 
-Alle in der Aufgabenstellung enthaltenen Punkte wurden erfüllt, ebenso sind alle
-daraus resultierenden Usecases abgedeckt. Darüber hinaus, konnten zusätzliche
-Ideen und Vorschläge eingebracht und umgesetzt werden.\\
-Ein zusätzlich eingebrachtes Ziel, war die Erhöhung der Code-Qualität. Die messbaren Attribute wie Testabdeckung, Code-Analyse konnten stark verbessert werden. Eine eher schwieriger zu bewertendes Attribut sind architektonische Anpassungen. Im Speziellen bei den verwendeten Technologien sind Best-Practises massgebend und können oft nur durch Erfahrung beurteilt werden. TODO Danilo
+\subsection{Erreichte Ziele}
+Alle in der Aufgabenstellung enthaltenen Punkte, Pflicht- und optional,  wurden
+erfüllt, ebenso sind alle daraus resultierenden Usecases abgedeckt. Darüber
+hinaus, konnten zusätzliche Ideen und Vorschläge eingebracht und umgesetzt
+werden.\\
+Zusätzlich konnten noch weitere Ziele erreicht werden:                 
+\begin{description}                  
+                                  
+	\item[REST API] Während der Projektzeit wurde ein Konzept für eine umfassende
+	REST Schnittstelle für strongTNC ausgearbeitet, mit dem Ziel die Schnittstelle
+	in Form einer gemeinsam genutzten Datenbank abzulösen. Das Konzept konnte auch
+	als Machbarkeitsnachweis im Bereich der SWID Erweiterung ungesetzt werden.
+	
+	\item[Code Qualität] Durch das einbringen von Django Konventionen, Testing,
+	Code Guidelines und Analyse Tools konnte die Qualtät des Codes gesteigert
+	werden.
+	
+	\item[Rückfluss von Wissen in die Community] Durch die intensive Arbeit mit
+	Plugins und Erweiterungen konnten einige Fehler festgestellt werden. Diese
+	konnten behoben werden und wurden als Pull Request in den Entwicklern der
+	Erweiterungen weder zur Verfügung gestellt.
+	
+\end{description}
 
+
+\subsection{Learnings}
+Die intensive Arbeit an einem Projekt fordert, dass bestimmte Technologien im
+Detail betrachtet werden und dass oft durch geführte Prozesse optimiert werden.
+Dabei lernt man Neues und bestätigt altes, im folgenden sind einige Learnings
+dieser Arbeit. Die Punkte beziehen sich auf technische oder organisatorische
+Merkmale, individuelle persönliche Learnings sind den \enquote{Persönlichen
+Berichten} zu entnehmen.
+
+\begin{description}
+	\item[Git: Branching und Reviews] Die Arbeit mit \enquote{Feature Branches} und
+	konsequentem Review bevor ein Branch in den Master-Branch einfliessen darf,
+	hatte diverse positive Effekte: Es konnten Fehler gefunden werden, bevor sie in
+	die Produktion geraten, das Wissen über einzelne Komponenten konnte verteilt
+	werden. Allerdings mit diesem Vorgehen viel Zeit aufgebraucht. Es ist schwierig
+	zu Sagen, ob der sich der erhöhte Zeitaufwand gegenüber der eingesparten Zeit
+	durch frühzeitiges finden von Bugs auszahlt. Das vorgehen hat sich jedoch
+	bewährt.
+	
+	\item[SQLite] An verschiedenen Punkten dieses Projektes war die Datenbank
+	Bestandteil von Problemstellungen. Nicht selten konnte festgestellt werden,
+	dass die technischen Einschränkungen von SQLite die Verursacher dieser Probleme
+	waren. SQLite eignet sich gut für Prototyping, Embedded Systeme oder kleine
+	einzelbenuzer Systeme, verursacht bei grösseren Infrastrukturen mit
+	mehrbenutzer Zugriff starke Probleme.
+	
+	\item[Testing] 
+	
+\end{description}
 

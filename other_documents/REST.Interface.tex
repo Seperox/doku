@@ -32,10 +32,10 @@
 	tabsize=2,
 }
 
-\linespread{1.3}
+\linespread{1.2}
 
 \author{Danilo Bargen, Christian Fässler, Jonas Furrer} 
-\title{strongTNC REST API\\DRAFT \\ \small{Im Rahmen der strongTNC BA} }
+\title{strongTNC REST API \\ \small{Im Rahmen der strongTNC BA} }
 
 \pagestyle{scrheadings}
 \ihead{REST API} %linke Kopfzeile
@@ -62,48 +62,59 @@ Die Definition der Ressourcen orientiert sich an den Regeln des Buches
 
 \subsubsection*{URI Definition}
 
-Bei der Bezeichnung der URIs\footnote{Uniform Resource Identifier} wurde folgende Terminologie gemäss RFC 3986\cite{rfc3986} verwendet:
+Bei der Bezeichnung der URIs\footnote{Uniform Resource Identifier} wurde
+folgende Terminologie gemäss RFC 3986\cite{rfc3986} verwendet:
 
 \texttt{URI = scheme \textquotedbl ://\textquotedbl{} authority \textquotedbl /\textquotedbl{}
 path [ \textquotedbl ?\textquotedbl{} query ] [ \textquotedbl \#\textquotedbl{} fragment ]}
 
 \subsubsection*{Ressource-Archetypen}
 
-Nachfolgend die Ressource-Archetypen gemäss Masse 2011\cite{masse2011rest}. Die Erklärungstexte wurden direkt dem besagten
-Buch entnommen.
+Nachfolgend die Ressource-Archetypen gemäss Masse 2011\cite{masse2011rest}. Die
+Erklärungstexte wurden direkt dem besagten Buch entnommen.
 
 \begin{description}
-	\item[Document] A document resource is a singular concept that is akin to an object instance or database
-		record. A document’s state representation typically includes both fields with values and
-		links to other related resources.
-	\item[Collection] A collection resource is a server-managed directory of resources. Clients may								 propose
-		new resources to be added to a collection. However, it is up to the collection to choose
-		to create a new resource, or not.
-	\item[Store] A store is a client-managed resource repository. A store resource lets an API client put
-		resources in, get them back out, and decide when to delete them. On their own, stores
-		do not create new resources; therefore a store never generates new URIs. Instead, each
-		stored resource has a URI that was chosen by a client when it was initially put into the
-		store.
-	\item[Controller] A controller resource models a procedural concept. Controller resources are like
-		executable functions, with parameters and return values; inputs and outputs.
-		Like a traditional web application’s use of HTML forms, a REST API relies on controller
-		resources to perform application-specific actions that cannot be logically mapped to
-		one of the standard methods (create, retrieve, update, and delete, also known as
-		CRUD).
+	\item[Document] A document resource is a singular concept that is akin to an
+	object instance or database record. A document’s state representation typically
+	includes both fields with values and links to other related resources.
+	
+	\item[Collection] A collection resource is a server-managed directory of
+	resources. Clients may								 propose new resources to be added to a
+	collection. However, it is up to the collection to choose to create a new
+	resource, or not.
+	
+	\item[Store] A store is a client-managed resource repository. A store resource
+	lets an API client put resources in, get them back out, and decide when to
+	delete them. On their own, stores do not create new resources; therefore a
+	store never generates new URIs. Instead, each stored resource has a URI that
+	was chosen by a client when it was initially put into the store.
+	
+	\item[Controller] A controller resource models a procedural concept. Controller
+	resources are like executable functions, with parameters and return values;
+	inputs and outputs. Like a traditional web application’s use of HTML forms, a
+	REST API relies on controller resources to perform application-specific actions
+	that cannot be logically mapped to one of the standard methods (create,
+	retrieve, update, and delete, also known as CRUD).
 \end{description}
 
+
 \pagebreak
+
+
 \section{Repräsentation der Archetypen}
 
 Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
 
 \begin{description}
-	\item[Document] Ein Document gibt ein JSON Objekt zurück, welches alle relevanten Felder enthält.
-		Informationen, welche durch die Ressource-URI bereits gegeben sind (z.B. Type), müssen nicht, können jedoch, erneut in der Liste erscheinen.\\
-		Falls im Document Unterobjekte auftauchen, wird für das Feld die URI des betreffenden Unterobjekts
-		eingesetzt, damit kann dieses Objekt direkt abgefragt werden. Zusätzlich wird ein Query-Parameter
-		bereit gestellt, welcher es erlaubt, Unterobjekte bis zu einer gewissen Tiefe aufzulösen.\\
-		Beispiel: \hfill
+	\item[Document] Ein Document gibt ein JSON Objekt zurück, welches alle
+	relevanten Felder enthält. Informationen, welche durch die Ressource-URI
+	bereits gegeben sind (z.B. Type), müssen nicht, können jedoch, erneut in der
+	Liste erscheinen.\\ 
+	Falls im Document Unterobjekte auftauchen, wird für das Feld die URI des
+	betreffenden Unterobjekts eingesetzt, damit kann dieses Objekt direkt abgefragt
+	werden. Zusätzlich wird ein Query-Parameter bereit gestellt, welcher es
+	erlaubt, Unterobjekte bis zu einer gewissen Tiefe aufzulösen.\\ 
+	Beispiel: \hfill
 \begin{lstlisting}
 {
 	"field1": "<str,value-1>",
@@ -146,11 +157,12 @@ Beispiel mit Query \texttt{depth=1}:
 }
 \end{lstlisting}
 
-	\item[Collection] Eine Collection gibt eine Liste mit allen enthaltenen (ggf. gefilterten)
-		JSON-Objekten zurück. Die Objekte werden zusätzlich um ein Feld \texttt{uri} ergänzt,
-		welches die Ressource-URI des jeweiligen Objektes enthält. Wie bei einem Document gibt es bei
-		Collections einen optionalen Query Parameter welcher es erlaubt Unterobjekte aufzulösen, \\
-		Beispiel: \hfill
+	\item[Collection] Eine Collection gibt eine Liste mit allen enthaltenen (ggf.
+	gefilterten) JSON-Objekten zurück. Die Objekte werden zusätzlich um ein Feld
+	\texttt{uri} ergänzt, welches die Ressource-URI des jeweiligen Objektes
+	enthält. Wie bei einem Document gibt es bei Collections einen optionalen Query
+	Parameter welcher es erlaubt Unterobjekte aufzulösen, \\ 
+	Beispiel: \hfill
 \begin{lstlisting}
 {
 	{
@@ -165,6 +177,7 @@ Beispiel mit Query \texttt{depth=1}:
 	},
 }
 \end{lstlisting}
+
 Beispiel mit Query \texttt{depth=1}:
 \begin{lstlisting}
 {
@@ -185,160 +198,98 @@ Beispiel mit Query \texttt{depth=1}:
 }
 \end{lstlisting}
 
-	\item[Store] Ein Store verhält sich wie eine Collection, wenn sie direkt angesprochen wird
-		(\texttt{/store}) und wie ein Document, wenn ein spezifisches Element des Store angesprochen
-		wird (\texttt{/store/\{element-id\}}).
+	\item[Store] Ein Store verhält sich wie eine Collection, wenn sie direkt
+	angesprochen wird (\texttt{/store}) und wie ein Document, wenn ein spezifisches
+	Element des Store angesprochen wird (\texttt{/store/\{element-id\}}).
+	
 	\item[Controller] Der Output des Controllers ist abhängig vom Verwendungszweck.
 \end{description}
 
+
 \pagebreak
+
+
 \section{HTTP Statuscodes}
-Das Ergebnis einer Anfrage wird grundsätzlich über einen HTTP Statuscode mitgeteilt, gewissen Fällen
-kann auch noch Payload im Body geliefert werden. Folgendes ist eine Auswahl von Statuscodes die zu
-erwarten sind:
+Das Ergebnis einer Anfrage wird grundsätzlich über einen HTTP Statuscode
+mitgeteilt, gewissen Fällen kann auch noch Payload im Body geliefert werden.
+Folgendes ist eine Auswahl von Statuscodes die zu erwarten sind:
 
 \begin{description*}
 	\item[200 OK] Request erfolgreich
 	\item[201 Created] Entity wurde erfolgreich erstellt
 	\item[204 No Content] Entity wurde erfolgreich geändert
 	\item[400 Bad Request] Generischer Client Fehler
-	\item[404 Not Found] Zu ändernde Entity nicht gefunden
-	\item[405 Method Not Allowed] Die verwendete HTTP Methode ist auf dieser Ressource nicht erlaubt
+	\item[404 Not Found] Entity nicht gefunden
+	\item[405 Method Not Allowed] Die verwendete HTTP Methode ist auf dieser
+	Ressource nicht erlaubt
 	\item[409 Conflict] Zu erstellende Entity existiert bereits
-	\item[412 Precondition Failed] Es sind zusätzliche Schritte nötig um die Anfrage auszuführen.
+	\item[412 Precondition Failed] Es sind zusätzliche Schritte nötig um die
+	Anfrage auszuführen.
 	\item[500 Internal Server Error] Generischer Server Fehler
 \end{description*}
 
-Falls zusätzliche Codes verwendet werden oder die Codes eine spezielle oder erwähnenswerte Bedeutung haben, ist dies bei der betroffenen Resource vermerkt.
+Falls zusätzliche Codes verwendet werden oder die Codes eine aussergewöhnliche oder
+erwähnenswerte Bedeutung haben, ist dies bei der betroffenen Resource vermerkt.
 
 
 \pagebreak
+
+
 \section{Allgemeine Hinweise}
 
 \subsection{Schreibweise}
-Für die Definition des Response- und Request-Formats wird eine pseudo JSON schreibweise verwendet. Die
-auszufüllenden Werte werden als Tupel in spitzen Klammern dargestellt. Der erste Teil des Tupels zeigt 
-den Typ, der zweite Teil steht zur Beschreibung für den Wert. Folgende Typen werden verwendet:
+Für die Definition des Response- und Request-Formats wird eine pseudo JSON
+schreibweise verwendet. Die Werte werden als Tupel in spitzen Klammern
+dargestellt. Der erste Teil des Tupels zeigt den Typ, der zweite Teil ist eine
+Beschreibung für den Wert. Folgende Typen werden verwendet:
+
 \begin{description*}
 	\item[int] Integer Zahlenwert
-	\item[num] Dezimalzahl, 
+	\item[num] Dezimalzahl
 	\item[str] String
 	\item[bool] Wahrheitswert
 	\item[xml] Ein XML Dokument
-	\item[hex] Ein HEX-Encoded String
-	\item[uri] Die voll qualifizerte URI einer Resource
-	\item[doc] Das Dokument einer Resource, wie dieses Aussieht kann im jeweiligen Abschnitt zur genannten Resource nachgeschlagen werden
+	\item[hex] Ein HEX String
+	\item[uri] Die vollqualifizerte URI einer Resource
+	\item[doc] Das Dokument einer Resource, wie dieses aussieht kann im jeweiligen
+	Abschnitt zur genannten Resource nachgeschlagen werden
 \end{description*}
 
 \subsection{Standard Verhalten}
-Folgende Punkte beschreiben das standard Verhalten der Resourcen:
+Folgende Punkte beschreiben das Standardverhalten der Resourcen:
+
 \begin{description*}
 	\item[Depth Query-Parameter] Jede Resource die als Antwort eine URI auf eine
-		andere Resource zurück gibt unterstützt den \texttt{depth} Query-Parameter.
-		Dieser löst die URIs bis zur gewünschten tiefe auf.  Möglicherweise wird die
-		maximale Tiefe eingeschränkt. Wenn keine tiefe angegeben wird, gilt die
-		Auflösungstiefe 0.
+	andere Resource zurück gibt unterstützt den \texttt{depth} Query-Parameter.
+	Dieser löst die URIs bis zur gewünschten tiefe auf. Möglicherweise wird die
+	maximale Tiefe eingeschränkt. Wenn keine tiefe angegeben wird, gilt die
+	Auflösungstiefe 0.
+	
 	\item[Filter Query-Parameter] Filter Query-Parameter sind, falls vorhanden,
-		immer optional, sie dienen der Präzisierung des Rückgabesets. Wenn sie
-		weggelassen werden, wird das vollständige Set zurückgegeben.
+	immer optional, sie dienen der Präzisierung des Rückgabesets. Wenn sie
+	weggelassen werden, wird das vollständige Set zurückgegeben.
+	
 	\item[Generische Filter] Collections unterstützen wenn nicht anders erwähnt
-		generische Filter auf allen Feldern mit Ausnahme der Foreign Keys. Das
-		heisst, es kann grundsätzlich nach jedem Attribut des Rückgabedokuments
-		gefiltert werden. Der Parameter ist wie folgt aufgebaut:
-		\texttt{attributeName=query}. Filter können auch auf Document-Resourcen
-		genutzt werden, dann wird bei nicht passenden Filterwerten ein HTTP 404
-		Status Code zurückgegeben. 
+	generische Filter auf alle Feldern mit Ausnahme der Foreign Keys. Das heisst,
+	es kann grundsätzlich nach jedem Attribut des Rückgabedokuments gefiltert
+	werden. Der Parameter ist wie folgt aufgebaut: \texttt{attributeName=query}.
+	Filter können auch auf Document-Resourcen genutzt werden, es wird bei nicht
+	passenden Filterwerten ein \texttt{HTTP 404} Status Code zurückgegeben.
+	
 	\item[Batch Create] Collections unterstützen, sofern sie nicht readonly sind
-		oder es anders erwähnt ist, das sogenannte 'Batch Create'. D.h zum Erstellen
-		von neuen Dokumenten kann einer Collection auch eine Liste gesendet werden.
-		Wird 'Batch Create' verwendet, besteht die Antwort des Servers nur aus einem
-		Statuscode, es wird nicht eine Liste der Erstellten Dokumente zurück
-		geschickt. Fall die Erstellung fehlschlägt wird kein Dokument angelegt. Es
-		wird versucht mitzuteilen warum die Erstellung fehlschlug.
-	\item[Paging] //TODO: Beschreiben//  
+	oder es anders erwähnt ist, das sogenannte 'Batch Create'. D.h zum Erstellen
+	von neuen Dokumenten kann einer Collection auch eine Liste gesendet werden.
+	Wird 'Batch Create' verwendet, besteht die Antwort des Servers nur aus einem
+	Statuscode, es wird nicht eine Liste der Erstellten Dokumente zurück geschickt.
+	Fall die Erstellung fehlschlägt wird kein Dokument angelegt. Es wird versucht
+	mitzuteilen warum die Erstellung fehlschlug.
+
 \end{description*}
  
-\pagebreak
-\subsection{Bisher verwendete SQL Vorgänge}
-\paragraph{Session}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/JOIN(devices,results)}
-	\item[Felder] *id, *device, *time, connection, product, identity, +rec
-\end{description*}
-
-\paragraph{Workitem}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/DELETE/JOIN(enforcements)}
-	\item[Felder] *id, *session, *result, enforcement, type, arg\_str, arg\_int, rec\_fail, rec\_noresult, rec\_final
-\end{description*} 
  
-\paragraph{Products}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT}
-	\item[Felder] id, *name
-\end{description*}
-
-\paragraph{Packages}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT}
-	\item[Felder] id, *name
-\end{description*}
-
-\paragraph{Versions}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/DELETE}
-	\item[Felder] *id, *product, *package, release, security, blacklist, time
-\end{description*}
-
-\paragraph{Identities}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT}
-	\item[Felder] id, *type, *value
-\end{description*}
-
-\paragraph{Devices}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/JOIN(sessions)}
-	\item[Felder] *id, *value, *product, trusted, created, +desription
-\end{description*}
-
-\paragraph{Enforcements}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/JOIN(policies,workitems)}
-	\item[Felder] *id, *group\_id, policy, rec\_fail, rec\_noresult, max\_age
-\end{description*}
-
-\paragraph{Policies}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/JOIN(enforcements)}
-	\item[Felder] *id, type, argument, rec\_fail, rec\_noresult, file, dir, +name
-\end{description*}
-
-\paragraph{Results}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT/JOIN(sessions)}
-	\item[Felder] *policy, session, rec, result, +id
-\end{description*}
-
-\paragraph{Groups}
-\begin{description*}
-	\item[SQL] \texttt{SELECT}
-	\item[Felder] *id, parent, +name
-\end{description*}
-
-\paragraph{Groups\_members}
-\begin{description*}
-	\item[SQL] \texttt{SELECT/INSERT}
-	\item[Fe•lder] *device\_id, group\_id, +id
-\end{description*}
-
-\paragraph{Groups\_products\_defaults}
-\begin{description*}
-	\item[SQL] \texttt{SELECT}
-	\item[Felder] *product\_id, group\_id, +id
-\end{description*} 
-
 \pagebreak
+
+
 \section{Daten Definition}
 
 \subsection{Policy Arguments}
@@ -364,7 +315,9 @@ Folgende Workitem, bzw. Policy Typen sind momentan vorhanden:
 	\item[\texttt{16: TPMRA}] TPM Remote Attestation
 \end{description*}
 
-Einige Typen benötigen unterschiedliche Argumente, Gemeinsamkeiten lassen sich wie folgt gruppieren:
+Einige Typen benötigen unterschiedliche Argumente, Gemeinsamkeiten lassen sich
+wie folgt gruppieren:
+
 \begin{description*}
 	\item[Keine Argumente] 00, 01, 02, 03, 04
 	\item[Datei Pfad] 05, 06, 07
@@ -373,24 +326,31 @@ Einige Typen benötigen unterschiedliche Argumente, Gemeinsamkeiten lassen sich 
 	\item[SWID Request Flags] 15
 	\item[TPM Attestation Flags] 16
 \end{description*}
-Entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende Objekte werden je nach Type übermittelt, als Verweis wir \texttt{<doc,policy-argument>} verwendet.
+
+Dem entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende
+Objekte werden je nach Type übermittelt, als Verweis wird
+\texttt{<doc,policy-argument>} verwendet.
+
 \begin{description*}
 	\item[Keine Argumente] \hfill
 \begin{lstlisting}
 {}
 \end{lstlisting}
+
 	\item[Datei Pfad] \hfill
 \begin{lstlisting}
 {
 	"file": "<str,file-path>"
 }
 \end{lstlisting}   
+
 	\item[Verzeichnis Pfad] \hfill
 \begin{lstlisting}
 {
 	"directory": "<str,directory-path>"
 }
 \end{lstlisting} 
+
 	\item[Port Liste] \hfill
 \begin{lstlisting}
 {
@@ -399,6 +359,7 @@ Entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende Ob
 	]
 }
 \end{lstlisting} 
+
 	\item[SWID Request Flags] \hfill
 \begin{lstlisting}
 {
@@ -407,6 +368,7 @@ Entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende Ob
 	]
 }
 \end{lstlisting} 
+
 	\item[TPM Attestation Flags] \hfill
 \begin{lstlisting}
 {
@@ -417,16 +379,20 @@ Entsprechend sollen die Argumente der Workitems übermittelt werden. Folgende Ob
 \end{lstlisting} 
 \end{description*}
 
+
 \subsection{Recommendation Types}
 Folgende Recommendation Types bzw. Actions sind vorhanden:
+
 \begin{description*}
 	\item[\texttt{0: ALLOW}] Die Empfehlung/Aktion ist, den Client zuzulassen
 	\item[\texttt{1: BLOCK}] Die Empfehlung/Aktion ist, den Client zu blockieren
-	\item[\texttt{2: ISOLATE}] Die Empfehlung/Aktion ist, den Client in einem isoliertem Segment zu platzieren
+	\item[\texttt{2: ISOLATE}] Die Empfehlung/Aktion ist, den Client in einem
+	isoliertem Segment zu platzieren
 	\item[\texttt{3: NONE}]
 \end{description*}
 
-Diese Werte werden von der API als Id verwendet. Es wird kein Objekt für die Repräsentation erstellt.
+Diese Werte werden von der API als Integer Id verwendet. Es wird kein Objekt für
+die Repräsentation erstellt.
 
 \subsection{Hash-Set}
 Ein Hash-Set wird innerhalb eines File-Documents ausgeliefert, der Verweis lautet \texttt{<doc,hash-set>} und ist wie folgt aufgebaut:
@@ -435,21 +401,19 @@ Ein Hash-Set wird innerhalb eines File-Documents ausgeliefert, der Verweis laute
 [
 	{
 		"algorithm": "<str,algorithm-name>",
-		"hash": "<hex,hash>	"
+		"hash": "<hex,hash>	",
+		"product": "<uri,product>"
 	}
 ]
 \end{lstlisting}
 
-Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgende Algorithmen erfasst:
-\begin{itemize*}
-	\item SHA384
-	\item SHA256
-	\item SHA1
-	\item SHA1-IMA
-\end{itemize*}
+Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgende Algorithmen erfasst: 
+\texttt{SHA384, SHA256, SHA1, SHA1-IMA}
 
 
 \pagebreak
+
+
 \section{REST Ressourcen}
 
 \subsection{Session Steuerung und Ablauf}
@@ -465,8 +429,11 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	\begin{description*}
 		\item[\texttt{connectionId}] strongSwan Connection Id
 		\item[\texttt{clientIdentity}] strongSwan Client-Identity
-		\item[\texttt{hardwareId}] Die Id, welche das Gerät identifiziert, so zum Beispiel, AIK, Android-Id, DBUS machine-id, o.ä. Dies entspricht dem \texttt{value} Feld in der \texttt{device} Tabelle in der Datenbank
-		\item[\texttt{productName}] Der Productname ist der Name des OS wie er in der \texttt{product} Tabelle der Datenbank steht
+		\item[\texttt{hardwareId}] Die Id, welche das Gerät identifiziert, so zum
+		Beispiel, AIK, Android-Id, DBUS machine-id, o.ä. Dies entspricht dem
+		\texttt{value} Feld in der \texttt{device} Tabelle in der Datenbank
+		\item[\texttt{productName}] Der Productname ist der Name des OS wie er in der
+		\texttt{product} Tabelle der Datenbank steht
 	\end{description*}
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -479,7 +446,13 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	"uri": "<uri,session>"
 }
 \end{lstlisting}
-	\item[Beschreibung] Dieser Controller erstellt und startet eine Session, das Device welches der Session zugeordnet werden soll wird anhand der \texttt{hardwareId} und dem \texttt{productName} bestimmt. Falls eines der Objekte noch nicht existiert wird dieses durch den Controller erstellt. Die Id, die im Response Dokument zurück geliefert wird, dient zur zukünftigen Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste von Workitems die für diese Session abgearbeitet werden müssen.
+	\item[Beschreibung] Dieser Controller erstellt und startet eine Session, das
+	Device welches der Session zugeordnet werden soll wird anhand der
+	\texttt{hardwareId} und dem \texttt{productName} bestimmt. Falls eines der
+	Objekte noch nicht existiert wird dieses durch den Controller erstellt. Die Id,
+	die im Response Dokument zurück geliefert wird, dient zur zukünftigen
+	Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste
+	von Workitems die für diese Session abgearbeitet werden müssen.
 \end{description*}
 \end{mdframed}
 
@@ -493,11 +466,17 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	\begin{description*}
 		\item[\texttt{recommendation}] Endgültiges Resultat/Empfehlung für diese Session.
 	\end{description*}
-	\item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle zusätzlich nötigen Vorgänge, so werden zum Beispiel die Workitems dieser Session abgeräumt und die jeweiligen Resultate gespeichert und können via \texttt{/sessions/\{id\}/results} abgerufen werden.
+	\item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle
+	zusätzlich nötigen Vorgänge, so werden zum Beispiel die Workitems dieser
+	Session abgeräumt und die jeweiligen Resultate gespeichert und können via
+	\texttt{/sessions/\{id\}/results} abgerufen werden.
 \end{description*}
 \end{mdframed}
 
+
 \pagebreak
+
+
 \subsubsection{Documents und Collections}
 
 \begin{mdframed}[style=def]
@@ -517,7 +496,10 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	"recommendation": <int,rec>
 }
 \end{lstlisting}
-	\item[Beschreibung] Informationen zu einer bestimmten Session. Sessions sollen nicht direkt geändert werden, sondern nur über die entsprechenden Controller, der Grund dafür ist, dass im Hintergrund noch zusätzliche Operationen vorgenommen werden müssen.
+	\item[Beschreibung] Informationen zu einer bestimmten Session. Sessions sollen
+	nicht direkt geändert werden, sondern nur über die entsprechenden Controller,
+	der Grund dafür ist, dass im Hintergrund noch zusätzliche Operationen
+	vorgenommen werden müssen.
 \end{description*}
 \end{mdframed}
 
@@ -535,11 +517,15 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 \begin{lstlisting}
 [<doc,session>, ...]
 \end{lstlisting}
-	\item[Beschreibung] Liste aller Sessions. Neue Sessions können nur über den entsprechenden Controller erstellt werden.
+	\item[Beschreibung] Liste aller Sessions. Neue Sessions können nur über den
+	entsprechenden Controller erstellt werden.
 \end{description*}
 \end{mdframed}
 
+
 \pagebreak
+
+
 \paragraph{Workitems}\hfill \\
 
 \begin{mdframed}[style=def]
@@ -558,10 +544,10 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 }
 \end{lstlisting}
 	\item[Beschreibung] Ein zu einer bestimmten Session zugehöriges Workitem.
-		Workitems können nicht direkt erstellt werden, sondern werden beim Erstellen
-		einer Session anhand der Enforcements erstellt. Workitems gibt es nur, so
-		lange eine Session nicht beendet wurde. Nach dem Ende der Session wird ein
-		HTTP404 Status Code zurückgeliefert.
+	Workitems können nicht direkt erstellt werden, sondern werden beim Erstellen
+	einer Session anhand der Enforcements erstellt. Workitems gibt es nur, so lange
+	eine Session nicht beendet wurde. Nach dem Ende der Session wird ein
+	\texttt{HTTP 404} Statuscode zurückgeliefert.
 \end{description*}
 \end{mdframed}
 
@@ -579,10 +565,10 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 [<doc,workitem>, ...]
 \end{lstlisting}
 	\item[Beschreibung] Eine Liste aller Workitems die zu einer bestimmten Session
-		gehören. Workitems können nicht direkt erstellt werden, sondern werden beim
-		Erstellen einer Session anhand der Enforcements erstellt. Workitems gibt es
-		nur, so lange eine Session nicht beendet wurde. Nach dem Ende der Session
-		wird eine leere Liste geliefert.
+	gehören. Workitems können nicht direkt erstellt werden, sondern werden beim
+	Erstellen einer Session anhand der Enforcements erstellt. Workitems gibt es
+	nur, so lange eine Session nicht beendet wurde. Nach dem Ende der Session wird
+	eine leere Liste geliefert.
 \end{description*}
 \end{mdframed}
 
@@ -610,20 +596,21 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 }
 \end{lstlisting}
 	\item[Beschreibung] Auf dieser Ressource soll das Resultat des jeweiligen
-		Workitems eingetragen werden. Diese Resultate werden beim Beenden der
-		Session von den Workitems in die Session-Resulate übertragen.
+	Workitems eingetragen werden. Diese Resultate werden beim Beenden der Session
+	von den Workitems in die Session-Resulate übertragen.
 \end{description*}
 \end{mdframed}
 
+
 \pagebreak
+
+
 \paragraph{Results} \hfill \\
-\nopagebreak
 
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/session/\{id\}/results/\{id\}/}
 	\item[Archetype] Readonly Collection
-	\item[Filter Query] \hfill
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
@@ -636,8 +623,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 }
 \end{lstlisting}
 	\item[Beschreibung] Einzelnes Resultat. Im Gegensatz zur Resultat-Resource
-		unter der Workitem Resource enthält dieses Document auch einen Link zum
-		zugehörigen Enforcement.
+	unter der Workitem Resource enthält dieses Document auch einen Link zum
+	zugehörigen Enforcement.
 \end{description*}
 \end{mdframed}
 
@@ -645,27 +632,28 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 \begin{description*}
 	\item[URI Path] \texttt{/session/\{id\}/results/}
 	\item[Archetype] Readonly Collection
-	\item[Filter Query] \hfill
 	\item[Methods] GET
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 [<doc,result>, ...]
 \end{lstlisting}
-	\item[Beschreibung] Nach dem Beenden einer Session können die eingetragenen Resultate in dieser Collection abgefragt werden. Diese Collection ist readonly, damit die Session-Ergebnisse nicht nachträglich geändert werden können.
+	\item[Beschreibung] Nach dem Beenden einer Session können die eingetragenen
+	Resultate in dieser Collection abgefragt werden. Diese Collection ist readonly,
+	damit die Session-Ergebnisse nicht nachträglich geändert werden können.
 \end{description*}
 \end{mdframed}
 
 
-
-
 \pagebreak
+
+
 \subsection{SWID Erweiterung}
 
 \subsubsection{SWID Tags: Messung}
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/register-swid-measurement/}
+	\item[URI Path] \texttt{/sessions/\{id\}/swid-measurement/}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Content-Type] \texttt{application/json; charset=utf-8}
@@ -676,22 +664,22 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 	\item[Response Statuscodes] \hfill
 		\begin{description*}
 			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
-				und wurden für die übermittelte Session eingetragen.
+			und wurden für die übermittelte Session eingetragen.
 			\item[404 Not Found] Session mit der spezifizierten ID wurde nicht gefunden. 
 			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die
-				übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs
-				übertragen.
+			übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs
+			übertragen.
 		\end{description*}
 	\item[JSON Format Response] \hfill
 \begin{lstlisting}
 ["<str,software-id>", ...]
 \end{lstlisting}
 	\item[Beschreibung] Die strongSwan Komponente sendet eine Liste von
-		Software-IDs an die strongTNC Schnittstelle. Die Software-IDs wurden zuvor
-		auf dem Client gemessen und widerspiegeln die momentan installierten
-		Software Pakete.\\
-		Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können
-		diese direkt eingetragen werden.
+	Software-IDs an die strongTNC Schnittstelle. Die Software-IDs wurden zuvor auf
+	dem Client gemessen und widerspiegeln die momentan installierten Software
+	Pakete.\\
+	Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können
+	diese direkt eingetragen werden.
 \end{description*}
 \end{mdframed}
 
@@ -712,16 +700,17 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 		\begin{description*}
 			\item[200 OK] SWID Tags wurden erfolgreich verarbeitet.
 			\item[400 Bad Request] Fehlerhafter Request. Details zum Fehler werden im
-				Response-Body zurückgesendet.
+			Response-Body zurückgesendet.
 		\end{description*}
 	\item[Beschreibung] Die übermittelten Tags werden gelesen und in die Datenbank
-		gespeichert. Bereits vorhandene Tags werden übersprungen, beziehungsweise
-		ergänzt, wenn der neu übermittelte Tag mehr optionale Felder enthält als der
-		bereits gespeicherte. (TODO specify genauer)
+	gespeichert. Bereits vorhandene Tags werden übersprungen.
 \end{description*}
 \end{mdframed}
 
+
 \pagebreak
+
+
 \subsection{CRUD Resourcen}
 \subsubsection{Products}
 
@@ -777,6 +766,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 
 
 \pagebreak
+
+
 \subsubsection{Packages}
 
 \begin{mdframed}[style=def]
@@ -827,6 +818,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 
 
 \pagebreak
+
+
 \subsubsection{Versions}
 
 \begin{mdframed}[style=def]
@@ -880,6 +873,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 
 
 \pagebreak
+
+
 \subsubsection{Identities}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -919,6 +914,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 
 
 \pagebreak
+
+
 \subsubsection{Devices}
 
 \begin{mdframed}[style=def]
@@ -1016,6 +1013,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 
 
 \pagebreak
+
+
 \subsubsection{Enforcements}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -1076,7 +1075,10 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 \end{description*}
 \end{mdframed}
 
+
 \pagebreak
+
+
 \subsubsection{Policies}
 
 \begin{mdframed}[style=def]
@@ -1135,6 +1137,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 
 
 \pagebreak
+
+
 \subsubsection{Groups}
 
 \begin{mdframed}[style=def]
@@ -1199,15 +1203,8 @@ Falls ein Algorithmus noch nicht existiert wird er erfasst, momentan sind folgen
 
 
 \pagebreak
-\subsubsection{Groups\_members}
-
-Keine Ressourcen für Zwischentabellen (siehe 'devices' und 'enforcements').
 
 
-\subsubsection{Groups\_products\_defaults}
-Keine Ressourcen für Zwischentabellen (siehe 'products').
-
-\pagebreak
 \subsubsection{Files}
 
 \begin{mdframed}[style=def]
@@ -1250,6 +1247,8 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 
 \pagebreak
+
+
 \subsubsection{Directories}
 
 \begin{mdframed}[style=def]
@@ -1298,7 +1297,10 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 \end{description*}
 \end{mdframed}
 
+
 \pagebreak
+
+
 \subsubsection{SWID Tags}
 
 \begin{mdframed}[style=def]
@@ -1358,6 +1360,8 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 
 
 \pagebreak
+
+
 \subsubsection{Entities}
 
 \begin{mdframed}[style=def]
@@ -1408,7 +1412,10 @@ Keine Ressourcen für Zwischentabellen (siehe 'products').
 \end{description*}
 \end{mdframed}
 
+
 \pagebreak
+
+
 \begin{thebibliography}{1}
 	\bibitem{masse2011rest}
 	Masse, Mark. 
