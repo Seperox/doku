@@ -169,8 +169,8 @@ Create the necessary schema in your database:
 
 \begin{bashcode}
 cd /var/www/strongTNC/
-VIRTUAL/bin/python manage.py syncdb --database=meta
-VIRTUAL/bin/python manage.py syncdb --database=default
+VIRTUAL/bin/python manage.py syncdb --database=meta --noinput
+VIRTUAL/bin/python manage.py syncdb --database=default --noinput
 \end{bashcode}
 
 \subsection*{Collect static files}
@@ -179,7 +179,7 @@ Run the following command to collect all static files in a single directory:
 
 \begin{bashcode}
 cd /var/www/strongTNC/
-VIRTUAL/bin/python manage.py collectstatic
+VIRTUAL/bin/python manage.py collectstatic --noinput
 \end{bashcode}
 
 \subsection*{Apache configuration}
