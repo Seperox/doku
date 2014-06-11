@@ -3,7 +3,9 @@
 
 \section{Requirements}
 \subsection{Nichtfunktionale Anforderungen}
-Da es sich bei diesem Projekt um eine aufbauende Arbeit handelt werden keine neuen nichtfunktionalen Anforderungen definiert. Es sollen die Anforderungen der vorgängerarbeit\cite{cygnet:2013} eingehalten werden.
+Da es sich bei diesem Projekt um eine aufbauende Arbeit handelt, werden keine
+neuen nichtfunktionalen Anforderungen definiert. Es sollen die Anforderungen der
+Vorgängerarbeit\cite{cygnet:2013} eingehalten werden.
 
 
 \subsection{Use Cases}
@@ -21,18 +23,16 @@ betrachtet.
 \hline
 \textbf{Story} &
 Der Akteur will feststellen, welche Software in welcher Version zu einem
-bestimmten Zeitpunkt auf einem Gerät installiert war.\\
+bestimmten Zeitpunkt auf einem Gerät installiert war, beispielsweise weil in
+einer Version eine kritische Sicherheitslücke enthalten ist.\\
 \hline
 \textbf{Standard Szenario} &
 Der Akteur betrachtet das SWID Tag Inventar des gewünschten Gerätes und kann
 dort zu jedem Mess-Zeitpunkt die installierte Software abrufen. \\
 \hline
 \textbf{Alternatives Szenario} &
-% TODO dies ist eine alternative story, kein alternatives szenario.
-Der Akteur möchte wissen auf welchen Geräten eine bestimmte Software Version
-installiert ist oder war (beispielsweise weil in dieser Version eine kritische
-Sicherheitslücke enthalten ist). Der Akteur wählt dazu den gewünschten SWID Tag
-in der SWID Liste und die Geräte welche die Software installiert hatten werden
+Der Akteur wählt den gewünschten SWID Tag
+in der SWID Liste und die Geräte, welche die Software installiert hatten, werden
 aufgelistet.\\
 \hline
 \end{usecase}
@@ -75,7 +75,7 @@ zugeordnet sind, aufgelistet. \\
 \phantom{\textbf{Alternatives Szenario}} & 
 \end{usecase}
 
-\subsubsection{UC04: Verfügbare SWID-Tags auflisten}
+\subsubsection{UC04: Verfügbare SWID Tags auflisten}
 \label{strongTNC:UC04}
 \begin{usecase}
 \hline
@@ -86,7 +86,7 @@ Der Akteur will alle im System erfassten SWID Tags auflisten. Dabei ist er an
 folgenden Informationen eines Tags interessiert:
 \begin{itemize}
 \item Software-ID
-\item Unique ID
+\item Unique-ID
 \item Tag Creator Entity
 \item RAW XML String
 \item Welche Files sind in diesem SWID Tag enthalten
@@ -103,14 +103,14 @@ aufgelistet. \\
 \phantom{\textbf{Alternatives Szenario}} &
 \end{usecase}
 
-\subsubsection{UC05: Erfassen eines neuen SWID-Tags}
+\subsubsection{UC05: Erfassen eines neuen SWID Tags}
 \begin{usecase}
 \hline
 \textbf{Akteur} & strongSwan TNC Server oder Administrator\\
 \hline
 \textbf{Story} &
 Der Akteur will einen neuen SWID Tag im System erfassen. Der Akteur liefert ein
-XML Dokument gemäss SWID Spezifikation (TODO Reference) an das System. Das
+XML Dokument gemäss SWID Spezifikation\cite{iso19770-2} an das System. Das
 System nimmt das XML Dokument entgegen und speichert die notwendigen
 Informationen ab.\\
 \hline
@@ -119,17 +119,17 @@ Der Akteur liefert ein XML Dokument an das System und erhält eine Erfolgsmeldun
 die bestätigt, dass der Tag gespeichert wurde.\\
 \hline
 \textbf{Alternatives Szenario 1} & 
-Eine Entity welche im gelieferte XMl enthalten ist exisitiert bereits im System
+Eine Entity welche im gelieferte XML enthalten ist existiert bereits im System
 (identifiziert durch die regid) besitzt aber einen anderen Namen. Der Name der
 bestehenden Entity wird entsprechend aktualisiert.\\
 \hline
 \textbf{Alternatives Szenario 2} & 
-Der Tag welcher erfasst werden sollte existiert bereits im System, identifiziert durch die software-id (TODO Referenz).
+Der Tag welcher erfasst werden sollte existiert bereits im System, identifiziert durch die Software-ID.
 \begin{description}
 \item[2a] Die Erfassung eines neuen SWID Tags erfolgt programmatisch über die
-TNC Server Komponente. Ein Tag mit derselben Unique ID existiert bereits und
+TNC Server Komponente. Ein Tag mit derselben Unique-ID existiert bereits und
 wird nicht ersetzt. \item[2b] Die Erfassung eines neuen SWID Tags erfolgt
-manuell durch den Administrator. Ein Tag mit derselben Unique ID existiert
+manuell durch den Administrator. Ein Tag mit derselben Unique-ID existiert
 bereits und wird mit den neuen Daten ersetzt.
 \end{description}
 \\

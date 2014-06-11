@@ -442,20 +442,21 @@ abgesetzt wird, wurde ein Verzögerungsmechanismus implementiert, welcher erst e
 absetzt, wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde (angelehnt an Nagle's Algorithmus \cite{nagle1984congestion}).
 Durch die Minimierung der Anzahl HTTP Request, wird auch die Anzahl der teilweise komplexen und zeitintensiven Abfragen auf die Datenbank vermindert.
 
-\paragraph{Langlaufende Operationen / Fehlerbehandlung} Asynchrone Aufrufe
-bringen zwei wesentliche Probleme mit sich. Zum einen kann es sein, dass Fehler
-auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt. Zum Anderen muss
-für den Benutzer ersichtlich sein, ob Datenübertragungen im Hintergrund anstehen
-und falls ja, wann diese erfolgreich abgeschlossen sind. Speziell für
-langlaufende Operationen durch datenbankintensive Abfragen oder grosse
-Datenmengen, können Antwortzeiten im Sekundenbereich entstehen. \\ Zu diesem
-Zweck wurde eine Proxy Komponente \cite{gamma1994design} implementiert, welche
-anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt wird. Komponenten, deren
-Inhalte per Ajax nachladen werden, werden vom Proxy mit einem Statusindikator
-besetzt. Zusätzlich wurde ein globaler Statusindikator eingeführt, der anzeigt,
-ob mindestens eine asynchrone Datenübertragung stattfindet.\\ Treten Fehler bei
-einer Ajax Datenübertragung auf, wird der Benutzer mittels Alert Box über den
-Fehler informiert.
+\paragraph{Langlaufende Operationen / Fehlerbehandlung}\hspace{0}\\
+Asynchrone Aufrufe bringen zwei wesentliche Probleme mit sich. Zum einen kann es
+sein, dass Fehler auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt.
+Zum Anderen muss für den Benutzer ersichtlich sein, ob Datenübertragungen im
+Hintergrund anstehen und falls ja, wann diese erfolgreich abgeschlossen sind.
+Speziell für langlaufende Operationen durch datenbankintensive Abfragen oder
+grosse Datenmengen, können Antwortzeiten im Sekundenbereich entstehen. \\
+Zu diesem Zweck wurde eine Proxy Komponente \cite{gamma1994design}
+implementiert, welche anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt
+wird. Komponenten, deren Inhalte per Ajax nachladen werden, werden vom Proxy mit
+einem Statusindikator besetzt. Zusätzlich wurde ein globaler Statusindikator
+eingeführt, der anzeigt, ob mindestens eine asynchrone Datenübertragung
+stattfindet.\\
+Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer mittels
+Alert Box über den Fehler informiert.
 
 \subsubsection{Ajax Pagination} 
 Um grosse Datenmengen besser handhaben zu können, wurde die bestehende statische
