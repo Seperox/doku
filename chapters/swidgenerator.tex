@@ -572,14 +572,14 @@ ausgegeben worden sind.
 \subsubsection{Python 3 Kompatibilität}
 
 Obwohl Python 3.0 bereits im Jahr 2008 veröffentlicht wurde, hat es sich bisher
-noch nicht flächendeckend durchgesetzt. Da mit dieser Version
-Rückwärts-Inkompatibilitäten eingeführt wurden, wehrten sich viele Entwickler
-gegen einen Wechsel von der etablierten Python 2 Version auf Python 3. Erstens
+noch nicht durchgesetzt. Da mit dieser Version
+die Rückwärtskompatibilität gebrochen wird, wehrten sich viele Entwickler
+gegen einen Wechsel von der etablierten Version 2 auf Python 3. Einerseits
 war es anfänglich schwierig, Python 2 und 3 mit einer einzigen Codebasis zu
 unterstützen, andererseits nutzten viele Programme Dritt-Bibliotheken welche
 noch nicht auf Python 3 portiert waren.
 
-Seit mit Python 3.3 der Unicode-Präfix wieder eingeführt
+Seit mit Python 3.3 der Unicode-Präfix für Strings wieder eingeführt
 wurde\cite{PEP414:2012}, ist die Unterstützung beider Sprachversionen mit einer
 einzigen Codebasis jedoch bedeutend einfacher geworden. Auch wurden mehrere
 Portierungs-Ratgeber publiziert, welche die Übergangsphase
@@ -587,24 +587,22 @@ vereinfachen\cite{regebro2013porting, ronacher2013porting}. Die Adoptionsrate
 stieg dadurch stark an, so dass inzwischen 162 der 200 meistgenutzten Python
 Pakete mit Python 3 kompatibel sind\cite{py3adoption}.
 
-Wir haben uns bei der Entwicklung vor allem auf den Ratgeber \enquote{Quick Tips
-on Making Your Code Python 3 Ready}\cite{deshev2012porting} gestützt. Eines der
-wichtigsten Elemente daraus ist der folgende \enquote{Future-Header}:
+Bei der Entwicklung wurden vor allem die Hinweise aus dem Ratgeber
+\enquote{Quick Tips on Making Your Code Python 3 Ready}\cite{deshev2012porting}
+verwendet. Eines der wichtigsten Elemente daraus ist der folgende
+\enquote{Future-Header}:
 
-\begin{listing}[H]
-\caption{Future-Header für Python-Code}
 \begin{pythoncode}
 from __future__ import print_function, division, absolute_import, unicode_literals
 \end{pythoncode}
-\end{listing}
 
 Durch die konsequente Nutzung dieser Import-Zeile in jedem Python-Modul konnten
-wir Inkompatibilitäten stark vermeiden; die Portierung auf Python 3.3 und 3.4
-war anschliessend einfach umzusetzen.
+die Inkompatibilitäten stark reduziert werden; die Portierung auf Python 3.3 und
+3.4 war anschliessend einfach umzusetzen.
 
 Um die Ausgabe von Unicode- wie auch Byte-Strings unter beiden Versionen zu
 vereinfachen, haben wir zusätzlich eine \texttt{safe\_print} Funktion definiert
-(siehe Listing \ref{safeprint}).
+(Listing \ref{safeprint}).
 
 \begin{listing}[h]
 \caption{Safe-Print Funktion}
@@ -628,9 +626,9 @@ def safe_print(data, end='\n'):
 \end{pythoncode}
 \end{listing}
 
-Zur Sicherstellung der Kompatibilität haben wir unsere Test Suite zudem so
-konfiguriert, dass die Tests auf allen unterstützten Python-Versionen lauffähig
-ist (siehe Absatz \ref{swidgenerator:architektur:qa}).
+Zur Sicherstellung der Kompatibilität wurde die Test Suite zudem so
+konfiguriert, dass die Tests auf allen unterstützten Python-Versionen ausgeführt
+werden (Abschnitt \ref{swidgenerator:architektur:qa}).
 % }}}
 
 % {{{ Ergebnisse -------------------------------------------------------------%
@@ -768,7 +766,40 @@ auch kaum ein sinnvolles Ziel für Optimierungen.
 \section{Qualitätsmanagement}
 \label{swidgenerator:architektur:qa}
 
-TODO Danilo
+Wie es in Abschnitt \ref{improvements:tests} genauer erläutert wird, haben wir
+zum Schreiben und Ausführen der Testsuite Pytest verwendet. Im Gegensatz zu
+strongTNC muss der swidGenerator jedoch nicht nur eine Python-Version
+unterstützen, sondern gleich mehrere, da die Deployment-Ziele (TNC Clients)
+eine höhere Betriebssystem-Diversität aufweisen.
+
+Um dies zu gewährleisten, wurde Tox\footnote{\url{http://tox.readthedocs.org/}}
+verwendet. Tox ist ein Tool welches gemäss einer Konfigurationsdatei automatisch
+verschiedene \enquote{Virtualenvs} erstellt. Jedes Virtualenv enthält eine
+andere Python-Version mit den entsprechenden Abhängigkeiten. Die Testsuite wird
+anschliessend in jedem Virtualenv separat ausgeführt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/tox-result}
+	\caption{Tox Resultate}
+	\label{swidgenerator:qa:tox}
+\end{figure}
+
+Wie im Abschnitt \ref{improvements:travis} beschrieben, wird auch für den SWID
+Generator Travis CI eingesetzt. Mit der entsprechenden Konfiguration wird jede
+von Tox unterstützte Version in einem separaten Job getestet. Die Resultate
+werden dann als Build Matrix dargestellt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{images/travis-results}
+	\caption{Tox Resultate}
+	\label{swidgenerator:qa:tox}
+\end{figure}
+
+Wie auch bei strongTNC werden beim SWID Generator die Coding-Guidelines durch
+die Test Suite forciert. Zuwiderhandlungen gegen die Guidelines werden als
+Fehler betrachtet.
 
 % }}}
 
