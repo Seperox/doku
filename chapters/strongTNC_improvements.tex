@@ -14,7 +14,7 @@ thematisch gruppierte Dateien aufgeteilt wurden (\texttt{device\_views.py},
 Diese Aufteilung der Views deutet darauf hin, dass die \texttt{tncapp} App für
 mehrere thematisch unterschiedliche Bereiche zuständig ist, welche in der
 Codebasis separiert werden könnten und sollten. Die Aufteilung in mehrere
-Python-Dateien ist jedoch in Django Projekten der falsche Weg um dies zu
+Python-Dateien ist jedoch in Django Projekten der falsche Weg, um dies zu
 erreichen. Stattdessen bietet Django für solche Fälle das Konzept einer App an.
 
 Eine App ist ein Verzeichnis innerhalb eines Django Projektes, welches seine eigenen
@@ -56,7 +56,7 @@ folgende zehn moderat bis hoch kohäsive Apps aufgeteilt:
 	und deren verfügbaren Versionen.
 		
 	\item \texttt{policies}: Enthält Models und Code mit Bezug zu Policies und
-	deren Durchsetzung mithilfe von Enforcements.
+	deren Durchsetzung mit Hilfe von Enforcements.
 		
 	\item \texttt{swid}: Enthält Models und Code betreffend die SWID Integration
 	in strongTNC.
@@ -161,7 +161,7 @@ Der Nachteil eines solchen Tests ist, dass obwohl vier verschiedene unabhängige
 Bedingungen getestet werden, in einem Fehlerfall der gesamte Test als
 \textit{failing} angezeigt wird.
 
-Pytest bietet hier als Abhilfe parametrisierte Tests. Dabei werden, mithilfe eines
+Pytest bietet hier als Abhilfe parametrisierte Tests. Dabei werden, mit Hilfe eines
 Decorators, aus einer einzelnen Funktion zur Laufzeit mehrere Tests generiert.
 
 \begin{listing}
@@ -237,7 +237,7 @@ Während der Entwicklung wurde bereits auf Tools wie
 Pyflakes\footnote{\url{https://pypi.python.org/pypi/pyflakes}} und
 Pylint\footnote{\url{http://www.pylint.org/}} gesetzt. Zusätzlich wurde das noch
 junge Projekt Landscape\footnote{\url{https://landscape.io/}} eingebunden,
-dieses überprüft den Code indem verschiedene Tools automatisch für jedem Commit
+dieses überprüft den Code indem verschiedene Tools automatisch für jeden Commit
 ausgeführt werden. Den Report kann man über den Webbrowser betrachten und
 analysieren.
 
@@ -264,7 +264,7 @@ gestellt\footnote{\url{http://git.io/BqNWMw}, \url{http://git.io/O8MaNA}}.
 
 Wenn man strongTNC in Produktion deployen will, müssen einige Dinge beachtet
 werden. Beispielsweise sollte die Applikation nie ohne TLS produktiv über ein
-Netzwerk genutzt werden, da die API Endpoints nur mithilfe von Basic Auth
+Netzwerk genutzt werden, da die API Endpoints nur mit Hilfe von Basic Auth
 geschützt sind.
 
 Um den Nutzern von strongTNC in diesen Punkten eine Hilfestellung zu geben,
@@ -394,7 +394,7 @@ werden. Dies wäre bedeutend einfacher zu implementieren, jedoch ist die Lösung
 nicht ausbaufähig. Deshalb wird das Permission-System bevorzugt.
 
 \subsubsection{Nachladen von grossen Datenmengen}
-strongTNC muss grossen mit Datenmengen umgehen können. Wenn Datei-Messungen
+strongTNC muss mit grossen Datenmengen umgehen können. Wenn Datei-Messungen
 durchgeführt- oder SWID Tags erfasst werden, ist beispielsweise die Zahl der
 erfassten Dateien schnell im fünfstelligen Bereich. Wenn einzelne dieser Dateien
 ausgewählt werden sollen, muss verhindert werden, dass immer die gesamte Menge
@@ -527,7 +527,7 @@ neuen Seite.
 	des übergebenen Konfigurationsnamens die zugehörige Konfiguration laden. Diese
 	beinhaltet einen Producer und die Referenz auf ein Template. Die
 	Datengenerierung wird an den Producer delegiert, dieser übernimmt auch die
-	Unterteilung der Daten in die Angeforderte  Seiten grösse. Die Daten welche der
+	Unterteilung der Daten in die Angeforderte  Seiten grösse. Die Daten, welche der
 	Producer zurück gibt werden anschliessend als Kontext verwendet, um das
 	Template in HTML zu rendern. Durch diese Separierung wird eine hohe
 	Wiederverwendbarkeit erreicht. Verschiedene Datenquellen und Templates können
@@ -603,12 +603,12 @@ eingeschränkt durchführbar, zu dem wird keine referenzielle Integrität
 unterstützt. Problematisch ist auch, dass SQLite nicht mehrbenutzerfähig ist.
 
 \paragraph{Generierung des Datenbankschemas} \hspace{0pt} \\
-Django unterstütz diverse Datenbankbackends
+Django unterstützt diverse Datenbankbackends
 \footnote{\url{https://docs.djangoproject.com/en/dev/ref/databases/}}, unter
 anderem MySQL, PostgreSQL, MSSQL und das zur Zeit verwendete SQLite. Wir
 empfehlen das SQLite Backend möglichst bald durch ein anders Datenbankbackend zu
 ersetzen. Aus diesem Grund wurden die Django Models so angepasst, dass sie dem
-aktuellen Dantebankschema entsprechen. Das Django ORM kann daraus
+aktuellen Datenbankschema entsprechen. Das Django ORM kann daraus
 datenbankspezifisches SQL-DDL generieren, und so die Migration erheblich
 erleichtern.
 
