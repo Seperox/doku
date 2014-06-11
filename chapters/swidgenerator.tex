@@ -273,14 +273,11 @@ Die zwei Subpackages sind für Input respektive Output zuständig. Im
 Paketmanager enthalten. Die Klassen greifen auf die jeweiligen Paketdatenbanken
 zu und geben diese Informationen an das Hauptprogramm zurück. Die
 Environment-Registry befindet sich ebenfalls in diesem Package. Mehr dazu im
-Abschnitt \ref{swidgenerator:architektur:environments}.
-
-Das \texttt{generators} Package enthält die nötigen Funktionen, um aus den durch
-das entsprechende Environment zurückgegebenen Paketinformationen, die
-dazugehörigen Software IDs oder SWID Tags zu generieren. Diese Funktionen sind
-als Python Generators\footnote{\url{https://docs.python.org/2/tutorial/classes.html\#generators}}
-implementiert. Die einzelnen Einträge können dadurch schon während der Generierung 
-laufend ausgegeben werden. Mehr dazu im Abschnitt \ref{swidgenerator:architektur:printers}.
+Abschnitt \ref{swidgenerator:architektur:environments}. Das \texttt{generators}
+Package enthält die nötigen Funktionen, um aus den durch das entsprechende
+Environment zurückgegebenen Paketinformationen, die dazugehörigen Software IDs
+oder SWID Tags zu generieren. Mehr dazu im Abschnitt
+\ref{swidgenerator:architektur:generators}.
 
 Als Einstiegspunkt in den SWID Generator dient das \texttt{main.py} Modul. Um
 das Programm direkt aus dem Quellcode-Ordner heraus zu starten, sollte Python
@@ -443,7 +440,7 @@ registriert und verwaltet werden. Dies ist die Aufgabe der
 Das Kernstück dieser Klasse ist die \texttt{register()}-Funktion. Sie benötigt als
 Argumente eine Kurzbezeichnung für das Environment sowie eine Referenz auf die
 Environment-Klasse. Beispiel:
-\begin{listing}
+\begin{listing}[H]
 \caption{Registrieren von Environments}
 \begin{pythoncode}
 registry = EnvironmentRegistry()
@@ -457,7 +454,7 @@ Die Klassen werden als Instanzen intern in einem Dictionary gespeichert. Um die
 Liste der verfügbaren Environments abzufragen, kann die
 \texttt{get\_environment\_strings()} Methode verwendet werden:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Verfügbare Environments abfragen}
 \begin{pythoncode}
 >>> registry.get_environment_strings()
@@ -495,7 +492,22 @@ entgegen und führt folgende Schritte aus:
 
 \subsubsection{Generatoren}
 \label{swidgenerator:architektur:generatoren}
-TODO: Danilo
+
+Die Generatoren (im \texttt{generators} Package) sind dafür zuständig, um aus
+den durch das entsprechende Environment zurückgegebenen Paketinformationen die
+dazugehörigen Software IDs oder SWID Tags zu generieren.
+
+Diese Funktionen sind als Python Generators\cite[S.~94-95]{alchin2010pro}
+implementiert und geben die einzelnen Resultat-Strings mit \texttt{yield}
+anstelle von \texttt{return} zurück. Dadurch kann man über alle SWID Tags oder
+über alle Software-IDs iterieren, ohne dass alle Strings gleichzeitig in den
+Hauptspeicher geladen werden müssen. Jedes Mal wenn auf der Generator-Instanz
+\texttt{next()} aufgerufen wird, wird nur der nächste String berechnet. Dieses
+Prinzip ist auch als \enquote{Lazy Evaluation}\cite[S.~85--93]{meyers1995more}
+bekannt.
+
+Die Generators werden nicht direkt evaluiert, sondern nach der Instanzierung an
+die Printers weitergegeben. Mehr dazu im nächsten Abschnitt.
 
 \subsubsection{Printers}
 \label{swidgenerator:architektur:printers}
@@ -515,7 +527,7 @@ TODO: Danilo
 Der SWID Generator kann folgendermassen verwendet werden, um Software-IDs zu
 generieren:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Generierung von Software-IDs}
 \begin{textcode}
 usage: swid_generator software-id [-h] [--env {auto,dpkg,pacman,rpm}]
@@ -526,7 +538,7 @@ usage: swid_generator software-id [-h] [--env {auto,dpkg,pacman,rpm}]
 
 Nachfolgend ein Beispielaufruf auf einem Debian-System:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Software-ID Auszug eines Debian-Systems}
 \begin{textcode}
 $ swid_generator software-id --regid=regid.1998-05.ch.hsr
@@ -546,7 +558,7 @@ Die vollständige Dokumentation der Optionen kann auf der Kommandozeile mit dem
 
 Die Syntax um SWID Tags zu generieren sieht folgendermassen aus:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Generieren von SWID Tags}
 \begin{textcode}
 usage: swid_generator swid [-h] [--env {auto,dpkg,pacman,rpm}]
@@ -560,7 +572,7 @@ usage: swid_generator swid [-h] [--env {auto,dpkg,pacman,rpm}]
 Hier ein Beispiel eines Targeted Requests für das \texttt{cowsay}-Paket mit
 \enquote{Pretty-Printing}:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Beispiel eines Targeted Requests}
 \begin{xmlcode}
 $ swid_generator swid --package cowsay --pretty
