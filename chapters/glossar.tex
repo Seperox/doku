@@ -2,59 +2,29 @@
 
 {
 \renewcommand{\arraystretch}{1.5}
-\begin{longtable}{ll}
-\textbf{IMC} & Information Measurement Collector. Sammelt Daten auf dem CLient und sendet diese an den IMV zur Verifizierung.\\
-
-\textbf{IMV} & Information Measurement Verifier. Empfängt Informationen vom IMC und verifiziert diese. Erzwingt Policies auf Serverseite. Erzwingt Policies auf Serverseite.\\
-
-\textbf{Enforcement} & Erzwingt eine Policy auf einer Gruppe von Clients.\\
-
-\textbf{Package} & Ein Software-Paket, das auf einem Client installiert ist. Kann auf eine schwarze Liste
-gesetzt werden.\\
-
-\textbf{Policy} & Eine Richtlinie, die ein Client einzuhalten hat, wenn er sich ins VPN einwählen will.\\
-
-\textbf{Product} & Ein Produkt, bzw. Betriebssystem, das auf einem Client installiert ist.\\
-
-\textbf{TNC} & Trusted Network Connect(-Server). Eine Architektur der Trusted Computing Group für
-Network Access Control. Der dazugehörige Server ist im Falle von strongSwan die
-Verwaltungsinstanz der IMVs.\\
-
-\textbf{VPN }& Virtual Private Network. Eine verschlüsselte Verbindung, die dem Benutzer Zugang ins
-lokale Netzwerk einer Firma oder Organisation über einen unsicheren Kanal (z.B. das
-Internet) ermöglicht.\\
- 
-\textbf{Workitem} & Definiert einen Arbeitsauftrag. Wird von Cygnet für IMVs generiert und von diesen
-ausgeführt. Die Resultate werden zurück an Cygnet geliefert und dann von Cygnet
-ausgewertet.\\
- 
-\textbf{DBMS} & Datenbankmanagementsystem. Verwaltungssoftware für ein Datenbanksystem.\\
-
-\textbf{REST} & Representational State Transfer. Programmierpradigma für die Implementation von zustandslosen Ressourcenorientierten Webschnittstellen.\\
-
-\textbf{ORM} & Object-Relational-Mapping. Layer für die Speicherung von Objekten in einer Relationalen Datenbank.\\
-
-\textbf{TNC} & Trusted Network Connect. Opensource Architekturframework für die Netzwerkzugangskontrolle.\\
-
-\textbf{Software-ID} & Eindeutiger Identifier einer Softwarepaketes. Bestehend aus regid des Tag Creators und uniqueID des Softwarepaketes.\\
-
-\textbf{SWID Tag} & Software Identification Tag. Beschreibung einer Softwarekomponente im XML Format. Standardisiert nach ISO 19770-2.\\
-
-\textbf{TCG} & Trusted Computing Group. Standardisierungsorganisation, die Standards für das TNC Framework verfasst.\\
- 
-\textbf{TNC Client} & Gegenstück zum TNC Server. Erlaubt die Verbindungsaufnahme mit einem TNC Server.\\
-
-\textbf{TLS} & Transport Layer Security. Hybrides Verschlüsselungsprotokoll zur Sicheren Datenübertragung via TCP.\\
-
-\textbf{TNC Policy Manager} & Komponente aus dem TNC Framework, welche die Richtlinien (Policies) verwaltet.\\
-
-\textbf{uniqueID} & Kennung, die eine Software innerhalbt des Namespaces des Tag Creators eindeutig identifiziert.\\
-
-\textbf{Regid} & Unique registrastion ID. Identifizierer einer Organisation, Format: regid.YYYY-MM.<reverse domain name>. Das Datum ist das Registrierungsdatum der Domain.\\
-
-\textbf{Model} & Abstraktion eines Datenbankobjektes.\\
-
-\textbf{View} & Python Funktion oder Klasse, welche einen Request entgegen nimmt und eine Response zurückliefert.\\
-
+\begin{longtable}{l >{\raggedright}p{.75\textwidth}}
+\textbf{DBMS} & Datenbankmanagementsystem. Verwaltungssoftware für ein Datenbanksystem.\tabularnewline
+\textbf{Enforcement} & Erzwingt eine Policy auf einer Gruppe von Clients.\tabularnewline
+\textbf{IMC} & Information Measurement Collector. Sammelt Daten auf dem CLient und sendet diese an den IMV zur Verifizierung.\tabularnewline
+\textbf{IMV} & Information Measurement Verifier. Empfängt Informationen vom IMC und verifiziert diese. Erzwingt Policies auf Serverseite. Erzwingt Policies auf Serverseite.\tabularnewline
+\textbf{Model} & Abstraktion eines Datenbankobjektes.\tabularnewline
+\textbf{ORM} & Object-Relational-Mapping. Layer für die Speicherung von Objekten in einer Relationalen Datenbank.\tabularnewline
+\textbf{Package} & Ein Software-Paket, das auf einem Client installiert ist. Kann auf eine schwarze Liste gesetzt werden.\tabularnewline
+\textbf{Policy} & Eine Richtlinie, die ein Client einzuhalten hat, wenn er sich ins VPN einwählen will.\tabularnewline
+\textbf{Product} & Ein Produkt, bzw. Betriebssystem, das auf einem Client installiert ist.\tabularnewline
+\textbf{Regid} & Unique registrastion ID. Identifizierer einer Organisation, Format: regid.YYYY-MM.<reverse domain name>. Das Datum ist das Registrierungsdatum der Domain.\tabularnewline
+\textbf{REST} & Representational State Transfer. Programmierpradigma für die Implementation von zustandslosen Ressourcenorientierten Webschnittstellen.\tabularnewline
+\textbf{Software-ID} & Eindeutiger Identifier einer Softwarepaketes. Bestehend aus regid des Tag Creators und uniqueID des Softwarepaketes.\tabularnewline
+\textbf{SWID Tag} & Software Identification Tag. Beschreibung einer Softwarekomponente im XML Format. Standardisiert nach ISO 19770-2.\tabularnewline
+\textbf{TCG} & Trusted Computing Group. Standardisierungsorganisation, die Standards für das TNC Framework verfasst.\tabularnewline
+\textbf{TLS} & Transport Layer Security. Hybrides Verschlüsselungsprotokoll zur Sicheren Datenübertragung via TCP.\tabularnewline
+\textbf{TNC Client} & Gegenstück zum TNC Server. Erlaubt die Verbindungsaufnahme mit einem TNC Server.\tabularnewline
+\textbf{TNC Policy Manager} & Komponente aus dem TNC Framework, welche die Richtlinien (Policies) verwaltet.\tabularnewline
+\textbf{TNC} & Trusted Network Connect. Opensource Architekturframework für die Netzwerkzugangskontrolle.\tabularnewline
+\textbf{TNC} & Trusted Network Connect(-Server). Eine Architektur der Trusted Computing Group für Network Access Control. Der dazugehörige Server ist im Falle von strongSwan die Verwaltungsinstanz der IMVs.\tabularnewline
+\textbf{uniqueID} & Kennung, die eine Software innerhalbt des Namespaces des Tag Creators eindeutig identifiziert.\tabularnewline
+\textbf{View} & Python Funktion oder Klasse, welche einen Request entgegen nimmt und eine Response zurückliefert.\tabularnewline
+\textbf{VPN} & Virtual Private Network. Eine verschlüsselte Verbindung, die dem Benutzer Zugang ins lokale Netzwerk einer Firma oder Organisation über einen unsicheren Kanal (z.B. das Internet) ermöglicht.\tabularnewline
+\textbf{Workitem} & Definiert einen Arbeitsauftrag. Wird von Cygnet für IMVs generiert und von diesen ausgeführt. Die Resultate werden zurück an Cygnet geliefert und dann von Cygnet ausgewertet.
 \end{longtable}
 }
