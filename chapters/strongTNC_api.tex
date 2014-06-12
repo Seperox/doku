@@ -1,26 +1,36 @@
 \chapter{API Konzept}
 \label{apikonzept}
+
 \section{Trennung}
+
+Um strongTNC von strongSwan zu trennen und die gemeinsame Datenbank abzulösen,
+wurde im Rahmen dieser Arbeit ein API Konzept erarbeitet. Das Konzept orientiert
+sich dabei am \enquote{REST} Architekturstil, welcher von Roy Fielding in seiner
+Dissertation aus dem Jahr 2000 erstmals definiert
+wurde\cite{fielding2000architectural}.
 
 In diesem Abschnitt werden wichtige Punkte des API Konzeptes genauer betrachtet.
 Das vollständige Konzept ist im Anhang (Abschnitt \ref{REST:api-konzept} ab
-Seite \pageref{REST:api-konzept}) zu finden. Detaillierte Beschreibungen zu der
-in den Beispielen verwendeten Syntax, sowie die Definition der Archetypen sind
-ebenfalls im Konzept zu finden.
+Seite \pageref{REST:api-konzept}) zu finden. Detaillierte Beschreibungen zur
+verwendeten Syntax, sowie die Definition der Archetypes, sind ebenfalls im
+Konzept zu finden.
 
-\section{Vorgehen}
-Das Ziel der REST API war eine vollständige Ablösung der gemeinsamen Datenbank
+\nobrsection{Vorgehen}
+
+Das Ziel der REST API ist eine vollständige Ablösung der gemeinsamen Datenbank
 als Schnittstelle. Um einen Überblick über den benötigten Umfang einer TNC
-Policy Manager Schnittstelle zu bekommen, wurden die Datenbankzugriffe der IMV
+Policy Manager Schnittstelle zu bekommen, wurden die Datenbankzugriffe im IMV
 Code der strongSwan Implementation betrachtet. Dazu wurden sämtliche SQL
 abfragen im IMV Quellcode gesammelt und analysiert. Das Ergebnis war eine Liste
-der Tabellen, auf die schreibend oder lesend zugegriffen wurde, ebenso konnte
-ermittelt werden, welche Tabelle durch einen \texttt{JOIN} verknüpft wurden.
-Basierend auf diesen Daten konnte ein Set von REST Endpunkten zusammengestellt
-werden, mit dem es möglich ist, sämtliche Datenbankzugriffe abzudecken.
+der Tabellen, auf die schreibend oder lesend zugegriffen wurde. Ebenso konnte
+ermittelt werden, welche Tabelle über ein SQL \texttt{JOIN} Statement verknüpft
+wurden. Basierend auf diesen Daten konnte ein Set von REST Endpunkten definiert
+werden, mit dem es möglich ist, sämtliche aktuell bestehenden Datenbankzugriffe
+abzudecken.
 
 \section{Documents und Collections}
-Für alle Elemente der strongTNC Domäne wurden REST Ressourcen von den Archetype
+
+Für alle Elemente der strongTNC Domäne wurden REST Ressourcen von den Archetypes
 \enquote{Document} und \enquote{Collection} konzipiert. Oft handelt es sich
 dabei um vollständige CRUD Ressourcen, wie beispielsweise bei der
 \texttt{Version} Ressource sichtbar ist:
@@ -68,7 +78,7 @@ Anbieten von nicht benötigten Operationen unnötig komplex erscheint.
 
 Um den \texttt{JOIN} Verknüpfungen in einer ressourcenorientierten Weise
 Rechnung zu tragen, wurden verschiedene virtuelle Ressourcen geschaffen.
-Beispielsweise lassen sich die \enquote{Sessions} eines Gerätes direkt auf der
+Beispielsweise lassen sich die \texttt{sessions} eines Gerätes direkt auf der
 \texttt{devices} Ressource abfragen:
 
 \begin{mdframed}[style=def]
@@ -381,26 +391,28 @@ Programmier-Schnittstelle testen, ohne dass dafür Code geschrieben werden muss.
 
 \subsection{Sicherheit}
 
-Durch die Einführung einer netzwerkfähigen Schnittstelle, werden neue
+Durch die Einführung einer netzwerkfähigen Schnittstelle werden neue
 System-Architekturen möglich (siehe Abschnitt \ref{analyse:architekturen}). Die
 strongTNC Komponente muss nicht mehr auf derselben Plattform wie die übrige
-strongSwan Infrastruktur betrieben werden.  (TODO Grafiken Deployment)
+strongSwan Infrastruktur betrieben werden.
 
 Für die neugeschaffenen Kommunikationspfade ist Sicherheit nun ein wichtigeres
 Thema als zuvor, zumal die Kommunikation von nun an auch über ein Netzwerk
 erfolgen kann. Durch die stärkere Exponierung der Schnittstellen werden diese
 auch ein potentielles Angriffsziel. Bei der Datenübertragung soll einerseits die
-Vertraulichkeit und Integrität der Daten gewährleistet sein, sowie durch
-Authentisierung nur für vertrauenswürdige Clients möglich sein. Die adäquate
+Vertraulichkeit und Integrität der Daten gewährleistet sein, andererseits sollte
+durch entsprechende Authentisierungs- und Authorisierungs-Mechanismen der
+Zugriff nur für vertrauenswürdige Clients möglich sein. \\ Die adäquate
 Verwendung von Transport Layer Security (TLS) würde diese Anforderungen bereits
-erfüllen. Das grosse Risiko hierbei ist, dass die Verantwortung der korrekten
-Umsetzung aus den Händen der Schnittstelle an den Anwender übergeht. Damit kann
-die Applikation nicht mehr als grundlegend sicher betrachtet werden, da die
-sachgemässe Konfiguration des Webservers nicht sichergestellt werden kann. Eine
-optimale Umsetzung würde daher vorsehen, Sicherheitsaspekte so in die
-Applikation zu integrieren, dass die Kommunikation ohne entsprechende
-Sicherheitsmassnahmen nicht möglich ist. Im Folgenden sollen mögliche Varianten
-aufgezeigt und deren Vor- und Nachteile besprochen werden.
+erfüllen.  Das grosse Risiko hierbei ist jedoch, dass die Verantwortung der
+korrekten Umsetzung aus den Händen der Schnittstelle an den Anwender übergeht.
+Damit kann die Applikation nicht mehr als grundsätzlich sicher betrachtet
+werden, da die sachgemässe Konfiguration des Webservers nicht garantiert werden
+kann\cite{owasp2013a5}. Eine optimale Umsetzung würde daher vorsehen,
+Sicherheitsaspekte so in die Applikation zu integrieren, dass die Kommunikation
+ohne entsprechende Sicherheitsmassnahmen nicht möglich ist. Im Folgenden sollen
+mögliche Authentisierungs- und Authorisierungs-Varianten aufgezeigt und deren
+Vor- und Nachteile besprochen werden.
 
 \begin{description}
 
@@ -424,11 +436,19 @@ Entwurfsstadium.
 
 \end{description}
 
-\subsubsection{Implementation} Aus zeitlichen Gründen konnte die nahtlose Integration von Sicherheitsfeatures in die Schnittstelle nicht umgesetzt werden. Anstelle wurde Session basierte Authentisierung und HTTP Basic Authentisierung umgesetzt. Wir
-empfehlen zudem ausdrücklich, TLS zu verwenden. Um die Konfiguration von TLS mit
-Apache zu erleichtern, haben wir eine ausführliche Deployment Dokumentation
-verfasst (siehe \ref{anhang:deployment-manual}). Darin sind unter anderem
-empfohlene Cypher-Suites, die Aktivierung von Strict-Transport-Security und eine
-Anleitung zum Erstellen serverseitiger Zertifikate enthalten.
+\subsubsection{Implementation} Aus zeitlichen Gründen konnte die nahtlose
+Integration von Sicherheitsfeatures in die Schnittstelle nicht umgesetzt werden.
+Anstelle wurde Session basierte Authentisierung und HTTP Basic Authentisierung
+umgesetzt. Wir empfehlen zudem ausdrücklich, TLS zu verwenden. Um die
+Konfiguration von TLS mit Apache zu erleichtern, haben wir eine ausführliche
+Deployment Dokumentation verfasst (Abschnitt \ref{anhang:deployment-manual}).
+Darin sind unter anderem empfohlene Cypher-Suites, die Aktivierung von
+Strict-Transport-Security und eine Anleitung zum Erstellen serverseitiger
+Zertifikate enthalten.
 
-\subsubsection{Empfehlung} Falls sich der HTTP Signatures Draft zu einem Standard durchsetzt, empfehlen wir dessen Implementation mit zusätzlicher Verwendung von TLS. Obwohl HTTP Signatures ohne TLS verwendet werden können, weist das HTTP Protokoll verschiedene Verletzlichkeiten\cite{httpsecconsiderations2014} auf, die durch TLS behoben werden.
+\subsubsection{Empfehlung} Falls sich der HTTP Signatures Draft zu einem
+Standard durchsetzt, empfehlen wir dessen Implementation mit zusätzlicher
+Verwendung von TLS. Obwohl HTTP Signatures ohne TLS verwendet werden können,
+weist das HTTP Protokoll verschiedene
+Verletzlichkeiten\cite{httpsecconsiderations2014} auf, die durch TLS behoben
+werden.
