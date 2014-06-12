@@ -706,7 +706,7 @@ Hier ein Beispiel eines Targeted Requests für das \texttt{cowsay}-Paket mit
 
 \begin{listing}[H]
 \caption{Beispiel eines Targeted Requests}
-\begin{xmlcode}
+\begin{bashcode}
 $ swid_generator swid --package cowsay --pretty
 <?xml version="1.0" encoding="utf-8"?>
 <SoftwareIdentity name="cowsay" uniqueId="debian_7.4-x86_64-cowsay-3.03+dfsg1-4"
@@ -714,17 +714,17 @@ $ swid_generator swid --package cowsay --pretty
       xmlns="http://standards.iso.org/iso/19770/-2/2014/schema.xsd">
   <Entity name="strongSwan" regid="regid.2004-03.org.strongswan" role="tagcreator"/>
 </SoftwareIdentity>
-\end{xmlcode}
+\end{bashcode}
 \end{listing}
 
 
 \subsection{Performance}
 
 Durch die in den Abschnitten \ref{swidgenerator:architektur:generatoren} und
-\ref{swidgenerator:architektur:printers} beschriebenen Optimierungen konnte die
-Ausgabe des SWID Generators beschleunigt werden. Nachfolgend ein paar
-Geschwindigkeitsmessungen, die auf verschiedenen Systemen durchgeführt wurden.
-Getestet wurden dabei die folgenden Befehle:
+\ref{swidgenerator:architektur:printers} beschriebenen Optimierungen konnte der
+Speicherverbrauch und die gepufferte Ausgabe verbessert werden.
+Nachfolgend ein paar Geschwindigkeitsmessungen, die auf verschiedenen Systemen
+durchgeführt wurden. Getestet wurden dabei die folgenden Befehle:
 
 \begin{itemize}
 	\item ids: \texttt{swid\_generator software-id > /dev/null}
@@ -760,8 +760,7 @@ Die Ergebnisse:
 \vspace{1.5em}
 
 Da auf den Systemen nicht gleich viele und gleich grosse Pakete installiert
-sind, sind diese Resultate schwer vergleichbar. Man kann jedoch die zu
-erwartende Laufzeit abschätzen.
+sind, sind diese Resultate schwer vergleichbar. Die zu erwartende Laufzeit ist jedoch abschätzbar.
 
 Klar ersichtlich ist, dass der grösste Zeitaufwand beim Generieren von SWID Tags
 mit der \texttt{-{}-full} Option auftritt. Dies ist erklärbar, da hierbei jede
@@ -770,8 +769,8 @@ Existenz geprüft wird. An diesem Punkt gibt es möglicherweise noch
 Optimierungspotential.
 
 Das Pretty Printing ist ebenfalls ein zeitaufwändiger Vorgang, da die
-generierten Tags hierfür ein zweites Mal geparsed und in einer
-\enquote{schöneren} Variante ausgegeben werden. Der Mehraufwand gegenüber
+generierten Tags hierfür ein zweites Mal geparst und in einer
+\enquote{eingerückten} Variante ausgegeben werden. Der Mehraufwand gegenüber
 der Variante ohne \texttt{-{}-pretty} betrug in den drei gemessenen
 Beispielfällen zwischen 43\% und 125\%. Da diese Option nur für Debugging-Zwecke
 gebraucht werden sollte, ist dies in der Praxis kein nenneswertes Problem und
