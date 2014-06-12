@@ -83,8 +83,8 @@ zu sehen:
 
 % TODO ganzen abschnitt etwas umformulieren? viele "wird" und "durch".
 Wenn sich ein Gerät mit einem strongSwan TNC Netzwerk verbindet, wird durch
-einen Integrity Measurement Verifier (IMV) eine strongTNC Session gestartet,
-darauf wird das Gerät anhand seiner Hardware ID und seines Betriebssystems
+einen Integrity Measurement Verifier (IMV) eine strongTNC Session gestartet.
+Von diesem wird das Gerät anhand seiner Hardware ID und seines Betriebssystems
 identifiziert. Falls sich das Gerät zum ersten Mal verbindet, wird es neu
 erfasst. Anhand der Gruppen, denen das Gerät angehört, werden die relevanten
 Enforcements gesammelt und daraus Workitems generiert. Diese Vorgänge werden
@@ -92,13 +92,13 @@ derzeit alle durch den IMV mittels direktem Zugriff auf die Datenbank
 durchgeführt.\\
 Verschiedene IMVs führen anhand der Workitems entsprechende Messungen durch. Die
 Ergebnisse der Messungen werden durch die IMVs in die Workitems der strongTNC
-Datenbank geschrieben. Anhand der abgearbeiteten Workitems, fällt der TNC Server
+Datenbank geschrieben. Anhand der abgearbeiteten Workitems fällt der TNC Server
 eine abschliessende Entscheidung darüber, ob das Gerät in das Netzwerk
 zugelassen wird oder nicht. Ein IMV schliesst die Session in der strongTNC
 Datenbank ab und die Resultate der Workitems werden archiviert.\\
 
-Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
-\autoref{masurement-diagramm}, entnehmen.
+Den Ablauf einer Messung kann man dem Sequenzdiagramm in
+\autoref{masurement-diagramm} entnehmen.
 
 \begin{figure}[H]	
 	\centering
@@ -112,7 +112,7 @@ Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
 \label{analyse:stand}
 
 strongTNC ist eine Implementierung eines TNC Policy Managers. Umgesetzt wurde
-dieser als Webapp mit dem Python basierten \textit{Django Web Framework} in
+diese als Webapp mit dem Python basierten \textit{Django Web Framework} in
 Version 1.5\footnote{\url{https://www.djangoproject.com/}}. Die Applikation
 bietet Unterstützung für das Verwalten von Geräten, Policies und Enforcements
 und erlaubt die Ausführung von Enforcements mittels hierarchischer Gruppen
