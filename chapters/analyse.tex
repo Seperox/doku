@@ -230,14 +230,14 @@ resultierenden Nachteile eingehen.
 	\item[Mehrbenutzerfähigkeit] Die Daten einer SQLite Datenbank können nur von
 	einem Prozess gleichzeitig geändert werden. Da es sich bei der aktuellen
 	Situation aber bereits um eine Multiprozessumgebung handelt ist dieser Einsatz
-	denkbar schlecht, und kann zu unerwünschten Locks führen.
+	nicht zweckmässig, und kann zu unerwünschten Locks führen.
 
 	\item[Verteilung der Komponenten] Die Policy Decision Komponente (TNC Server
-	aus strongSwan Projekt) kann derzeit nicht getrennt von der strongTNC Webserver
+	aus dem strongSwan Projekt) kann derzeit nicht getrennt von der strongTNC Webserver
 	Komponente betrieben werden. Dies kann in einem Enterprise Deployment
-	durchaus erwünscht sein. Beispielsweise der Einsatz eines Windows Webservers
+	durchaus erwünscht sein. Beispielsweise der Einsatz eines Microsoft Webservers
 	mit der strongTNC App, während der Enforcement Point auf einem Linux System
-	läuft. Zusätzlich kann es aus netzwerktechnischen Gründen bedingt sein, im
+	betrieben wird. Zusätzlich kann es aus netzwerktechnischen Gründen bedingt sein, im
 	Internet exponierte Komponenten, in diesem Fall den strongSwan VPN Gateway und
 	einen Webserver, in getrennten Netzwerksegmenten zu halten. Oder zur
 	Lastverteilung auf unterschiedliche Hosts zu verteilen.
@@ -250,9 +250,9 @@ resultierenden Nachteile eingehen.
 	\item[Flexiblere Arbeit mit Django] Wenn die strongTNC Anwendung ihre Datenbank
 	nicht mit anderen Systemen teilen muss, können alle
 	Datenbank-Abstraktionsfeatures von Django voll ausgenutzt werden. Im Moment
-	muss man sich aktiv um das Datenbankschema kümmern. Dies hätte zur Folge, dass
+	muss man sich aktiv um das Datenbankschema kümmern. Eine Entkopplung hätte zur Folge, dass
 	auch
-	\enquote{Migrations}\footnote{\url{https://docs.djangoproject.com/en/dev/topics/migrations/}} zu verwenden, welche es erlauben Änderungen an den Models automatisiert in die Datenbank einfliessen zu lassen.
+	\enquote{Migrations}\footnote{\url{https://docs.djangoproject.com/en/dev/topics/migrations/}} verwendet werden können, welche es erlauben Änderungen an den Models automatisiert in die Datenbank einfliessen zu lassen.
 	
 \end{description} 
 
@@ -282,7 +282,7 @@ Hauptansatzpunkte:
 
 
 \section{Abgrenzung}
-Folgende Punkte werden von uns als gegeben betrachtet und sind nicht zentraler
+Folgende Punkte werden von uns als gegeben betrachtet oder sind nicht
 Bestandteil unserer Arbeit:
 
 \begin{description}
@@ -304,7 +304,7 @@ Bestandteil unserer Arbeit:
 
 \section{ISO Standard 19770-2}
 \label{analyse:swidstandard} 
-Der ISO Standard 19770-2:2014 ist der zweite Teil einer Gruppe von ISO Standards
+Der ISO Standard 19770-2\cite{iso19770-2} ist der zweite Teil einer Gruppe von ISO Standards
 zu den Prozessen und Technologien des Software Asset Management. Dieser Teil des
 Standards beschreibt den Aufbau und die Verwendung von Software Identification
 Tags und befindet sich zur Zeit noch im Entwurfsstadium (\enquote{Draft}).
@@ -434,7 +434,7 @@ Auswahl, wie sie für diese Arbeit relevant sind. (ISO
 
 
 \subsection{Probleme}
-Bei der Analyse und der Implementation des ISO Standard 19770-2:2014 sind
+Bei der Analyse und der Implementation des ISO Standard 19770-2 sind
 einige Punkte aufgetaucht in denen sich der Standard widerspricht, etwas unklar
 ist oder Schwierigkeiten bei der Implementation verursacht.
 
@@ -473,10 +473,9 @@ Organisation, welche den Tag erstellt hat, vorhanden sind.
 In dieser Arbeit ist dieses Problem dadurch entschärft, dass der SWID Generator
 die einzige Tag creator Instanz ist und damit eindeutige Tags kreiert. Sobald
 jedoch mehrere Tag creators vorhanden sind, und die Eindeutigkeit nicht mehr
-zentral geregelt ist (z.b namespacing durch präfixe), könnten Probleme
-entstehen. Des Weiteren muss davon ausgegangen werden, dass es im Interesse des
-Tag Erstellers liegt, dass seine SWID Tags nicht Ursache eines Konfliktes
-werden.
+zentral geregelt ist, können Probleme entstehen. Des Weiteren muss davon
+ausgegangen werden, dass es im Interesse des Tag Erstellers liegt, dass seine
+SWID Tags nicht Ursache eines Konfliktes werden.
 
 \subsubsection{SWID Tag XML Dateien}
 \begin{quote}
@@ -490,7 +489,7 @@ Softwarepakete unter Linux oft nicht nur in einem Verzeichnis installiert
 werden, sondern Dateien in verschiedene Verzeichnisse kopieren.
 
 In dieser Arbeit wird diese Anforderung nicht beachtet. Der SWID Generator
-kreiert Tags dynamisch aus den Informationen des Linux Paketmanagement Systems
+kreiert Tags dynamisch aus den Informationen des Linux Paketmanagers
 und liefert diese direkt auf die Standardausgabe der Konsole. Die SWID Tags
 werden nicht in einer Datei gespeichert. 
 
