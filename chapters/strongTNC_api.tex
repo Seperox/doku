@@ -99,7 +99,7 @@ Beispielsweise lassen sich die \texttt{sessions} eines Gerätes direkt auf der
 Komplexere Abläufe, welche bei der gegenwärtigen Schnittstelle direkt mit
 mehreren Datenbankzugriffen ablaufen, werden im REST Konzept durch
 \enquote{Controller} abgebildet. Zu diesen Abläufen gehören das Starten und
-Stoppen einer \enquote{Session}. Ebenfalls wurde die bisher noch nicht
+Stoppen einer \texttt{Session}. Ebenfalls wurde die bisher noch nicht
 existierende Funktion der SWID Tag Messung, beschrieben in Abschnitt
 \ref{swiderweiterung}, als \enquote{Controller} umgesetzt.
 
@@ -158,11 +158,11 @@ Session zugeordnet werden soll wird anhand der \texttt{hardwareId} und dem
 dieses durch den Controller erstellt.
 
 Die ID, die im Response Dokument zurück geliefert wird, dient zur zukünftigen
-Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste
-von Workitems, die für diese Session abgearbeitet werden müssen.
+Identifikation der soeben gestarteten Session. Ausserdem wird eine Liste von
+Workitems zurückgegeben, die für diese Session abgearbeitet werden müssen.
 
 Um aktive und vergangene Sessions abzufragen existiert eine readonly
-Collection, die Session Documents sind ebenfalls als readonly definiert.
+Collection. Die Session Documents sind ebenfalls als readonly definiert.
 Sessions sollen nicht direkt geändert werden, sondern nur über die
 entsprechenden Controller. Der Grund dafür ist, dass im Hintergrund noch
 zusätzliche Operationen vorgenommen werden müssen.
@@ -177,7 +177,7 @@ virtuelle Ressource zur Verfügung:
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/workitems/\{id\}/result/}
+	\item[URI Path] \texttt{/sessions/\{id\}/workitems/\{id\}/result/}
 	\item[Archetype] Document
 	\item[Request Parameter] \hfill
 	\begin{description*}
@@ -209,7 +209,7 @@ ursprünglichen Zweck zugeordnet werden:
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/results/\{id\}/}
+	\item[URI Path] \texttt{/sessions/\{id\}/results/\{id\}/}
 	\item[Archetype] Readonly Collection
 	\item[Filter Query] \hfill
 	\item[Methods] GET
@@ -217,7 +217,7 @@ ursprünglichen Zweck zugeordnet werden:
 \begin{jsoncode}
 {
 	"id": 5,
-	"uri": "https://strongtnc/api/session/420/results/5/",
+	"uri": "https://strongtnc/api/sessions/420/results/5/",
 	"enforcement": "https://strongtnc/api/enforcements/13/",
 	"recommendation": 0,	 
 	"comment": "received inventory of 2165 SWID tag IDs and 0 SWID tags"
@@ -228,7 +228,7 @@ ursprünglichen Zweck zugeordnet werden:
 
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/session/\{id\}/results/}
+	\item[URI Path] \texttt{/sessions/\{id\}/results/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
 	\item[Response] List of Result documents
