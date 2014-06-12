@@ -1,0 +1,24 @@
+\chapter{Verzeichnisse}
+
+
+\section{Literatur}
+
+\defbibheading{bibliography}[\refname]{}
+\printbibliography
+
+
+\section{Abbildungsverzeichnis}
+
+\makeatletter
+\@starttoc{lof} % Print List of Figures
+\makeatother
+
+
+\section{Listingverzeichnis}
+
+\begingroup
+\renewcommand{\listlistingname}{}
+\renewcommand{\cleardoublepage}{}
+\renewcommand{\clearpage}{}
+\listoflistings
+\endgroup
