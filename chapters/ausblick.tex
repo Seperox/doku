@@ -40,13 +40,11 @@ auf dem Gerät das letzte Mal als installiert gemeldet wurde.
 	elegant erledigt werden kann. Die Komplexität der Views dadurch könnte
 	erheblich reduziert werden.
 	
-	\item[Sicherheit API] Falls sich der HTTP Signatures Draft zu einem Standard durchsetzt empfehlen wir ihn für die REST API zu implementieren. Damit könnte die
-	Authentisierung und Datenintegrität der Kommunikation sichergestellt werden.
-	Zudem sollte empfehlen wir stets TLS einzusetzen, da das HTTP Protokoll verschiedene
-	Verletzlichkeiten\cite{httpsecconsiderations2014} aufweist, die durch TLS
-	behoben werden.
+	\item[Sicherheit API] Falls sich der HTTP Signatures Draft zu einem offiziellen Standard entwickelt, empfehlen wir, diesen in der REST API einzusetzen. Damit könnte die Authentisierung und Datenintegrität der Kommunikation besser sichergestellt werden, als es mit Basic Authentication der Fall ist.
+	Zudem sollte auch mit HTTP Signatures stets TLS eingesetzt werden, da das HTTP Protokoll verschiedene Verletzlichkeiten aufweist, die durch TLS
+	behoben werden\cite{httpsecconsiderations2014}.
 	
 	\item[Sicherheit Frontend]
-	Wir empfehlen auch für das Frontend immer TLS einzusetzen. Es wurde eine detaillierte Deployment Dokumentation für das Setup von Apache mit TLS erstellt.
+	Wir empfehlen auch für das Frontend den universellen Einsatz von TLS. Als Hilfestellung haben wir eine detaillierte Deployment-Dokumentation für die Konfiguratino von Apache mit TLS-Verschlüsselung erstellt (Abschnitt \ref{anhang:deployment-manual}).
 	
 \end{description}
