@@ -505,13 +505,13 @@ Plus-Zeichen. Anhand der folgenden Aussage aus dem Standard kann man darauf
 schliessen, dass diese Zeichen in einer \texttt{uniqueId} nicht erlaubt sind.
 
 \begin{quote}
-\textit{(...) unique\_id und that may be either a GUID, or any reference unique
+\textit{(...) may be either a GUID, or any reference unique
 for the tag\_creator\_regid. The unique\_id shall follow the restrictions for
 URI character use as specified in IETF RFC 3986, section 2, characters.}
 \end{quote} 
 \textit{ISO 19770-2\cite{iso19770-2}, Seite 13}\\
 
-Die \texttt{uniqueId} unterliegt den Restriktionen einer URI. Für URIs gilt, ein
+Die \texttt{uniqueId} unterliegt den Restriktionen einer URI. Für diese gilt: ein
 Doppelpunkt ist kein unerlaubtes Zeichen jedoch ein reserviertes:
 
 \begin{verbatim} 
@@ -522,10 +522,10 @@ unreserved = ALPHA / DIGIT / "-" / "." / "_ " / "~"
 \end{verbatim}
 \textit{IETF RFC 3986\cite{berners2005rfc}}\\
 
-Die \texttt{uniqueId} kann als \texttt{href} Attribut des Link Tags, in Form
+Die \texttt{uniqueId} kann als \texttt{href} Attribut des \texttt{Link} Tags, in Form
 einer URI mit einem \texttt{swid:} Prefix verwendet werden. Daraus folgt, dass
 die \texttt{uniqueId} zum \enquote{Authority} Teil einer URI gehört und somit
-keine Doppelpunkte enthalten sollte.
+keine Doppelpunkte enthalten darf.
 
 In dieser Arbeit werden daher Zeichen, welche in URIs als reserviert gelten, in
-der \texttt{uniqueId} durch eine Tilde ersetzt.
+der \texttt{uniqueId} durch eine Tilde (\texttt{~}) ersetzt.
