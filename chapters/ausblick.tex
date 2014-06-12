@@ -1,21 +1,15 @@
 \chapter{Ausblick}
 
-\section{Offene Punkte} 
-Während der gesamten Projektarbeit wurden Bugs, weiterführende Arbeiten und
-Ideen im Github
-Issuetracker\footnote{\url{https://github.com/tnc-ba/strongTNC/issues}} erfasst,
-ungeachtet davon, ob sie im Rahmen dieser Arbeit bearbeitet werden konnten.
-Diese Issues können noch bearbeitet werden, eventuell in einer Nachfolgearbeit
-oder durch die Community.\\
-Ein Verbesserungsvorschlag betrifft die SWID Log View. Durch Einbauen
-einer Filterfunktion wäre es möglich, schneller festzustellen, wann ein Paket auf
-einem Gerät installiert beziehungsweise entfernt wurde. Dies könnte man auch
-bereits in der SWID Tag Detail unterstützen. Anhand einer zusätzlichen Spalte in
-der \enquote{Reported by Devices} Tabelle könnte angezeigt werden, wann der Tag
-auf dem Gerät das letzte Mal als installiert gemeldet wurde.
+\section{Offene Issues} 
+
+Während der Projektarbeit wurden Bugs, weiterführende Arbeiten und Ideen im
+Github Issuetracker\footnote{\url{https://github.com/tnc-ba/strongTNC/issues}}
+erfasst, ungeachtet davon, ob sie im Rahmen dieser Arbeit bearbeitet werden
+konnten oder nicht.  Diese Issues können noch bearbeitet werden, eventuell in
+einer Nachfolgearbeit oder durch die Community.
 
 
-\section{Empfehlungen} 
+\nobrsection{Empfehlungen} 
 
 \begin{description} 
 
@@ -43,17 +37,24 @@ auf dem Gerät das letzte Mal als installiert gemeldet wurde.
 	konsequenterweise für alle bestehenden Views eingesetzt werden. Bisher folgen
 	nur die Views der SWID Erweiterungen diesem Konzept.
 	
-	\item[Django Form Framework] Die Formularvalidierung wird derzeit noch manuell
-	per Javascript gemacht. Django bietet mit der \enquote{Form Framework}
-	Erweiterung ein komfortables Hilfsmittel, mit der diese aufwändige Arbeit
-	elegant erledigt werden kann. Die Komplexität der Views dadurch könnte
-	erheblich reduziert werden.
+	\item[Django Forms Framework] Die Formularvalidierung wird derzeit noch
+		manuell im Frontend per Javascript und im Backend in den jeweiligen Views
+		gemacht.  Django bietet jedoch mit dem \enquote{Forms Framework} ein
+		komfortables Hilfsmittel, mit welchem diese aufwändige Arbeit elegant
+		erledigt werden kann. Die Komplexität der Views könnte dadurch erheblich
+		reduziert werden.
 	
-	\item[Sicherheit API] Falls sich der HTTP Signatures Draft zu einem offiziellen Standard entwickelt, empfehlen wir, diesen in der REST API einzusetzen. Damit könnte die Authentisierung und Datenintegrität der Kommunikation besser sichergestellt werden, als es mit Basic Authentication der Fall ist.
-	Zudem sollte auch mit HTTP Signatures stets TLS eingesetzt werden, da das HTTP Protokoll verschiedene Verletzlichkeiten aufweist, die durch TLS
-	behoben werden\cite{httpsecconsiderations2014}.
+	\item[API Sicherheit] Falls sich der HTTP Signatures Draft zu einem
+		offiziellen Standard entwickeln sollte, empfehlen wir, diesen in der REST API
+		einzusetzen. Damit könnte die Authentisierung und Datenintegrität der
+		Kommunikation besser sichergestellt werden, als dies mit Basic Authentication
+		möglich ist.  Zudem sollte auch mit HTTP Signatures stets TLS eingesetzt
+		werden, da das HTTP Protokoll verschiedene Verletzlichkeiten aufweist, die
+		durch TLS behoben werden\cite{httpsecconsiderations2014}.
 	
-	\item[Sicherheit Frontend]
-	Wir empfehlen auch für das Frontend den universellen Einsatz von TLS. Als Hilfestellung haben wir eine detaillierte Deployment-Dokumentation für die Konfiguratino von Apache mit TLS-Verschlüsselung erstellt (Abschnitt \ref{anhang:deployment-manual}).
+	\item[Frontend Sicherheit] Wir empfehlen auch für das Frontend den
+		universellen Einsatz von TLS. Als Hilfestellung haben wir eine detaillierte
+		Deployment-Dokumentation für die Konfiguration von Apache mit
+		TLS-Verschlüsselung erstellt (Abschnitt \ref{anhang:deployment-manual}).
 	
 \end{description}

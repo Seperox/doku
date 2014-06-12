@@ -190,6 +190,7 @@ Test Coverage anzeigt. \texttt{pytest-django} liefert Fixtures, wie \zb
 erhalten.
 
 \subsubsection{Continuous Integration}
+\label{improvements:ci}
 
 Eine Sicherstellung und langfristige Verbesserung der Softwarequalität ist nicht
 möglich, wenn diese nicht regelmässig überprüft wird. Um dieses Ziel zu
@@ -471,7 +472,9 @@ neuen Seite.
 
 \begin{figure}[H]	
 	\centering
-	\input{tikz/pagination-sequenzdiagramm-grob}
+	\resizebox{\textwidth}{!}{%
+		\input{tikz/pagination-sequenzdiagramm-grob}
+	}
 	\caption{Sequenzdiagramm, Grobablauf}
 	\label{paginationSequence}
 \end{figure}

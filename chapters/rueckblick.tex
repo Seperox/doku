@@ -1,50 +1,61 @@
 \chapter{Rückblick}
 
-
 \section{Schlussfolgerungen}
 
 \subsection{Erreichte Ziele}
-Alle in der Aufgabenstellung enthaltenen Punkte, Pflicht- und optional,  wurden
-erfüllt, ebenso sind alle daraus resultierenden Usecases abgedeckt. Darüber
-hinaus konnten zusätzliche Ideen und Vorschläge eingebracht und umgesetzt
-werden.\\
-Ausserdem konnten noch weitere Ziele erreicht werden:                 
+
+Alle in der Aufgabenstellung geforderten Ziele wurden erfüllt. Ebenso sind alle
+aus der Aufgabenstellung resultierenden Usecases abgedeckt. Darüber hinaus
+konnten zusätzliche Ideen und Vorschläge eingebracht und umgesetzt werden:
+
 \begin{description}                  
                                   
-	\item[REST API] Während der Projektzeit wurde ein Konzept für eine umfassende
-	REST Schnittstelle für strongTNC ausgearbeitet, mit dem Ziel die Schnittstelle
-	in Form einer gemeinsam genutzten Datenbank abzulösen. Das Konzept konnte auch
-	als Machbarkeitsnachweis im Bereich der SWID Erweiterung umgesetzt werden.
+	\item[REST API] Während der Projektarbeit wurde ein Konzept für eine
+		umfassende REST Schnittstelle für strongTNC ausgearbeitet, mit dem Ziel die
+		Schnittstelle in Form einer gemeinsam genutzten Datenbank abzulösen. Das
+		Konzept konnte auch als Proof of Concept im Bereich der SWID Erweiterung
+		umgesetzt werden.
 	
-	\item[Code Qualität] Durch das Einbringen von Django Konventionen, Testing,
-	Code Guidelines und Analyse Tools konnte die Qualtät des Codes gesteigert
-	werden.
-	
+	\item[Code Qualität] Durch das Einbringen von Django-Konventionen, besserem
+		Testing, Coding Guidelines und Analyse-Tools konnte die Qualtät des Codes
+		messbar gesteigert werden (Absatz \ref{improvements:ci}).
+
+	\item[Zusätzliche Backends für SWID Generator] Zusätzlich zur geforderten
+		Unterstützung des unter Debian und Ubuntu genutzten Paketmanagers DPKG,
+		konnte auch die Unterstützung für RPM und Pacman implementiert werden.
+
+	\item[Packaging und Deployment für SWID Generator] Um das Deployment des SWID
+		Generators zu vereinfachen, haben wir diesen paketiert und im Python Package
+		Index publiziert. Dies ermöglicht eine einfache Installation über ein
+		einziges Kommando (Absatz \ref{swidgenerator:architektur:packaging}).
+
 	\item[Rückfluss von Wissen in die Community] Durch die intensive Arbeit mit
-	Plugins und Erweiterungen konnten einige Fehler festgestellt werden. Diese
-	konnten behoben werden und wurden als Pull Request in den Entwicklern der
-	Erweiterungen zur Verfügung gestellt.
-	
+		Libraries und Plugins konnten einige Fehler in diesen festgestellt werden.
+		Einige davon konnten behoben werden und wurden als Pull Request in den
+		Entwicklern der Erweiterungen zur Verfügung gestellt.
+
 \end{description}
 
 
 \subsection{Learnings}
+
 Die intensive Arbeit an einem Projekt fordert, dass bestimmte Technologien im
 Detail betrachtet werden und dass oft durchgeführte Prozesse optimiert werden.
-Dabei lernt man Neues und bestätigt Altes, im Folgenden sind einige Learnings
-dieser Arbeit. Die Punkte beziehen sich auf technische oder organisatorische
-Merkmale, individuelle persönliche Learnings sind den \enquote{Persönlichen
-Berichten} (Abschnitt \ref{anhang:berichte}) zu entnehmen.
+Dabei lernt man Neues und bestätigt Altes. Im Folgenden sind die wesentlichsten
+Learnings dieser Arbeit erwähnt. Sie beziehen sich auf technische oder
+organisatorische Merkmale, individuelle persönliche Learnings sind den
+\enquote{Persönlichen Berichten} (Abschnitt \ref{anhang:berichte}) zu entnehmen.
 
 \begin{description}
+
 	\item[Git: Branching und Reviews] Die Arbeit mit \enquote{Feature Branches} und
-	konsequentem Review bevor ein Branch in den Master-Branch einfliessen darf,
-	hatte diverse positive Effekte: Es konnten Fehler gefunden werden, bevor sie in
-	die Produktion geraten, das Wissen über einzelne Komponenten konnte verteilt
-	werden. Allerdings wird mit diesem Vorgehen viel Zeit aufgebraucht. Es ist schwierig
+	konsequentem Review, bevor ein Branch in den Master-Branch einfliessen darf,
+	hatte viele positive Effekte: Es konnten Fehler gefunden werden, bevor sie in
+	die Produktion gelangten, zudem konnte das Wissen über einzelne Komponenten verteilt
+	werden. Allerdings kostet dieses Vorgehen viel Zeit. Es ist schwierig
 	zu sagen, ob sich der erhöhte Zeitaufwand gegenüber der eingesparten Zeit
 	durch frühzeitiges Finden von Bugs auszahlt. Das Vorgehen hat sich jedoch
-	bewährt.
+	in unserem Fall bewährt.
 	
 	\item[SQLite] An verschiedenen Punkten dieses Projektes war die Datenbank
 	Bestandteil von Problemstellungen. Nicht selten konnte festgestellt werden,
@@ -54,4 +65,3 @@ Berichten} (Abschnitt \ref{anhang:berichte}) zu entnehmen.
 	Mehrbenutzerzugriff starke Probleme.
 	
 \end{description}
-
