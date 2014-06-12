@@ -137,8 +137,9 @@ bereitgestelltes SQL Schema verwendet.
 
 Laut dem Technischen Bericht der Vorgängerarbeit
 \enquote{Cygnet}\cite{cygnet:2013} sollen die Richtlinien des \enquote{Style
-Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
-existieren elf Unit-Tests, welche den bestehenden Python Code zu 21\% abdecken.
+Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden.
+Ausserdem existieren elf Unit-Tests, welche den bestehenden Python Code zu 21\%
+abdecken.
 
 
 \subsubsection{Einschätzung der Ist-Situation}
@@ -159,16 +160,13 @@ existieren elf Unit-Tests, welche den bestehenden Python Code zu 21\% abdecken.
 	besteht Handlungsbedarf.
 
 	\item[Benutzerschnittstelle] Die Benutzeroberfläche wurde noch nicht für den
-	Umgang mit grossen Datenmengen optimiert. Es gibt keinen Paging Mechanismus, der
-	ein stückweises Ausliefern von Daten oder ein Filtern einer grossen Anzahl
-	Objekte erlaubt. Beispielsweise kann das Inventar der Dateinamen in einem Linux
-	System durchaus 40000 Objekte umfassen. Wird die vorhandene File View
-	aufgerufen, werden alle 40000 Einträge angezeigt.\\ Diesen Datenmengen wird zur
-	Zeit noch nicht Rechnung getragen und die aktuelle Oberfläche hat sich bereits
-	beim Entwickeln in einer kleinen Umgebung als nicht mehr überschaubar erwiesen.
-	Tendentiell ist der Einsatz einer Endpoint Compliance Lösung in mittelgrossen
-	und grossen Unternehmungen zu erwarten, dementsprechend ist auch die Menge der
-	zu verwaltenden Daten als hoch einzuschätzen.
+	Umgang mit grossen Datenmengen optimiert.Beispielsweise kann das Inventar der
+	Dateinamen in einem Linux System durchaus 40000 Objekte umfassen. Wird die
+	Policy View aufgerufen, werden alle 40000 Einträge geladen.\\ Diesen
+	Datenmengen wird zur Zeit noch nicht Rechnung getragen. Tendenziell ist der
+	Einsatz einer Endpoint Compliance Lösung in mittelgrossen und grossen
+	Unternehmungen zu erwarten, dementsprechend ist auch die Menge der zu
+	verwaltenden Daten als hoch einzuschätzen.
 	
 	\item[Django-Apps] Django Webapplikationen lassen sich in Module, sogenannte
 	\enquote{Apps}, aufteilen. Diese Möglichkeit wird allerdings bisher nicht
@@ -178,34 +176,35 @@ existieren elf Unit-Tests, welche den bestehenden Python Code zu 21\% abdecken.
 	\item[Datenbank-Schema] Bei der Umsetzung von Webapplikationen mit Django ist es
 	gängig, dass das Datenbankschema aus den Models generiert wird. Dadurch muss man
 	sich als Entwickler nicht um Schema-Detailfragen kümmern, sondern kann sich auf
-	die abstrakten Models konzentrieren. Ein weiterer Vorteil ist, dass das genutzte
-	DBMS beliebig austauschbar ist. Da die Datenbank bei strongTNC jedoch als
-	Schnittstelle dient und nicht ausschliesslich von Django verwendet wird, kann
-	dieses Feature derzeit nicht genutzt werden. Stattdessen bilden die
-	Model-Definitionen den jeweiligen Stand der Datenbank (siehe
-	\autoref{fig:database-model}) ab. Weil die Datenbank nicht aus den Models
-	generiert wird, ist es möglich, dass die Models und das effektive Schema bei
-	Änderungen nicht mehr synchron sind und manuell angepasst werden müssen. Eine
-	zentrale \enquote{Autorität} für das Schema sowie die Nutzung eines
-	Schema-Migrations-Frameworks würde diese Situation stark verbessern.
+	die abstrakten Models konzentrieren.\\
+	Ein weiterer Vorteil ist, dass das genutzte DBMS beliebig austauschbar ist. Da
+	die Datenbank bei strongTNC jedoch als Schnittstelle dient und nicht
+	ausschliesslich von Django verwendet wird, kann dieses Feature derzeit nicht
+	genutzt werden. Stattdessen bilden die Model-Definitionen den jeweiligen Stand
+	der Datenbank (\autoref{fig:database-model}) ab. Weil die Datenbank nicht aus
+	den Models generiert wird, ist es möglich, dass die Models und das effektive
+	Schema bei Änderungen nicht mehr synchron sind und manuell angepasst werden
+	müssen. Eine \enquote{Autorität} für das Schema sowie die Nutzung eines
+	Schema-Migrations-Frameworks würde die Situation stark verbessern.
 	
 	\item[Codequalität] Obwohl sich die Vorgängerarbeit gemäss eigener Aussagen auf
 	die Einhaltung der PEP8-Coderichtlinien\cite{PEP8:2001} beruft
 	\cite[S.~79]{cygnet:2013}, wurden diese Richtlinien nicht konsequent
-	eingehalten. \\ Alle Views wurden als Funktionen definiert, obwohl sie häufig
-	über gemeinsame Funktionalität verfügen. Auch die zyklomatische Komplexität der
-	Views ist oft hoch. Ein klassenbasierter Ansatz, eventuell auch in Kombination
-	mit den mitgelieferten generischen Views von Django, könnte die Wartbarkeit
-	verbessern. \\ Die Validierung von übermittelten Formulardaten wurde
-	\enquote{von Hand} gemacht, anstatt das vorhandene Formular-Framework von Django
-	zu verwenden. Auch dies verursacht mehrfach vorhandenen Code und verletzt
-	unnötigerweise das DRY-Prinzip\cite[S.~26--27]{hunt1999pragmatic}. \\ Statische
-	Code-Analyse zeigt viele Mängel auf, wie beispielsweise unerreichbarer Code,
-	ungenutzte Variablen, mehrfach definierte Funktionen oder verdeckte
-	Python-Standardfunktionen. \\ Die Templates sind inkonsistent eingerückt, man
-	findet sich im Markup sehr schwer zurecht. Zudem sind sehr viele Elemente -- wie
-	\zb das Suchfeld -- mehrfach vorhanden und sollten in ein eigenes
-	Include-Template extrahiert werden.
+	eingehalten. \\
+	Alle Views wurden als Funktionen definiert, obwohl sie häufig über gemeinsame
+	Funktionalität verfügen. Auch die zyklomatische Komplexität der Views ist oft
+	hoch. Ein klassenbasierter Ansatz, eventuell auch in Kombination mit den
+	generischen Views von Django, könnte die Wartbarkeit verbessern.\\
+	Die Validierung von übermittelten Formulardaten wurde manuell mittels Javascript
+	gemacht, anstatt das vorhandene Formular-Framework von Django zu verwenden.
+	Auch dies verursacht mehrfach vorhandenen Code und verletzt unnötigerweise das
+	DRY-Prinzip\cite[S.~26--27]{hunt1999pragmatic}. \\
+	Die Durchführung statischer Code-Analyse zeigt Mängel auf, wie
+	beispielsweise unerreichbarer Code, ungenutzte Variablen, mehrfach definierte
+	Funktionen oder verdeckte Python-Standardfunktionen. \\
+	Die Templates sind inkonsistent eingerückt, man findet sich im Markup schwer
+	zurecht. Zudem sind viele Elemente -- wie \zb das Suchfeld -- mehrfach
+	vorhanden und sollten in ein eigenes Include-Template extrahiert werden.
 
 \end{description}
 
@@ -217,7 +216,7 @@ für Linux Systeme und der Integration der SWID Erweiterung in strongTNC,
 schlagen wir nachfolgende Anpassungen vor, die wir bei vorhandener Kapazität
 noch umsetzen möchten.
 
-\subsection{Entkopplung der Datenbank}
+\subsection*{Entkopplung der Datenbank}
 \label{analyse:architekturen}
 Wie bereits erwähnt entstehen durch die gemeinsame Nutzung einer SQLite
 Datenbank einige Probleme. Nachfolgend möchten wir kurz auf die daraus
