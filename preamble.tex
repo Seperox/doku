@@ -147,3 +147,11 @@
 	{\endtabularx}
 
 \newcommand{\zb}{z.\ B. }
+
+\newcommand{\nobrsection}[1]{%
+	\begingroup
+	\renewcommand{\cleardoublepage}{}
+	\renewcommand{\clearpage}{}
+	\section{#1}
+	\endgroup%
+}
