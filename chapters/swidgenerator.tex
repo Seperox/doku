@@ -173,7 +173,7 @@ verwandten Distributionen wie Ubuntu.
 
 \textbf{Liste installierter Pakete abfragen}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{DPKG Abfrage installierter Pakete}
 \begin{bashcode}
 dpkg-query --show --showformat='${Package}\t${Version}\t${Status}\n'
@@ -182,12 +182,12 @@ dpkg-query --show --showformat='${Package}\t${Version}\t${Status}\n'
 
 \textbf{Dateien zu Paket abfragen}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{DPKG Abfrage der Paketdateien}
-\end{listing}
 \begin{bashcode}
 dpkg-query --listfiles <package-name>
 \end{bashcode}
+\end{listing}
 
 \textbf{Bemerkungen}
 
@@ -206,7 +206,7 @@ verwandte Distributionen wie openSUSE, CentOS, Mandriva und Fedora.
 
 \textbf{Liste installierter Pakete abfragen}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{RPM Abfrage installierter Pakete}
 \begin{bashcode}
 rpm -qa --queryformat %{name}\t%{version}-%{release}
@@ -215,7 +215,7 @@ rpm -qa --queryformat %{name}\t%{version}-%{release}
 
 \textbf{Dateien zu Paket abfragen}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{RPM Abfrage der Paketdateien}
 \begin{bashcode}
 rpm -ql <package-name>
@@ -230,7 +230,7 @@ unter Arch Linux und Derivaten wie Manjaro Linux oder Chakra.
 
 \textbf{Liste installierter Pakete abfragen}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Pacman Abfrage installierter Pakete}
 \begin{bashcode}
 pacman -Q --color never
@@ -239,7 +239,7 @@ pacman -Q --color never
 
 \textbf{Dateien zu Paket abfragen}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Pacman Abfrage der Paketdateien}
 \begin{bashcode}
 pacman -Ql <package-name>
@@ -275,9 +275,7 @@ Das Hauptpackage -- \texttt{swid\_generator} -- enthält folgende Module:
 		Kommandozeilenargumente zu parsen
 	\item \texttt{print\_functions.py}: Funktionen um Tag- und den Output der
 		Software-ID-Generatoren auf die Standardausgabe auszugeben
-	\item \texttt{package\_info.py}: DTO\footnote{Data Transfer Object, eine
-		Klasse, die kein Eigenverhalten aufweist, sondern lediglich Daten in
-		einem Objekt bündelt.}-Klassen für Dateien und Softwarepakete
+	\item \texttt{package\_info.py}: DTO-Klassen für Dateien und Softwarepakete
 	\item \texttt{exceptions.py}: Eigene Fehlerklassen
 	\item \texttt{settings.py}: Globale Variablen, wie \zb
 		\texttt{DEFAULT\_ENTITY\_NAME}
@@ -300,7 +298,7 @@ Als Einstiegspunkt in den SWID Generator dient das \texttt{main.py} Modul. Um
 das Programm direkt aus dem Quellcode-Ordner heraus zu starten, sollte Python
 mit der \texttt{-m} Option und dem vollständigen Modulpfad gestartet werden:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Aufruf der Main Funktion des SWID Generators}
 \begin{bashcode}
 python -m swid_generator.main
@@ -310,7 +308,7 @@ python -m swid_generator.main
 Wenn das Programm über \texttt{pip} oder \texttt{setup.py} installiert wird (\autoref{swidgenerator:architektur:packaging}), kann es auch direkt
 über den Programmnamen aufgerufen werden:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Aufruf des installierten SWID Generators}
 \begin{bashcode}
 swid_generator
@@ -612,9 +610,12 @@ Bei der Entwicklung wurden vor allem die Hinweise aus dem Ratgeber
 verwendet. Eines der wichtigsten Elemente daraus ist der folgende
 \enquote{Future-Header}:
 
+\begin{listing}[H]
+\caption{Python 3 Compat Future-Header}
 \begin{pythoncode}
 from __future__ import print_function, division, absolute_import, unicode_literals
 \end{pythoncode}
+\end{listing}
 
 Durch die konsequente Nutzung dieser Import-Zeile in jedem Python-Modul konnten
 die Inkompatibilitäten stark reduziert werden; die Portierung auf Python 3.3 und
@@ -624,7 +625,12 @@ Um die Ausgabe von Unicode- wie auch Byte-Strings unter beiden Versionen zu
 vereinfachen, haben wir zusätzlich eine \texttt{safe\_print} Funktion definiert
 (Listing \ref{safeprint}).
 
-\begin{listing}[h]
+Zur Sicherstellung der Kompatibilität wurde die Test Suite zudem so
+konfiguriert, dass die Tests auf allen unterstützten Python-Versionen ausgeführt
+werden (Abschnitt \ref{swidgenerator:architektur:qa}).
+
+\newpage
+\begin{listing}[t!]
 \caption{Safe-Print Funktion}
 \label{safeprint}
 \begin{pythoncode}
@@ -646,9 +652,6 @@ def safe_print(data, end='\n'):
 \end{pythoncode}
 \end{listing}
 
-Zur Sicherstellung der Kompatibilität wurde die Test Suite zudem so
-konfiguriert, dass die Tests auf allen unterstützten Python-Versionen ausgeführt
-werden (Abschnitt \ref{swidgenerator:architektur:qa}).
 % }}}
 
 % {{{ Ergebnisse -------------------------------------------------------------%
@@ -701,6 +704,7 @@ usage: swid_generator swid [-h] [--env {auto,dpkg,pacman,rpm}]
 \end{textcode}
 \end{listing}
 
+\needspace{4\baselineskip}
 Hier ein Beispiel eines Targeted Requests für das \texttt{cowsay}-Paket mit
 \enquote{Pretty-Printing}:
 
@@ -749,6 +753,7 @@ durchgeführt wurden. Getestet wurden dabei die folgenden Befehle:
 	\item tags-full-pretty: \texttt{swid\_generator swid -{}-pretty -{}-full > /dev/null}
 \end{itemize}
 
+\needspace{4\baselineskip}
 Die Befehle wurden jeweils mehrmals ausgeführt, um mögliche Caching-Effekte
 auszugleichen. Nachfolgend die getesteten Systeme:
 

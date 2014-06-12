@@ -1,6 +1,6 @@
 \chapter{Management Summary}
 
-\nobrsection{Ausgangslage}
+\nnobrsection{Ausgangslage}
 
 Das amerikanische National Cybersecurity Center of Excellence schlägt in einem
 Entwurfsdokument vor, durch eine kontinuierliche Überwachung der installierten
@@ -18,7 +18,7 @@ mittels SWID Tags erweitert werden soll.
 Zusätzlich soll ein Client für Debian und Ubuntu basierte Systeme erstellt
 werden, welcher SWID Tags aus den Informationen des Paketmanagers generiert.
 
-\nobrsection{Vorgehen / Technologien}
+\nnobrsection{Vorgehen / Technologien}
 
 Der SWID Generator wurde vollständig in Python entwickelt. Es wurde darauf
 geachtet, dass keine Abhängigkeiten zu externen Bibliotheken bestehen. Dadurch
@@ -27,9 +27,9 @@ strongSwan VPN Client verteilt werden kann. Die Analyse des bestehenden
 strongTNC Policy Managers hat gezeigt, dass eine enge Kopplung mit dem
 strongSwan TNC Server besteht. Zudem ist aufgefallen, dass der bereits
 bestehende Code Qualitätsmängel aufweist. Diese beiden Punkte wurden neben der
-Integration der SWID Tag Verwaltung zum zentralen Bestandteil dieser Arbeit.
+Integration der SWID Tag Verwaltung zum zentralen Bestandteil dieser Arbeit.\\
 
-\nobrsection{Ergebnis}
+\nnobrsection{Ergebnis}
 
 Die Architektur des SWID Generators wurde modular ausgelegt, so dass die
 Unterstützung für weitere Paketmanager einfach hinzugefügt werden kann. Zum

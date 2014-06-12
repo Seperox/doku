@@ -157,3 +157,11 @@
 	\section{#1}
 	\endgroup%
 }
+
+\newcommand{\nnobrsection}[1]{%
+	\begingroup
+	\renewcommand{\cleardoublepage}{}
+	\renewcommand{\clearpage}{}
+	\section*{#1}
+	\endgroup%
+}

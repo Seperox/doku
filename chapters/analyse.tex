@@ -397,9 +397,10 @@ Auswahl, wie sie für diese Arbeit relevant sind. \cite[S.~19]{iso19770-2}
 	zugänglich gemacht werden. \cite[S.~10,15]{iso19770-2}
 	
 	\item Als eindeutige Kennung für einen SWID Tag dient die Kombination von
-	\texttt{tag\_createor\_regid} und \texttt{uniqueId}. Diese Kennung wird
-	\enquote{software\_id} genannt. Es liegt in der Verantwortung des \enquote{Tag
-	Creators} dafür zu sorgen, dass seine Tags eindeutig sind. \cite[S.~10,16]{iso19770-2}
+	\texttt{uniqueId} und \texttt{tag\_creator\_regid}. Diese Kennung wird
+	\enquote{software\_id} genannt. Es liegt in der Verantwortung des
+	\enquote{Tag Creators} dafür zu sorgen, dass seine Tags eindeutig sind.
+	\cite[S.~10,16]{iso19770-2}
 	
 	\item Es ist nicht obligatorisch die Echtheit von SWID Tags zu garantieren;
 	falls eine Echtheitsvalidierung gewünscht oder nötig ist, kann dies durch
@@ -408,23 +409,23 @@ Auswahl, wie sie für diese Arbeit relevant sind. \cite[S.~19]{iso19770-2}
 	Arbeit. \cite[S.~14]{iso19770-2}
 	
 	\item Die minimale Information, die ein valider SWID Tag enthalten muss, ist
-	\texttt{SoftwareIdentity.name} und \texttt{Entity.role}. Bei der Rolle muss es
+	\texttt{Entity.role} und \texttt{SoftwareIdentity.name}. Bei der Rolle muss es
 	sich um die Rolle des \enquote{Tag Creators} handeln. Das empfohlene
 	Minimum besteht aus folgenden Informationen:
 	\begin{itemize*}
-		\item SoftwareIdentity
+		\item \texttt{SoftwareIdentity}
 			\begin{itemize*}
-			\item name
-			\item tagVersion
-			\item uniqueId
-			\item version
-			\item versionScheme
+				\item \texttt{name}
+				\item \texttt{tagVersion}
+				\item \texttt{uniqueId}
+				\item \texttt{version}
+				\item \texttt{versionScheme}
 			\end{itemize*}
-		\item Entity
+		\item \texttt{Entity}
 			\begin{itemize*}
-			\item name
-			\item regid
-			\item role
+				\item \texttt{name}
+				\item \texttt{regid}
+				\item \texttt{role}
 			\end{itemize*}
 	\end{itemize*}	
 	\cite[S.~16]{iso19770-2}
@@ -524,4 +525,4 @@ die \texttt{uniqueId} zum \enquote{Authority} Teil einer URI gehört und somit
 keine Doppelpunkte enthalten darf.
 
 In dieser Arbeit werden daher Zeichen, welche in URIs als reserviert gelten, in
-der \texttt{uniqueId} durch eine Tilde (\texttt{\~}) ersetzt.
+der \texttt{uniqueId} durch eine Tilde (\texttt{$\sim$}) ersetzt.
