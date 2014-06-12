@@ -5,7 +5,7 @@
 Die Erweiterung des bestehenden Datenmodells ist in \autoref{fig:database-model}
 zu sehen. Die hinzugefügten Tabellen sind durch den grünen Hintergrund
 hervorgehoben. Bei Tabellen mit grauem Rahmen handelt es sich um
-Zwischentabellen, welche eine N zu M Beziehung auflösen.\\
+Zwischentabellen, welche eine n:m Beziehung auflösen.\\
 Beim Modellieren der zusätzlichen Tabellen wurde darauf geachtet, dass keine der
 bestehenden Tabellen angepasst werden mussten. Die Beziehungen werden daher alle
 von der Seite der Erweiterung hergestellt.
@@ -32,10 +32,10 @@ von der Seite der Erweiterung hergestellt.
 	File und einem SWID Tag erfasst. Ein SWID Tag kann mehrere Files beinhalten
 	(\nameref{strongTNC:UC04}).
 
-	\item[swid\_tags\_sessions] Bei der Durchführen einer Messung von SWID Tags
-	werden die entsprechenden Tags in dieser Tabelle abgespeichert
-	(\nameref{strongTNC:UC06}). Hier werden die gemessenen Tags mit passenden
-	Sessions verknüpft.
+	\item[swid\_tags\_sessions] Hier werden die gemessenen Tags mit passenden
+	Sessions verknüpft (\nameref{strongTNC:UC06}).
+	
+	\item[swid\_tags] Die SWID Tags werden in dieser Tabelle gespeichert.
 
 \end{description}
 
@@ -69,10 +69,10 @@ In \autoref{fig:swid-measurement} ist der Ablauf der SWID Tag Messung
 		
 	\item Bevor die Messung durchgeführt werden kann, müssen alle fehlenden SWID
 	Tags erfasst werden. Die einzelnen XML Dokumente der SWID Tags werden vom
-	Client anhand sogenannter \enquote{Targeted Requests} (siehe Abschnitt
+	Client anhand sogenannter \enquote{Targeted Requests} (Abschnitt
 	\ref{swidgenerator:UC04}) erstellt, das heisst, der Generator kreiert gezielt
 	die Tags für die gegebenen Software-IDs und nicht für alle installierten
-	Software Pakete.
+	Pakete.
 	
 	\item Der Client erfasst alle neu generierten SWID Tags in strongTNC.
 	
@@ -102,9 +102,9 @@ illustriert werden. In diesem Beispiel erfolgt eine Messung für drei Tags mit
 folgenden Software-IDs:
 
 \begin{textcode}
-regid.2004-03.org.strongswan Ubuntu 12.04-i686-logrotate-3.7.8-6ubuntu5
-regid.2004-03.org.strongswan Ubuntu 12.04-i686-lsb-base-4.0-0ubuntu20
-regid.2004-03.org.strongswan Ubuntu 12.04-i686-strongswan-4.5.2-1.5+deb7u3
+regid.2004-03.org.strongswan_Ubuntu_12.04-i686-logrotate-3.7.8-6ubuntu5
+regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20
+regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3
 \end{textcode}
 
 Der HTTP Endpunkt wurde wie folgt definiert:
@@ -133,9 +133,9 @@ Der HTTP Endpunkt wurde wie folgt definiert:
 \begin{jsoncode}
 {"data" : 
 	[
-		"regid.2004-03.org.strongswan Ubuntu 12.04-i686-logrotate-3.7.8-6ubuntu5",
-		"regid.2004-03.org.strongswan Ubuntu 12.04-i686-lsb-base-4.0-0ubuntu20",
-		"regid.2004-03.org.strongswan Ubuntu 12.04-i686-strongswan-4.5.2-1.5+deb7u3" 
+		"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-logrotate-3.7.8-6ubuntu5",
+		"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20",
+		"regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3" 
 	]
 }
 \end{jsoncode}
