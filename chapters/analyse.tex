@@ -17,13 +17,13 @@ kurzen Überblick geben, eine ausführliche Beschreibung ist in der Dokumentatio
 
 \begin{description}
 	\item[Policy] Eine Policy beschreibt eine zu überprüfende Richtlinie. Durch
-	einen Policytyp wird festgelegt, was überprüft werden soll (z.B erlaubte offene
+	einen Policytyp wird festgelegt, was überprüft werden soll (\zb erlaubte offene
 	Ports, installierte Software). Weiterhin kann festgelegt werden, welche Aktion
-	bei positivem oder negativen Ausgang der Messung (überprüfen der Richtlinie)
+	bei positivem oder negativen Ausgang der Messung (Überprüfung der Richtlinie)
 	ausgeführt werden soll.
 	
 	\item[Enforcement] Policies werden durch Enforcements erzwungen. Ein
-	Enforcement wird einer Gruppe von Geräten zugeteilt. Spezifiert wird zudem in
+	Enforcement wird einer Gruppe von Geräten zugeteilt. Spezifiert wird zudem, in
 	welchen zeitlichen Abständen die verknüpfe Policy überprüft wird.
 
 	\item[Group] Geräte können in Gruppen zusammengefasst werden. Gruppen dienen
@@ -32,22 +32,21 @@ kurzen Überblick geben, eine ausführliche Beschreibung ist in der Dokumentatio
 
 	\item[Session] Wenn sich ein Gerät mit einem strongSwan TNC Netzwerk verbindet,
 	wird durch strongSwan eine Session für das verbundene Gerät erstellt. Sämtliche
-	Messungen werden mit einer Session verknüpft.
+	Messungen werden mit dieser Session verknüpft.
 
 	\item[Workitem] Für jede Policy, die durch ein Enforcement während einer
 	Session geprüft werden muss, wird ein Workitem erstellt. Diese Workitems werden
-	durch die IMVs (Integrity Measurement Verifier) von strongSwan abgearbeitet.
+	durch die IMVs (Integrity Measurement Verifiers) von strongSwan abgearbeitet.
 	Die Resultate werden nach den Messungen in den Workitems abgelegt.
 
 	\item[Device] Ein Device repräsentiert ein Gerät, welches sich in ein
 	strongSwan TNC Netzwerk verbinden kann. Ein Gerät wird durch die Kombination
-	einer eindeutigen Hardware ID, sowie dem Betriebssystem (siehe Product)
-	identifiziert. Ein Device ist Mitglied einer oder mehrerer Gruppen, diese
-	Mitgliedschaft bestimmt welche Policies auf das Gerät angewendet werden.
+	einer eindeutigen Hardware ID sowie dem Betriebssystem (siehe Product)
+	identifiziert. Ein Device ist Mitglied einer oder mehrerer Gruppen; diese
+	Mitgliedschaft bestimmt, welche Policies auf das Gerät angewendet werden.
 
 	\item[Product] Ein Product entspricht dem Betriebssystem eines Devices. Einem
-	Product können Gruppen zugeteilt werden, welche auf Devices mit
-	diesem Product übertragen werden. Diese Gruppen stellen insofern die
+	Product können Gruppen zugeteilt werden. Diese Gruppen stellen die
 	Standardgruppen eines Gerätes mit einem bestimmten Betriebssystem dar.
 
 	\item[Package] Ein Package beschreibt ein Softwarepaket. Packages werden mit
@@ -56,8 +55,8 @@ kurzen Überblick geben, eine ausführliche Beschreibung ist in der Dokumentatio
 	\item[Version] Eine Version ist immer mit einem Package und einem Product
 	verknüpft. Das heisst, für jedes Betriebssystem existiert eine eigene Version,
 	auch wenn die Versionsbezeichnung dieselbe ist. Versionen können global als
-	\enquote{blacklisted} und \enquote{Security patch} markiert werden. Versionen
-	können Messobjekte einer Policy sein.
+	\enquote{blacklisted} und \enquote{security patch} markiert werden. Versionen
+	können Messziele einer Policy sein.
 
 	\item[Directory] Ein Directory kann Bestandteil einer Policy und somit
 	Grundlage einer Messung sein.
@@ -70,12 +69,13 @@ kurzen Überblick geben, eine ausführliche Beschreibung ist in der Dokumentatio
 	
 \end{description}
 
+\needspace{4\baselineskip}
 In \autoref{django-ist-diagram} ist eine Übersicht der verwendeten Django-Models
 zu sehen:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{images/architecture/django_apps_ist}
-	\caption{Monolithische Django App}
+	\caption{Ursprünglich vorhandene strongTNC Models}
 	\label{django-ist-diagram}
 \end{figure}
 
@@ -228,31 +228,34 @@ resultierenden Nachteile eingehen.
 
 \begin{description}
 	\item[Mehrbenutzerfähigkeit] Die Daten einer SQLite Datenbank können nur von
-	einem Prozess gleichzeitig geändert werden. Da es sich bei der aktuellen
-	Situation aber bereits um eine Multiprozessumgebung handelt ist dieser Einsatz
-	nicht zweckmässig, und kann zu unerwünschten Locks führen.
+		einem Prozess gleichzeitig geändert werden. Da es sich bei der aktuellen
+		Situation aber bereits um eine Multiprozessumgebung handelt ist dieser
+		Einsatz nicht zweckmässig, und kann zu unerwünschten Locks führen.
 
 	\item[Verteilung der Komponenten] Die Policy Decision Komponente (TNC Server
-	aus dem strongSwan Projekt) kann derzeit nicht getrennt von der strongTNC Webserver
-	Komponente betrieben werden. Dies kann in einem Enterprise Deployment
-	durchaus erwünscht sein. Beispielsweise der Einsatz eines Microsoft Webservers
-	mit der strongTNC App, während der Enforcement Point auf einem Linux System
-	betrieben wird. Zusätzlich kann es aus netzwerktechnischen Gründen bedingt sein, im
-	Internet exponierte Komponenten, in diesem Fall den strongSwan VPN Gateway und
-	einen Webserver, in getrennten Netzwerksegmenten zu halten. Oder zur
-	Lastverteilung auf unterschiedliche Hosts zu verteilen.
+		aus dem strong\-Swan Projekt) kann derzeit nicht getrennt von der strongTNC
+		Webserver Komponente betrieben werden. Dies kann in einem Enterprise
+		Deployment jedoch durchaus erwünscht sein, beispielsweise wenn die strongTNC
+		App auf einem Microsoft Webserver betrieben werden soll, während der Policiy
+		Decision Point auf einem Linux System läuft. Zusätzlich kann es aus
+		sicherheitstechnischen Gründen angezeigt sein, den VPN Gateway, den Decision
+		Point und den strongTNC Webserver in getrennten Netzwerksegmenten zu
+		betreiben.
 
 	\item[Anbindung an Drittsysteme] Die Anbindung an Umsysteme gestaltet sich als
-	kaum realisierbar. Das TNC Framework sieht aber bereits weitere Komponenten,
-	wie beispielsweise IF-MAP Devices vor, die integriert werden könnten. Auch eine
-	Integration in bestehende Geschäftsprozesse (zum Beispiel CMDB) ist nur schwer realisierbar.
+		kaum realisierbar. Das TNC Framework sieht aber bereits weitere Komponenten,
+		wie beispielsweise IF-MAP Devices vor, die integriert werden könnten. Auch
+		eine Integration in bestehende Geschäftsprozesse (zum Beispiel CMDB) ist nur
+		schwer realisierbar.
 	
-	\item[Flexiblere Arbeit mit Django] Wenn die strongTNC Anwendung ihre Datenbank
-	nicht mit anderen Systemen teilen muss, können alle
-	Datenbank-Abstraktionsfeatures von Django voll ausgenutzt werden. Im Moment
-	muss man sich aktiv um das Datenbankschema kümmern. Eine Entkopplung hätte zur Folge, dass
-	auch
-	\enquote{Migrations}\footnote{\url{https://docs.djangoproject.com/en/dev/topics/migrations/}} verwendet werden können, welche es erlauben Änderungen an den Models automatisiert in die Datenbank einfliessen zu lassen.
+	\item[Flexiblere Arbeit mit Django] Wenn die strongTNC Anwendung ihre
+		Datenbank nicht mit anderen Systemen teilen muss, können alle
+		Datenbank-Abstraktionsfeatures von Django voll ausgenutzt werden. Im Moment
+		muss man sich aktiv um das Datenbankschema kümmern. Eine Entkopplung hätte
+		zur Folge, dass auch
+		\enquote{Migrations}\footnote{\url{https://docs.djangoproject.com/en/1.7/topics/migrations/}}
+		verwendet werden können, welche es erlauben Änderungen an den Models
+		automatisiert in die Datenbank einfliessen zu lassen.
 	
 \end{description} 
 
