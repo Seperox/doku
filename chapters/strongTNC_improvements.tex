@@ -458,13 +458,13 @@ Der Inhalt, der seitenweise ausgeliefert werden soll, ist von der Pagination
 entkoppelt und kann mittels einer Art Strategie (\enquote{Strategy Pattern}\cite{gamma1994design}) festgelegt werden.
 
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
-Die Implementation der Paginination besteht aus den folgenden fünf Teilen:
+Die Implementation der Pagination besteht aus den folgenden fünf Teilen:
 \begin{enumerate}
 	\item Javascript Frontend Komponente
 	\item Template Tag, Templates und HTML Markup
 	\item Generischer Ajax Endpunkt
 	\item Individuelle Konfiguration pro Pagination Block
-	\item \enquote{List Producer} für die Datenaufbereitung, wiederverwendbar
+	\item \enquote{List Producer} für die Datenaufbereitung
 \end{enumerate}
 
 \autoref{paginationSequence} zeigt den Grobablauf beim dynamischen Anfordern einer
@@ -481,13 +481,12 @@ neuen Seite.
 
 
 \begin{description}
-	\item[HTMLPage] Auf der HTML Seite werden Container definiert, welche später
-	mit den Seiteninhalten befüllt werden. Die Container können entweder direkt in
-	HTML (Listing~\ref{paging:container}) definiert werden oder mittels, des dafür
-	kreierten, Template Tags (Listing~\ref{paging:templatetag}) generiert werden,
-	üblicherweise sollte der Template Tag verwendet werden.
+	\item[HTMLPage] Auf einer HTML Seite werden Container definiert, welche später
+	mit den Seiteninhalten befüllt werden. Die Container werden mittels, des dafür
+	kreierten, Template Tags (Listing~\ref{paging:templatetag}) generiert.
+
 \begin{listing}[H]
-\caption{Pagination HTML Markup}
+\caption{Generiertes HTML Markup des Template Tags}
 \label{paging:container}
 \begin{htmlcode}
 <div class="ajax-paged"
@@ -521,17 +520,17 @@ neuen Seite.
 	Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Block in den
 	entsprechenden Container geladen. 
 
-	\item [AjaxEndpoint] Der AjaxEndpoint nimmt Requests entgegen und kann anhand
+	\item [AjaxEndpoint] Der Ajax Endpoint nimmt Requests entgegen und kann anhand
 	des übergebenen Konfigurationsnamens die zugehörige Konfiguration laden. Diese
 	beinhaltet einen Producer und die Referenz auf ein Template. Die
 	Datengenerierung wird an den Producer delegiert, dieser übernimmt auch die
-	Unterteilung der Daten in die Angeforderte  Seiten grösse. Die Daten, welche der
+	Unterteilung der Daten in die Angeforderte  Seitengrösse. Die Daten, welche der
 	Producer zurück gibt werden anschliessend als Kontext verwendet, um das
-	Template in HTML zu rendern. Durch diese Separierung wird eine hohe
+	Template zu HTML zu rendern. Durch diese Separierung wird eine hohe
 	Wiederverwendbarkeit erreicht. Verschiedene Datenquellen und Templates können
 	kombiniert und wiederverwendet werden.
 \begin{listing}
-\caption{Beispiel einer Paging Config}
+\caption{Beispiel einer Pagination Config}
 \begin{pythoncode}
 regid_list_paging = {
     'template_name': 'front/paging/default_list',
@@ -592,28 +591,26 @@ swid_producer_factory.list()
 %Endpunkt.
 
 \subsubsection{Models für MySQL Support}
-\paragraph{Empfehlung für Wechsel der Datenbank} \hspace{0pt} \\
+\paragraph{Datenbankwechsel} \hspace{0pt} \\
 Die enge Kopplung von strongSwan und strongTNC durch eine gemeinsam genutzte
 Datenbank, hat zur Folge, dass Anpassungen des Datenbankschemas, Änderungen an
 allen Komponenten bedingen. Des Weiteren ist zu erwarten, dass für grössere
-Installationen SQLite zu leichtgewichtig ist. Optimierungen und Profiling sind
-eingeschränkt durchführbar, zu dem wird keine referenzielle Integrität
+Installationen SQLite zu wenig Funktionalität bietet. Optimierungen und Profiling sind nur eingeschränkt durchführbar, zudem wird keine referenzielle Integrität
 unterstützt. Problematisch ist auch, dass SQLite nicht mehrbenutzerfähig ist.
 
 \paragraph{Generierung des Datenbankschemas} \hspace{0pt} \\
-Django unterstützt diverse Datenbankbackends
-\footnote{\url{https://docs.djangoproject.com/en/1.6/ref/databases/}}, unter
+Django unterstützt diverse Datenbankbackends\footnote{\url{https://docs.djangoproject.com/en/1.6/ref/databases/}}, unter
 anderem MySQL, PostgreSQL, MSSQL und das zur Zeit verwendete SQLite. Wir
 empfehlen das SQLite Backend möglichst bald durch ein anders Datenbankbackend zu
 ersetzen. Aus diesem Grund wurden die Django Models so angepasst, dass sie dem
 aktuellen Datenbankschema entsprechen. Das Django ORM kann daraus
-datenbankspezifisches SQL-DDL generieren, und so die Migration erheblich
+datenbankspezifisches SQL-DDL generieren und so die Migration erheblich
 erleichtern.
 
-\subsubsection{Split der Configfiles}
+\subsubsection{Konfigurationsdateien}
 
-Um beim Deployment von strongTNC den Code und die Konfiguration trennen zu
-können, sollte man die Möglichkeit haben, wichtige Einstellungen wie die
+Um beim Deployment von strongTNC den Code und die Konfiguration zu trennen,
+sollte man die Möglichkeit haben, wichtige Einstellungen wie
 Datenbank-Connection-Strings, in einer nicht versionierten Datei zu
 konfigurieren. Drei verbreitete Möglichkeiten sind:
 
@@ -625,18 +622,19 @@ konfigurieren. Drei verbreitete Möglichkeiten sind:
 		der regulären \texttt{settings.py} Datei importiert und zu konfigurierende
 		Werte überschreibt.
 	\item Eine \texttt{settings.ini} Datei, welche durch die \texttt{ConfigParser}
-		Klasse aus der Python Standardbibliothek geparsed wird.
+		Klasse aus der Python Standardbibliothek geparst wird.
 \end{itemize}
 
-Die erste Methode ist äusserst gut geeignet wenn man seine Applikation auf einem
-Cloud-Hosting Provider wie Heroku deployen will. Für Systemadminstratoren, die
-sich Konfigurationsdateien gewöhnt sind, ist dies allerdings etwas umständlich.
+Die erste Methode ist gut geeignet, wenn man seine Applikation auf einem
+Cloud-Hosting Provider wie Heroku\footnote{\url{http://www.heroku.com}} deployen
+will. Für Systemadminstratoren, die sich Konfigurationsdateien gewöhnt sind, ist
+dies allerdings etwas umständlich.
 
 Die zweite Möglichkeit bietet grosse Flexibilität, weist jedoch auch Gefahren
 auf, da in einer solchen Datei beliebiger Code ausgeführt werden kann.
 
-Wir haben deshalb den dritten Ansatz gewählt: Eine \texttt{settings.ini} Datei,
-welche lediglich nichtausführbare Konfigurationsdaten enthält. Die Datei darf
+Deshalb wurde der dritte Ansatz gewählt: Eine \texttt{settings.ini} Datei,
+welche lediglich nichtausführbare Konfigurationsdaten enthält. Die Datei muss
 sich entweder im Projektverzeichnis oder im \texttt{/etc/strongTNC/} Verzeichnis
 befinden. Eine Beispielkonfiguration mit dem Namen \texttt{settings.sample.ini}
 wird mit strongTNC mitgeliefert.
@@ -654,25 +652,20 @@ Oberfläche von strongTNC neue Files und neue Versionen zu erstellen. Die
 Ansichten wurden um diese Funktionalität ergänzt.
 
 \item[Verknüpfung von Daten in Views] Die Views wurden durch sinnvolle
-Verknüpfungen ergänzt. Die  Verknüpfungen waren bereits in der Datenbank
+Verknüpfungen ergänzt. Die Verknüpfungen waren bereits in der Datenbank
 vorhanden, jedoch in den Views nicht direkt ersichtlich, so zum Beispiel welche
 Enforcements einer Gruppe zugeordnet sind.
 
 \item[URL Hash Parameter] Um Parameter in der URL abzulegen und auszulesen,
-wurde eine Javascript Hilfsbibliothek erstellt. Die Bibliothek erlaubt es, die
-Parameter in der URL abzulegen ohne einen Reload auszulösen. Ausserdem kann auf
-Änderungen eventbasiert (Observer Pattern \cite{gamma1994design}) reagiert werden.
-Änderungen welche mittels Ajax ausgelöst und somit keinen Reload zur Folge
+wurde eine Javascript Hilfsbibliothek erstellt. Die Bibliothek erlaubt es,
+Parameter in die URL zu schreiben ohne einen Reload auszulösen. Ausserdem kann auf
+Änderungen eventbasiert (\enquote{Observer Pattern} \cite{gamma1994design}) reagiert werden. Änderungen welche mittels Ajax ausgelöst und somit keinen Reload zur Folge
 haben, können so über die URL und die Browser History zugänglich gemacht werden.
 
 \item[Umstellung auf UTC] Die bestehende Konfiguration von strongTNC hatte keine
-Unterstützung für Zeitzonen. Dies stellt ein Problem dar, wenn sich Clients aus
-verschiedenen Zeitzonen in das Netzwerk einwählen. Mit unseren Anpassungen
-bietet strongTNC vollständige Unterstützung für Zeitzonen und stellt alle Zeiten
-gemäss der konfigurierten Zeitzone dar.
+Unterstützung für Zeitzonen. Dies stellt ein Problem dar, wenn Clients aus
+verschiedenen Zeitzonen mit strongTNC kommunizieren. Mit dieser Anpassung bietet
+strongTNC vollständige Unterstützung für Zeitzonen und stellt alle Zeiten gemäss
+der konfigurierten Zone dar.
 
 \end{description}
-
-
-
-
