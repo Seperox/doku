@@ -1,12 +1,15 @@
 \chapter{API Konzept}
 \section{Trennung}
+
 In diesem Abschnitt werden wichtige Punkte des API Konzeptes genauer betrachtet.
 Das vollständige Konzept ist im Anhang (Abschnitt \ref{REST:api-konzept}) zu
 finden. Detaillierte Beschreibungen zu der in den Beispielen verwendeten Syntax
 sowie die Definition der Archetypen sind ebenfalls im Konzept zu finden.
 
-Durch die Einführung einer netzwerkfähigen Schnittstelle, werden zusätzliche System-Architekturen möglich. Die strongTNC Komponente muss nicht mehr auf derselben Plattform wie die übrige strongSwan Infrastruktur betrieben werden. 
-(TODO Grafiken Deployment)
+Durch die Einführung einer netzwerkfähigen Schnittstelle, werden zusätzliche
+System-Ar\-chi\-tek\-tu\-ren möglich. Die strongTNC Komponente muss nicht mehr
+auf derselben Plattform wie die übrige strongSwan Infrastruktur betrieben
+werden. (TODO Grafiken Deployment)
 
 Für die neugeschaffenen Kommunikationspfade ist Sicherheit nun ein wichtigeres Thema als zuvor, zumal die Kommunikation von nun an auch über ein Netzwerk erfolgen kann. Durch die stärkere Exponierung der Schnittstellen werden diese auch ein potentielles Angriffsziel.
 Bei der Datenübertragung soll einerseits die Vertraulichkeit und Integrität der Daten gewährleistet sein, sowie durch Authentisierung nur für vertrauenswürdige Clients möglich sein. Die adäquate Verwendung von Transport Layer Security (TLS) würde diese Anforderungen bereits erfüllen. Das grosse Risiko hierbei ist, dass die Verantwortung der korrekten Umsetzung aus den Händen der Schnittstelle an den Anwender übergeht. Damit kann die Applikation nicht mehr als grundlegend sicher betrachtet werden, da die sachgemässe Konfiguration des Webservers nicht sichergestellt werden kann. Eine optimale Umsetzung würde daher vorsehen, Sicherheitsaspekte so in die Applikation zu integrieren, dass die Kommunikation ohne entsprechende Sicherheitsmassnahmen nicht möglich ist. Im Folgenden sollen mögliche Varianten aufgezeigt und deren Vor- und Nachteile besprochen werden.
@@ -286,21 +289,32 @@ Wenn eine Session abgeschlossen wird, werden alle Workitems dieser Session
 abgeräumt und die jeweiligen Resultate auf die Session übertragen.
 
 \section{Implementation}
-Die im Rahmen dieser Arbeit konzipierte HTTP Schnittstelle wurde stellenweise
-als Machbarkeitsnachweis umgesetzt. Da die Entwicklung einer HTTP Schnittstelle
-für strongTNC nicht Bestandteil der Aufgabenstellung war, wurde aus Zeitgründen
+
+Die im Rahmen dieser Arbeit konzipierte HTTP Schnittstelle wurde teilweise als
+Machbarkeitsnachweis umgesetzt. Da die Entwicklung einer HTTP Schnittstelle für
+strongTNC nicht Bestandteil der Aufgabenstellung war, wurde aus Zeitgründen
 nicht der gesamte Umfang implementiert.
 
 Für die Implementation wurde das \enquote{Django REST
-Framework}\footnote{\url{http://www.django-rest-framework.org/}} (DRF)
-verwendet.
+Framework}\footnote{\url{http://www.django-rest-framework.org/}} (DRF) gewählt.
+Eine Evaluation der vorhandenen REST Frameworks für Python ergab zwei nahezu
+gleichwertige Kandidaten: Django Rest Framework und Django-Tastypie
+\cite{greenfeld2012rest}. Wir haben uns aus folgenden Gründen für DRF
+entschieden:
 
-<TODO: Danilo, Ein, zwei Gründe für die Wahl von DRF>.
-- Class Based Views
-- Browsable API
-- Mozilla verwendet es auch
-- Contribution
-- ...
+\begin{itemize}
+	\item DRF nutzt Class Based Views und Mixins, was näher am Django-Paradigma
+		liegt als Tastypie. Zudem erhöht dieser Architekturansatz die Flexibilität
+		und Anpassbarkeit, da eigene Klassen einfach durch Komposition und
+		Spezialisierung erzeugt werden können.
+	\item DRF liefert im Gegensatz zu Tastypie einen API Browser mit, inklusive
+		Unterstützung für POST, PUT und DELETE Requests.
+	\item Unterstützung für Basic Auth, Digest Auth, OAuth1 und OAuth2 wird
+		mitgeliefert, HTTP Signatures sind über ein Plugin nutzbar.
+	\item Ausgezeichnete Dokumentation und hilfsbereiter Support via IRC.
+	\item DRF wird unter anderem von Mozilla und Eventbrite verwendet. Dies zeugt
+		von einer gewissen Stabilität und Reife des Projektes.
+\end{itemize}
 
 \subsection{Serialisierung}
 \label{api:serialisierung}
