@@ -36,7 +36,7 @@ kurzen Überblick geben, eine ausführliche Beschreibung ist in der Dokumentatio
 
 	\item[Workitem] Für jede Policy, die durch ein Enforcement während einer
 	Session geprüft werden muss, wird ein Workitem erstellt. Diese Workitems werden
-	durch die IMVs (Integrity Measurement Validator) von strongSwan abgearbeitet.
+	durch die IMVs (Integrity Measurement Verifier) von strongSwan abgearbeitet.
 	Die Resultate werden nach den Messungen in den Workitems abgelegt.
 
 	\item[Device] Ein Device repräsentiert ein Gerät, welches sich in ein
@@ -80,13 +80,16 @@ zu sehen:
 \end{figure}
 
 \subsection{Ablauf einer TNC Messung mit strongSwan und strongTNC}
-Wenn sich ein Gerät mit einem strongSwan TNC Netzwerk verbindet, wird durch einen
-IMV eine strongTNC Session gestartet, darauf wird das Gerät anhand seiner
-Hardware ID und seines Betriebssystems identifiziert. Falls sich das Gerät zum
-ersten Mal verbindet, wird es neu erfasst. Anhand der Gruppen denen das Gerät
-angehört werden die relevanten Enforcements gesammelt und daraus Workitems
-generiert. Diese Vorgänge werden derzeit alle durch den IMV mittels direktem
-Zugriff auf die Datenbank durchgeführt.\\
+
+% TODO ganzen abschnitt etwas umformulieren? viele "wird" und "durch".
+Wenn sich ein Gerät mit einem strongSwan TNC Netzwerk verbindet, wird durch
+einen Integrity Measurement Verifier (IMV) eine strongTNC Session gestartet,
+darauf wird das Gerät anhand seiner Hardware ID und seines Betriebssystems
+identifiziert. Falls sich das Gerät zum ersten Mal verbindet, wird es neu
+erfasst. Anhand der Gruppen, denen das Gerät angehört, werden die relevanten
+Enforcements gesammelt und daraus Workitems generiert. Diese Vorgänge werden
+derzeit alle durch den IMV mittels direktem Zugriff auf die Datenbank
+durchgeführt.\\
 Verschiedene IMVs führen anhand der Workitems entsprechende Messungen durch. Die
 Ergebnisse der Messungen werden durch die IMVs in die Workitems der strongTNC
 Datenbank geschrieben. Anhand der abgearbeiteten Workitems, fällt der TNC Server
