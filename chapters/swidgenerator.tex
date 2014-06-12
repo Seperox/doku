@@ -859,16 +859,23 @@ Metadaten aus dem \texttt{swid\_generator/meta.py} Modul. Die Datei
 Um den SWID Generator mit diesem Script in das globale Python-Verzeichnis zu
 installieren, reicht folgender Befehl:
 
+\begin{listing}[H]
+\caption{Installieren des SWID Generators}
 \begin{bashcode}
 $ sudo python setup.py install
 \end{bashcode}
+\end{listing}
 
 Auch ein Archiv mit der Source-Distribution des Projektes kann über die
 \texttt{setup.py} Datei erzeugt werden:
 
+\begin{listing}[H]
+\caption{Erstellen einer SWID Generators Source Distribution}
+\begin{bashcode}
 \begin{bashcode}
 $ python setup.py sdist
 \end{bashcode}
+\end{listing}
 
 Um die Installation noch weiter zu vereinfachen, kann der SWID Generator auch in
 den Python Package Index\footnote{\url{https://pypi.python.org/}} hochgeladen
@@ -887,11 +894,15 @@ $ python setup.py bdist_wheel upload
 \end{bashcode}
 \end{listing}
 
+\needspace{4\baselineskip}
 Da wir den SWID Generator bereits auf PyPI publiziert
 haben\footnote{\url{https://pypi.python.org/pypi/swid_generator/}}, kann dieser
-bereits über PIP installiert werden.
+bereits über pip installiert werden.
 
+\begin{listing}[H]
+\caption{Installieren des SWID Generators mit pip}
 \begin{bashcode}
 $ sudo pip install swid_generator
 \end{bashcode}
+\end{listing}
 % }}}
