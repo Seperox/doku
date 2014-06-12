@@ -259,7 +259,7 @@ Das Hauptpackage -- \texttt{swid\_generator} -- enthält folgende Module:
 	\item \texttt{print\_functions.py}: Funktionen um Tag- und
 		Software-ID-Generatoren auf die Standardausgabe auszugeben
 	\item \texttt{package\_info.py}: DTO\footnote{Data Transfer Object, eine
-		Klasse die kein Eigenverhalten aufweist sondern lediglich Daten in
+		Klasse, die kein Eigenverhalten aufweist, sondern lediglich Daten in
 		einem Objekt bündelt.}-Klassen für Dateien und Softwarepakete
 	\item \texttt{exceptions.py}: Eigene Fehlerklassen
 	\item \texttt{settings.py}: Globale Variablen, wie \zb
@@ -380,7 +380,7 @@ Wie bereits im Abschnitt \ref{swidgenerator:paketmanager} erwähnt, bietet der
 SWID Generator zum aktuellen Zeitpunkt Unterstützung für drei Paketmanager an.
 Damit der SWID Generator in Zukunft auch auf bisher noch nicht unterstützten
 Systemen wie Slackware Linux, FreeBSD oder Windows einsatzfähig ist, wurde Wert
-darauf gelegt, dass sich das Hinzugfügen neuer Environments einfach gestaltet.
+darauf gelegt, dass sich das Hinzufügen neuer Environments einfach gestaltet.
 
 Um dieses Ziel zu erreichen, ist eine einheitliche Schnittstelle für die
 Environment-Klassen essentiell. Wie es in Python üblich
@@ -388,7 +388,7 @@ ist\cite{contracts:2003}, wird dafür ein Ansatz mit impliziten Contracts
 anstelle von explizit ausprogrammierten Interfaces verwendet. Dieser
 Architektur-Ansatz ist auch als \textit{Duck Typing} bekannt.
 
-Damit eine Klasse ein gültiges Environment darstellt, benötigt sie die folgenden
+Damit eine Klasse ein gültiges Environment darstellt, benötigt sie 
 fünf Methoden:
 
 \begin{itemize}
@@ -417,7 +417,7 @@ wirklich auf dem System vorhanden ist -- wurden diese in eine Basisklasse namens
 \texttt{CommonEnvironment} ausgegliedert. Diese kann wahlweise von einem
 Environment erweitert werden.
 
-Die aktuell vorhandenen Environment-Klassen sind folgendermassen organisiert:
+Die Organisation der aktuell vorhandenen Environment-Klassen ist in der nachstehenden Grafik~\ref{img:environment-klassendiagramm} ersichtlich:
 
 \begin{figure}[H]
 	\centering
