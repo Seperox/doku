@@ -564,9 +564,9 @@ iterate(software_ids, action, separator, end='\n')
 
 Dadurch, dass die Generatoren jeweils nur ein einzelnes Element zurückgeben,
 kann dieses sofort auf die Standardausgabe geschrieben werden und dann vom
-Garbace Collector gelöscht werden. Dies spart einerseits Arbeitsspeicher,
+Garbage Collector gelöscht werden. Dies spart einerseits Arbeitsspeicher,
 andererseits kann es die Wartezeit eines aufrufenden Programmes verkürzen, da es
-mit der Verarbeitung bereits beginnen kann bevor alle Daten generiert und
+mit der Verarbeitung bereits beginnen kann, bevor alle Daten generiert und
 ausgegeben worden sind.
 
 \subsubsection{Python 3 Kompatibilität}
@@ -766,26 +766,30 @@ auch kaum ein sinnvolles Ziel für Optimierungen.
 \section{Qualitätsmanagement}
 \label{swidgenerator:architektur:qa}
 
-Wie es in Abschnitt \ref{improvements:tests} genauer erläutert wird, haben wir
-zum Schreiben und Ausführen der Testsuite Pytest verwendet. Im Gegensatz zu
-strongTNC muss der swidGenerator jedoch nicht nur eine Python-Version
-unterstützen, sondern gleich mehrere, da die Deployment-Ziele (TNC Clients)
-eine höhere Betriebssystem-Diversität aufweisen.
+Wie in Abschnitt \ref{improvements:tests} genauer erläutert, haben wir zum
+Schreiben und Ausführen der Testsuite Pytest verwendet. Im Gegensatz zu
+strongTNC sollte der swidGenerator mehrere Python-Versionen unterstützen, da die
+Deployment-Ziele (TNC Clients) eine höhere Betriebssystem-Diversität aufweisen.
 
 Um dies zu gewährleisten, wurde Tox\footnote{\url{http://tox.readthedocs.org/}}
-verwendet. Tox ist ein Tool welches gemäss einer Konfigurationsdatei automatisch
-verschiedene \enquote{Virtualenvs} erstellt. Jedes Virtualenv enthält eine
-andere Python-Version mit den entsprechenden Abhängigkeiten. Die Testsuite wird
-anschliessend in jedem Virtualenv separat ausgeführt.
+verwendet. Tox ist ein Tool, welches gemäss einer Konfigurationsdatei
+automatisch verschiedene \enquote{Virtualenvs} erstellt. Jedes Virtualenv
+enthält eine andere Python-Version mit den entsprechenden Abhängigkeiten. Die
+Testsuite wird anschliessend in jedem Virtualenv separat ausgeführt.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{images/tox-result}
-	\caption{Tox Resultate}
-	\label{swidgenerator:qa:tox}
-\end{figure}
+\begin{bashcode}
+$ tox -e py27,py33,py34,pypy
+...
+================== 26 passed, 17 skipped in 1.23 seconds ===================
+_________________________________ summary __________________________________
+  py27: commands succeeded
+  py33: commands succeeded
+  py34: commands succeeded
+  pypy: commands succeeded
+  congratulations :)
+\end{bashcode}
 
-Wie im Abschnitt \ref{improvements:travis} beschrieben, wird auch für den SWID
+Wie in Abschnitt \ref{improvements:travis} beschrieben, wird auch für den SWID
 Generator Travis CI eingesetzt. Mit der entsprechenden Konfiguration wird jede
 von Tox unterstützte Version in einem separaten Job getestet. Die Resultate
 werden dann als Build Matrix dargestellt.
@@ -797,26 +801,57 @@ werden dann als Build Matrix dargestellt.
 	\label{swidgenerator:qa:tox}
 \end{figure}
 
-Wie auch bei strongTNC werden beim SWID Generator die Coding-Guidelines durch
-die Test Suite forciert. Zuwiderhandlungen gegen die Guidelines werden als
-Fehler betrachtet.
+Analog zu strongTNC werden beim SWID Generator die Coding-Guidelines durch die
+Test Suite forciert. Verletzungen der Guidelines werden als Fehler betrachtet.
 
 % }}}
 
 % {{{ Packaging --------------------------------------------------------------%
 
-\section{Packaging}
-TODO Danilo
-- Setup.py
-- Manifest.in
-- meta.py
+\section{Packaging / Deployment}
 
-% }}}
+Für eine vereinfachte Installation des SWID Generators auf den Zielsystemen
+wurde ein Setuptools\footnote{\url{https://pythonhosted.org/setuptools/}}
+basiertes \texttt{setup.py}-Script erstellt. Dieses liest die benötigten
+Metadaten aus dem \texttt{swid\_generator/meta.py} Modul. Die Datei
+\texttt{MANIFEST.in} steuert, welche Dateien beim Paketieren eingebunden werden.
 
-% {{{ Deployment -------------------------------------------------------------%
+Um den SWID Generator mit diesem Script in das globale Python-Verzeichnis zu
+installieren, reicht folgender Befehl:
 
-\section{Deployment}
-\label{swidgenerator:architektur:deployment}
-TODO Danilo
+\begin{bashcode}
+$ sudo python setup.py install
+\end{bashcode}
 
+Auch ein Archiv mit der Source-Distribution des Projektes kann über die
+\texttt{setup.py} Datei erzeugt werden:
+
+\begin{bashcode}
+$ python setup.py sdist
+\end{bashcode}
+
+Um die Installation noch weiter zu vereinfachen, kann der SWID Generator auch in
+den Python Package Index\footnote{\url{https://pypi.python.org/}} hochgeladen
+werden. Dafür sollte das Projekt dort registriert werden, sowohl eine Source-
+wie auch eine Binärdistribution erstellt werden und diese schlussendlich
+hochgeladen werden. All diese Punkte können mit folgenden Befehlen erledigt
+werden:
+
+\begin{listing}[H]
+\caption{Hochladen des SWID Generators auf PyPI}
+\begin{bashcode}
+$ pip install wheel
+$ python setup.py register
+$ python setup.py sdist upload
+$ python setup.py bdist_wheel upload
+\end{bashcode}
+\end{listing}
+
+Da wir den SWID Generator bereits auf PyPI publiziert
+haben\footnote{\url{https://pypi.python.org/pypi/swid_generator/}}, kann dieser
+bereits jetzt direkt über PIP installiert werden.
+
+\begin{bashcode}
+$ sudo pip install swid_generator
+\end{bashcode}
 % }}}
