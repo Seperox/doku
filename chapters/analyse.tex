@@ -306,18 +306,18 @@ Bestandteil unserer Arbeit:
 
 \section{ISO Standard 19770-2}
 \label{analyse:swidstandard} 
-Der ISO Standard 19770-2\cite{iso19770-2} ist der zweite Teil einer Gruppe von ISO Standards
-zu den Prozessen und Technologien des Software Asset Management. Dieser Teil des
-Standards beschreibt den Aufbau und die Verwendung von Software Identification
-Tags und befindet sich zur Zeit noch im Entwurfsstadium (\enquote{Draft}).
+Der ISO Standard 19770-2\cite{iso19770-2} ist der zweite Teil einer Gruppe von
+ISO Standards zu den Prozessen und Technologien des Software Asset Management.
+Dieser Teil des Standards beschreibt den Aufbau und die Verwendung von Software
+Identification Tags und befindet sich zur Zeit noch im Entwurfsstadium
+(\enquote{Draft}).
 
 \subsection{Bestandteile eines SWID Tags}
 Nachfolgend eine Zusammenstellung der Bestandteile eines SWID Tags, wie sie in
 diesem Projekt verwendet werden. Der Standard beschreibt noch weitere Elemente
 und Anwendungsmöglichkeiten, welche in dieser Arbeit allerdings nicht verwendet
 werden. Die jeweiligen Listen der Attribute sind nicht vollständig, sondern eine
-Auswahl, wie sie für diese Arbeit relevant sind. (ISO
-19770-2\cite{iso19770-2}, Seite 19, 8.6)
+Auswahl, wie sie für diese Arbeit relevant sind. \cite[S.~19]{iso19770-2}
 
 \begin{description}
 	\item[SoftwareIdentity] Repräsentation des Wurzelelementes eines SWID Tags.
@@ -385,30 +385,27 @@ Auswahl, wie sie für diese Arbeit relevant sind. (ISO
 \begin{itemize}
 	\item Ein Tag darf nur durch die Organisation modifiziert werden, die ihn
 	initial erstellt hat. Diese Organisation hat mindestens die Rolle des
-	\enquote{Tag Creator}. Dieser Tag heisst \enquote{Primary Tag}. (ISO
-	19770-2\cite{iso19770-2}, Seite 6, 5.3)
+	\enquote{Tag Creator}. Dieser Tag heisst \enquote{Primary Tag}. \cite[S.~6]{iso19770-2}
 	
 	\item Wenn ein Tag ergänzt werden soll, muss dies mit Hilfe eines
 	\enquote{Supplemental Tags} geschehen, da der \enquote{Primary Tag} nicht
-	modifiziert werden darf. ((ISO 19770-2\cite{iso19770-2}, Seite 7, 5.4.2)
+	modifiziert werden darf. \cite[S.~7]{iso19770-2}
 	
 	\item Ein SWID Tag wird grundsätzlich als XML Datei abgelegt, diese Datei muss
 	sich im Installationsverzeichnis der repräsentierten Software befinden. Der Tag
 	kann zusätzlich über andere Kanäle wie URIs oder zentrale Verwaltungen
-	zugänglich gemacht werden. (ISO 19770-2\cite{iso19770-2}, Seite 10, 6.1.3 und
-	Seite 15, 7.1)
+	zugänglich gemacht werden. \cite[S.~10,15]{iso19770-2}
 	
 	\item Als eindeutige Kennung für einen SWID Tag dient die Kombination von
 	\texttt{tag\_createor\_regid} und \texttt{uniqueId}. Diese Kennung wird
 	\enquote{software\_id} genannt. Es liegt in der Verantwortung des \enquote{Tag
-	Creators} dafür zu sorgen, dass seine Tags eindeutig sind. (ISO
-	19770-2\cite{iso19770-2}, Seite 10, 6.1.5 und Seite 16, 8.1)
+	Creators} dafür zu sorgen, dass seine Tags eindeutig sind. \cite[S.~10,16]{iso19770-2}
 	
 	\item Es ist nicht obligatorisch die Echtheit von SWID Tags zu garantieren;
-	falls eine Echtheitsvalidierung gewünscht oder nötig ist, kann dies durch den
-	Einsatz von der \enquote{XML signature syntax}\cite{bartel2002xml}
-	implementiert werden. Echtheitsprüfung ist nicht Bestandteil dieser Arbeit.
-	(ISO 19770-2\cite{iso19770-2}, Seite 14, 6.1.19)
+	falls eine Echtheitsvalidierung gewünscht oder nötig ist, kann dies durch
+	den Einsatz von der \enquote{XML signature syntax}\cite{bartel2002xml}
+	implementiert werden. Echtheitsprüfung ist nicht Bestandteil dieser
+	Arbeit. \cite[S.~14]{iso19770-2}
 	
 	\item Die minimale Information, die ein valider SWID Tag enthalten muss, ist
 	\texttt{SoftwareIdentity.name} und \texttt{Entity.role}. Bei der Rolle muss es
@@ -430,7 +427,7 @@ Auswahl, wie sie für diese Arbeit relevant sind. (ISO
 			\item role
 			\end{itemize*}
 	\end{itemize*}	
-	(ISO 19770-2\cite{iso19770-2}, Seite 16, 8.2)
+	\cite[S.~16]{iso19770-2}
 	
 \end{itemize}
 
@@ -446,10 +443,10 @@ Die eindeutige Kennung eines SWID Tags setzt sich aus der \texttt{regid} des
 beiden Attribute als optional definiert werden, garantiert der Standard keine
 eindeutige Identität für jeden SWID Tag.
 \begin{quote}
-\textit{(...) so it is up to each tag creator to ensure each of their tags is
+\textit{(\ldots) so it is up to each tag creator to ensure each of their tags is
 unique.}
 \end{quote}
-\textit{ISO 19770-2\cite{iso19770-2}, Seite 16}\\
+\textit{ISO 19770-2 \cite[S.~16]{iso19770-2}}\\
 
 Da der \enquote{Tag Creator} für die Eindeutigkeit seiner Tags verantwortlich
 ist, muss man davon ausgehen, dass ein erhaltener Tag eindeutig identifizierbar
@@ -459,7 +456,7 @@ Konsumenten:
 \textit{A conforming consumer shall not reject any conforming SWID tag
 document.}
 \end{quote}
-\textit{ISO 19770-2\cite{iso19770-2}, Seite 4}\\
+\textit{ISO 19770-2 \cite[S.~4]{iso19770-2}}\\
 
 Vom Tag Ersteller wird lediglich erwartet, dass die produzierten Tags
 standardkonform sind:
@@ -467,7 +464,7 @@ standardkonform sind:
 \textit{A conforming producer shall be able to produce SWID tag documents
 conforming with this part of ISO/IEC 19770.}
 \end{quote}
-\textit{ISO 19770-2\cite{iso19770-2}, Seite 4}\\
+\textit{ISO 19770-2 \cite[S.~4]{iso19770-2}}\\
 
 Diese Anforderung ist bereits erfüllt, wenn der Name der Software und der
 Organisation, welche den Tag erstellt hat, vorhanden sind.
@@ -484,7 +481,7 @@ SWID Tags nicht Ursache eines Konfliktes werden.
 \textit{SWID tag data is stored in an XML file and shall be located on a devices
 file system in the same file directory as the application they represent.}
 \end{quote}
-\textit{ISO 19770-2\cite{iso19770-2}, Seite 10}\\
+\textit{ISO 19770-2 \cite[S.~10]{iso19770-2}}\\
 
 Diese Anforderung ist bei Linux Systemen nicht direkt umsetzbar, da
 Softwarepakete unter Linux oft nicht nur in einem Verzeichnis installiert
@@ -504,11 +501,11 @@ Plus-Zeichen. Anhand der folgenden Aussage aus dem Standard kann man darauf
 schliessen, dass diese Zeichen in einer \texttt{uniqueId} nicht erlaubt sind.
 
 \begin{quote}
-\textit{(...) may be either a GUID, or any reference unique
+\textit{(\ldots) may be either a GUID, or any reference unique
 for the tag\_creator\_regid. The unique\_id shall follow the restrictions for
 URI character use as specified in IETF RFC 3986, section 2, characters.}
 \end{quote} 
-\textit{ISO 19770-2\cite{iso19770-2}, Seite 13}\\
+\textit{ISO 19770-2 \cite[S.~13]{iso19770-2}}\\
 
 Die \texttt{uniqueId} unterliegt den Restriktionen einer URI. Für diese gilt: ein
 Doppelpunkt ist kein unerlaubtes Zeichen jedoch ein reserviertes:
@@ -527,4 +524,4 @@ die \texttt{uniqueId} zum \enquote{Authority} Teil einer URI gehört und somit
 keine Doppelpunkte enthalten darf.
 
 In dieser Arbeit werden daher Zeichen, welche in URIs als reserviert gelten, in
-der \texttt{uniqueId} durch eine Tilde (\texttt{~}) ersetzt.
+der \texttt{uniqueId} durch eine Tilde (\texttt{\~}) ersetzt.
