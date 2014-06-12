@@ -47,8 +47,7 @@ Der Akteur will feststellen, welche Dateien zu einem bestimmten Softwarepaket ge
 \hline
 \textbf{Standard Szenario} &
 Der Akteur findet den SWID Tag, der zum gesuchten Softwarepaket gehört in der
-SWID Tag Ansicht. Die Dateien, die mit dem SWID Tag gemessen wurden, sind
-aufgelistet. \\
+SWID Tag Ansicht. Die Dateien, die mit dem SWID Tag gemessen wurden, sind in der Detailansicht aufgelistet. \\
 \hline
 \textbf{Alternatives Szenario} & 
 Der Akteur findet das Softwarepaket in der Paketübersicht. Dort kann auf einen
@@ -87,18 +86,17 @@ folgenden Informationen eines Tags interessiert:
 \begin{itemize}
 \item Software-ID
 \item Unique-ID
-\item Tag Creator Entity
+\item Entity
 \item RAW XML String
-\item Welche Files sind in diesem SWID Tag enthalten
-\item Gibt es ein bestehendes Paket dessen Name dem des SWID Tags entspricht
-\item Welche Devices haben diesen SWID Tag installiert gemeldet (Abschnitt \ref{strongTNC:UC01})
-Case UC01)
+\item Im SWID Tag enthaltene Files
+\item Verknüpfte Pakete
+\item Devices welche diesen SWID Tag installiert haben (Abschnitt \ref{strongTNC:UC01})
 \end{itemize}\\
 \hline
 \textbf{Standard Szenario} &
 Der Akteur kann sich in der SWID Tag Ansicht alle erfassten SWID Tags auflisten
 lassen. Wenn ein SWID Tag angewählt wird, sind alle gewünschten Details
-aufgelistet. \\
+sichtbar. \\
 \hline
 \phantom{\textbf{Alternatives Szenario}} &
 \end{usecase}
@@ -110,9 +108,7 @@ aufgelistet. \\
 \hline
 \textbf{Story} &
 Der Akteur will einen neuen SWID Tag im System erfassen. Der Akteur liefert ein
-XML Dokument gemäss SWID Spezifikation\cite{iso19770-2} an das System. Das
-System nimmt das XML Dokument entgegen und speichert die notwendigen
-Informationen ab.\\
+XML Dokument gemäss SWID Spezifikation\cite{iso19770-2} an das System.\\
 \hline
 \textbf{Standard Szenario} &
 Der Akteur liefert ein XML Dokument an das System und erhält eine Erfolgsmeldung
@@ -120,7 +116,7 @@ die bestätigt, dass der Tag gespeichert wurde.\\
 \hline
 \textbf{Alternatives Szenario 1} & 
 Eine Entity welche im gelieferten XML enthalten ist existiert bereits im System
-(identifiziert durch die regid) besitzt aber einen anderen Namen. Der Name der
+(identifiziert durch die Regid) besitzt aber einen anderen Namen. Der Name der
 bestehenden Entity wird entsprechend aktualisiert.\\
 \hline
 \textbf{Alternatives Szenario 2} & 
@@ -135,15 +131,15 @@ bereits und wird mit den neuen Daten ersetzt.
 \\
 \hline
 \textbf{Alternatives Szenario 3} & 
-Es wurde ein invalides XML Dokument ans System geliefert. Das System informiert
-den Benutzer über den Fehler und erstellt keinen neuen Tag.\\
+Es wurde ein invalides XML Dokument geliefert. Das System informiert
+den Akteur über den Fehler und erstellt keinen neuen Tag.\\
 \hline
 \textbf{Häufigkeit des Auftretens} &
-Bei Systemeinführung wird diese Operation häufig auftreten. Idealerweise sieht
-das Deployment vor, dass für jeden Produktetyp ein Referenzgerät vorhanden ist,
-mit welchem initial alle Tags generiert und erfasst werden und danach in
+Bei Systemeinführung wird diese Operation häufig durchgeführt. Idealerweise sieht
+das Deployment vor, dass für jeden Produktetyp ein Referenzgerät vorhanden ist.
+Mit diesem sollen initial alle Tags generiert und erfasst werden und danach in
 regelmässigen Abständen aktualisiert werden. Dadurch ist die Anzahl der nötigen
-Erfassungs-Operationen durch User Endgeräte klein zu halten.\\
+Erfassungs-Operationen durch Endgeräte klein zu halten.\\
 \hline
 \textbf{Datenvariation} &
 Es soll möglich sein, eine Liste mit mehreren XML Dokumenten auf einmal ans System
@@ -161,7 +157,7 @@ Dadurch kann die Anzahl nötiger Systemaufrufe erheblich reduziert werden.\\
 \hline
 \textbf{Story} &
 Der Akteur will alle auf einem Device vorhandenen SWID Tags mit einer Session
-verknüpfen\\
+verknüpfen.\\
 \hline
 \textbf{Standard Szenario} &
 Der Akteur sendet eine Liste der Software-IDs an das System, die er mit der
