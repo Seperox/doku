@@ -253,7 +253,7 @@ nicht der gesamte Umfang implementiert.
 Für die Implementation wurde das \enquote{Django REST
 Framework}\footnote{\url{http://www.django-rest-framework.org/}} (DRF) gewählt.
 Eine Evaluation der vorhandenen REST Frameworks für Python ergab zwei nahezu
-gleichwertige Kandidaten: Django Rest Framework und Django-Tastypie
+gleichwertige Kandidaten: Django REST Framework und Django-Tastypie
 \cite{greenfeld2012rest}. Wir haben uns aus folgenden Gründen für DRF
 entschieden:
 
@@ -366,8 +366,16 @@ Allow: GET, HEAD, OPTIONS
 \end{listing}
 
 \subsection{Browsable API}
-TODO Danilo
-Das Django REST Framework bietet die Möglichkeit die API mittels Browser zu durchsuchen. 
+
+Das Django REST Framework bietet die Möglichkeit, die API mittels Browser zu
+durchsuchen und POST/PUT/DELTE Requests abzusetzen. So können Entwickler die
+Programmier-Schnittstelle testen, ohne dass dafür Code geschrieben werden muss.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/drf-browsable}
+	\caption{Die Browsable API}
+\end{figure}
 
 \subsection{Sicherheit}
 
