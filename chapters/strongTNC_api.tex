@@ -422,11 +422,11 @@ Entwurfsstadium.
 
 \end{description}
 
-\subsubsection{Implementation} Aus zeitlichen Gründen konnte die nahtlose Integration von Sicherheitsfeatures in die Schnittstelle  nicht umgesetzt werden. Anstelle wurde Session basierte Authentisierung und HTTP Basic Authentisierung umgesetzt. Wir
+\subsubsection{Implementation} Aus zeitlichen Gründen konnte die nahtlose Integration von Sicherheitsfeatures in die Schnittstelle nicht umgesetzt werden. Anstelle wurde Session basierte Authentisierung und HTTP Basic Authentisierung umgesetzt. Wir
 empfehlen zudem ausdrücklich, TLS zu verwenden. Um die Konfiguration von TLS mit
 Apache zu erleichtern, haben wir eine ausführliche Deployment Dokumentation
 verfasst (siehe \ref{anhang:deployment-manual}). Darin sind unter anderem
 empfohlene Cypher-Suites, die Aktivierung von Strict-Transport-Security und eine
 Anleitung zum Erstellen serverseitiger Zertifikate enthalten.
 
-\subsubsection{Empfehlung} Falls sich der HTTP Signatures Draft zu einem Standard durchsetzt empfehlen wir deren Implementation mit zusätzlicher Verwendung von TLS. Obwohl HTTP Signatures ohne TLS verwendet werden können, weist das HTTP Protokoll verschiedene Verletzlichkeiten\cite{httpsecconsiderations2014} auf, die durch TLS berücksichtigt werden.
+\subsubsection{Empfehlung} Falls sich der HTTP Signatures Draft zu einem Standard durchsetzt, empfehlen wir dessen Implementation mit zusätzlicher Verwendung von TLS. Obwohl HTTP Signatures ohne TLS verwendet werden können, weist das HTTP Protokoll verschiedene Verletzlichkeiten\cite{httpsecconsiderations2014} auf, die durch TLS behoben werden.
