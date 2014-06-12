@@ -258,35 +258,32 @@ gestellt\footnote{\url{http://git.io/BqNWMw}, \url{http://git.io/O8MaNA}}.
 
 \subsubsection{Deployment Dokumentation, Vagrant, Ansible}
 
-Wenn man strongTNC in Produktion deployen will, müssen einige Dinge beachtet
-werden. Beispielsweise sollte die Applikation nie ohne TLS produktiv über ein
-Netzwerk genutzt werden, da die API Endpoints nur mit Hilfe von Basic Auth
-geschützt sind.
+Wenn man strongTNC in einen produktiven Umgebung einsetzt, müssen einige Dinge
+beachtet werden. Beispielsweise sollte die Applikation nie ohne TLS über ein Netzwerk genutzt werden, da die API Endpoints nur mit Hilfe von Basic
+Auth geschützt sind.
 
-Um den Nutzern von strongTNC in diesen Punkten eine Hilfestellung zu geben,
-haben wir im Projekt-Repository ein Dokument mit allen nötigen Informationen
-erstellt. Das Dokument findet sich im Repository unter
+Für eine einfache Installation haben wir eine detaillierte Deployment Dokumentation erstellt. Das Dokument findet sich im Repository unter
 \texttt{doc/deployment.rst}\footnote{\url{https://github.com/strongswan/strongTNC/blob/master/docs/deployment.rst}}
 sowie im Anhang dieser Dokumentation auf Seite
 \pageref{anhang:deployment-manual}.
 
-Falls man strongTNC jedoch nicht gleich produktiv nutzen will, sondern zuerst
-testen möchte, wäre es etwas umständlich all diese Konfigurationsschritte
-manuell durchzuführen. Für diesen Fall haben wir eine
+Falls man strongTNC nur testen möchte, wurde eine
 Vagrant\footnote{\url{http://www.vagrantup.com/}}- und eine
-Ansible\footnote{\url{http://www.ansible.com/}}-Konfiguration vorbereitet.
+Ansible\footnote{\url{http://www.ansible.com/}}-Konfiguration vorbereitet.\\
 Vagrant ist ein Tool um die Erstellung und Konfiguration von Virtuellen
-Maschinen zu automatisieren, während Ansible ein System zur Automation von
+Maschinen zu automatisieren, während Ansible ein System zur Automatisierung von
 Deployments ist. Durch die Kombination der beiden Tools kann mit folgenden zwei
-Befehlen eine komplett konfigurierte VM erstellt werden, mit welcher strongTNC
-getetstet werden kann:
+Befehlen eine komplett konfigurierte VM erstellt werden.
 
+\begin{listing}
+\caption{Starten einer Vagrant Box}
 \begin{textcode}
 $ cd /path/to/strongtnc/vagrant/
 $ vagrant up
 Bringing machine 'default' up with 'virtualbox' provider...
 ...
 \end{textcode}
+\end{listing}
 
 Alle weiteren Informationen befinden sich im Projekt-Repository unter
 \texttt{vagrant/README.rst}\footnote{\url{https://github.com/strongswan/strongTNC/blob/master/vagrant/README.rst}}.
@@ -299,15 +296,14 @@ Alle weiteren Informationen befinden sich im Projekt-Repository unter
 	integriert. Dadurch gilt ein Build als fehlgeschlagen, falls die Richtlinien
 	nicht vollständig eingehalten wurden.
 
-\item[Vermeidung von Hardcoded URLs] Gemäss Empfehlung des Django Frameworks
-	soll das Verwenden von absoluten URLs in Templates und Views vermieden werden.
-	Anstelle sollen URLs nur einmal, in der URLConf, konfiguriert und danach via
-	Rückwärtssuche durch den Namen aufgelöst werden. Auf diese Weise können
+\item[Dynamisches Auflösen von URLs] Gemäss Django Dokumentation
+	soll das Verwenden von internen URLs in Templates und Views vermieden werden.
+	Anstelle sollen URLs nur einmal, in der \texttt{urls.py} Datei, konfiguriert und danach anhand des Namens aufgelöst werden. Auf diese Weise können
 	zentral Änderungen an URLs vorgenommen werden, ohne Templates oder Views
 	anpassen zu müssen.
 
-\item[Konsequente Frontend Validierung] Die bestehende Frontend Validierung
-	wurde an diversen Orten inkonsequent oder fehlerhaft eingesetzt. Diese Mängel
+\item[Konsequente Frontend-Validierung] Die bestehende Frontend-Validierung
+	wurde an diversen Stellen inkonsequent oder fehlerhaft implementiert. Diese Mängel
 	wurden behoben und damit die Validierung vereinheitlicht.
 
 \item[Upgrade auf Django 1.6] strongTNC wurde von Django 1.5 auf Django 1.6
@@ -319,47 +315,45 @@ Alle weiteren Informationen befinden sich im Projekt-Repository unter
 \subsection{Features}
 
 \subsubsection{Aufteilung der Zugriffsrechte}
-Um die Informationen in strongTNC zu Präsentationszwecken zugänglich zu machen,
-ohne dass Änderungen vorgenommen werden können, weder absichtlich noch aus
-Versehen, soll eine Readonly Rolle eingeführt werden.
+Um die Informationen in strongTNC zugänglich zu machen,
+ohne dass Änderungen vorgenommen werden können, soll eine Readonly Rolle eingeführt werden.
 
-In einem ersten Schritt soll ein Modell mit zwei Rollen eingeführt werden. Eine
-Rolle für den readonly Zugriff und eine für den Vollzugriff. Die Rollen sollen,
-so wie es gegenwärtig implementiert ist, nicht personalisiert sein. Die
-Möglichkeit, den Login zu personalisieren sollte nicht grundsätzlich
-ausgeschlossen werden, jedoch steht die Implementation eines nicht
-personalisierten readonly Zugriffs im Vordergrund.
+In einem ersten Schritt soll ein Modell mit zwei Rollen umgesetzt werden. Eine
+Rolle für den readonly Zugriff und eine für den Vollzugriff. Die Rollen sollen nicht personalisiert sein. Die Möglichkeit, das Login zu personalisieren sollte aber nicht grundsätzlich ausgeschlossen werden.
 
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
-Das Django Webframework hat ein vollständiges Authentication- und
-Permission-System integriert. Damit lassen sich komplexe Permission-Szenarien
-abbilden, jedoch besteht auch die Möglichkeit, nur Teile daraus zu verwenden und
-so ein einfacheres Rollen-Modell zu simulieren.
+Das Django Webframework besitzt ein vollständiges Authentication- und
+Permission-System, damit lassen sich komplexe Permission-Szenarien
+abbilden. Es besteht die Möglichkeit, nur Teile davon zu verwenden und
+so ein einfaches Rollen-Modell zu umzusetzen.
 
-Da keine personalisierten Logins benötigt sind, werden zwei technische Benutzer
-erstellt, die für die beiden Rollen eingesetzt werden. Die Namen der beiden Benutzer sind 
+Es werden zwei technische Benutzer
+erstellt. Die Namen der beiden Benutzer sind 
  \texttt{admin-user} und \texttt{readonly-user}. Dem
-\texttt{admin-user} Benutzer wird eine \texttt{write\_access} Berechtigung erteilt, diese
+\texttt{admin-user} wird eine \texttt{write\_access} Berechtigung erteilt. Diese
 kann in den Views mittels Django-Internem \texttt{@permission\_required()}
-Decorator geprüft werden.
+Decorator überprüft werden.
 
-Diese Variante der Umsetzung erlaubt es, mit wenig Aufwand personaliserte Logins
-einzuführen. Für die Verwaltung der Benutzer stellt Django ein Admin-Interface
-zur Verfügung, die Benutzerverwaltung muss nicht selber entwickelt werden.
+Diese Variante der Umsetzung erlaubt es, mit wenig Aufwand dennoch personaliserte Logins
+einzuführen. Es muss keine eigene Benutzerverwaltung entwickelt werden, da Django ein Admin-Interface zur Verwaltung von Benutzern zur Verfügung stellt.
 
-In den Templates können die Zugriffsrechte über das \texttt{perms} Objekt im
-\texttt{Context} geprüft werden:
+In den Templates können die Zugriffsrechte über das \texttt{perms} Objekt geprüft werden:
 
+\begin{listing}
+\caption{Überprüfung der Zugriffsrechte in Templates}
 \begin{pythoncode}
 {% if 'auth.write_access' in perms %}
     <p>Read-write access.</p>
 {% endif %}
 \end{pythoncode}
+\end{listing}
 
-Die zusätzliche Implementation eines Templatetags erleichtert die Steuerung von
+Die zusätzliche Implementation eines Template Tags erleichtert die Steuerung von
 HTML Formularelementen, deren Bedienung nur für schreibberechtigte Benutzer
 erlaubt sein soll:
 
+\begin{listing}
+\caption{Template Tag zur Zugriffssteuerung von HTML Form Elementen}
 \begin{pythoncode}
 @register.simple_tag(takes_context=True)
 def input_editability(context):
@@ -368,15 +362,18 @@ def input_editability(context):
         return 'disabled="disabled"'
     return ''
 \end{pythoncode}
-
+\end{listing}
 Die Anwendung sieht wie folgt aus:
 
+\begin{listing}
+\caption{Anwendung des Template Tags zur Zugriffssteuerung von HTML Form Elementen }
 \begin{pythoncode}
 <input type="text"name="name" value="{{ group }}" {% input_editability %} />
 \end{pythoncode}
+\end{listing}
 
 Diese Umsetzung folgt einer Variation, des in \enquote{Security
-Patterns}\cite{schumacher2013security} vorgeschlagenen Patterns \enquote{Full
+Patterns}\cite{schumacher2013security} beschriebenen Entwurfsmusters \enquote{Full
 Access With Errors}. Alle Funktionen sind stets für den Benutzer sichtbar.
 Dadurch kann das User Interface einheitlich gestaltet werden und vermeidet auf
 diese Weise mögliche Verwirrungen. Diejenigen Elemente, die der Benutzer nicht
@@ -391,26 +388,25 @@ festzulegen.
 Als Alternative zum Django Permission-System könnten auch die standardmässig
 vorhandenen Flags \texttt{user.is\_admin} und \texttt{user.is\_staff} verwendet
 werden. Dies wäre bedeutend einfacher zu implementieren, jedoch ist die Lösung
-nicht ausbaufähig. Deshalb wird das Permission-System bevorzugt.
+nicht ausbaufähig. Deshalb wurde das Permission-System bevorzugt.
 
 \subsubsection{Nachladen von grossen Datenmengen}
 strongTNC muss mit grossen Datenmengen umgehen können. Wenn Datei-Messungen
-durchgeführt- oder SWID Tags erfasst werden, ist beispielsweise die Zahl der
-erfassten Dateien schnell im fünfstelligen Bereich. Wenn einzelne dieser Dateien
+durchgeführt- oder SWID Tags erfasst werden, erreicht beispielsweise die Zahl der
+erfassten Dateien schnell den fünfstelligen Bereich. Wenn einzelne dieser Dateien
 ausgewählt werden sollen, muss verhindert werden, dass immer die gesamte Menge
 der Daten geladen wird.
 
 \paragraph{Technische Umsetzung} \hspace{0pt} \\
-Die gesuchten Datensätze werden mittels inkrementeller Suche per Ajax
-nachgeladen.
-
+Mittels Ajax Requests werden jeweils nur die Daten nachgeladen, welche benötigt werden. 
 Die Ajax Endpunkte wurden mit Hilfe der \enquote{Dajax-ice}\footnote{\url{http://www.dajaxproject.com/}} Django Erweiterung realisiert.
 \enquote{Dajax-ice} stellt die nötigen Bibliotheken bereit, um Ajax Endpunkte wie gewöhnliche Views zu implementieren. So werden zum Beispiel benötigte HTTP Header
-automatisch gesetzt und geprüft. Ausserdem generiert \enquote{Dajax-ice} Javascript Funktionen, welche die benötige Infrastruktur clientseitig bereitstellen, um Ajax Requests auszuführen.
+automatisch gesetzt und geprüft. Ausserdem generiert \enquote{Dajax-ice} Javascript Funktionen, welche clientseitig die benötige Infrastruktur bereitstellen, um Ajax Requests auszuführen.
 \\
 
-In Listing \ref{strongTNC:ajaxendpoint} ist die Beispielimplementation eines Ajax Endpoints zu sehen. Um auch bei Ajax Anfragen eine Authentifizierung zu erzwingen, wurde ein eigener Decorator (\texttt{@ajax\_login\_required}) erstellt. 
-\begin{listing}
+In Listing \ref{strongTNC:ajaxendpoint} ist die Beispielimplementation eines Ajax Endpoints zu sehen. Um auch bei Ajax Anfragen eine Authentisierung zu erzwingen, wurde ein eigener Decorator \texttt{@ajax\_login\_required} erstellt. 
+
+\begin{listing}[H]
 \caption{Beispiel eines Ajax Endpunktes}
 \label{strongTNC:ajaxendpoint}
 \begin{pythoncode}
@@ -434,23 +430,22 @@ Dajaxice.apps.filesystem.directories_autocomplete(callback, {search_term: 'syste
 Damit bei der inkrementellen Suche nicht bei jedem Tastenanschlag ein Request
 abgesetzt wird, wurde ein Verzögerungsmechanismus implementiert, welcher erst einen Request
 absetzt, wenn für eine bestimmte Zeit keine Eingabe mehr gemacht wurde (angelehnt an Nagle's Algorithmus \cite{nagle1984congestion}).
-Durch die Minimierung der Anzahl HTTP Request, wird auch die Anzahl der teilweise komplexen und zeitintensiven Abfragen auf die Datenbank vermindert.
+Durch die Reduktion der Anzahl HTTP Requests, wird auch die Anzahl der teilweise komplexen und zeitintensiven Datenbankabfragen minimiert.
 
 \paragraph{Langlaufende Operationen / Fehlerbehandlung}\hspace{0pt}\\
 Asynchrone Aufrufe bringen zwei wesentliche Probleme mit sich. Zum einen kann es
-sein, dass Fehler auftreten, wie z.B Timeouts, die der Benutzer nicht bemerkt.
+sein, dass Fehler auftreten, die der Benutzer nicht bemerkt. So zum Beispiel Timeouts.
 Zum Anderen muss für den Benutzer ersichtlich sein, ob Datenübertragungen im
 Hintergrund anstehen und falls ja, wann diese erfolgreich abgeschlossen sind.
 Speziell für langlaufende Operationen durch datenbankintensive Abfragen oder
 grosse Datenmengen, können Antwortzeiten im Sekundenbereich entstehen. \\
 Zu diesem Zweck wurde eine Proxy Komponente \cite{gamma1994design}
 implementiert, welche anstelle des eigentlichen Dajax-ice Aufrufes eingesetzt
-wird. Komponenten, deren Inhalte per Ajax nachladen werden, werden vom Proxy mit
+wird. Komponenten, deren Inhalt per Ajax nachladen wird, werden mit
 einem Statusindikator besetzt. Zusätzlich wurde ein globaler Statusindikator
 eingeführt, der anzeigt, ob mindestens eine asynchrone Datenübertragung
 stattfindet.\\
-Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer mittels
-Alert Box über den Fehler informiert.
+Treten Fehler bei einer Ajax Datenübertragung auf, wird der Benutzer über den Fehler informiert.
 
 \subsubsection{Ajax Pagination} 
 Um grosse Datenmengen besser handhaben zu können, wurde die bestehende statische
