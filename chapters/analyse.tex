@@ -212,12 +212,6 @@ abdecken.
 \label{analyse:soll-situation}
 
 \subsection{Aufgabe}
-Das Ziel dieser Arbeit ist es, einen SWID Generator für Linux Systeme zu
-erstellen und die entsprechende SWID Tag Unterstützung für strongTNC zu
-implementieren, sowie bekannte Fehler in strongTNC zu beheben. Der Umfang der
-einzelnen Bestandteile soll Punkte der Aufgabenstellung vollständig erfüllen.
-
-
 Nebst den geforderten Pflichtteilen, der Implementation eines SWID Generators
 für Linux Systeme und der Integration der SWID Erweiterung in strongTNC,
 schlagen wir nachfolgende Anpassungen vor, die wir bei vorhandener Kapazität
@@ -252,14 +246,20 @@ resultierenden Nachteile eingehen.
 	
 	\item[Flexiblere Arbeit mit Django] Wenn die strongTNC Anwendung ihre Datenbank
 	nicht mit anderen Systemen teilen muss, können alle
-	Datenbank-Abstraktionsfeatures von Django voll ausgenutzt werden. Im Moment muss man sich aktiv um das Datenbankschema kümmern. Dies hätte zur Folge, dass
+	Datenbank-Abstraktionsfeatures von Django voll ausgenutzt werden. Im Moment
+	muss man sich aktiv um das Datenbankschema kümmern. Dies hätte zur Folge, dass
 	auch
 	\enquote{Migrations}\footnote{\url{https://docs.djangoproject.com/en/dev/topics/migrations/}} zu verwenden, welche es erlauben Änderungen an den Models automatisiert in die Datenbank einfliessen zu lassen.
 	
 \end{description} 
 
+Aus diesen Gründen möchten wir ein Konzept entwerfen, um die gemeinsame Nutzung
+einer SQLite Datenbank aufzuheben.
+
 \subsection{Codequaliät}
-Um die Entwicklung und mögliche Weiterentwicklung dieses Projektes einfacher zu gestalten, soll die Codequalität verbessert werden. Folgendes sind die Hauptansatzpunkte:
+Um die Entwicklung und mögliche Weiterentwicklung dieses Projektes einfacher zu
+gestalten, soll die Codequalität verbessert werden. Folgendes sind die
+Hauptansatzpunkte:
 \begin{description}
 	\item[Coderichtlinien] Die PEP8 Coderichtlinien sollen im Verlaufe dieses
 	Projektes und auch in Zukunft strikt eingehalten werden.
@@ -272,7 +272,7 @@ Um die Entwicklung und mögliche Weiterentwicklung dieses Projektes einfacher zu
 	soll die Testabdeckung erhöht werden.
 	
 	\item[Continuous Integration] Um stets über den Stand der Software Informiert
-	zu sein soll der Code mit Hilfe von Contiuous Integration regelmässig und bei
+	zu sein, soll der Code mit Hilfe von Continuous Integration regelmässig und bei
 	jeder Änderung gebuilded und getestet werden.
 	
 \end{description}
@@ -297,6 +297,7 @@ Bestandteil unserer Arbeit:
 	strongSwan haben, werden mit den verantwortlichen strongSwan Entwicklern
 	besprochen.
 \end{description}
+
 
 \section{ISO Standard 19770-2}
 \label{analyse:swidstandard} 
