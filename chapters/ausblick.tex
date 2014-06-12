@@ -22,13 +22,22 @@ auf dem Gerät das letzte Mal als installiert gemeldet wurde.
 	\item[REST API vollständig umsetzen] Die vollständige Trennung von strongTNC
 	und strongSwan sollte auf jeden Fall umgesetzt werden.
 	
-	\item[Wechsel von SQLite zu MySQL] Durch die Erweiterungen in dieser Arbeit
+	\item[Wechsel von SQLite zu MySQL] Durch die Anpassungen an strongTNC
 	wurde die Applikation darauf vorbereitet, mit grossen Datenmengen umgehen zu
 	können. Ein Aspekt der dies zur Zeit teilweise noch verhindert, ist die
 	Verwendung von SQLite. Daher empfehlen wir die nötigen Schritte vorzunehmen, um
 	MySQL als Datenbankbackend nutzen zu können. Es wurden teilweise Workarounds
-	implementiert, die lediglich der SQLite Kompatibilität dienen. Diese sollten zu
-	diesem Zeitpunkt entfernt werden.
+	implementiert, die lediglich der SQLite Kompatibilität dienen. Diese könnten
+	entfernt werden, sobald die Unterstützung von SQLite eingestellt wird.
+
+	\item[Upgrade auf Django 1.7] Da Django
+	1.7\footnote{\url{https://docs.djangoproject.com/en/dev/releases/1.7/}} erst
+	im Sommer 2014 veröffentlicht wird, konnten wir ein Upgrade auf diese
+	Version noch nicht durchführen. Django bringt mit der Version 1.7 viele neue
+	Features mit, unter anderem ein eigenes Datenbank-Migrations-Framework. Es
+	wäre sinnvoll, Django auf Version 1.7 zu aktualisieren, sobald die Trennung
+	der Datenbank umgesetzt wurde. Die Datenbank kann dann gleich mit dem
+	Migrations-Framework initialisiert und verwaltet werden.
 	
 	\item[Class Based Views] Die Verwendung von Class Based Views sollte
 	konsequenterweise für alle bestehenden Views eingesetzt werden. Bisher folgen
