@@ -5,12 +5,11 @@
 \subsubsection{Aufteilung in mehrere Django Apps}
 
 Bereits in der Analyse (Abschnitt \ref{analyse:stand}) fiel auf, dass
-die bestehende Codebasis von strongTNC als einzelne Django App namens
-\texttt{tncapp} umgesetzt wurde. Innerhalb der App waren alle Models in einer
+das bestehende strongTNC Projekt aus einer einzigen Django App besteht. 
+Innerhalb der App waren alle Models in einer
 einzigen Datei enthalten (\texttt{models.py}), während die Views in mehrere
 thematisch gruppierte Dateien aufgeteilt wurden (\texttt{device\_views.py},
-\texttt{product\_views.py}, etc).
-
+\texttt{product\_views.py}, etc).\\
 Diese Aufteilung der Views deutet darauf hin, dass die \texttt{tncapp} App für
 mehrere thematisch unterschiedliche Bereiche zuständig ist, welche in der
 Codebasis separiert werden könnten und sollten. Die Aufteilung in mehrere
@@ -19,35 +18,32 @@ erreichen. Stattdessen bietet Django für solche Fälle das Konzept einer App an
 
 Eine App ist ein Verzeichnis innerhalb eines Django Projektes, welches seine eigenen
 Models, Views und Templates enthält. Die Apps werden in der
-Projektweiten \texttt{setting.py} registriert. Ein einzelnes Projekt lässt sich
+Projektweiten \texttt{settings.py} registriert. Ein einzelnes Projekt lässt sich
 so in mehrere kleine MVC Container aufteilen.
 
-Die Voraussetzung dafür, dass eine Aufteilung einer Codebasis in mehrere Apps
-Sinn ergibt, ist eine hohe Kohäsion der Codebasis innerhalb einer App. Das führt
-dazu, dass eine App \enquote{pluggable} wird und einfach aktiviert- und
-deaktiviert werden kann. Die Separierung von hochkohäsivem Code in mehrere Apps
-führt automatisch zu tiefer Kopplung (\cite[S.~232--237]{larman2002applying})
-und dadurch zu wartbarerem Code.
+Zusammenhängende Codeteile sollen wenn möglich in separate Apps unterteilt werden.
+Dadurch werden die Apps \enquote{pluggable} und können aktiviert- und
+deaktiviert werden kann. Die Separierung von Code in mehrere Apps
+führt zu tiefer Kopplung\cite[S.~232--237]{larman2002applying}
+und dadurch zu bessert wartbaren Code.
 
 Aus den oben genannten Gründen haben wir die bestehende monolithische App in
-folgende zehn moderat bis hoch kohäsive Apps aufgeteilt:
+folgende zehn moderat bis hoch kohäsiven Apps aufgeteilt:
 
 \begin{itemize}
-	\item \texttt{core}: Enthält zentrale Elemente die von fast allen Apps
+	\item \texttt{core}: Enthält Elemente, die von fast allen Apps
 	verwendet werden, wie beispielsweise das \texttt{Session} Model oder die
 	\texttt{WorkItemType} Klasse.
 		
-	\item \texttt{front}: Enthält alle Elemente zum darstellen der Seiten, welche
+	\item \texttt{front}: Enthält alle Elemente zur Darstellung der Seiten, welche
 	nicht App-spezifisch sind. Beispiele hierfür sind das Base-Template, der
 	\texttt{highlight} Template Filter oder der \texttt{pagination} Ajax Endpoint.
 	
-	\item \texttt{auth}: Enthält Hilfsfunktionen, Mixins und Template Tags aus dem
-	Bereich der Authentisierung und Berechtigungsprüfung.
+	\item \texttt{auth}: Enthält Hilfsfunktionen, Mixins und Template Tags für die Authentisierung und Berechtigungsprüfung.
 	
-	\item \texttt{api}: Enthält Hilfsfunktionen und Mixins mit Bezug zur API.
+	\item \texttt{api}: Enthält Hilfsfunktionen und Mixins der API.
 	
-	\item \texttt{devices}: Enthält Models und Code mit Bezug zu Geräten, wie
-	\texttt{Product}, \texttt{Device} und \texttt{Group}.
+	\item \texttt{devices}: Enthält Models wie \texttt{Product}, \texttt{Device} und \texttt{Group} sowie dazugehörige Views.
 		
 	\item \texttt{filesystem}: Enthält Models und Code mit Bezug auf das
 	Dateisystem (\texttt{File}, \texttt{Directory}, etc).
@@ -58,7 +54,7 @@ folgende zehn moderat bis hoch kohäsive Apps aufgeteilt:
 	\item \texttt{policies}: Enthält Models und Code mit Bezug zu Policies und
 	deren Durchsetzung mit Hilfe von Enforcements.
 		
-	\item \texttt{swid}: Enthält Models und Code betreffend die SWID Integration
+	\item \texttt{swid}: Enthält die Implementation der SWID Integration
 	in strongTNC.
 		
 	\item \texttt{tpm}: Enthält Models für die TPM Integration in strongTNC. Diese
@@ -68,10 +64,10 @@ folgende zehn moderat bis hoch kohäsive Apps aufgeteilt:
 \subsubsection{Verbesserung der Testing-Infrastruktur}
 \label{improvements:tests}
 
-Unit- und Integration-Tests sind zentral für die agile Entwicklung und
-längerfristige Wartbarkeit eines Softwareprojektes. Wir haben deshalb viel Zeit
-und Aufwand in die Konfiguration unserer Testing-Umgebung investiert, um diese
-besser und flexibler zu machen.
+Unit- und Integration-Tests sind zentral für die agile Entwicklung und für die
+Sicherstellung der Wartbarkeit eines Softwareprojektes. Es wurde Zeit und
+Aufwand in die Konfiguration der Testing-Umgebung investiert, um diese besser
+und flexibler zu machen.
 
 Die ursprüngliche Codebasis verwendete das
 \texttt{unittest}\footnote{\url{https://docs.python.org/2/library/unittest.html}}
@@ -84,7 +80,7 @@ Methodenaufrufe wie \texttt{assertEqual} oder \texttt{assertLessThan} verwendet
 werden. Nachfolgend ein Minimalbeispiel:
 
 \begin{listing}
-\caption{UnitTest Minimalbeispiel}
+\caption{Unittest Minimalbeispiel}
 \label{improvements:unittest-beispiel}
 \begin{pythoncode}
 import unittest
@@ -96,9 +92,9 @@ class TestTheAnswer(unittest.TestCase):
 \end{listing}
 
 In Python gibt es jedoch bereits ein \texttt{assert} Keyword, welches beliebige
-Assertions testen kann. Zudem ist es in Python-Code üblich auf Klassen zu
-verzichten, wenn sie keinen Mehrwert bringen. Im Fall der Tests ist es oft
-sinnvoller, diese direkt als top-level Funktionen zu definieren und in mehrere
+Assertions testen kann. Zudem ist es in Python üblich auf Klassen zu
+verzichten, wenn sie keinen Mehrwert bieten. Im Fall von Tests ist es oft
+sinnvoll , diese direkt als top-level Funktionen zu definieren und in mehrere
 Module zu organisieren.
 
 Um die Situation zu verbessern wurde die Test-Infrastruktur von
@@ -181,39 +177,38 @@ def test_add(a, b):
 \end{pythoncode}
 \end{listing}
 
-In diesem Beispiel werden vier unabhängige Tests generiert. Drei davon laufen
-erfolgreich durch, während der Vierte einen Fehler meldet, da die Bedingung
+In diesem Beispiel werden vier unabhängige Tests generiert. Drei davon sind
+erfolgreich, während der Vierte einen Fehler meldet, da die Bedingung
 \texttt{42 + 1 == 42} nicht erfüllt ist.
 
 Um das Testen mit Django zu vereinfachen, wurde das \texttt{pytest-django}
-Plugin verwendet und ein \texttt{runtests.py} Script geschrieben, dieses setzt
-die Pfad-Variablen korrekt, führt alle Tests aus und zeigt anschliessend die
-Test Coverage an. pytest-django liefert bereits mehrere häufig genutzte Fixtures
-mit, wie \zb \texttt{client} um auf einen Django Test Client zugreifen zu können
-oder \texttt{transactional\_db}, um transaktionellen Zugriff auf die Datenbank
-zu erhalten.
+Plugin verwendet. Es wurde ein \texttt{runtests.py} Script geschrieben, welches
+die die Pfad-Variablen korrekt setzt, alle Tests ausführt und anschliessend die
+Test Coverage anzeigt. \texttt{pytest-django} liefert Fixtures, wie \zb
+\texttt{client} um auf einen Django Test Client zugreifen zu können oder
+\texttt{transactional\_db}, um transaktionellen Zugriff auf die Datenbank zu
+erhalten.
 
 \subsubsection{Continuous Integration}
 
 Eine Sicherstellung und langfristige Verbesserung der Softwarequalität ist nicht
 möglich, wenn diese nicht regelmässig überprüft wird. Um dieses Ziel zu
 erreichen, wurde in verschiedenen Bereichen auf \enquote{Continuous
-Integration} (CI) gesetzt. Die Qualität wird in drei Bereichen geprüft: Tests,
-Testabdeckung und Qualitäts-Score.
+Integration} (CI) gesetzt: Tests, Testabdeckung und statische Analyse.
 
 \paragraph{Ausführung der Tests} \hspace{0pt} \\
 \label{improvements:travis}
-Die Test Suite (Abschnitt \ref{improvements:tests}) automatisiert
-auszuführen, haben wir Travis CI\footnote{\url{https://travis-ci.org/}}
-verwendet. Travis ist eine CI-Platform mit Python-Unterstützung, die für Open
-Source Projekte kostenfrei verwendet werden darf. Mit wenigen Zeilen in einer
+Um die Test Suite (Abschnitt \ref{improvements:tests}) automatisiert
+auszuführen, wurde Travis CI\footnote{\url{https://travis-ci.org/}}
+verwendet. Travis ist eine CI-Plattform mit Python-Unterstützung, die für Open
+Source Projekte kostenfrei ist. Mit wenigen Zeilen in einer
 Datei namens \texttt{.travis.yml} kann die Test-Ausführung konfiguriert werden.
-In einem Fehlerfall wird dies auf Github angezeigt und der Autor des
-entsprechenden Commits wird per E-Mail benachrichtigt.
+Ein Fehlerfall wird auf Github angezeigt und der Autor des
+entsprechenden Commits per E-Mail benachrichtigt.
 
 \paragraph{Überwachen der Testabdeckung} \hspace{0pt} \\
 Neben dem Testerfolg ist die Testabdeckung ebenfalls eine wichtige Kennzahl. Um
-diese laufend zu überwachen haben wir
+diese laufend zu überwachen wurde
 Coveralls\footnote{\url{https://coveralls.io/}} verwendet. Coveralls bietet eine
 Integration mit Travis CI und zeigt die Entwicklung der Testabdeckung an. Dank
 einer Integration mit Github wird auch für jeden Pull Request die Veränderung
@@ -225,12 +220,12 @@ gesamten Projektdauer kontinuierlich an:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{images/coveralls}
-	\caption{Coveralls: Entwicklung der Testabdeckung}
+	\caption{Entwicklung der Testabdeckung}
 	\label{improvements:coveralls}
 \end{figure}
 
 \paragraph{Messen der Codequalität} \hspace{0pt} \\
-Neben den Testing-Werkzeugen sind auch statische Codeanalyse-Tools hilfreich zur
+Neben Testing-Werkzeugen sind auch statische Codeanalyse-Tools hilfreich zur
 Verbesserung der Codequalität. Sie erkennen häufige Schwachstellen im Code, wie
 beispielsweise ungenutzte Variablen oder unerreichbaren Code.
 
@@ -238,7 +233,7 @@ Während der Entwicklung wurde bereits auf Tools wie
 Pyflakes\footnote{\url{https://pypi.python.org/pypi/pyflakes}} und
 Pylint\footnote{\url{http://www.pylint.org/}} gesetzt. Zusätzlich wurde das noch
 junge Projekt Landscape\footnote{\url{https://landscape.io/}} eingebunden,
-dieses überprüft den Code indem verschiedene Tools automatisch für jeden Commit
+dieses überprüft den Code indem verschiedene Checks automatisch nach jedem Commit
 ausgeführt werden. Den Report kann man über den Webbrowser betrachten und
 analysieren.
 
@@ -250,13 +245,13 @@ analysieren.
 \end{figure}
 
 Auf Landscape liegt das Projekt aktuell bei einem Quality Score von 90\%.
-Wichtig ist dabei jedoch, dass Landscape einige False Positives liefert. Das
-liegt daran dass das Projekt noch jung ist und gewisse Spezialfälle -- welche in
+Zu bemerken ist, dass Landscape einige False Positives liefert. Das
+liegt daran, dass das Projekt noch jung ist und gewisse Spezialfälle -- welche in
 einer dynamischen Sprache wie Python häufig vorkommen können -- nicht erkennt.
 Zudem sind gewisse Kennzahlen, wie die maximale Zeilenlänge, noch nicht
-konfigurierbar und werden deshalb als Fehler angezeigt, obwohl in unserem Coding
+konfigurierbar und werden deshalb als Fehler angezeigt, obwohl im Coding
 Styleguide (Abschnitt \ref{anhang:coding-styleguide}) andere Regeln vereinbart
-wurden. Damit sich diese Situation in Zukunft verbessert, haben wir Feature
+wurden. Damit sich diese Situation in Zukunft verbessert, wurden Feature
 Requests für die entsprechenden Anpassungen
 gestellt\footnote{\url{http://git.io/BqNWMw}, \url{http://git.io/O8MaNA}}.
 
