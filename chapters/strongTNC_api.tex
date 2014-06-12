@@ -35,6 +35,8 @@ Für alle Elemente der strongTNC Domäne wurden REST Ressourcen von den Archetyp
 dabei um vollständige CRUD Ressourcen, wie beispielsweise bei der
 \texttt{Version} Ressource sichtbar ist:
 
+\begin{listing}
+\caption{REST Document für Versions}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/versions/\{id\}/}
@@ -55,7 +57,10 @@ dabei um vollständige CRUD Ressourcen, wie beispielsweise bei der
 \end{jsoncode}
 \end{description*}
 \end{mdframed}
+\end{listing}
 
+\begin{listing}
+\caption{REST Collection für Versions}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/versions/}
@@ -69,6 +74,7 @@ dabei um vollständige CRUD Ressourcen, wie beispielsweise bei der
 	\item[Response] List of Version documents
 \end{description*}
 \end{mdframed}
+\end{listing}
 
 Die angebotenen Operationen, beziehungsweise HTTP Methoden, wurden immer so weit
 wie möglich eingeschränkt, so gibt es diverse Ressourcen die kein
@@ -81,6 +87,8 @@ Rechnung zu tragen, wurden verschiedene virtuelle Ressourcen geschaffen.
 Beispielsweise lassen sich die \texttt{sessions} eines Gerätes direkt auf der
 \texttt{devices} Ressource abfragen:
 
+\begin{listing}
+\caption{Readonly Collection für Devices}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/device/\{id\}/sessions/}
@@ -94,6 +102,7 @@ Beispielsweise lassen sich die \texttt{sessions} eines Gerätes direkt auf der
 	\item[Response] List of Session documetns
 \end{description*}
 \end{mdframed}
+\end{listing}
 
 \section{Controller}
 Komplexere Abläufe, welche bei der gegenwärtigen Schnittstelle direkt mit
@@ -115,6 +124,8 @@ Informationen dazu sind in der Vorgängerarbeit
 Folgendes ist der Aufbau der Endpunkte für den Sessionstart und das Beenden der
 Session:
 
+\begin{listing}
+\caption{Controller zum starten einer Session}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/sessions/start/}
@@ -152,6 +163,8 @@ Session:
 \end{jsoncode}
 \end{description*}
 \end{mdframed}
+\end{listing}
+
 Dieser Controller erstellt und startet eine Session, das Device, welches der
 Session zugeordnet werden soll wird anhand der \texttt{hardwareId} und dem
 \texttt{productName} bestimmt. Falls eines der Objekte noch nicht existiert, wird
@@ -175,6 +188,8 @@ erstellt, darum dürfen diese nicht manuell verändert werden.
 Die Messresultate müssen für jedes Workitem erfasst werden, dafür steht eine
 virtuelle Ressource zur Verfügung:
 
+\begin{listing}
+\caption{Result Document auf der Workitem Resource}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/sessions/\{id\}/workitems/\{id\}/result/}
@@ -199,6 +214,7 @@ virtuelle Ressource zur Verfügung:
 \end{jsoncode}
 \end{description*}
 \end{mdframed}
+\end{listing}
 
 Da eine Session nach dem Abschluss nicht mehr verändert werden soll, sind die
 Workitems flüchtig. Wenn die dazugehörige Session beendet wird, werden die
@@ -207,6 +223,8 @@ Auf diese Weise können die Messresultate einer Session dauerhaft nachvollzogen
 werden. Über den Verweis auf das Enforcement kann die Messung auch dem
 ursprünglichen Zweck zugeordnet werden:
 
+\begin{listing}
+\caption{Readonly Document für Results}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/sessions/\{id\}/results/\{id\}/}
@@ -224,7 +242,10 @@ ursprünglichen Zweck zugeordnet werden:
 \end{jsoncode}
 \end{description*}
 \end{mdframed}
+\end{listing}
 
+\begin{listing}
+\caption{Readonly Collection für Results}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/sessions/\{id\}/results/}
@@ -233,12 +254,15 @@ ursprünglichen Zweck zugeordnet werden:
 	\item[Response] List of Result documents
 \end{description*}
 \end{mdframed}
+\end{listing}
 
 Über folgenden Endpunkt kann eine Session abgeschlossen werden. Im Normalfall
 wird dies gemacht, wenn alle Workitems abgearbeitet sind, dies ist allerdings
 keine Voraussetzung, eine Session kann jederzeit abgeschlossen werden. Beim
 Abschliessen wird die Recommendation mitgegeben.
 
+\begin{listing}
+\caption{Controller zum beenden einer Session}
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/sessions/\{id\}/end/}
@@ -251,6 +275,7 @@ Abschliessen wird die Recommendation mitgegeben.
 	\end{description*}
 \end{description*}
 \end{mdframed}
+\end{listing}
 
 Wenn eine Session abgeschlossen wird, werden alle Workitems dieser Session
 abgeräumt und die jeweiligen Resultate auf die Session übertragen.
