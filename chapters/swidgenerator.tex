@@ -718,6 +718,22 @@ $ swid_generator swid --package cowsay --pretty
 \end{listing}
 
 
+\subsection{Prüfen der Rückgabewerte}
+
+Nach einem Aufruf des SWID Generators sollte immer der Exit Code geprüft
+werden. In einem Bash-Terminal kann der Rückgabewert mit \texttt{echo \$?}
+angezeigt werden.
+
+Folgende Rückgabewerte sind möglich:
+
+\begin{description}
+	\item[0] Ausführung war erfolgreich.
+	\item[1] Ein Targeted Request hat keine Resultate ergeben.
+	\item[2] Kommandozeilen-Argumente sind ungültig.
+	\item[3] Der System-Paketmanager konnte nicht erkannt oder gefunden werden.
+\end{description}
+
+
 \subsection{Performance}
 
 Durch die in den Abschnitten \ref{swidgenerator:architektur:generatoren} und
