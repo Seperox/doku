@@ -9,47 +9,12 @@ für diese Arbeit.
 
 Im Bereich des SWID Generators gibt es zur Zeit noch keine bestehenden Produkte.
 
-\subsection{Stand der strongTNC Webapplikation} 
-\label{analyse:stand}
-
-strongTNC ist eine Implementierung eines TNC Policy Managers. Umgesetzt wurde
-dieser als Webapp mit dem Python basierten \textit{Django Web Framework} in
-Version 1.5\footnote{\url{https://www.djangoproject.com/}}. Die Applikation
-bietet Unterstützung für das Verwalten von Geräten, Policies und Enforcements
-und erlaubt es, die Ausführung der Enforcements mittels hierarchischer Gruppen
-zu steuern. Stammdaten wie Dateien oder Softwarepakete können eingesehen und
-teilweise bearbeitet werden. Auch Messresultate werden passend aufbereitet.
-
-Für SWID Tags besteht derzeit keine Unterstützung. Es wurden zwar bereits Views
-für SWID Tags und Regids erstellt, diese haben jedoch ausser der Auflistung der
-Datenbankinhalte keine weitere Funktionalität und dienen lediglich als Vorschau
-für zukünftige Features.
-
-Im Frontend der Webapplikation wurden Bootstrap
-2.3\footnote{\url{http://getbootstrap.com/2.3.2/}} sowie jQuery
-1.9\footnote{\url{http://jquery.com/1.9}} eingesetzt. Grundsätzlich werden die
-Views als \enquote{Master-Detail Ansichten} dargestellt. Als Schnittstelle zur
-strongSwan IPsec Infrastruktur dient eine gemeinsam genutzte
-SQLite\footnote{\url{http://www.sqlite.org/}} Datenbank.
-
-Der Code ist in einer einzelnen Django-App namens \texttt{tncapp} organisiert,
-es gibt keine thematische Aufteilung in mehrere Apps.
-
-Das Schema der Datenbank ist unabhängig von den Models, die Models bilden
-lediglich das aktuelle Schema ab. Um die Datenbank zu initialisieren wird ein
-separat bereitgestelltes SQL Schema verwendet, anstatt die Datenbank aus den
-Models zu generieren.
-
-Laut dem technischen Bericht der Vorgängerarbeit
-\enquote{Cygnet}\cite{cygnet:2013} sollen die Richtlinien des \enquote{Style
-Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
-existieren elf Unit-Tests, welche den bestehenden Python Code zu 21\% abdecken.
-
-\subsection{Elemente der strongTNC App} Im Folgenden werden die zentralen
-Elemente der strongTNC Umgebung beschrieben. Die verwendeten Namen entsprechen
-der Benennung der bestehenden Django-Models. Diese Liste soll dem kurzen Überblick dienen,
-eine ausführliche Beschreibung ist in der Dokumentation
+\subsection{Elemente der strongTNC App}
+Im Folgenden werden die zentralen Elemente der strongTNC Umgebung beschrieben.
+Die Namen entsprechen jenen der bestehenden Django-Models. Diese Liste soll dem
+kurzen Überblick dienen, eine ausführliche Beschreibung ist in der Dokumentation
 \enquote{Cygnet}\cite{cygnet:2013} zu finden.
+
 \begin{description}
 	\item[Policy] Eine Policy beschreibt eine zu überprüfende Richtlinie. Durch einen Policytyp wird
 	festgelegt, was überprüft werden soll (z.B erlaubte offene Ports, installierte Software).
@@ -142,6 +107,43 @@ Den Ablauf einer Messung kann man dem folgenden Sequenzdiagramm,
 	\caption{Sequenzdiagramm, strongSwan TNC Messung}
 	\label{masurement-diagramm}
 \end{figure}
+
+
+\subsection{Stand der strongTNC Webapplikation} 
+\label{analyse:stand}
+
+strongTNC ist eine Implementierung eines TNC Policy Managers. Umgesetzt wurde
+dieser als Webapp mit dem Python basierten \textit{Django Web Framework} in
+Version 1.5\footnote{\url{https://www.djangoproject.com/}}. Die Applikation
+bietet Unterstützung für das Verwalten von Geräten, Policies und Enforcements
+und erlaubt die Ausführung von Enforcements mittels hierarchischer Gruppen
+zu steuern. Stammdaten wie Dateien oder Softwarepakete können eingesehen und
+teilweise bearbeitet werden. Auch Messresultate werden passend aufbereitet.
+
+Für SWID Tags besteht derzeit keine Unterstützung. Es wurden zwar bereits Views
+für SWID Tags und Regids erstellt, diese haben jedoch ausser der Auflistung der
+Datenbankinhalte keine weitere Funktionalität und dienen bisher als Vorschau
+für zukünftige Features.
+
+Im Frontend der Webapplikation wurden Bootstrap
+2.3\footnote{\url{http://getbootstrap.com/2.3.2/}} sowie jQuery
+1.9\footnote{\url{http://jquery.com/1.9}} eingesetzt. Grundsätzlich werden die
+Views als \enquote{Master-Detail Ansichten} dargestellt. Als Schnittstelle zur
+strongSwan TNC Server Infrastruktur dient eine gemeinsam genutzte
+SQLite\footnote{\url{http://www.sqlite.org/}} Datenbank.
+
+Der Code ist in einer einzelnen Django-App organisiert, es gibt keine
+thematische Aufteilung in mehrere Apps.
+
+Das Schema der Datenbank ist unabhängig von den Models, diese bilden das
+aktuelle Schema ab. Um die Datenbank zu initialisieren wird ein separat
+bereitgestelltes SQL Schema verwendet.
+
+Laut dem Technischen Bericht der Vorgängerarbeit
+\enquote{Cygnet}\cite{cygnet:2013} sollen die Richtlinien des \enquote{Style
+Guide for Python Code}\cite{PEP8:2001}, genannt PEP8, eingehalten werden. Es
+existieren elf Unit-Tests, welche den bestehenden Python Code zu 21\% abdecken.
+
 
 \subsubsection{Einschätzung der Ist-Situation}
 \label{analyse:einschaezung}

@@ -13,28 +13,29 @@ entwickelt, welche SWID Tags gemäss dem aktuellen ISO 19770-2 Draft aus den
 installierten Softwarepaketen generiert. Implementiert wurde die Unterstützung
 für drei weit verbreitete Paketmanager. Die Architektur des Generators ist
 modular aufgebaut, so dass die Unterstützung für weitere Umgebungen einfach
-hinzugefügt werden kann.
+hinzugefügt werden kann. Die generierten SWID Tags werden einem sogenannten TNC
+Policy Manager übermittelt.
 
-Die so generierten SWID Tags werden einem zentralen Server übermittelt. Die
-Trusted Computing Group\footnote{\url{http://www.trustedcomputinggroup.org/}}
-hat ein offenes Framework für das aktive Monitoring von Endgeräten mit dem Namen
-Trusted Network Connect (TNC) entwickelt. In einer Vorgängerarbeit wurde bereits
-eine erste Version eines TNC Policy Managers implementiert, welcher nun für die
-Verwaltung der SWID Tags erweitert wurde.
+Die Trusted Computing
+Group\footnote{\url{http://www.trustedcomputinggroup.org/}} hat ein offenes
+Framework für das aktive Monitoring von Endgeräten mit dem Namen
+\enquote{Trusted Network Connect} (TNC) entwickelt. In einer Vorgängerarbeit
+wurde bereits eine erste Version eines TNC Policy Managers implementiert,
+welcher nun für die Verwaltung der SWID Tags erweitert wurde.
 
 Über frei definierbare Policies können Clients mit bestimmten Softwarepaketen
-oder -versionen automatisch aus dem Netzwerk ausgeschlossen oder zu Software
-Updates gezwungen werden. Dadurch wird ein umfassendes Software Asset Management
-ermöglicht, welches sich in bestehende Geschäftsprozesse integrieren lässt.
+automatisch aus dem Netzwerk ausgeschlossen oder zu Software Updates gezwungen
+werden. Dadurch wird ein umfassendes Software Asset Management ermöglicht,
+welches sich in bestehende Geschäftsprozesse integrieren lässt.
 
 Der strongTNC Policy Manager war bislang über eine gemeinsame Datenbank eng mit
-der strongSwan IPsec Implementierung gekoppelt. Diese Kopplung wirkte sich
-negativ auf die Wartbarkeit und die Interoperabilität mit Drittsystemen aus. Aus
-diesem Grund wurde im Rahmen dieser Arbeit ein Konzept erarbeitet, welches eine
-serviceorientierte Architektur vorsieht und so den Grad der Kopplung minimiert.
+dem strongSwan TNC Server gekoppelt. Diese Kopplung wirkt sich negativ auf die
+Wartbarkeit und die Interoperabilität mit Drittsystemen aus. Aus diesem Grund
+wurde im Rahmen dieser Arbeit ein Konzept erarbeitet, welches eine
+serviceorientierte Architektur vorsieht und so eine Trennung ermöglicht.
 Bestandteil des Konzeptes ist die Definition einer REST Schnittstelle, sowie ein
-Proof of Concept, welcher diese Schnittstelle gemäss dem erarbeiteten Konzept
-für die Verwaltung der SWID Tags bereits erfolgreich implementiert. Da das TNC
-Framework bisher keine einheitlichen Schnittstellen für die Kommunikation
-zwischen dem Policy Manager und Umsystemen vorsieht, wird das erarbeitete
-Konzept der Trusted Computing Group als Vorschlag unterbreitet.
+Proof of Concept, welcher diese Schnittstelle für die Verwaltung der SWID Tags
+bereits erfolgreich implementiert. Da das TNC Framework bisher keine
+einheitlichen Schnittstellen für die Kommunikation zwischen dem Policy Manager
+und Umsystemen beinhaltet, wird das erarbeitete Konzept der Trusted Computing
+Group als Vorschlag unterbreitet.
