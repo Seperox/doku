@@ -7,13 +7,14 @@ Entwurfsdokument vor, durch eine kontinuierliche Überwachung der installierten
 Software auf Client-Systemen (Desktop PCs, Laptops, Tablets, Smartphones) die
 Gefahr von Cyberattacken zu minimieren. Das Software Asset Management soll über
 Software Identification (SWID) Tags erfolgen, welche durch die ISO/IEC
-19770-2\cite{iso19770-2} Norm international standardisiert sind. Die Trusted
-Computing Group hat ein offenes Framework für das aktive Monitoring von
-Endgeräten mit dem Namen Trusted Network Connect (TNC) entwickelt. In einer
+19770-2\cite{iso19770-2} Norm international standardisiert sind.
+
+Die Trusted Computing Group hat ein offenes Framework für das aktive Monitoring
+von Endgeräten mit dem Namen Trusted Network Connect (TNC) entwickelt. In einer
 Vorgängerarbeit wurde bereits eine erste Version eines TNC Policy Managers
-implementiert, welcher nun für das Software Asset Managements mittels
-sogenannter Software Identification (SWID) Tags, welche durch die ISO/IEC
-19770-2 Norm international standardisiert sind, erweitert werden soll.
+implementiert, welcher nun für das Software Asset Managements mittels SWID Tags
+erweitert werden soll.
+
 Zusätzlich soll ein Client für Debian und Ubuntu basierte Systeme erstellt
 werden, welcher SWID Tags aus den Informationen des Paketmanagers generiert.
 
@@ -24,19 +25,23 @@ geachtet, dass keine Abhängigkeiten zu externen Bibliotheken bestehen. Dadurch
 kann sichergestellt werden, dass der Client problemlos zusammen mit dem
 strongSwan VPN Client verteilt werden kann. Die Analyse des bestehenden
 strongTNC Policy Managers hat gezeigt, dass eine enge Kopplung mit dem
-strongSwan TNC Server besteht. Zudem ist aufgefallen, dass der bereits bestehende Code
-teilweise Qualitätsmängel aufweist. Diese beiden Punkte wurden neben der
+strongSwan TNC Server besteht. Zudem ist aufgefallen, dass der bereits
+bestehende Code Qualitätsmängel aufweist. Diese beiden Punkte wurden neben der
 Integration der SWID Tag Verwaltung zum zentralen Bestandteil dieser Arbeit.
 
 \nobrsection{Ergebnis}
+
 Die Architektur des SWID Generators wurde modular ausgelegt, so dass die
 Unterstützung für weitere Paketmanager einfach hinzugefügt werden kann. Zum
 jetzigen Zeitpunkt werden die drei weitverbreitetsten Paketmanager (DPKG,
 RPM, Pacman) unterstützt. Um das Deployment zu erleichtern, wurde der Generator
-in den Python Package Index aufgenommen. Für die Entkopplung des strongTNC
-Policy Managers gegenüber den Umsystemen wurde ein API Konzept ausgearbeitet,
-welches eine serviceorientierte Architektur vorsieht und bereits erfolgreich für
-die neu integrierten Komponenten umgesetzt wurde. Das Konzept soll nun als
-Vorschlag zur Umsetzung einer TNC Schnittstelle der TCG unterbreitet werden.\\
+in den Python Package Index aufgenommen.
+
+Für die Entkopplung des strongTNC Policy Managers gegenüber den Umsystemen wurde
+ein API Konzept ausgearbeitet, welches eine serviceorientierte Architektur
+vorsieht und bereits erfolgreich für die neu integrierten Komponenten umgesetzt
+wurde. Das Konzept soll nun als Vorschlag zur Umsetzung einer TNC Schnittstelle
+der TCG unterbreitet werden.
+
 Mittels Continuous Integration, Refactoring und zusätzlichen Integrations- und
-Unittests konnte die Codequalität messbar verbessert werden.
+Unittests konnte die Codequalität von strongTNC messbar verbessert werden.
