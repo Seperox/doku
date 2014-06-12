@@ -85,8 +85,7 @@ In \autoref{fig:swid-measurement} ist der Ablauf der SWID Tag Messung
 Dieses Vorgehen erzwingt eine Aktualisierung der strongTNC Datenbank falls diese
 nicht alle SWID Tags enthält, bevor eine Messung erfolgreich abgeschlossen
 werden kann. Dadurch wird erreicht, dass auf Serverseite kein Zustand gewahrt
-werden muss, wie es für eine nicht abgeschlossene Messung, welche später
-abgeschlossen wird, der Fall wäre. Dieses Vorgehen entspricht den Prinzipien von
+werden muss. Dieses Vorgehen entspricht den Prinzipien von
 HTTP, eine Messung kann jederzeit durchgeführt werden, ohne dass ein Zustand
 oder Kontextinformationen vorhanden sein müssen. Das heisst, wenn eine Messung
 nicht vollständig und korrekt durchgeführt werden kann, werden keine Daten
@@ -94,8 +93,8 @@ verändert.
 
 \subsection{Technische Umsetzung}
 Der Zugriff auf die beschriebene Systemoperation erfolgt durch die, in dieser
-Arbeit ausgearbeiteten, RESTful HTTP Schnittstelle. Das komplette Konzept ist in
-Anhang (\autoref{REST:api-konzept}) zu finden.
+Arbeit ausgearbeiteten, REST Schnittstelle. Das komplette Konzept ist in
+Anhang (\autoref{apikonzept}) zu finden.
 
 \subsubsection{REST Kommunikation}
 Im Folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels
@@ -108,11 +107,12 @@ regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20
 regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3
 \end{textcode}
 
-Der HTTP Endpunkt wurde wie folgt definiert:
+Der HTTP Endpunkt ist wie folgt definiert:
 
+\begin{listing}
 \begin{mdframed}[style=def]
 \begin{description*}
-	\item[URI Path] \texttt{/sessions/\{id\}/register-swid-measurement/}
+	\item[URI Path] \texttt{/sessions/\{id\}/swid-measurement/}
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Content-Type] \texttt{application/json; charset=utf-8}
@@ -142,17 +142,19 @@ Der HTTP Endpunkt wurde wie folgt definiert:
 \end{jsoncode}
 \end{description*}
 \end{mdframed}
+\caption{SWID Measurement Endpunkt}
+\end{listing}
 
 \paragraph{Übermitteln von Software-IDs} \hspace{0pt} \\
 Die Daten werden als JSON-Liste an den entsprechenden Endpunkt gesendet.
 Der HTTP Request sieht folgendermassen aus:
 
 \begin{listing}
-\caption{Übermitteln von Software-IDs via REST API}
+\caption{HTTP Request einer SWID Messung}
 \begin{httpcode}
 POST /api/sessions/2/swid-measurement/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
-Host: tncserver:8000
+Host: strongtnc
 Accept: application/json
 Content-Type: application/json; charset=utf-8
 Content-Length: 232
@@ -170,14 +172,16 @@ Content-Length: 232
 
 Der entsprechende cURL\footnote{\url{http://curl.haxx.se/}} Befehl:
 
+\begin{listing}
 \begin{bashcode}
 curl -i -X POST https://strongtnc/api/sessions/2/swid-measurement/ \
 		 -u username:password \
 		 -H "Accept: application/json" \
 		 -H "Content-Type: application/json; charset=utf-8" \
-		 -d "$DATA"
+		 -d "{ \"data\" : $DATA }"
 \end{bashcode}
-
+\caption{cURL Beispiel für SWID Measurement}
+\end{listing}
 
 \paragraph{Antwort - Status 412 Precondition Failed} \hspace{0pt} \\
 Sind noch nicht alle Tags in der strongTNC Datenbank vorhanden, werden die
@@ -186,7 +190,7 @@ Software-IDs der fehlenden Tags zurückgeliefert. Der HTTP Status Code ist
 mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt aussehen:
 
 \begin{listing}
-\caption{HTTP Response mit Status Code 412 PRECONDITION FAILED}
+\caption{HTTP Response mit Status Code \texttt{412 PRECONDITION FAILED}}
 \begin{httpcode}
 HTTP/1.0 412 PRECONDITION FAILED
 Date: Wed, 14 May 2014 15:21:45 GMT
@@ -200,12 +204,11 @@ Allow: POST, OPTIONS
 \end{listing}
 
 \paragraph{Antwort - Status 200 OK} \hspace{0pt} \\
-
 Sind für alle Software-IDs bereits Tags in der Datenbank vorhanden, würde die
 Antwort wie folgt aussehen:
 
 \begin{listing}
-\caption{HTTP Response mit Status Code 200 OK}
+\caption{HTTP Response mit Status Code \texttt{200 OK}}
 \begin{httpcode}
 HTTP/1.0 200 OK
 Date: Wed, 14 May 2014 15:21:45 GMT
@@ -216,6 +219,7 @@ Allow: POST, OPTIONS
 
 []
 \end{httpcode}
+\caption{HTTP Response einer erfolgreichen SWID Messung}
 \end{listing}
 
 \paragraph{Nacherfassen von SWID Tags}\hspace{0pt} \\
@@ -233,7 +237,7 @@ Der Request sieht folgendermassen aus:
 \begin{httpcode}
 POST /api/swid/add-tags/ HTTP/1.1
 Authorization: Basic cm9vdDpyb290
-Host: tncserver:8000
+Host: strongtnc
 Accept: application/json
 Content-Type: application/json; charset="utf-8"
 Content-Length: 239
@@ -269,8 +273,7 @@ Views können sämtliche ermittelten Usecases (Abschnitt~\ref{strongTCN:usecases
 abgedeckt werden.\\
 Die Views sind visuell dem Stil der bereits vorhanden Templates angepasst.
 Allerdings wurde für die Implementation der Views nicht der funktionsbasierte,
-sondern der klassenbasierte Ansatz gewählt, wie in der Analyse erwähnt
-(Abschnitt \ref{analyse:einschaezung}). Diese Views dienen somit also auch als
+sondern der klassenbasierte Ansatz gewählt. Diese Views dienen somit also auch als
 Vorlage, beziehungsweise Machbarkeitsnachweis für die Umsetzung mit
 \enquote{Class Based Views}.
 
@@ -318,8 +321,8 @@ Geräten ein Tag registriert ist und welche Dateien zum jeweiligen Tag gehören.
 
 
 \subsubsection{SWID Inventory View}
-Mit Hilfe der SWID Inventory View kann festgestellt werden, welche Software für
-eine ausgewählte Session auf einem Gerät installiert war
+Mit Hilfe der SWID Inventory View kann festgestellt werden, welche Software zu beginn 
+einer ausgewählten Session auf einem Gerät installiert war
 (\nameref{strongTNC:UC01}).\\
 Mittels Datumsauswahl kann eingeschränkt werden welcher Bereich von Sessions
 geladen werden soll. Die Tags der geladenen Sessions werden dynamisch
