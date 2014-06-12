@@ -101,15 +101,18 @@ Im Folgenden soll der Ablauf einer Messung anhand eines konkreten Beispiels
 illustriert werden. In diesem Beispiel erfolgt eine Messung für drei Tags mit
 folgenden Software-IDs:
 
+\begin{listing}[H]
+\caption{Software-IDs}
 \begin{textcode}
 regid.2004-03.org.strongswan_Ubuntu_12.04-i686-logrotate-3.7.8-6ubuntu5
 regid.2004-03.org.strongswan_Ubuntu_12.04-i686-lsb-base-4.0-0ubuntu20
 regid.2004-03.org.strongswan_Ubuntu_12.04-i686-strongswan-4.5.2-1.5+deb7u3
 \end{textcode}
+\end{listing}
 
 Der HTTP Endpunkt ist wie folgt definiert:
 
-\begin{listing}
+\begin{listing}[H]
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/sessions/\{id\}/swid-measurement/}
@@ -149,7 +152,7 @@ Der HTTP Endpunkt ist wie folgt definiert:
 Die Daten werden als JSON-Liste an den entsprechenden Endpunkt gesendet.
 Der HTTP Request sieht folgendermassen aus:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{HTTP Request einer SWID Messung}
 \begin{httpcode}
 POST /api/sessions/2/swid-measurement/ HTTP/1.1
@@ -172,7 +175,7 @@ Content-Length: 232
 
 Der entsprechende cURL\footnote{\url{http://curl.haxx.se/}} Befehl:
 
-\begin{listing}
+\begin{listing}[H]
 \begin{bashcode}
 curl -i -X POST https://strongtnc/api/sessions/2/swid-measurement/ \
 		 -u username:password \
@@ -189,7 +192,7 @@ Software-IDs der fehlenden Tags zurückgeliefert. Der HTTP Status Code ist
 \texttt{412 Precondition Failed}. Es werden zu diesem Zeitpunkt noch keine Tags
 mit der Session verknüpft. Eine entsprechende Antwort kann wie folgt aussehen:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{HTTP Response mit Status Code \texttt{412 PRECONDITION FAILED}}
 \begin{httpcode}
 HTTP/1.0 412 PRECONDITION FAILED
@@ -207,7 +210,7 @@ Allow: POST, OPTIONS
 Sind für alle Software-IDs bereits Tags in der Datenbank vorhanden, würde die
 Antwort wie folgt aussehen:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{HTTP Response mit Status Code \texttt{200 OK}}
 \begin{httpcode}
 HTTP/1.0 200 OK
@@ -232,7 +235,7 @@ dauern können.
 
 Der Request sieht folgendermassen aus:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{SWID Tags erfassen via REST API}
 \begin{httpcode}
 POST /api/swid/add-tags/ HTTP/1.1

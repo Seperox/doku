@@ -35,7 +35,7 @@ Für alle Elemente der strongTNC Domäne wurden REST Ressourcen von den Archetyp
 dabei um vollständige CRUD Ressourcen, wie beispielsweise bei der
 \texttt{Version} Ressource sichtbar ist:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{REST Document für Versions}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -59,7 +59,7 @@ dabei um vollständige CRUD Ressourcen, wie beispielsweise bei der
 \end{mdframed}
 \end{listing}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{REST Collection für Versions}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -87,7 +87,7 @@ Rechnung zu tragen, wurden verschiedene virtuelle Ressourcen geschaffen.
 Beispielsweise lassen sich die \texttt{sessions} eines Gerätes direkt auf der
 \texttt{devices} Ressource abfragen:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Readonly Collection für Devices}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -124,7 +124,7 @@ Informationen dazu sind in der Vorgängerarbeit
 Folgendes ist der Aufbau der Endpunkte für den Sessionstart und das Beenden der
 Session:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Controller zum starten einer Session}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -188,7 +188,7 @@ erstellt, darum dürfen diese nicht manuell verändert werden.
 Die Messresultate müssen für jedes Workitem erfasst werden, dafür steht eine
 virtuelle Ressource zur Verfügung:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Result Document auf der Workitem Resource}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -223,7 +223,7 @@ Auf diese Weise können die Messresultate einer Session dauerhaft nachvollzogen
 werden. Über den Verweis auf das Enforcement kann die Messung auch dem
 ursprünglichen Zweck zugeordnet werden:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Readonly Document für Results}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -244,7 +244,7 @@ ursprünglichen Zweck zugeordnet werden:
 \end{mdframed}
 \end{listing}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Readonly Collection für Results}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -261,7 +261,7 @@ wird dies gemacht, wenn alle Workitems abgearbeitet sind, dies ist allerdings
 keine Voraussetzung, eine Session kann jederzeit abgeschlossen werden. Beim
 Abschliessen wird die Recommendation mitgegeben.
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Controller zum beenden einer Session}
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -336,7 +336,7 @@ die Parameter aus dem Request und übergibt sie dem Serialisierer (Listing
 Implementierung des Serialisierungs-Mechanismus und so kann für alle
 Serialisierer verwendet werden.
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Erweiterung durch \texttt{DynamicFieldsMixin} zur Abfrage bestimmter Felder}
 \label{api:tagserializer}
 \begin{pythoncode}
@@ -351,7 +351,7 @@ Fehlern detaillierte Informationen im Body der Response ausgeliefert. Ein
 möglicher Fehler ist beispielsweise das Übermitteln eines ungültig formatierten
 JSON Objektes.
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Fehlerinformation beim Übermitteln eines ungültigen JSON Objektes}
 \begin{httpcode}
 HTTP/1.0 400 BAD REQUEST
@@ -389,7 +389,7 @@ Es wäre zwar möglich diese Rückwärtsbeziehungen manuell in den Serialisierer
 definieren. Aus zeitlichen Gründen konnte diese Erweiterung jedoch im Rahmen
 dieser Arbeit nicht implementiert werden.
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Serialisierter SWID-Tag}
 \begin{httpcode}
 HTTP/1.0 200 OK

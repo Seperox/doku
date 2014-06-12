@@ -79,7 +79,7 @@ Klasse geschrieben werden. Um Assertions zu definieren, müssen ebenfalls
 Methodenaufrufe wie \texttt{assertEqual} oder \texttt{assertLessThan} verwendet
 werden. Nachfolgend ein Minimalbeispiel:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Unittest Minimalbeispiel}
 \label{improvements:unittest-beispiel}
 \begin{pythoncode}
@@ -105,7 +105,7 @@ und Unterstützung für Plugins.
 Nachfolgend dasselbe Minimalbeispiel wie in Listing
 \ref{improvements:unittest-beispiel}, mit Pytest:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Pytest Minimalbeispiel}
 \label{improvements:pytest-beispiel}
 \begin{pythoncode}
@@ -120,7 +120,7 @@ Eine Fixture ist eine Funktion, deren Rückgabewert über \enquote{Dependency
 Injection} einem Test übergeben wird. Eine selbst definierte Fixture könnte
 beispielsweise folgendermassen aussehen:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Pytest Fixtures}
 \label{improvements:pytest-fixtures}
 \begin{pythoncode}
@@ -139,7 +139,7 @@ def test_the_database(database):
 Ein weiteres, von uns häufig genutztes Feature, ist die Parametrisierung von
 Tests. Ein \enquote{klassischer} Unittest könnte folgendermassen aussehen:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Kombinierte Tests}
 \label{improvements:pytest-combined}
 \begin{pythoncode}
@@ -160,7 +160,7 @@ Bedingungen getestet werden, in einem Fehlerfall der gesamte Test als
 Pytest bietet hier als Abhilfe parametrisierte Tests. Dabei werden, mit Hilfe eines
 Decorators, aus einer einzelnen Funktion zur Laufzeit mehrere Tests generiert.
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Parametrisierte Tests}
 \label{improvements:pytest-parametrize}
 \begin{pythoncode}
@@ -276,7 +276,7 @@ Maschinen zu automatisieren, während Ansible ein System zur Automatisierung von
 Deployments ist. Durch die Kombination der beiden Tools kann mit folgenden zwei
 Befehlen eine komplett konfigurierte VM erstellt werden.
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Starten einer Vagrant Box}
 \begin{textcode}
 $ cd /path/to/strongtnc/vagrant/
@@ -340,7 +340,7 @@ einzuführen. Es muss keine eigene Benutzerverwaltung entwickelt werden, da Djan
 
 In den Templates können die Zugriffsrechte über das \texttt{perms} Objekt geprüft werden:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Überprüfung der Zugriffsrechte in Templates}
 \begin{pythoncode}
 {% if 'auth.write_access' in perms %}
@@ -353,7 +353,7 @@ Die zusätzliche Implementation eines Template Tags erleichtert die Steuerung vo
 HTML Formularelementen, deren Bedienung nur für schreibberechtigte Benutzer
 erlaubt sein soll:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Template Tag zur Zugriffssteuerung von HTML Form Elementen}
 \begin{pythoncode}
 @register.simple_tag(takes_context=True)
@@ -366,7 +366,7 @@ def input_editability(context):
 \end{listing}
 Die Anwendung sieht wie folgt aus:
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Anwendung des Template Tags zur Zugriffssteuerung von HTML Form Elementen }
 \begin{pythoncode}
 <input type="text"name="name" value="{{ group }}" {% input_editability %} />
@@ -421,7 +421,7 @@ def directories_autocomplete(request, search_term):
 \end{listing}
 
 Clientseitig kann der Endpunkt wie folgt mit Javascript angesprochen werden:
-\begin{listing}
+\begin{listing}[H]
 \caption{Absenden eines Ajax Requests}
 \begin{jscode}
 Dajaxice.apps.filesystem.directories_autocomplete(callback, {search_term: 'system'});
@@ -502,7 +502,7 @@ neuen Seite.
 \end{htmlcode}
 \end{listing}
 
-\begin{listing}
+\begin{listing}[H]
 \caption{Verwendung eines \enquote{Paged Blocks} mittels Template Tag}
 \label{paging:templatetag}
 \begin{pythoncode}
@@ -529,7 +529,7 @@ neuen Seite.
 	Template zu HTML zu rendern. Durch diese Separierung wird eine hohe
 	Wiederverwendbarkeit erreicht. Verschiedene Datenquellen und Templates können
 	kombiniert und wiederverwendet werden.
-\begin{listing}
+	\begin{listing}[H]
 \caption{Beispiel einer Pagination Config}
 \begin{pythoncode}
 regid_list_paging = {
@@ -548,7 +548,7 @@ regid_list_paging = {
 	können Producer flexibel ausgetauscht und wiederverwendet werden. Eine konkrete
 	Implementation eines Producers ist in Listing~\ref{paging:producer} zu sehen.
 	
-\begin{listing}
+	\begin{listing}[H]
 \caption{Beispielimplementation eines Producers}
 \label{paging:producer}
 \begin{pythoncode}
@@ -563,7 +563,7 @@ def swid_files_list_producer(from_idx, to_idx, filter_query, dynamic_params, sta
 	Für generische List Producer, welche lediglich eine Liste von Objekten eines
 	bestimmten Models liefern, wurde eine eine \enquote{Factory} erstellt:
 	
-\begin{listing}
+	\begin{listing}[H]
 \caption{Producer Factory}
 \begin{pythoncode}
 swid_producer_factory = ProducerFactory(Tag, 'unique_id__icontains')
