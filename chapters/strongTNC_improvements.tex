@@ -5,12 +5,11 @@
 \subsubsection{Aufteilung in mehrere Django Apps}
 
 Bereits in der Analyse (Abschnitt \ref{analyse:stand}) fiel auf, dass
-die bestehende Codebasis von strongTNC als einzelne Django App namens
-\texttt{tncapp} umgesetzt wurde. Innerhalb der App waren alle Models in einer
+das bestehende strongTNC Projekt aus einer einzigen Django App besteht. 
+Innerhalb der App waren alle Models in einer
 einzigen Datei enthalten (\texttt{models.py}), während die Views in mehrere
 thematisch gruppierte Dateien aufgeteilt wurden (\texttt{device\_views.py},
-\texttt{product\_views.py}, etc).
-
+\texttt{product\_views.py}, etc).\\
 Diese Aufteilung der Views deutet darauf hin, dass die \texttt{tncapp} App für
 mehrere thematisch unterschiedliche Bereiche zuständig ist, welche in der
 Codebasis separiert werden könnten und sollten. Die Aufteilung in mehrere
@@ -19,30 +18,28 @@ erreichen. Stattdessen bietet Django für solche Fälle das Konzept einer App an
 
 Eine App ist ein Verzeichnis innerhalb eines Django Projektes, welches seine eigenen
 Models, Views und Templates enthält. Die Apps werden in der
-Projektweiten \texttt{setting.py} registriert. Ein einzelnes Projekt lässt sich
+Projektweiten \texttt{settings.py} registriert. Ein einzelnes Projekt lässt sich
 so in mehrere kleine MVC Container aufteilen.
 
-Die Voraussetzung dafür, dass eine Aufteilung einer Codebasis in mehrere Apps
-Sinn ergibt, ist eine hohe Kohäsion der Codebasis innerhalb einer App. Das führt
-dazu, dass eine App \enquote{pluggable} wird und einfach aktiviert- und
-deaktiviert werden kann. Die Separierung von hochkohäsivem Code in mehrere Apps
-führt automatisch zu tiefer Kopplung (\cite[S.~232--237]{larman2002applying})
-und dadurch zu wartbarerem Code.
+Zusammenhängende Codeteile sollen wenn möglich in separate Apps unterteilt werden.
+Dadurch werden die Apps \enquote{pluggable} und können aktiviert- und
+deaktiviert werden kann. Die Separierung von Code in mehrere Apps
+führt zu tiefer Kopplung\cite[S.~232--237]{larman2002applying}
+und dadurch zu bessert wartbaren Code.
 
 Aus den oben genannten Gründen haben wir die bestehende monolithische App in
-folgende zehn moderat bis hoch kohäsive Apps aufgeteilt:
+folgende zehn moderat bis hoch kohäsiven Apps aufgeteilt:
 
 \begin{itemize}
-	\item \texttt{core}: Enthält zentrale Elemente die von fast allen Apps
+	\item \texttt{core}: Enthält Elemente, die von fast allen Apps
 	verwendet werden, wie beispielsweise das \texttt{Session} Model oder die
 	\texttt{WorkItemType} Klasse.
 		
-	\item \texttt{front}: Enthält alle Elemente zum darstellen der Seiten, welche
+	\item \texttt{front}: Enthält alle Elemente zur Darstellung der Seiten, welche
 	nicht App-spezifisch sind. Beispiele hierfür sind das Base-Template, der
 	\texttt{highlight} Template Filter oder der \texttt{pagination} Ajax Endpoint.
 	
-	\item \texttt{auth}: Enthält Hilfsfunktionen, Mixins und Template Tags aus dem
-	Bereich der Authentisierung und Berechtigungsprüfung.
+	\item \texttt{auth}: Enthält Hilfsfunktionen, Mixins und Template Tags für die Authentisierung und Berechtigungsprüfung.
 	
 	\item \texttt{api}: Enthält Hilfsfunktionen und Mixins mit Bezug zur API.
 	
