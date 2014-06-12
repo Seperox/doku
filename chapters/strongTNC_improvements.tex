@@ -157,6 +157,7 @@ Der Nachteil eines solchen Tests ist, dass obwohl vier verschiedene unabhängige
 Bedingungen getestet werden, in einem Fehlerfall der gesamte Test als
 \textit{failing} angezeigt wird.
 
+\needspace{4\baselineskip}
 Pytest bietet hier als Abhilfe parametrisierte Tests. Dabei werden, mit Hilfe eines
 Decorators, aus einer einzelnen Funktion zur Laufzeit mehrere Tests generiert.
 
@@ -364,6 +365,8 @@ def input_editability(context):
     return ''
 \end{pythoncode}
 \end{listing}
+
+\needspace{2\baselineskip}
 Die Anwendung sieht wie folgt aus:
 
 \begin{listing}[H]
@@ -393,7 +396,7 @@ nicht ausbaufähig. Deshalb wurde das Permission-System bevorzugt.
 
 \subsubsection{Nachladen von grossen Datenmengen}
 strongTNC muss mit grossen Datenmengen umgehen können. Wenn Datei-Messungen
-durchgeführt- oder SWID Tags erfasst werden, erreicht beispielsweise die Zahl der
+durch\-ge\-führt- oder SWID Tags erfasst werden, erreicht beispielsweise die Zahl der
 erfassten Dateien schnell den fünfstelligen Bereich. Wenn einzelne dieser Dateien
 ausgewählt werden sollen, muss verhindert werden, dass immer die gesamte Menge
 der Daten geladen wird.
@@ -405,7 +408,10 @@ Die Ajax Endpunkte wurden mit Hilfe der \enquote{Dajax-ice}\footnote{\url{http:/
 automatisch gesetzt und geprüft. Ausserdem generiert \enquote{Dajax-ice} Javascript Funktionen, welche clientseitig die benötige Infrastruktur bereitstellen, um Ajax Requests auszuführen.
 \\
 
-In Listing \ref{strongTNC:ajaxendpoint} ist die Beispielimplementation eines Ajax Endpoints zu sehen. Um auch bei Ajax Anfragen eine Authentisierung zu erzwingen, wurde ein eigener Decorator \texttt{@ajax\_login\_required} erstellt. 
+In Listing \ref{strongTNC:ajaxendpoint} ist die Beispielimplementation eines
+Ajax Endpoints zu sehen. Um auch bei Ajax-Anfragen eine Authentisierung zu
+erzwingen, wurde ein eigener Decorator mit dem Namen
+\texttt{@ajax\_login\_required} erstellt. 
 
 \begin{listing}[H]
 \caption{Beispiel eines Ajax Endpunktes}
@@ -480,6 +486,7 @@ neuen Seite.
 \end{figure}
 
 
+\newpage
 \begin{description}
 	\item[HTMLPage] Auf einer HTML Seite werden Container definiert, welche später
 	mit den Seiteninhalten befüllt werden. Die Container werden mittels, des dafür
@@ -520,6 +527,7 @@ neuen Seite.
 	Kommunikation mit dem AjaxEndpoint wird der zurückgelieferte HTML Block in den
 	entsprechenden Container geladen. 
 
+	\newpage
 	\item [AjaxEndpoint] Der Ajax Endpoint nimmt Requests entgegen und kann anhand
 	des übergebenen Konfigurationsnamens die zugehörige Konfiguration laden. Diese
 	beinhaltet einen Producer und die Referenz auf ein Template. Die
@@ -648,7 +656,7 @@ werden. Die Models wurden mit den nötigen Metadaten erweitert, damit dieses
 Feature aktiviert werden konnte.
 
 \item[Erstellen von Files und Versions] Bisher war es nicht möglich über die
-Oberfläche von strongTNC neue Files und neue Versionen zu erstellen. Die
+Oberfläche von strong\-TNC neue Files und neue Versionen zu erstellen. Die
 Ansichten wurden um diese Funktionalität ergänzt.
 
 \item[Verknüpfung von Daten in Views] Die Views wurden durch sinnvolle
