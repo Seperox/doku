@@ -1,7 +1,7 @@
 \documentclass[10pt,a4paper]{scrartcl}
 \pagestyle{empty}
 \usepackage{a4wide}
-\usepackage[ngerman]{babel} % Neudeutsche Silbentrennung (mehrsprachiges Dokument)
+\usepackage[english]{babel}
 \usepackage{parskip} % Skip indentation of first row
 \usepackage{graphicx} % Graphics support
 \usepackage{longtable} % Tables across several pages
@@ -35,8 +35,8 @@
 \linespread{1.2}
 
 \author{Danilo Bargen, Christian Fässler, Jonas Furrer} 
-\title{strongTNC REST API \\ \small{Im Rahmen der strongTNC BA} }
-\date{Frühlingssemester 2014}
+\title{strongTNC REST API \\ \small{Part of the strongTNC Bachelor's Thesis} }
+\date{Spring 2014}
 
 \pagestyle{scrheadings}
 \ihead{REST API} %linke Kopfzeile
@@ -56,23 +56,22 @@
 	\tableofcontents
 \newpage
 
-\section{Einleitung}
+\section{Introduction}
 
-Die Definition der Ressourcen orientiert sich an den Regeln des Buches
-\textit{REST API Design Rulebook}\cite{masse2011rest} aus dem O'Reilly Verlag.
+The REST resource design is based on the recommendations of the \textit{REST API
+Design Rulebook}\cite{masse2011rest} from O'Reilly.
 
 \subsubsection*{URI Definition}
 
-Bei der Bezeichnung der URIs\footnote{Uniform Resource Identifier} wurde
-folgende Terminologie gemäss RFC 3986\cite{rfc3986} verwendet:
+URIs\footnote{Uniform Resource Identifier} are defined as follows, according to RFC 3986\cite{rfc3986}:
 
 \texttt{URI = scheme \textquotedbl ://\textquotedbl{} authority \textquotedbl /\textquotedbl{}
 path [ \textquotedbl ?\textquotedbl{} query ] [ \textquotedbl \#\textquotedbl{} fragment ]}
 
-\subsubsection*{Ressource-Archetypen}
+\subsubsection*{Resource-Archetypes}
 
-Nachfolgend die Ressource-Archetypen gemäss Masse 2011\cite{masse2011rest}. Die
-Erklärungstexte wurden direkt dem besagten Buch entnommen.
+We used the resource archetype terminology from Masse 2011\cite{masse2011rest}.
+The explanation texts are taken directly from said book.
 
 \begin{description}
 	\item[Document] A document resource is a singular concept that is akin to an
@@ -80,7 +79,7 @@ Erklärungstexte wurden direkt dem besagten Buch entnommen.
 	includes both fields with values and links to other related resources.
 	
 	\item[Collection] A collection resource is a server-managed directory of
-	resources. Clients may								 propose new resources to be added to a
+	resources. Clients may propose new resources to be added to a
 	collection. However, it is up to the collection to choose to create a new
 	resource, or not.
 	
@@ -102,20 +101,18 @@ Erklärungstexte wurden direkt dem besagten Buch entnommen.
 \pagebreak
 
 
-\section{Repräsentation der Archetypen}
+\section{Archetype Representation}
 
-Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
+The JSON representation in this API documentation depends on the resource
+archetype.
 
 \begin{description}
-	\item[Document] Ein Document gibt ein JSON Objekt zurück, welches alle
-	relevanten Felder enthält. Informationen, welche durch die Ressource-URI
-	bereits gegeben sind (z.B. Type), müssen nicht, können jedoch, erneut in der
-	Liste erscheinen.\\ 
-	Falls im Document Unterobjekte auftauchen, wird für das Feld die URI des
-	betreffenden Unterobjekts eingesetzt, damit kann dieses Objekt direkt abgefragt
-	werden. Zusätzlich wird ein Query-Parameter bereit gestellt, welcher es
-	erlaubt, Unterobjekte bis zu einer gewissen Tiefe aufzulösen.\\ 
-	Beispiel: \hfill
+	\item[Document] A document returns a JSON object, which contains all relevant
+		fields.\\
+		If a document contains references to other resources, then this reference is
+		returned as an URI. Additionally, a \texttt{depth} query parameter can be
+		specified to embed nested resources directly in the response.\\
+		Example: \hfill
 \begin{lstlisting}
 {
 	"field1": "<str,value-1>",
@@ -132,7 +129,7 @@ Die JSON-Repräsentation ist abhängig vom Ressource-Archetypen.
 	]
 }
 \end{lstlisting}
-Beispiel mit Query \texttt{depth=1}:
+Example with \texttt{depth=1}:
 \begin{lstlisting}
 {
 	"field1": "<str,value-1>",
@@ -145,25 +142,27 @@ Beispiel mit Query \texttt{depth=1}:
 	}
 	"subCollection": [
 		{
-			"field": <int, field>,
+			"field": <int,field>,
 			...
 			"uri": "<uri,sub-object>"
 		},
 		{
-			"field": <int, field>,
+			"field": <int,field>,
 			...
-			"uri": "<uri, sub-object>"
+			"uri": "<uri,sub-object>"
 		}
 	]
 }
 \end{lstlisting}
 
-	\item[Collection] Eine Collection gibt eine Liste mit allen enthaltenen (ggf.
-	gefilterten) JSON-Objekten zurück. Die Objekte werden zusätzlich um ein Feld
-	\texttt{uri} ergänzt, welches die Ressource-URI des jeweiligen Objektes
-	enthält. Wie bei einem Document gibt es bei Collections einen optionalen Query
-	Parameter welcher es erlaubt Unterobjekte aufzulösen, \\ 
-	Beispiel: \hfill
+	\newpage
+	\item[Collection] A collection returns a (possibly filtered) list of all
+		contained documents as JSON-objects. The documents are annotated with an
+		additional field called \texttt{uri}, which contains the URI to the document
+		resource.\\
+		Collections too allow the usage of a \texttt{depth} parameter to embed
+		nested objects.\\ 
+		Example: \hfill
 \begin{lstlisting}
 {
 	{
@@ -179,7 +178,7 @@ Beispiel mit Query \texttt{depth=1}:
 }
 \end{lstlisting}
 
-Beispiel mit Query \texttt{depth=1}:
+Example with \texttt{depth=1}:
 \begin{lstlisting}
 {
 	{
@@ -199,39 +198,40 @@ Beispiel mit Query \texttt{depth=1}:
 }
 \end{lstlisting}
 
-	\item[Store] Ein Store verhält sich wie eine Collection, wenn sie direkt
-	angesprochen wird (\texttt{/store}) und wie ein Document, wenn ein spezifisches
-	Element des Store angesprochen wird (\texttt{/store/\{element-id\}}).
-	
-	\item[Controller] Der Output des Controllers ist abhängig vom Verwendungszweck.
+	\item[Controller] The output of a controller varies, depending on the
+		implementation.
 \end{description}
 
 
 \pagebreak
 
 
-\section{HTTP Statuscodes}
-Das Ergebnis einer Anfrage wird grundsätzlich über einen HTTP Statuscode
-mitgeteilt, in gewissen Fällen kann auch noch Payload im Body geliefert werden.
-Folgendes ist eine Auswahl von Statuscodes die zu erwarten sind:
+\section{HTTP Status Codes}
+
+The result of a request is communicated through HTTP status codes. In some
+cases, additional information is returned in the response body.
+
+The following status codes can be expected:
 
 \begin{description*}
-	\item[200 OK] Request erfolgreich
-	\item[201 Created] Entity wurde erfolgreich erstellt
-	\item[204 No Content] Entity wurde erfolgreich geändert
-	\item[400 Bad Request] Generischer Client Fehler
-	\item[404 Not Found] Entity nicht gefunden
-	\item[405 Method Not Allowed] Die verwendete HTTP Methode ist auf dieser
-	Ressource nicht erlaubt
-	\item[409 Conflict] Zu erstellende Entity existiert bereits
-	\item[412 Precondition Failed] Es sind zusätzliche Schritte nötig um die
-	Anfrage auszuführen
-	\item[500 Internal Server Error] Generischer Server Fehler
+	\item[200 OK] The request has succeeded.
+	\item[201 Created] The request has been fulfilled and resulted in a new
+		resource being created.
+	\item[204 No Content] The server has fulfilled the request but does not need
+		to return an entity-body.
+	\item[400 Bad Request] Generic client side error.
+	\item[404 Not Found] The server has not found anything matching the
+		Request-URI.
+	\item[405 Method Not Allowed] The method specified in the Request-Line is not
+		allowed for the resource identified by the Request-URI.
+	\item[409 Conflict] The entity to be created already exists.
+	\item[412 Precondition Failed] Additional steps are necessary to successfully
+		process the sent request.
+	\item[500 Internal Server Error] Generic server side error.
 \end{description*}
 
-Falls zusätzliche Codes verwendet werden oder die Codes eine aussergewöhnliche oder
-erwähnenswerte Bedeutung haben, ist dies bei der betroffenen Resource vermerkt.
-
+If a resource uses additional error codes, then it is documented in the resource
+documentation.
 
 \pagebreak
 
