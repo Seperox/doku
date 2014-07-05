@@ -35,11 +35,11 @@
 \linespread{1.2}
 
 \author{Danilo Bargen, Christian Fässler, Jonas Furrer} 
-\title{strongTNC REST API \\ \small{Part of the strongTNC Bachelor's Thesis} }
+\title{strongTNC REST API Draft 1\\ \small{Part of the strongTNC Bachelor's Thesis} }
 \date{Spring 2014}
 
 \pagestyle{scrheadings}
-\ihead{REST API} %linke Kopfzeile
+\ihead{REST API Draft 1} %linke Kopfzeile
 \ohead{strongTNC BA} %rechte Kopfzeile
 
 \let\textquotedbl="
@@ -236,55 +236,50 @@ documentation.
 \pagebreak
 
 
-\section{Allgemeine Hinweise}
+\section{Further Remarks}
 
-\subsection{Schreibweise}
-Für die Definition des Response- und Request-Formats wird eine pseudo JSON
-Schreibweise verwendet. Die Werte werden als Tupel in spitzen Klammern
-dargestellt. Der erste Teil des Tupels zeigt den Typ, der zweite Teil ist eine
-Beschreibung für den Wert. Folgende Typen werden verwendet:
+\subsection{Notation}
+
+For the request- and response-format of a resource, pseudo-JSON notation is
+used. The values are denoted as a tuple in angle brackets. The first part of the
+tuple denotes the type, while the second is a description of the value.
+
+The following types are used:
 
 \begin{description*}
-	\item[int] Integer Zahlenwert
-	\item[num] Dezimalzahl
+	\item[int] Integer
+	\item[num] Decimal
 	\item[str] String
-	\item[bool] Wahrheitswert
-	\item[xml] Ein XML Dokument
-	\item[hex] Ein HEX String
-	\item[uri] Die vollqualifizerte URI einer Resource
-	\item[doc] Das Dokument einer Resource, wie dieses aussieht kann im jeweiligen
-	Abschnitt zur genannten Resource nachgeschlagen werden
+	\item[bool] Boolean
+	\item[xml] An XML document
+	\item[hex] A HEX string
+	\item[uri] The fully qualified URI of a resource
+	\item[doc] The resource document
 \end{description*}
 
-\subsection{Standard Verhalten}
-Folgende Punkte beschreiben das Standardverhalten der Resourcen:
+\subsection{Default Behavior}
+
+The following items describe the default behavior of resources:
 
 \begin{description*}
-	\item[Depth Query-Parameter] Jede Resource die als Antwort eine URI auf eine
-	andere Resource zurück gibt unterstützt den \texttt{depth} Query-Parameter.
-	Dieser löst die URIs bis zur gewünschten tiefe auf. Möglicherweise wird die
-	maximale Tiefe eingeschränkt. Wenn keine Tiefe angegeben wird, gilt die
-	Auflösungstiefe 0.
+	\item[Depth Query-Parameter] Each resource that returns an URI to another
+		resource, supports a \texttt{depth} query parameter. This parameter embeds
+		the nested resources into the returned document up to the depth specified by
+		the query parameter. If no parameter is specified, the depth \texttt{0} is
+		used.
 	
-	\item[Filter Query-Parameter] Filter Query-Parameter sind, falls vorhanden,
-	immer optional, sie dienen der Präzisierung des Rückgabesets. Wenn sie
-	weggelassen werden, wird das vollständige Set zurückgegeben.
-	
-	\item[Generische Filter] Collections unterstützen wenn nicht anders erwähnt
-	generische Filter auf alle Feldern mit Ausnahme der Foreign Keys. Das heisst,
-	es kann grundsätzlich nach jedem Attribut des Rückgabedokuments gefiltert
-	werden. Der Parameter ist wie folgt aufgebaut: \texttt{attributeName=query}.
-	Filter können auch auf Document-Resourcen genutzt werden, es wird bei nicht
-	passenden Filterwerten ein \texttt{HTTP 404} Status Code zurückgegeben.
-	
-	\item[Batch Create] Collections unterstützen, sofern sie nicht readonly sind
-	oder es anders erwähnt ist, das sogenannte 'Batch Create'. D.h zum Erstellen
-	von neuen Dokumenten kann einer Collection auch eine Liste gesendet werden.
-	Wird 'Batch Create' verwendet, besteht die Antwort des Servers nur aus einem
-	Statuscode, es wird nicht eine Liste der erstellten Dokumente zurück geschickt.
-	Fall die Erstellung fehlschlägt wird kein Dokument angelegt. Es wird versucht
-	mitzuteilen, warum die Erstellung fehlschlug.
+	\item[Filter Query-Parameter] Filter query parameters are -- if available --
+		always optional. They can be used to filter the returned data.\\
+	All Collections support -- unless specified otherwise -- generic filters on
+	all fields except foreign keys. The parameter looks like this:
+	\texttt{fieldName=query}. Filters can also be used on document resources -- if
+	the document field values don't match, then a HTTP 404 status code is
+	returned.
 
+	\item[Fields Query-Parameter] The \texttt{fields} query parameter can be used
+		to limit the returned fields of a resource. This is similar to a
+		\texttt{SELECT field1, field2, fieldn} SQL statement.
+	
 \end{description*}
  
  
