@@ -286,11 +286,11 @@ The following items describe the default behavior of resources:
 \pagebreak
 
 
-\section{Daten Definition}
+\section{Data Definitions}
 
 \subsection{Policy Arguments}
 
-Folgende Workitem, bzw. Policy Typen sind momentan vorhanden:
+The following workitem- and policy-types are currently available:
 \begin{description*}
 	\item[\texttt{00: RESVD}] Deny
 	\item[\texttt{01: PCKGS}] Installed Packages
@@ -311,43 +311,40 @@ Folgende Workitem, bzw. Policy Typen sind momentan vorhanden:
 	\item[\texttt{16: TPMRA}] TPM Remote Attestation
 \end{description*}
 
-Einige Typen benötigen unterschiedliche Argumente, Gemeinsamkeiten lassen sich
-wie folgt gruppieren:
+Some of the types have different parameters. They can be grouped as follows:
 
 \begin{description*}
-	\item[Keine Argumente] 00, 01, 02, 03, 04
-	\item[Datei Pfad] 05, 06, 07
-	\item[Verzeichnis Pfad] 08, 09, 10
-	\item[Port Liste] 11, 12, 13, 14
-	\item[SWID Request Flags] 15
-	\item[TPM Attestation Flags] 16
+	\item[No arguments] 00, 01, 02, 03, 04
+	\item[File path] 05, 06, 07
+	\item[Directory path] 08, 09, 10
+	\item[Port list] 11, 12, 13, 14
+	\item[SWID request flags] 15
+	\item[TPM attestation flags] 16
 \end{description*}
 
-Dementsprechend sollen die Argumente der Workitems übermittelt werden. Folgende
-Objekte werden je nach Type übermittelt, als Verweis wird
-\texttt{<doc,policy-argument>} verwendet.
+Depending on the type, the following arguments need to be submitted:
 
 \begin{description*}
-	\item[Keine Argumente] \hfill
+	\item[No arguments] \hfill
 \begin{lstlisting}
 {}
 \end{lstlisting}
 
-	\item[Datei Pfad] \hfill
+	\item[File path] \hfill
 \begin{lstlisting}
 {
 	"file": "<str,file-path>"
 }
 \end{lstlisting}   
 
-	\item[Verzeichnis Pfad] \hfill
+	\item[Directory path] \hfill
 \begin{lstlisting}
 {
 	"directory": "<str,directory-path>"
 }
 \end{lstlisting} 
 
-	\item[Port Liste] \hfill
+	\item[Port list] \hfill
 \begin{lstlisting}
 {
 	"portList": [
@@ -356,7 +353,7 @@ Objekte werden je nach Type übermittelt, als Verweis wird
 }
 \end{lstlisting} 
 
-	\item[SWID Request Flags] \hfill
+	\item[SWID request flags] \hfill
 \begin{lstlisting}
 {
 	"swidFlags": [
@@ -365,7 +362,7 @@ Objekte werden je nach Type übermittelt, als Verweis wird
 }
 \end{lstlisting} 
 
-	\item[TPM Attestation Flags] \hfill
+	\item[TPM attestation flags] \hfill
 \begin{lstlisting}
 {
 	"tpmFlags": [
@@ -377,21 +374,21 @@ Objekte werden je nach Type übermittelt, als Verweis wird
 
 
 \subsection{Recommendation Types}
-Folgende Recommendation Types bzw. Actions sind vorhanden:
+
+The following recommendation types and -actions are available:
 
 \begin{description*}
-	\item[\texttt{0: ALLOW}] Die Empfehlung/Aktion ist, den Client zuzulassen
-	\item[\texttt{1: BLOCK}] Die Empfehlung/Aktion ist, den Client zu blockieren
-	\item[\texttt{2: ISOLATE}] Die Empfehlung/Aktion ist, den Client in einem
-	isoliertem Segment zu platzieren
+	\item[\texttt{0: ALLOW}] It is recommended to allow access to the client
+	\item[\texttt{1: BLOCK}] It is recommended to deny access to the client
+	\item[\texttt{2: ISOLATE}] It is recommended to isolate the client
 	\item[\texttt{3: NONE}]
 \end{description*}
 
-Diese Werte werden von der API als Integer Id verwendet. Es wird kein Objekt für
-die Repräsentation erstellt.
+The values should be submitted to the API as integer values.
 
 \subsection{Hash-Set}
-Ein Hash-Set wird innerhalb eines File-Documents ausgeliefert, der Verweis lautet \texttt{<doc,hash-set>} und ist wie folgt aufgebaut:
+
+A hash-set is used in the file documents. They are structured as follows:
 
 \begin{lstlisting}
 [
@@ -403,16 +400,16 @@ Ein Hash-Set wird innerhalb eines File-Documents ausgeliefert, der Verweis laute
 ]
 \end{lstlisting}
 
-Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folgende Algorithmen erfasst: 
-\texttt{SHA384, SHA256, SHA1, SHA1-IMA}
+If an algorithm doesn't exist yet, it will be created automatically. Current
+default algorithms are \texttt{SHA384, SHA256, SHA1, SHA1-IMA}.
 
 
 \pagebreak
 
 
-\section{REST Ressourcen}
+\section{REST Resources}
 
-\subsection{Session Steuerung und Ablauf}
+\subsection{Session control}
 
 \subsubsection{Controller}
 
@@ -421,17 +418,16 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/sessionss/start/}
 	\item[Archetype] Controller
 	\item[Methods] POST
-	\item[Request Parameter] \hfill
+	\item[Request Parameters] \hfill
 	\begin{description*}
-		\item[\texttt{connectionId}] strongSwan Connection Id
+		\item[\texttt{connectionId}] strongSwan Connection ID
 		\item[\texttt{clientIdentity}] strongSwan Client-Identity
-		\item[\texttt{hardwareId}] Die ID, welche das Gerät identifiziert, so zum
-		Beispiel AIK, Android-ID, DBUS Machine-ID, o.ä. Dies entspricht dem
-		\texttt{value} Feld in der \texttt{device} Tabelle in der Datenbank
-		\item[\texttt{productName}] Der Productname ist der Name des OS wie er in der
-		\texttt{product} Tabelle der Datenbank steht
+		\item[\texttt{hardwareId}] The ID that identifies the device, for example 
+		the AIK, Android-ID, DBUS Machine-ID, etc.
+		\item[\texttt{productName}] The productName is the name of the operating
+			system as present in the \texttt{product} table of the database.
 	\end{description*}
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"sessionId": <int,id>,
@@ -442,13 +438,13 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	"uri": "<uri,session>"
 }
 \end{lstlisting}
-	\item[Beschreibung] Dieser Controller erstellt und startet eine Session, das
-	Device, welches der Session zugeordnet werden soll, wird anhand der
-	\texttt{hardwareId} und dem \texttt{productName} bestimmt. Falls eines der
-	Objekte noch nicht existiert wird dieses durch den Controller erstellt. Die ID,
-	die im Response Dokument zurück geliefert wird, dient zur zukünftigen
-	Identifikation der soeben gestarteten Session. Ausserdem erhält man eine Liste
-	von Workitems, die für diese Session abgearbeitet werden müssen.
+	\item[Description] This controller creates and starts a session. The device to
+		be assigned to the session is determined by the \texttt{hardwareId} and the
+		\texttt{productName}. If one of the related objects does not exist yet, it
+		will be created by this controller. The ID which is returned in the response
+		document is used to identify the initiated session. Furthermore, a list of
+		workitems is returned in the response. These workitems should be processed
+		in the corresponding session.
 \end{description*}
 \end{mdframed}
 
@@ -458,14 +454,15 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/sessions/\{id\}/end/}
 	\item[Archetype] Controller
 	\item[Methods] POST
-	\item[Request Parameter] \hfill
+	\item[Request Parameters] \hfill
 	\begin{description*}
-		\item[\texttt{recommendation}] Endgültiges Resultat/Empfehlung für diese Session.
+		\item[\texttt{recommendation}] Final result / recommendation for this
+			session.
 	\end{description*}
-	\item[Beschreibung] Dieser Controller schliesst die Session ab und startet alle
-	zusätzlich nötigen Vorgänge, so werden zum Beispiel die Workitems dieser
-	Session abgeräumt und die jeweiligen Resultate gespeichert und können via
-	\texttt{/sessions/\{id\}/results} abgerufen werden.
+	\item[Description] This controller finalizes the session and starts all
+		related processes. Among other things, the workitems related to this session
+		will be removed, their results will be stored and can be accessed via
+		\texttt{/sessions/\{id\}/results}.
 \end{description*}
 \end{mdframed}
 
@@ -473,14 +470,14 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 \pagebreak
 
 
-\subsubsection{Documents und Collections}
+\subsubsection{Documents and Collections}
 
 \begin{mdframed}[style=def]
 \begin{description*}
 	\item[URI Path] \texttt{/sessions/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -492,10 +489,10 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	"recommendation": <int,rec>
 }
 \end{lstlisting}
-	\item[Beschreibung] Informationen zu einer bestimmten Session. Sessions sollen
-	nicht direkt geändert werden, sondern nur über die entsprechenden Controller,
-	der Grund dafür ist, dass im Hintergrund noch zusätzliche Operationen
-	vorgenommen werden müssen.
+	\item[Description] Information related to a specific session. Sessions should
+		never be changed directly, changes can only be made via the corresponding
+		controllers. The reason for this is that a change in the session requires
+		more processing tasks in the background.
 \end{description*}
 \end{mdframed}
 
@@ -509,12 +506,12 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 		\item[timeTo] \texttt{<int,timestamp>}
 	\end{description*}
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,session>, ...]
 \end{lstlisting}
-	\item[Beschreibung] Liste aller Sessions. Neue Sessions können nur über den
-	entsprechenden Controller erstellt werden.
+	\item[Description] List of all sessions. New sessions can only be created via
+		the corresponding controllers.
 \end{description*}
 \end{mdframed}
 
@@ -529,7 +526,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/sessions/\{id\}/workitems/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -539,11 +536,11 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	"argument": <policy-argument>
 }
 \end{lstlisting}
-	\item[Beschreibung] Ein zu einer bestimmten Session zugehöriges Workitem.
-	Workitems können nicht direkt erstellt werden, sondern werden beim Erstellen
-	einer Session anhand der Enforcements erstellt. Workitems gibt es nur, so lange
-	eine Session nicht beendet wurde. Nach dem Ende der Session wird ein
-	\texttt{HTTP 404} Statuscode zurückgeliefert.
+	\item[Description] A workitem related to the specified session. Workitems
+		cannot be created directly, they will be created automatically during the
+		session initialization depending on the configured enforcements. Workitems
+		only exist as long as a session is active. After the session has ended, a
+		\texttt{HTTP 404} status code will be returned.
 \end{description*}
 \end{mdframed}
 
@@ -556,15 +553,15 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 		\item[type] \texttt{<int,policy-type>}
 	\end{description*}
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,workitem>, ...]
 \end{lstlisting}
-	\item[Beschreibung] Eine Liste aller Workitems, die zu einer bestimmten Session
-	gehören. Workitems können nicht direkt erstellt werden, sondern werden beim
-	Erstellen einer Session anhand der Enforcements erstellt. Workitems gibt es
-	nur, so lange eine Session nicht beendet wurde. Nach dem Ende der Session wird
-	eine leere Liste geliefert.
+	\item[Description] A list of all workitems that belong to the specified
+		session. Workitems cannot be created directly, they will be created
+		automatically during the session initialization depending on the configured
+		enforcements. Workitems only exist as long as a session is active. After the
+		session has ended, an empty list will be returned.
 \end{description*}
 \end{mdframed}
 
@@ -573,27 +570,27 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 \begin{description*}
 	\item[URI Path] \texttt{/sessions/\{id\}/workitems/\{id\}/result/}
 	\item[Archetype] Document
-	\item[Request Parameter] \hfill
+	\item[Request Parameters] \hfill
 	\begin{description*}
-		\item[\texttt{recommendation}] Resultat/Empfehlung für dieses Workitem.
-		\item[\texttt{comment}] Kommentar zum Resultat.
+		\item[\texttt{recommendation}] Result / recommendation for this workitem.
+		\item[\texttt{comment}] Comment concerning the result.
 	\end{description*}
 	\item[Methods] GET, POST
 	\item[Response Statuscodes] \hfill
 		\begin{description*}
-			\item[201 Created] Resultat wurde erfolgreich gespeichert.
-			\item[409 Conflict] Resultat existiert bereits.
+			\item[201 Created] Result has been saved successfully.
+			\item[409 Conflict] Result already exists.
 		\end{description*}
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"recommendation": <int,type>,
 	"comment": <str,comment>
 }
 \end{lstlisting}
-	\item[Beschreibung] Auf dieser Ressource soll das Resultat des jeweiligen
-	Workitems eingetragen werden. Diese Resultate werden beim Beenden der Session
-	von den Workitems in die Session-Resulate übertragen.
+	\item[Description] To this resource the result of the corresponding workitem
+		should be submitted. The results are transferred from the workitem to the
+		session result when the session is closed.
 \end{description*}
 \end{mdframed}
 
@@ -608,7 +605,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/sessions/\{id\}/results/\{id\}/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -618,9 +615,9 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	"comment": "<str,comment>"
 }
 \end{lstlisting}
-	\item[Beschreibung] Einzelnes Resultat. Im Gegensatz zur Resultat-Resource
-	unter der Workitem Resource enthält dieses Document auch einen Link zum
-	zugehörigen Enforcement.
+	\item[Description] A single result. In contrast to the result resource
+		relative to the workitem resource, this document also contains a link to the
+		corresponding enforcement.
 \end{description*}
 \end{mdframed}
 
@@ -629,13 +626,13 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/sessions/\{id\}/results/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,result>, ...]
 \end{lstlisting}
-	\item[Beschreibung] Nach dem Beenden einer Session können die eingetragenen
-	Resultate in dieser Collection abgefragt werden. Diese Collection ist readonly,
-	damit die Session-Ergebnisse nicht nachträglich geändert werden können.
+	\item[Description] After closing a session, this collection allows the
+		querying of results. The collection is readonly, so that session results
+		cannot be changed afterwards.
 \end{description*}
 \end{mdframed}
 
@@ -643,9 +640,9 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 \pagebreak
 
 
-\subsection{SWID Erweiterung}
+\subsection{SWID Extension to strongTNC}
 
-\subsubsection{SWID Tags: Messung}
+\subsubsection{SWID Tags: Measurement}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -653,34 +650,34 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Content-Type] \texttt{application/json; charset=utf-8}
-	\item[Request Parameter] \hfill
+	\item[Request Parameters] \hfill
 	\begin{description*}
-		\item[\texttt{softwareId}] Software-IDs als JSON-Liste.
+		\item[\texttt{softwareId}] Software-IDs as JSON-list.
 	\end{description*}
 	\item[Response Statuscodes] \hfill
 		\begin{description*}
-			\item[200 OK] SWID Tags der übermittelten Software-IDs sind eingetragen \\
-			und wurden für die übermittelte Session eingetragen.
-			\item[404 Not Found] Session mit der spezifizierten ID wurde nicht gefunden. 
-			\item[412 Precondition Failed] Es existieren nicht alle SWID Tags für die
-			übertragenen Software-IDs. Als Payload werden die fehlenden Software-IDs
-			übertragen.
+			\item[200 OK] SWID Tags for the submitted software IDs alreay exist\\
+				and have been linked with the current session.
+			\item[404 Not Found] Session with the specified ID could not be found.
+			\item[412 Precondition Failed] For some of the submited software IDs no
+				SWID tags \\ could be found. The response body contains a list of those
+				software IDs.
 		\end{description*}
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 ["<str,software-id>", ...]
 \end{lstlisting}
-	\item[Beschreibung] Die strongSwan Komponente sendet eine Liste von
-	Software-IDs an die strongTNC Schnittstelle. Die Software-IDs wurden zuvor auf
-	dem Client gemessen und widerspiegeln die momentan installierten Software
-	Pakete.\\
-	Wenn bereits SWID Tags für alle übertragenen Software-IDs bestehen, können
-	diese direkt eingetragen werden.
+	\item[Description] A list of software IDs can be submitted to this endpoint.
+		If SWID tags already exist for all submitted software IDs, they are linked
+		with the current session and a \texttt{HTTP 200} status code is returned.\\
+		Otherwise, a list of missing software IDs is returned. The requester first
+		has to add these SWID tags via the SWID tag endpoint. Afterwards he can
+		repeat the original request.
 \end{description*}
 \end{mdframed}
 
 
-\subsubsection{SWID Tags: Erstellung}
+\subsubsection{SWID Tags: Creation}
 
 \begin{mdframed}[style=def]
 \begin{description*}
@@ -688,18 +685,18 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[Archetype] Controller
 	\item[Methods] POST
 	\item[Content-Type] \texttt{application/json; charset=utf-8}
-	\item[Request Parameter] \hfill
+	\item[Request Parameters] \hfill
 		\begin{description*}
-			\item[\texttt{xmlData}] SWID Tag als JSON-Liste.
+			\item[\texttt{xmlData}] SWID Tag as JSON-list.
 		\end{description*}
 	\item[Response Statuscodes] \hfill
 		\begin{description*}
-			\item[200 OK] SWID Tags wurden erfolgreich verarbeitet.
-			\item[400 Bad Request] Fehlerhafter Request. Details zum Fehler werden im
-			Response-Body zurückgesendet.
+			\item[200 OK] SWID tags have been processed successfully.
+			\item[400 Bad Request] Details regarding the error are contained in the
+				response body.
 		\end{description*}
-	\item[Beschreibung] Die übermittelten Tags werden gelesen und in die Datenbank
-	gespeichert. Bereits vorhandene Tags werden übersprungen.
+	\item[Description] The submitted tags are stored in the database. If a tag
+		already exists, it is ignored.
 \end{description*}
 \end{mdframed}
 
@@ -715,7 +712,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/products/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -731,7 +728,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/products/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [
 	{
@@ -749,11 +746,11 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/products/\{id\}/default-groups/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[Request Parameter] \hfill
+	\item[Request Parameters] \hfill
 	\begin{description*}
 		\item[\texttt{groupId}] group-id
 	\end{description*}
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,group>, ...]
 \end{lstlisting}
@@ -771,7 +768,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/packages/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -787,7 +784,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/packages/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [
 	{
@@ -805,7 +802,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/packages/\{id\}/versions/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,version>, ...]
 \end{lstlisting}
@@ -823,7 +820,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/versions/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH, DELETE
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -849,7 +846,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 		\item[packageName] \texttt{<str,package-name>}
 	\end{description*}
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [
 	{
@@ -877,7 +874,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/identities/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -894,7 +891,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/identities/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [
 	{
@@ -919,7 +916,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/devices/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -938,7 +935,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/devices/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [
 	{
@@ -964,7 +961,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 		\item[timeTo] \texttt{<int,timestamp>}
 	\end{description*}	
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,session>, ...]
 \end{lstlisting}
@@ -976,7 +973,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/device/\{id\}/sessions/\{id\}/results/}
 	\item[Archetype] Readonly Collection 
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,result>, ...]
 \end{lstlisting}
@@ -988,7 +985,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/device/\{id\}/groups/}
 	\item[Archetype] Collection 
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,group>, ...]
 \end{lstlisting}
@@ -1000,7 +997,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/device/\{id\}/swid-tags/}
 	\item[Archetype] Readonly Collection 
 	\item[Methods] POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,swid-tag>, ...]
 \end{lstlisting}
@@ -1017,7 +1014,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/enforcements/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -1082,7 +1079,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/policies/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -1142,7 +1139,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/groups/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -1178,7 +1175,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/groups/\{id\}/devices/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,device>, ...]
 \end{lstlisting}
@@ -1190,7 +1187,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/groups/\{id\}/enforcements/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,enfocement>, ...]
 \end{lstlisting}
@@ -1208,7 +1205,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/files/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -1226,7 +1223,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/files/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [
 	{
@@ -1252,7 +1249,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/directories/\{id\}/}
 	\item[Archetype] Document
 	\item[Methods] GET, PUT, PATCH
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -1268,7 +1265,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/directories/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [
 	{
@@ -1286,7 +1283,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/directories/\{id\}/files/}
 	\item[Archetype] Collection
 	\item[Methods] GET, POST
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,file>, ...]
 \end{lstlisting}
@@ -1304,7 +1301,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/swid-tags/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,swid-tag>, ...]
 \end{lstlisting}
@@ -1322,7 +1319,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 		\item[version] \texttt{<str,version>}
 		\item[uniqueId] \texttt{<str,unique-id>}
 	\end{description*}
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -1347,7 +1344,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/swid-tags/\{id\}/files/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,file>, ...]
 \end{lstlisting}
@@ -1365,7 +1362,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/swid-entities/\{id\}/}
 	\item[Archetype] Readonly Document
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 {
 	"id": <int,id>,
@@ -1382,7 +1379,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/swid-entities/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [
 	{
@@ -1401,7 +1398,7 @@ Falls ein Algorithmus noch nicht existiert, wird er erfasst, momentan sind folge
 	\item[URI Path] \texttt{/swid-entities/\{id\}/swid-tags/}
 	\item[Archetype] Readonly Collection
 	\item[Methods] GET
-	\item[JSON Format Response] \hfill
+	\item[JSON Formatted Response] \hfill
 \begin{lstlisting}
 [<doc,swid-tag>, ...]
 \end{lstlisting}
