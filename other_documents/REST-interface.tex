@@ -111,7 +111,7 @@ archetype.
 		fields.\\
 		If a document contains references to other resources, then this reference is
 		returned as an URI. Additionally, a \texttt{depth} query parameter can be
-		specified to embed nested resources directly in the response.\\
+		specified to embed nested resources directly into the response.\\
 		Example: \hfill
 \begin{lstlisting}
 {
@@ -160,7 +160,7 @@ Example with \texttt{depth=1}:
 		contained documents as JSON-objects. The documents are annotated with an
 		additional field called \texttt{uri}, which contains the URI to the document
 		resource.\\
-		Collections too allow the usage of a \texttt{depth} parameter to embed
+		Collections also allow the usage of a \texttt{depth} parameter to embed
 		nested objects.\\ 
 		Example: \hfill
 \begin{lstlisting}
@@ -208,7 +208,7 @@ Example with \texttt{depth=1}:
 
 \section{HTTP Status Codes}
 
-The result of a request is communicated through HTTP status codes. In some
+The result of a request is sent by means of HTTP status codes. In some
 cases, additional information is returned in the response body.
 
 The following status codes can be expected:
@@ -230,8 +230,7 @@ The following status codes can be expected:
 	\item[500 Internal Server Error] Generic server side error.
 \end{description*}
 
-If a resource uses additional error codes, then it is documented in the resource
-documentation.
+If a resource uses additional error codes, it's documentation can be found in the corresponding resource documentation
 
 \pagebreak
 
@@ -616,7 +615,7 @@ default algorithms are \texttt{SHA384, SHA256, SHA1, SHA1-IMA}.
 }
 \end{lstlisting}
 	\item[Description] A single result. In contrast to the result resource
-		relative to the workitem resource, this document also contains a link to the
+		(relative to the workitem resource), this document also contains a link to the
 		corresponding enforcement.
 \end{description*}
 \end{mdframed}
@@ -631,7 +630,7 @@ default algorithms are \texttt{SHA384, SHA256, SHA1, SHA1-IMA}.
 [<doc,result>, ...]
 \end{lstlisting}
 	\item[Description] After closing a session, this collection allows the
-		querying of results. The collection is readonly, so that session results
+		querying of results. The collection is readonly, in order that session results
 		cannot be changed afterwards.
 \end{description*}
 \end{mdframed}
@@ -704,7 +703,7 @@ default algorithms are \texttt{SHA384, SHA256, SHA1, SHA1-IMA}.
 \pagebreak
 
 
-\subsection{CRUD Resourcen}
+\subsection{CRUD Resources}
 \subsubsection{Products}
 
 \begin{mdframed}[style=def]
